@@ -1,0 +1,6 @@
+.tfstate*
+.terraform/
+**lock.hcl
+**.pyc
+**/certs/*
+**/env
