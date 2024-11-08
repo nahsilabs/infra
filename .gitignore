@@ -4,3 +4,7 @@
 **.pyc
 **/certs/*
 **/env
+.direnv
+kubeconfig
+talosconfig
+secrets/
