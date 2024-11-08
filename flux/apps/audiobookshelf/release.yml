@@ -34,7 +34,7 @@ spec:
                 memory: 600Mi
     service:
       main:
-        controller: audiobookshelf
+        controller: main
         ports:
           http:
             port: *port
