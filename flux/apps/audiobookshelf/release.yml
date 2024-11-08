@@ -15,9 +15,9 @@ spec:
   interval: 30m
   values:
     controllers:
-      main:
+      audiobookshelf:
         containers:
-          main:
+          audiobookshelf:
             image:
               repository: ghcr.io/advplyr/audiobookshelf
               tag: 2.16.2
@@ -33,13 +33,13 @@ spec:
               limits:
                 memory: 600Mi
     service:
-      main:
-        controller: main
+      audiobookshelf:
+        controller: audiobookshelf
         ports:
           http:
             port: *port
     ingress:
-      main:
+      audiobookshelf:
         className: cilium
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt
@@ -48,7 +48,7 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier: main
+                  identifier: audiobookshelf
                   port: http
         tls:
           - hosts:
