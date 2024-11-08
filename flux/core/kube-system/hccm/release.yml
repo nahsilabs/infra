@@ -15,7 +15,8 @@ spec:
       version: 1.20.0
   values:
     env:
-      HCLOUD_NETWORK_ROUTES_ENABLED: "false"
+      HCLOUD_NETWORK_ROUTES_ENABLED:
+        value: "false"
       HCLOUD_TOKEN:
         valueFrom:
           secretKeyRef:
