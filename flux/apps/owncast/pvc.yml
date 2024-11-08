@@ -4,6 +4,7 @@ metadata:
   name: owncast
   namespace: default
 spec:
+  persistentVolumeReclaimPolicy: retain
   accessModes:
     - ReadWriteOnce
   resources:
