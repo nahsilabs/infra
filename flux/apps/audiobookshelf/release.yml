@@ -15,7 +15,7 @@ spec:
   interval: 30m
   values:
     controllers:
-      audiobookshelf:
+      main:
         containers:
           main:
             image:
