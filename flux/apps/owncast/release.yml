@@ -34,7 +34,7 @@ spec:
       rtmp:
         controller: main
         enabled: true
-        type: NodePort
+        type: ClusterIP
         ports:
           rtmp:
             enabled: true
