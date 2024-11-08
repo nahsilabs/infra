@@ -49,7 +49,7 @@ spec:
             port: *port
     ingress:
       main:
-        className: public
+        className: cilium
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt
         hosts:
