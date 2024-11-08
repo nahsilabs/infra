@@ -20,3 +20,8 @@ spec:
           secretKeyRef:
             name: hccm
             key: HCLOUD_TOKEN
+      HCLOUD_NETWORK:
+        valueFrom:
+          secretKeyRef:
+            name: hccm
+            key: HCLOUD_NETWORK
