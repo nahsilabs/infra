@@ -1,0 +1,70 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: audiobookshelf
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 3.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 30m
+  values:
+    controllers:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/advplyr/audiobookshelf
+              tag: 2.16.2
+            env:
+              TZ: Europe/Athens
+              PORT: &port 8080
+              CONFIG_PATH: /config
+              METADATA_PATH: /config/metadata
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthcheck
+                    port: *port
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 50m
+                memory: 200Mi
+              limits:
+                memory: 600Mi
+    service:
+      app:
+        controller: audiobookshelf
+        ports:
+          http:
+            port: *port
+    ingress:
+      main:
+        className: public
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt
+        hosts:
+          - host: &host audio.nahsi.dev
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+        tls: [hosts: [*host]]
+    persistence:
+      config:
+        existingClaim: audiobookshelf-config
+      media:
+        existingClaim: audiobookshelf-datastore
+        globalMounts:
+          - path: /audiobooks
+            subPath: Audiobooks
+          - path: /podcasts
+            subPath: Podcasts
