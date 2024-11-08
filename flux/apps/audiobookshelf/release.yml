@@ -26,15 +26,6 @@ spec:
               PORT: &port 8080
               CONFIG_PATH: /config
               METADATA_PATH: /config/metadata
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthcheck
-                    port: *port
-              readiness: *probes
             resources:
               requests:
                 cpu: 50m
