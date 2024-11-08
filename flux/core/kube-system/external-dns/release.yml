@@ -23,6 +23,7 @@ spec:
             key: CF_API_TOKEN
     sources:
       - ingress
+      - service
     policy: sync
     domainFilters:
       - "nahsi.dev"

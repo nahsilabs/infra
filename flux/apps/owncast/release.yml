@@ -34,7 +34,9 @@ spec:
       rtmp:
         controller: main
         enabled: true
-        type: ClusterIP
+        type: NodePort
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname:  owncast.nahsi.dev
         ports:
           rtmp:
             enabled: true
@@ -54,10 +56,6 @@ spec:
                 service:
                   name: main
                   port: http
-              - path: /live
-                service:
-                  name: rtmp
-                  port: rtmp
         tls:
           - hosts:
               - stream.nahsi.dev
