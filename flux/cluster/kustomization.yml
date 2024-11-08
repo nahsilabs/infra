@@ -4,4 +4,3 @@ resources:
   - ../repositories
   - ../core/kube-system
   - cert-manager.yml
-  - ../apps/owncast
