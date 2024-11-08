@@ -16,6 +16,8 @@ spec:
   values:
     controllers:
       main:
+        containers:
+          main:
         image:
           repository: ghcr.io/advplyr/audiobookshelf
           tag: 2.16.2
