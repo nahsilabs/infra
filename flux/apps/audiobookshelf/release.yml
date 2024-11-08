@@ -50,7 +50,10 @@ spec:
                 service:
                   identifier: main
                   port: http
-        tls: [hosts: [*host]]
+        tls:
+          - hosts:
+              - *host
+            secretName: audiobookshelf-tls
     persistence:
       config:
         existingClaim: audiobookshelf-config
