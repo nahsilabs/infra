@@ -18,7 +18,6 @@ spec:
     replicaCount: 2
     controller:
       hcloudToken:
-        valueFrom:
-          secretKeyRef:
-            name: hcloud-csi
-            key: HCLOUD_TOKEN
+        existingSecret:
+          name: hcloud-csi
+          key: HCLOUD_TOKEN
