@@ -54,6 +54,10 @@ spec:
                 service:
                   name: main
                   port: http
+              - path: /live
+                service:
+                  name: rtmp
+                  port: rtmp
         tls:
           - hosts:
               - stream.nahsi.dev
