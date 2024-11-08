@@ -34,9 +34,7 @@ spec:
       rtmp:
         controller: main
         enabled: true
-          #type: LoadBalancer
-          #loadBalancerIP: "95.217.169.186"
-        externalTrafficPolicy: local
+        type: NodePort
         ports:
           rtmp:
             enabled: true
@@ -56,10 +54,6 @@ spec:
                 service:
                   name: main
                   port: http
-              - path: /live
-                service:
-                  name: rtmp
-                  port: rtmp
         tls:
           - hosts:
               - stream.nahsi.dev
