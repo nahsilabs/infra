@@ -21,7 +21,6 @@ spec:
         existingSecret:
           name: hcloud-csi
           key: HCLOUD_TOKEN
-
     storageClasses:
       - name: hcloud-volumes
         defaultStorageClass: true
