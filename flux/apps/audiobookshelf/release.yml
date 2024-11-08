@@ -16,12 +16,6 @@ spec:
   values:
     controllers:
       audiobookshelf:
-        pod:
-          securityContext:
-            runAsUser: &uid 568
-            runAsGroup: &gid 2000
-            fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
         containers:
           audiobookshelf:
             image:
@@ -32,8 +26,6 @@ spec:
               PORT: &port 8080
               CONFIG_PATH: /config
               METADATA_PATH: /config/metadata
-              AUDIOBOOKSHELF_UID: *uid
-              AUDIOBOOKSHELF_GID: *gid
             resources:
               requests:
                 cpu: 50m
