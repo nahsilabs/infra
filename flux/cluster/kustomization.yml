@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - ../repositories
   - ../core/kube-system
+  - cert-manager.yml

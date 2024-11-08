@@ -4,4 +4,3 @@ resources:
   - secret.yml
   - repository.yml
   - release.yml
-    # - issuers.yml
