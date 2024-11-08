@@ -43,7 +43,7 @@ spec:
         controller: main
         enabled: true
         type: LoadBalancer
-        # loadBalancerIP: "${LB_OWNCAST}"
+        loadBalancerIP: "95.217.169.186"
         externalTrafficPolicy: Local
         ports:
           rtmp:
