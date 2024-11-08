@@ -18,29 +18,29 @@ spec:
       audiobookshelf:
         containers:
           main:
-        image:
-          repository: ghcr.io/advplyr/audiobookshelf
-          tag: 2.16.2
-        env:
-          TZ: Europe/Athens
-          PORT: &port 8080
-          CONFIG_PATH: /config
-          METADATA_PATH: /config/metadata
-        probes:
-          liveness: &probes
-            enabled: true
-            custom: true
-            spec:
-              httpGet:
-                path: /healthcheck
-                port: *port
-          readiness: *probes
-        resources:
-          requests:
-            cpu: 50m
-            memory: 200Mi
-          limits:
-            memory: 600Mi
+            image:
+              repository: ghcr.io/advplyr/audiobookshelf
+              tag: 2.16.2
+            env:
+              TZ: Europe/Athens
+              PORT: &port 8080
+              CONFIG_PATH: /config
+              METADATA_PATH: /config/metadata
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthcheck
+                    port: *port
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 50m
+                memory: 200Mi
+              limits:
+                memory: 600Mi
     service:
       main:
         controller: audiobookshelf
