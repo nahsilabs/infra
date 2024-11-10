@@ -18,6 +18,8 @@ spec:
     domain: "https://secrets.nahsi.dev"
     signupsAllowed: false
     signupsVerify: false
+    logging:
+      logLevel: debug
     ingress:
       enabled: true
       class: "cilium"
