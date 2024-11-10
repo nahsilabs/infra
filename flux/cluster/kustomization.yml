@@ -4,4 +4,5 @@ resources:
   - ../repositories
   - ../core/kube-system
   - cert-manager.yml
+  - ../database
   - ../apps/audiobookshelf
