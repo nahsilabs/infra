@@ -16,7 +16,7 @@ spec:
       interval: 1h
   values:
     domain: "https://secrets.nahsi.dev"
-    signupsAllowed: true
+    signupsAllowed: false
     signupsVerify: false
     ingress:
       enabled: true
@@ -28,7 +28,6 @@ spec:
     adminToken:
       existingSecret: vaultwarden-secret
       existingSecretKey: token
-    signupsAllowed: true
     data:
       name: "vaultwarden-data"
       size: "10Gi"
