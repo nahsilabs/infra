@@ -6,3 +6,4 @@ resources:
   - cert-manager.yml
   - ../database
   - ../apps/audiobookshelf
+  - ../apps/vaultwarden
