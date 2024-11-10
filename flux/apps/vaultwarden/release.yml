@@ -16,6 +16,8 @@ spec:
       interval: 1h
   values:
     domain: "https://secrets.nahsi.dev"
+    signupsAllowed: true
+    signupsVerify: false
     ingress:
       enabled: true
       class: "cilium"
