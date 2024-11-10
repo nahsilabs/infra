@@ -27,8 +27,6 @@ spec:
       existingSecret: vaultwarden-secret
       existingSecretKey: token
     signupsAllowed: true
-    database:
-      type: "sqlite"
     data:
       name: "vaultwarden-data"
       size: "10Gi"
