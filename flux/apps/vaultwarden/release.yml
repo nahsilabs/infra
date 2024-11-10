@@ -23,6 +23,7 @@ spec:
       class: "cilium"
       hostname: "secrets.nahsi.dev"
       tlsSecret: "vaultwarden-tls"
+      nginxIngressAnnotations: false
       additionalAnnotations:
         cert-manager.io/cluster-issuer: letsencrypt
     adminToken:
