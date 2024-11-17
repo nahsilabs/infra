@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: hcloud-csi
-  namespace: kube-system
+  namespace: hcloud
 spec:
   interval: 1m
   chart:
