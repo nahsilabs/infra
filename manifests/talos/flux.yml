@@ -1,3 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: flux-system
+data:
+  CLUSTER: nahsilabs-talos
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
@@ -8,7 +15,7 @@ spec:
   interval: 1m
   url: https://github.com/nahsilabs/infra.git
   ref:
-    branch: provision-hcloud
+    branch: main
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -17,7 +24,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m
-  path: "./flux/cluster"
+  path: "./flux/clusters/talos"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -26,3 +33,7 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
+  postBuild:
+    substituteFrom:
+    - kind: ConfigMap
+      name: config
