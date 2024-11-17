@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - ../../core/kube-system
   - ../../core/talos
-  - ../cert-manager.yml
+    #- ../cert-manager.yml
