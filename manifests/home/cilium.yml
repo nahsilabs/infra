@@ -2,21 +2,36 @@
 apiVersion: cilium.io/v2alpha1
 kind: CiliumLoadBalancerIPPool
 metadata:
-  name: service-pool
+  name: private-pool
 spec:
+  allowFirstLastIPs: "No"
   blocks:
   - cidr: "10.2.20.0/24"
+  serviceSelector:
+    matchExpressions:
+      - {key: "io.cilium/bgp-announce", operator: NotIn, values: ['false']}
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: public-pool
+spec:
+  blocks:
+  - start: "188.117.231.119"
+  serviceSelector:
+    matchExpressions:
+      - {key: "io.cilium/bgp-announce", operator: In, values: ['false']}
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPPeeringPolicy
 metadata:
-  name: bgp-peering-policy-worker
+  name: bgp-peering-policy
 spec:
   virtualRouters:
     - localASN: 64513
       serviceSelector:
         matchExpressions:
-          - {key: "io.cilium/bgp-announce", operator: NotIn, values: ['fakevalue']} # This will allow all `LoadBalancers`
+          - {key: "io.cilium/bgp-announce", operator: NotIn, values: ['false']} # This will allow all `LoadBalancers`
       neighbors:
         - peerAddress: '10.2.10.3/32' # This should be the IP of your Opnsense Router, the /32 should be included as CIDR notation is required.
           peerASN: 64512 # Set this to the ASN delegated to your Opnsense Router
