@@ -1,0 +1,38 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vaultwarden
+  namespace: default
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: vaultwarden
+      version: "0.29.x"
+      sourceRef:
+        kind: HelmRepository
+        name: vaultwarden
+        namespace: flux-system
+      interval: 1h
+  values:
+    domain: "https://secrets.nahsi.dev"
+    signupsAllowed: false
+    signupsVerify: false
+    logging:
+      logLevel: debug
+    ingress:
+      enabled: true
+      class: "cilium"
+      hostname: "secrets.nahsi.dev"
+      tlsSecret: "vaultwarden-tls"
+      nginxIngressAnnotations: false
+      additionalAnnotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+    adminToken:
+      existingSecret: vaultwarden-secret
+      existingSecretKey: token
+    data:
+      name: "vaultwarden-data"
+      size: "10Gi"
+      accessMode: ReadWriteOnce
+      keepPvc: true

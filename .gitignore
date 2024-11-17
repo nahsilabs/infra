@@ -1,0 +1,10 @@
+.tfstate*
+.terraform/
+**lock.hcl
+**.pyc
+**/certs/*
+**/env
+.direnv
+kubeconfig
+talosconfig
+secrets/

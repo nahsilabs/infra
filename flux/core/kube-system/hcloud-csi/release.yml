@@ -1,0 +1,27 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hcloud-csi
+  namespace: kube-system
+spec:
+  interval: 1m
+  chart:
+    spec:
+      chart: hcloud-csi
+      version: 2.10.0
+      sourceRef:
+        kind: HelmRepository
+        name: hcloud
+        namespace: flux-system
+      interval: 5m
+  values:
+    replicaCount: 2
+    controller:
+      hcloudToken:
+        existingSecret:
+          name: hcloud-csi
+          key: HCLOUD_TOKEN
+    storageClasses:
+      - name: hcloud-volumes
+        defaultStorageClass: true
+        reclaimPolicy: Retain
