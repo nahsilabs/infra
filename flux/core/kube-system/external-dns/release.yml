@@ -25,6 +25,7 @@ spec:
       - ingress
       - service
     policy: sync
+    txtOwnerId: "${CLUSTER}"
     domainFilters:
       - "nahsi.dev"
     provider: cloudflare
