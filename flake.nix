@@ -33,15 +33,15 @@
             pkgs.kubectl
             pkgs.kubelogin-oidc
             pkgs.kubernetes-helm
-	    pkgs.cilium-cli
-	    pkgs.fluxcd
+            pkgs.cilium-cli
+            pkgs.fluxcd
 
-	    pkgs.age
-	    pkgs.sops
+            pkgs.age
+            pkgs.sops
           ];
 
           shellHook = ''
-            [[ -f $NAHSILABS_SECRETS ]] && source $NAHSILABS_SECRETS
+	    [[ -f $NAHSILABS_SECRETS ]] && source $NAHSILABS_SECRETS
 	    [[ -f kubeconfig ]] && export KUBECONFIG=$(realpath kubeconfig)
 	    [[ -f talosconfig ]] && export TALOSCONFIG=$(realpath talosconfig)
           '';
