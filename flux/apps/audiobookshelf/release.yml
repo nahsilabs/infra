@@ -41,9 +41,10 @@ spec:
             port: *port
     ingress:
       audiobookshelf:
-        className: cilium
+        className: nginx
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt
+          nginx.ingress.kubernetes.io/proxy-body-size: "1G"
         hosts:
           - host: &host audio.nahsi.dev
             paths:

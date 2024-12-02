@@ -22,7 +22,7 @@ spec:
       logLevel: debug
     ingress:
       enabled: true
-      class: "cilium"
+      class: "nginx"
       hostname: "secrets.nahsi.dev"
       tlsSecret: "vaultwarden-tls"
       nginxIngressAnnotations: false
