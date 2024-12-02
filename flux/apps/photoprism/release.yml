@@ -33,7 +33,7 @@ spec:
 
     env:
       TZ: "Europe/Athens"
-      PHOTOPRISM_SITE_URL: https://photos.${DOMAIN}
+      PHOTOPRISM_SITE_URL: https://photos.nahsi.dev
       PHOTOPRISM_SITE_TITLE: Photos
       PHOTOPRISM_SITE_AUTHOR: nahsi
       PHOTOPRISM_ORIGINALS_PATH: /photoprism/media/
