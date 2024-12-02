@@ -52,7 +52,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: cilium
+        ingressClassName: nginx
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt
         hosts:

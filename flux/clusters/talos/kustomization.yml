@@ -8,3 +8,4 @@ resources:
   - ../../apps/audiobookshelf
   - ../../apps/vaultwarden
   - ../../apps/photoprism
+  - ../../core/ingress-nginx
