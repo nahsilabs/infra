@@ -4,4 +4,3 @@ resources:
   - repository.yml
   - hccm
   - hcloud-csi
-  - namespace.yml
