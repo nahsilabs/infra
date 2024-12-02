@@ -31,3 +31,4 @@ spec:
     provider: cloudflare
     extraArgs:
       - --ingress-class=cilium
+      - --ingress-class=nginx
