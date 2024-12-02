@@ -1,0 +1,80 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: photoprism
+  namespace: media
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 3
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+
+  values:
+    image:
+      repository: photoprism/photoprism
+      tag: "240915"
+
+    env:
+      TZ: "Europe/Athens"
+      PHOTOPRISM_SITE_URL: https://photos.${DOMAIN}
+      PHOTOPRISM_SITE_TITLE: Photos
+      PHOTOPRISM_SITE_AUTHOR: nahsi
+      PHOTOPRISM_ORIGINALS_PATH: /photoprism/media/
+      PHOTOPRISM_STORAGE_PATH: /photoprism/storage/
+      PHOTOPRISM_IMPORT_PATH: /photoprism/unsorted/
+    envFrom:
+      - secretRef:
+          name: photoprism-secrets
+
+    service:
+      main:
+        ports:
+          http:
+            port: 2342
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: cilium
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt
+        hosts:
+          - host: &host "photos.${DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+            secretName: photoprism-tls
+
+    persistence:
+      config:
+        enabled: true
+        mountPath: /photoprism/storage
+        existingClaim: photoprism-config
+      media:
+        enabled: true
+        mountPath: /photoprism/media
+        existingClaim: media-photos
+      unsorted:
+        enabled: true
+        mountPath: /photoprism/unsorted
+        existingClaim: media-photos-unsorted

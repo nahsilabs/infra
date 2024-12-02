@@ -7,3 +7,4 @@ resources:
   - ../../database
   - ../../apps/audiobookshelf
   - ../../apps/vaultwarden
+  - ../../apps/photoprism
