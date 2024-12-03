@@ -7,7 +7,7 @@
   "kubernetes": {
     "fileMatch": ["flux/*/.+\\.ya?ml$"]
   },
-  "helm": {
+  "helm-values": {
     "fileMatch": ["flux/*/.+\\.ya?ml$"]
   }
 }
