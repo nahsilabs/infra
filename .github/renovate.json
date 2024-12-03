@@ -3,5 +3,11 @@
   "dependencyDashboard": true,
   "flux": {
     "fileMatch": ["flux/*/.+\\.ya?ml$"]
+  },
+  "kubernetes": {
+    "fileMatch": ["flux/*/.+\\.ya?ml$"]
+  },
+  "helm": {
+    "fileMatch": ["flux/*/.+\\.ya?ml$"]
   }
 }
