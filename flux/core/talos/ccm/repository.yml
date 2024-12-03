@@ -1,5 +1,5 @@
 kind: HelmRepository
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 metadata:
   name: talos-cloud-controller-manager
   namespace: flux-system
