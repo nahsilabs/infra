@@ -1,0 +1,62 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: homepage
+  namespace: default
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: homepage
+      version: 2.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: jameswynn
+        namespace: flux-system
+  values:
+    image:
+      repository: ghcr.io/gethomepage/homepage
+      tag: v0.9.12
+    serviceAccount:
+      create: true
+      name: homepage
+    enableRbac: true
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: nginx
+        annotations:
+          cert-manager.io/cluster-issuer: "letsencrypt"
+        hosts:
+          - host: &host "home.nahsi.dev"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+            secretName: homepage-tls
+    config:
+      bookmarks: null
+      kubernetes:
+        mode: cluster
+
+      settings:
+        title: NahsiLabs Dashboard
+        favicon: https://kubernetes.io/images/favicon.png
+        theme: dark
+        color: slate
+        target: _self
+        headerStyle: clean
+        layout:
+          Home:
+            style: row
+            columns: 4
+
+      widgets:
+        - search:
+            provider: [duckduckgo]
+            focus: false
+            target: _blank
+
+      services: null

@@ -44,6 +44,9 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt
           nginx.ingress.kubernetes.io/proxy-body-size: "1G"
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Audiobookshelf
+          gethomepage.dev/icon: audiobookshelf.png
         hosts:
           - host: &host audio.nahsi.dev
             paths:
