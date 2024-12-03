@@ -25,7 +25,7 @@ spec:
       class: "nginx"
       hostname: "secrets.nahsi.dev"
       tlsSecret: "vaultwarden-tls"
-      nginxIngressAnnotations: false
+      nginxIngressAnnotations: true
       additionalAnnotations:
         cert-manager.io/cluster-issuer: letsencrypt
     adminToken:

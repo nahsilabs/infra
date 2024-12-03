@@ -26,7 +26,6 @@ spec:
               PORT: &port 8080
               CONFIG_PATH: /config
               METADATA_PATH: /config/metadata
-              LOG_LEVEL: debug
             resources:
               requests:
                 cpu: 50m
