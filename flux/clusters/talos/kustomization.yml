@@ -3,8 +3,9 @@ kind: Kustomization
 resources:
   - ../../core/kube-system
   - ../../core/hcloud
+  - ../../core/ingress-nginx
   - ../cert-manager.yml
   - ../../database
   - ../../apps/audiobookshelf
   - ../../apps/vaultwarden
-  - ../../core/ingress-nginx
+  - ../../apps/homepage
