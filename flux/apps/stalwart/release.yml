@@ -17,7 +17,7 @@ spec:
         dnsNames:
           - &host stalwart.nahsi.dev
     service:
-      type: loadBalancer
+      type: LoadBalancer
     ingress:
       enabled: false
       className: nginx
