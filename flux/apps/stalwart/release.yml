@@ -11,9 +11,10 @@ spec:
     namespace: flux-system
   values:
     certificate:
-      secretName: stalwart-stalwart-mail
+      secretName: stalwart-tls
       certmanager:
-        issuerRef.name: "letsencrypt"
+        issuerRef:
+          name: "letsencrypt"
         dnsNames:
           - &host stalwart.nahsi.dev
     service:
