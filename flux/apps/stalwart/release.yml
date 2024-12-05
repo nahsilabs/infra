@@ -16,8 +16,10 @@ spec:
         issuerRef.name: "letsencrypt"
         dnsNames:
           - &host stalwart.nahsi.dev
+    service:
+      type: loadBalancer
     ingress:
-      enabled: true
+      enabled: false
       className: nginx
       annotations: 
         nginx.ingress.kubernetes.io/proxy-body-size: "1G"
