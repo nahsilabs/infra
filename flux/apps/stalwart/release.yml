@@ -11,7 +11,7 @@ spec:
     namespace: flux-system
   values:
     certificate:
-      secretName: stalwart-tls
+      secretName: stalwart-stalwart-mail
       certmanager:
         issuerRef.name: "letsencrypt"
         dnsNames:
@@ -30,6 +30,5 @@ spec:
       tls:
         - hosts:
             - *host
-          secretName: stalwart-tls
     persistence:
       existingClaim: stalwart
