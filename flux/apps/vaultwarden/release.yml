@@ -34,8 +34,9 @@ spec:
     adminToken:
       existingSecret: vaultwarden-secret
       existingSecretKey: token
-    data:
-      name: "vaultwarden-data"
-      size: "10Gi"
-      accessMode: ReadWriteOnce
-      keepPvc: true
+    storage:
+      data:
+        name: "vaultwarden-data"
+        size: "10Gi"
+        accessMode: ReadWriteOnce
+        keepPvc: true
