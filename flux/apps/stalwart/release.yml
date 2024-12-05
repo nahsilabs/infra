@@ -12,6 +12,7 @@ spec:
   values:
     certificate:
       certmanager:
+        enabled: true
         issuerRef:
           name: "letsencrypt"
         dnsNames:
