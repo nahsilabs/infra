@@ -1,6 +1,6 @@
 {
   description = "Setup ops things";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
   inputs.systems.url = "github:nix-systems/default";
   inputs.flake-utils = {
     url = "github:numtide/flake-utils";
@@ -20,7 +20,7 @@
       {
         formatter = pkgs.nixfmt-rfc-style;
         devShells.default = pkgs.mkShell {
-          name = "fluence-ops";
+          name = "infra";
 
           packages = [
             pkgs.bashInteractive
@@ -41,9 +41,9 @@
           ];
 
           shellHook = ''
-	    [[ -f $NAHSILABS_SECRETS ]] && source $NAHSILABS_SECRETS
-	    [[ -f kubeconfig ]] && export KUBECONFIG=$(realpath kubeconfig)
-	    [[ -f talosconfig ]] && export TALOSCONFIG=$(realpath talosconfig)
+            [[ -f $NAHSILABS_SECRETS ]] && source $NAHSILABS_SECRETS
+            [[ -f kubeconfig ]] && export KUBECONFIG=$(realpath kubeconfig)
+            [[ -f talosconfig ]] && export TALOSCONFIG=$(realpath talosconfig)
           '';
         };
       }
