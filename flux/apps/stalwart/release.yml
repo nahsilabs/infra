@@ -11,7 +11,6 @@ spec:
     namespace: flux-system
   values:
     certificate:
-      secretName: stalwart-tls
       certmanager:
         issuerRef:
           name: "letsencrypt"
