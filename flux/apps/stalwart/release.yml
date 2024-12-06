@@ -26,11 +26,5 @@ spec:
         imaptls: 993
         smtp: 25
         submissions: 465
-        http: null
-        imap: null
-        pop3: null
-        pop3s: null
-        sieve: null
-        submission: null
     persistence:
       existingClaim: stalwart
