@@ -19,11 +19,10 @@ spec:
           - &host stalwart.nahsi.dev
     service:
       type: LoadBalancer
-    persistence:
-      existingClaim: stalwart
-    service:
       ports:
         https: 443
         imaptls: 993
         smtp: 25
         submissions: 465
+    persistence:
+      existingClaim: stalwart
