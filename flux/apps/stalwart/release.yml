@@ -19,6 +19,8 @@ spec:
           - &host stalwart.nahsi.dev
     service:
       type: LoadBalancer
+      annotations:
+        external-dns.alpha.kubernetes.io/hostname: *host
       ports:
         https: 443
         imaptls: 993
