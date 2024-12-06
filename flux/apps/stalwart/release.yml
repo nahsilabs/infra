@@ -22,6 +22,7 @@ spec:
       annotations:
         external-dns.alpha.kubernetes.io/hostname: *host
       ports:
+        https: 80
         https: 443
         imaptls: 993
         smtp: 25
