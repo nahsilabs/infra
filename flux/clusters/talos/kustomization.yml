@@ -9,4 +9,4 @@ resources:
   - ../../apps/audiobookshelf
   - ../../apps/vaultwarden
   - ../../apps/homepage
-  # - ../../apps/stalwart
+  - ../../apps/stalwart

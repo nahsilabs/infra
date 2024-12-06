@@ -19,17 +19,11 @@ spec:
           - &host stalwart.nahsi.dev
     service:
       type: LoadBalancer
-    ingress:
-      enabled: false
-      className: nginx
-      annotations: 
-        nginx.ingress.kubernetes.io/proxy-body-size: "1G"
-        gethomepage.dev/enabled: "true"
-        gethomepage.dev/name: Stalwart
-      hosts:
-        - *host
-      tls:
-        - hosts:
-            - *host
     persistence:
       existingClaim: stalwart
+    service:
+      ports:
+        https: 443
+        imaptls: 993
+        smtp: 25
+        submissions: 465
