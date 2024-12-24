@@ -10,6 +10,8 @@ spec:
     name: stalwart
     namespace: flux-system
   values:
+    livenessProbe: null
+    readinessProbe: null
     config:
       server:
         proxy:
