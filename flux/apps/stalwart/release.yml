@@ -10,6 +10,10 @@ spec:
     name: stalwart
     namespace: flux-system
   values:
+    config:
+      server:
+        proxy:
+          trusted-network: [ "10.50.1.0/24" ]
     certificate:
       certmanager:
         enabled: true
