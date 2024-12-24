@@ -23,6 +23,8 @@ spec:
         enabled: true
       service:
         type: LoadBalancer
+        annotations:
+          load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
         nodePorts:
           http: 30102
           https: 30103

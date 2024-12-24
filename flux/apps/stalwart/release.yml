@@ -21,6 +21,7 @@ spec:
       type: LoadBalancer
       annotations:
         external-dns.alpha.kubernetes.io/hostname: *host
+        load-balancer.hetzner.cloud/uses-proxyprotocol: "true"
       ports:
         http: 80
         https: 443
