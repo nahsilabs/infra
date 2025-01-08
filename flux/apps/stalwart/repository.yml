@@ -7,4 +7,4 @@ spec:
   interval: 5m0s
   url: oci://codeberg.org/wrenix/helm-charts/stalwart-mail
   ref:
-    tag: 0.0.19
+    tag: 0.0.21
