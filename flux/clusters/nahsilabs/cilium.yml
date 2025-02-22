@@ -6,7 +6,7 @@ metadata:
 spec:
   blocks:
   - start: "37.98.199.179"
-    end: "37.98.199.182"
+    stop: "37.98.199.182"
   serviceSelector:
     matchExpressions:
       - {key: "io.cilium/bgp-public", operator: In, values: ['true']}
