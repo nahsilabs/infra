@@ -1,9 +1,9 @@
-kind: HelmRepository
 apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
 metadata:
-  name: talos-cloud-controller-manager
+  name: siderolabs-charts
   namespace: flux-system
 spec:
-  interval: 5m0s
-  type: "oci"
+  interval: 24h
+  type: oci
   url: oci://ghcr.io/siderolabs/charts

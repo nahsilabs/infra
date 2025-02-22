@@ -1,0 +1,5 @@
+providerRegex: |
+  ^(heliopolis|odroid-[1-3])$
+providerIpPrefixes:
+  - "10.2.15.0/24"
+bypassDnsResolution: true

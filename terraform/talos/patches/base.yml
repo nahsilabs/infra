@@ -15,9 +15,9 @@ machine:
     nameservers:
       - 10.2.1.1
 
-  # kubelet:
-    # extraArgs:
-    #   rotate-server-certificates: true
+  kubelet:
+    extraArgs:
+      rotate-server-certificates: true
 
 cluster:
   allowSchedulingOnControlPlanes: true
