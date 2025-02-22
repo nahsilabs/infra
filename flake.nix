@@ -26,6 +26,8 @@
             pkgs.bashInteractive
             pkgs.nixfmt-rfc-style
 
+            pkgs.ansible
+            pkgs.sshpass
             pkgs.terraform
             pkgs.packer
             pkgs.vault

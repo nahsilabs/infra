@@ -1,0 +1,38 @@
+- name: Proxmox post install
+  hosts: proxmox
+  user: root
+  gather_facts: true
+  vars:
+    ntp_timezone: Europe/Athens
+    ntp_servers:
+      - 10.2.1.1
+
+  roles:
+    - geerlingguy.ntp
+
+  tasks:
+    - name: Ensure necessary packages are installed
+      apt:
+        name:
+          - "ca-certificates"
+          - "btop"
+          - "vim"
+        state: present
+
+    - name: Add ssh keys
+      authorized_key:
+        user: "root"
+        key: "https://github.com/nahsi.keys"
+        exclusive: true
+
+    - name: Setup network
+      copy:
+        dest: /etc/network/interfaces
+        content: "{{ proxmox_network }}"
+      notify: restart network
+
+  handlers:
+    - name: restart network
+      ansible.builtin.systemd:
+        name: networking
+        state: restarted

@@ -1,0 +1,68 @@
+proxmox_network: |
+  auto lo
+  iface lo inet loopback
+
+  auto enp39s0
+  iface enp39s0 inet manual
+
+  auto enp40s0
+  iface enp40s0 inet manual
+
+  iface enx5e46417fa2c3 inet manual
+
+  auto enp41s0
+  iface enp41s0 inet manual
+
+  auto enp42s0
+  iface enp42s0 inet manual
+
+  auto bond0
+  iface bond0 inet manual
+      bond-slaves enp41s0 enp42s0
+      bond-miimon 100
+      bond-mode 802.3ad
+      bond-xmit-hash-policy layer2+3
+      bond-lacp-rate 1
+  #Management
+
+  auto bond1
+  iface bond1 inet manual
+      bond-slaves enp39s0 enp40s0
+      bond-miimon 100
+      bond-mode 802.3ad
+      bond-xmit-hash-policy layer2+3
+  #NFS
+
+  auto bond1.13
+  iface bond1.13 inet static
+      address 10.2.13.40/24
+      post-up ip rule add from 10.2.13.40 table 200
+      post-up ip route add 10.2.13.0/24 dev bond1.13 table 200
+      post-up ip route add default via 10.2.13.1 dev bond1.13 table 200
+      post-up ip route add 10.2.13.0/24 dev bond1.13 src 10.2.13.40 table 200
+      pre-down ip rule del from 10.2.13.40 table 200
+      pre-down ip route del 10.2.13.0/24 dev bond1.13 table 200
+      pre-down ip route del default via 10.2.13.1 dev bond1.13 table 200
+      pre-down ip route del 10.2.13.0/24 dev bond1.13 src 10.2.13.40 table 200
+  #NFS
+
+  auto vmbr0
+  iface vmbr0 inet manual
+      bridge-ports bond0
+      bridge-stp off
+      bridge-fd 0
+      bridge-vlan-aware yes
+      bridge-vids 10
+
+  auto vmbr0.10
+  iface vmbr0.10 inet static
+      address 10.2.10.40/24
+      gateway 10.2.10.1
+  #Infrastructure
+  
+  auto bond0.11
+  iface bond0.11 inet static
+      address 10.2.11.40/24
+  #Proxmox
+
+  source /etc/network/interfaces.d/*

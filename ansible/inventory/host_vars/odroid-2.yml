@@ -1,0 +1,49 @@
+proxmox_network: |
+  auto lo
+  iface lo inet loopback
+
+  auto enp1s0
+  iface enp1s0 inet manual
+
+  auto enp2s0
+  iface enp2s0 inet manual
+
+  auto bond0
+  iface bond0 inet manual
+      bond-slaves enp1s0 enp2s0
+      bond-miimon 100
+      bond-mode 802.3ad
+      bond-xmit-hash-policy layer2+3
+      bond-lacp-rate 1
+  #Management
+
+  auto vmbr0
+  iface vmbr0 inet manual
+      bridge-ports bond0
+      bridge-stp off
+      bridge-fd 0
+      bridge-vlan-aware yes
+      bridge-vids 10
+
+  auto vmbr0.10
+  iface vmbr0.10 inet static
+      address 10.2.10.20/24
+      gateway 10.2.10.1
+  #Infrastructure
+  
+  auto bond0.11
+  iface bond0.11 inet static
+      address 10.2.11.20/24
+  #Proxmox
+  
+  auto bond0.13
+  iface bond0.13 inet static
+      address 10.2.13.20/24
+  #Ceph public
+  
+  auto bond0.12
+  iface bond0.12 inet static
+      address 10.2.12.20/24
+  #Ceph private
+  
+  source /etc/network/interfaces.d/*
