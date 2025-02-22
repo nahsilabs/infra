@@ -1,0 +1,13 @@
+machine:
+  install:
+    image: factory.talos.dev/installer-secureboot/4d2f14467f85468b6b5ff0ba1747f7f0bcb97d351d516db0197885247093d6fd:v1.9.4 
+  network:
+    hostname: heliopolis
+    interfaces:
+      - interface: enp6s18
+        dhcp: false
+        addresses:
+          - 10.2.15.40/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.2.15.1

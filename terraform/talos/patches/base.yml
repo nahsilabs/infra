@@ -1,0 +1,36 @@
+machine:
+  certSANs:
+    - talos.nahsi.dev
+
+  install:
+    diskSelector:
+      size: '>= 50GB'
+    bootloader: true
+    wipe: true
+
+  time:
+    servers:
+      - 10.2.1.1
+  network:
+    nameservers:
+      - 10.2.1.1
+
+  # kubelet:
+    # extraArgs:
+    #   rotate-server-certificates: true
+
+cluster:
+  allowSchedulingOnControlPlanes: true
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true
+
+  controllerManager:
+    extraArgs:
+      bind-address: 0.0.0.0
+      
+  scheduler:
+    extraArgs:
+      bind-address: 0.0.0.0
