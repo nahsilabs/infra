@@ -52,7 +52,7 @@ proxmox_network: |
       bridge-stp off
       bridge-fd 0
       bridge-vlan-aware yes
-      bridge-vids 10
+      bridge-vids 10 15
 
   auto vmbr0.10
   iface vmbr0.10 inet static

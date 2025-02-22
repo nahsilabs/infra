@@ -6,6 +6,8 @@
     ntp_timezone: Europe/Athens
     ntp_servers:
       - 10.2.1.1
+    ntp_config_file: /etc/ntpsec/ntp.conf
+    ntp_manage_config: true
 
   roles:
     - geerlingguy.ntp
@@ -23,7 +25,6 @@
       authorized_key:
         user: "root"
         key: "https://github.com/nahsi.keys"
-        exclusive: true
 
     - name: Setup network
       copy:
