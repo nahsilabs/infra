@@ -5,8 +5,7 @@ metadata:
   name: public-pool
 spec:
   blocks:
-  - start: "37.98.199.179"
-    stop: "37.98.199.182"
+  - cidr: "37.98.199.180/30"
   serviceSelector:
     matchExpressions:
       - {key: "io.cilium/bgp-public", operator: NotIn, values: ['false']}
