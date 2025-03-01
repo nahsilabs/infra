@@ -1,2 +1,0 @@
-talos-arm.raw.xz filter=lfs diff=lfs merge=lfs -text
-talos-x86.raw.xz filter=lfs diff=lfs merge=lfs -text
