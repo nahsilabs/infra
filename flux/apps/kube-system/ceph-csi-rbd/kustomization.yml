@@ -4,3 +4,4 @@ namespace: kube-system
 resources:
   - release.yml
   - secret.yml
+  - storage-class.yml
