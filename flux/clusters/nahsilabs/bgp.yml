@@ -6,7 +6,7 @@ metadata:
 spec:
   nodeSelector:
     matchLabels:
-      bgp: "true"
+      cilium-bgp: "true"
   bgpInstances:
   - name: "cilium-bgp"
     localASN: 64513
@@ -66,3 +66,32 @@ spec:
   serviceSelector:
     matchLabels:
       cilium-bgp-public: "true"
+---
+apiVersion: v1
+data:
+    password: ENC[AES256_GCM,data:zhGZyi1Smb+1GdrJ04px/9bdQMMBhMBm,iv:biyXvviwd/Y+eZs0a+/3C5zK2J2kUneab2VgWGPMjIE=,tag:+/JJ0Aa2eyBH6vx3VLjcMg==,type:str]
+kind: Secret
+metadata:
+    creationTimestamp: null
+    name: bgp-auth-secret
+    namespace: kube-system
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age17kf3tfnhtv36pjscj7mzuv5dc0xjcj388764258uwgad78mzzs2qtu05pw
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB5bEZ2MWdqZmVOLzhuV2I0
+            Ni8wOXg0S1pyVUlhWmtGblpLcGFFQS8xZ0VNCkJQSmw2aVJZVS84d0VVMVFZcXRR
+            U2p2NDBWR3ZEN3JldlJ5UysrR0w1bGcKLS0tIFNGdmQzc050RWR0dTR5bnhCUHlN
+            WjlNaWlIWjYraDZqdFYwUWdqR1I2WFEKfuS171I02o5jDIJHLNDLeoUytRlWbuso
+            69B0uXaAqYRmDPP7vYmlz7AHQ2/vzKTn+l4toEZLlNpPhY3Fh88GIw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-03-01T19:47:30Z"
+    mac: ENC[AES256_GCM,data:Ow5WQGU/h2zSRdUVxJgViPFyHKY5dLw2ScaVcfUxs1R5/L++lca/lG4APf3TSMI5ywTk08WwR6IeXeO/m3RTx3is4R03qwQPrHyQeZLf9C6X0EUuWIf7AaqRRHWsXylxPM7XgAxRrcbftR/k0uCI2nv3zkNPFPylRGQq+vs/sL0=,iv:Zm02/YeXlN+5L6tyTfGAD0lCS65EX0ZW5nB97vHKUhQ=,tag:3Nbb+6FFbiFzZwCNHN5VkQ==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.9.1
