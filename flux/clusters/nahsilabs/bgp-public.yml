@@ -22,6 +22,7 @@ kind: CiliumBGPPeerConfig
 metadata:
   name: opnsense
 spec:
+  authSecretRef: bgp-auth-secret
   ebgpMultihop: 4
   timers:
     holdTimeSeconds: 9
