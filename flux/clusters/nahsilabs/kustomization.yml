@@ -4,5 +4,6 @@ resources:
   - bgp.yml
   - ../../repositories
   - ../../apps/kube-system
+  - ../../apps/kube-system/cert-manager
   - ../../apps/networking
   - ../../apps/media

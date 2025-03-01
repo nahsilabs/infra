@@ -7,4 +7,3 @@ resources:
   - metrics-server
   - ceph-csi-rbd
   - external-dns
-  - cert-manager
