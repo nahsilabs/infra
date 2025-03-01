@@ -4,3 +4,4 @@ resources:
   - ./siderolabs.yml
   - ./metrics-server.yml
   - ./postfinance.yml
+  - ./ceph-csi.yml
