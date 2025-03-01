@@ -36,11 +36,5 @@ cgroup:
     enabled: false
   hostRoot: /sys/fs/cgroup
 
-externalIPs:
-  enabled: true
-
-socketLB:
-  hostNamespaceOnly: true
-
 bgpControlPlane:
   enabled: true
