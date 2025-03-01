@@ -57,7 +57,7 @@ kind: CiliumLoadBalancerIPPool
 metadata:
   name: "public-ip-pool"
   labels:
-    cilium-bgp-public: true
+    cilium-bgp-public: "true"
 spec:
   blocks:
     - start: "37.98.199.181"
