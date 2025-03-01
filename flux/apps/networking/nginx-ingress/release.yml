@@ -20,5 +20,6 @@ spec:
         enabled: true
       service:
         type: LoadBalancer
+        externalTrafficPolicy: Local
         labels:
-          cilium-bgp-public: true
+          cilium-bgp-public: "true"
