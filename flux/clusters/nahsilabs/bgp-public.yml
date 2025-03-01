@@ -26,6 +26,7 @@ spec:
   timers:
     holdTimeSeconds: 9
     keepAliveTimeSeconds: 3
+    connectRetryTimeSeconds: 12
   gracefulRestart:
     enabled: true
     restartTimeSeconds: 15
