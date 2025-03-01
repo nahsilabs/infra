@@ -9,9 +9,9 @@ parameters:
   clusterID: "0f97afb5-e33d-48cb-b27a-4a7ea168b1b7"
   pool: kubernetes
   imageFeatures: layering
-  csi.storage.k8s.io/provisioner-secret-name: ceph-csi-rdb-secret
+  csi.storage.k8s.io/provisioner-secret-name: ceph-csi-rbd-secret
   csi.storage.k8s.io/provisioner-secret-namespace: kube-system
-  csi.storage.k8s.io/controller-expand-secret-name: ceph-csi-rdb-secret
+  csi.storage.k8s.io/controller-expand-secret-name: ceph-csi-rbd-secret
   csi.storage.k8s.io/controller-expand-secret-namespace: kube-system
-  csi.storage.k8s.io/node-stage-secret-name: ceph-csi-rdb-secret
+  csi.storage.k8s.io/node-stage-secret-name: ceph-csi-rbd-secret
   csi.storage.k8s.io/node-stage-secret-namespace: kube-system
