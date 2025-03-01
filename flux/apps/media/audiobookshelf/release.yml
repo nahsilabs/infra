@@ -57,14 +57,14 @@ spec:
           - hosts:
               - *host
             secretName: audiobookshelf-tls
-        persistence:
-          config:
-            existingClaim: audiobookshelf-config
-          media:
-            globalMounts:
-              - path: /audiobooks
-                subPath: Audiobooks
-                existingClaim: audiobookshelf-audiobooks
-              - path: /podcasts
-                subPath: Podcasts
-                existingClaim: audiobookshelf-podcasts
+    persistence:
+      config:
+        existingClaim: audiobookshelf-config
+      media:
+        globalMounts:
+          - path: /audiobooks
+            subPath: Audiobooks
+            existingClaim: audiobookshelf-audiobooks
+          - path: /podcasts
+            subPath: Podcasts
+            existingClaim: audiobookshelf-podcasts

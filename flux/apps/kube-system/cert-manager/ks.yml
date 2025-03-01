@@ -25,5 +25,9 @@ spec:
     kind: GitRepository
     name: infra
     namespace: flux-system
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   dependsOn:
     - name: cert-manager
