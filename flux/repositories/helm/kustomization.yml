@@ -4,5 +4,6 @@ resources:
   - ./siderolabs.yml
   - ./metrics-server.yml
   - ./postfinance.yml
+  - ./nginx-ingress.yml
   - ./ceph-csi.yml
   - ./csi-driver-nfs.yml

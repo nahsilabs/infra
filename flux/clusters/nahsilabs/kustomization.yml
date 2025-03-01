@@ -4,3 +4,4 @@ resources:
   - ./bgp.yml
   - ../../repositories
   - ../../apps/kube-system
+  - ../../apps/networking
