@@ -45,7 +45,7 @@ spec:
   volumeName: audiobookshelf-audiobooks
   resources:
     requests:
-      storage: 10Gi
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -80,4 +80,4 @@ spec:
   volumeName: audiobookshelf-podcasts
   resources:
     requests:
-      storage: 10Gi
+      storage: 1Gi
