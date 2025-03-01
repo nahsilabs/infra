@@ -13,7 +13,7 @@ spec:
     peers:
     - name: "opnsense"
       peerASN: 64512
-      peerAddress: "10.2.1.1"
+      peerAddress: "10.2.15.2"
       peerConfigRef:
         name: "opnsense"
 ---
