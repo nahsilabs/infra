@@ -20,5 +20,5 @@ spec:
         enabled: true
       service:
         type: LoadBalancer
-        annotations:
+        labels:
           cilium-bgp-public: true
