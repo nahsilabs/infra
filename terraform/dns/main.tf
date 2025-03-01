@@ -4,6 +4,7 @@ resource "adguard_rewrite" "haproxy" {
     "opnsense",
     "adguard",
     "unifi",
+    "ha",
     "power-panel",
     "valetudo",
     "ceph",
