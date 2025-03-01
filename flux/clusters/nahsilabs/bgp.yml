@@ -6,7 +6,7 @@ metadata:
 spec:
   nodeSelector:
     matchLabels:
-     kubernetes.io/hostname: odroid-2
+     kubernetes.io/hostname: odroid-1
   bgpInstances:
   - name: "cilium-bgp"
     localASN: 64513
