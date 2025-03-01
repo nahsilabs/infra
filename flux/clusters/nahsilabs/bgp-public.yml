@@ -2,13 +2,13 @@
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPClusterConfig
 metadata:
-  name: cilium-bgp-public
+  name: cilium-bgp
 spec:
   nodeSelector:
     matchLabels:
-      cilium-bgp: public
+      bgp: true
   bgpInstances:
-  - name: "cilium-public"
+  - name: "cilium-bgp"
     localASN: 64513
     peers:
     - name: "opnsense"
