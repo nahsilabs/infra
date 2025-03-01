@@ -7,7 +7,7 @@ spec:
     email: nahsi@nahsi.dev
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: letsencrypt
+      name: nahsi.dev
     solvers:
       - dns01:
           cloudflare:
