@@ -8,5 +8,5 @@ resources:
   - ceph-csi.yml
   - csi-driver-nfs.yml
   - bjw-s.yml
-  - extenral-dns.yml
+  - external-dns.yml
   - cert-manager.yml
