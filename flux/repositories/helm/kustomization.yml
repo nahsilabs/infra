@@ -5,3 +5,4 @@ resources:
   - ./metrics-server.yml
   - ./postfinance.yml
   - ./ceph-csi.yml
+  - ./csi-driver-nfs.yml

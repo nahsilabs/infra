@@ -6,3 +6,4 @@ resources:
   - ./kubelet-csr-approver
   - ./metrics-server
   - ./ceph-csi-rbd
+  - ./nfs-csi
