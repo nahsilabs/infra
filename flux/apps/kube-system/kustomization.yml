@@ -2,8 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: kube-system
 resources:
-  - ./namespace.yml
-  - ./kubelet-csr-approver
-  - ./metrics-server
-  - ./ceph-csi-rbd
-  #  - ./nfs-csi
+  - namespace.yml
+  - kubelet-csr-approver
+  - metrics-server
+  - ceph-csi-rbd
+  - external-dns
+  - cert-manager

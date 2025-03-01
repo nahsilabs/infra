@@ -5,3 +5,4 @@ resources:
   - ../../repositories
   - ../../apps/kube-system
   - ../../apps/networking
+  - ../../apps/media
