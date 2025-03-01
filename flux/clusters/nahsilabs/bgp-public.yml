@@ -22,7 +22,7 @@ kind: CiliumBGPPeerConfig
 metadata:
   name: opnsense
 spec:
-  ebgpMultihop: 2
+  ebgpMultihop: 4
   timers:
     holdTimeSeconds: 9
     keepAliveTimeSeconds: 3
