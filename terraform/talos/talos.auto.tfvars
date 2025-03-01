@@ -7,6 +7,7 @@ control_planes = [
     server_ip = "10.2.15.10"
     config_patches = [
       "./patches/base.yml",
+      "./patches/control-plane.yml",
       "./patches/odroid-1.yml",
     ]
   },
@@ -15,6 +16,7 @@ control_planes = [
     server_ip = "10.2.15.20"
     config_patches = [
       "./patches/base.yml",
+      "./patches/control-plane.yml",
       "./patches/odroid-2.yml",
     ]
   },
@@ -23,6 +25,7 @@ control_planes = [
     server_ip = "10.2.15.30"
     config_patches = [
       "./patches/base.yml",
+      "./patches/control-plane.yml",
       "./patches/odroid-3.yml",
     ]
   },

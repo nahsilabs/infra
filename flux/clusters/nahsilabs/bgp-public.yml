@@ -1,0 +1,67 @@
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: cilium-bgp-public
+spec:
+  nodeSelector:
+    matchLabels:
+      cilium-bgp: public
+  bgpInstances:
+  - name: "cilium-public"
+    localASN: 64513
+    peers:
+    - name: "opnsense"
+      peerASN: 64512
+      peerAddress: "10.2.1.1/32"
+      peerConfigRef:
+        name: "opnsense"
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeerConfig
+metadata:
+  name: opnsense
+spec:
+  timers:
+    holdTimeSeconds: 9
+    keepAliveTimeSeconds: 3
+  authSecretRef: public-bgp-auth-secret
+  ebgpMultihop: 2
+  gracefulRestart:
+    enabled: true
+    restartTimeSeconds: 15
+  families:
+    - afi: ipv4
+      safi: unicast
+      advertisements:
+        matchLabels:
+          cilium-bgp-public: true
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPAdvertisement
+metadata:
+  name: bgp-public-advertisements
+  labels:
+    cilium-bgp-public: true
+spec:
+  advertisements:
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchExpressions:
+          - { key: cilium-bgp-public, operator: In, values: [ true ] }
+---
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "public-ip-pool"
+  labels:
+    cilium-bgp-public: true
+spec:
+  blocks:
+    - start: "37.98.199.181"
+  serviceSelector:
+    matchExpressions:
+      - { key: cilium-bgp-public, operator: In, values: [ true ] }
