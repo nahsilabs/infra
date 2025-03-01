@@ -5,3 +5,4 @@ resources:
   - ./namespace.yml
   - ./kubelet-csr-approver
   - ./metrics-server
+  - ./ceph-csi-rbd
