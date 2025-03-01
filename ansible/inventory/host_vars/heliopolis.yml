@@ -1,3 +1,4 @@
+proxmox_grub_cmdline: "quiet amd_pstate=active kvm_amd.nested=1 kvm_amd.avic=1 kvm_amd.vapic=1 amd_iommu=on hugepagesz=1G hugepages=96"
 proxmox_network: |
   auto lo
   iface lo inet loopback
@@ -21,7 +22,7 @@ proxmox_network: |
       bond-slaves enp41s0 enp42s0
       bond-miimon 100
       bond-mode 802.3ad
-      bond-xmit-hash-policy layer2+3
+      bond-xmit-hash-policy layer3+4
       bond-lacp-rate 1
   #Management
 
@@ -30,7 +31,7 @@ proxmox_network: |
       bond-slaves enp39s0 enp40s0
       bond-miimon 100
       bond-mode 802.3ad
-      bond-xmit-hash-policy layer2+3
+      bond-xmit-hash-policy layer3+4
   #NFS
 
   auto bond1.13
@@ -52,7 +53,7 @@ proxmox_network: |
       bridge-stp off
       bridge-fd 0
       bridge-vlan-aware yes
-      bridge-vids 10 15
+      bridge-vids 2-4000
 
   auto vmbr0.10
   iface vmbr0.10 inet static
@@ -60,8 +61,8 @@ proxmox_network: |
       gateway 10.2.10.1
   #Infrastructure
   
-  auto bond0.11
-  iface bond0.11 inet static
+  auto vmbr0.11
+  iface vmbr0.11 inet static
       address 10.2.11.40/24
   #Proxmox
 

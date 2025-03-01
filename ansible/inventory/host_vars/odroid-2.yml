@@ -13,7 +13,7 @@ proxmox_network: |
       bond-slaves enp1s0 enp2s0
       bond-miimon 100
       bond-mode 802.3ad
-      bond-xmit-hash-policy layer2+3
+      bond-xmit-hash-policy layer3+4
       bond-lacp-rate 1
   #Management
 
@@ -23,7 +23,7 @@ proxmox_network: |
       bridge-stp off
       bridge-fd 0
       bridge-vlan-aware yes
-      bridge-vids 10 15
+      bridge-vids 2-4000
 
   auto vmbr0.10
   iface vmbr0.10 inet static
@@ -31,19 +31,19 @@ proxmox_network: |
       gateway 10.2.10.1
   #Infrastructure
   
-  auto bond0.11
-  iface bond0.11 inet static
+  auto vmbr0.11
+  iface vmbr0.11 inet static
       address 10.2.11.20/24
   #Proxmox
   
-  auto bond0.13
-  iface bond0.13 inet static
-      address 10.2.13.20/24
-  #Ceph public
-  
-  auto bond0.12
-  iface bond0.12 inet static
+  auto vmbr0.12
+  iface vmbr0.12 inet static
       address 10.2.12.20/24
   #Ceph private
+  
+  auto vmbr0.13
+  iface vmbr0.13 inet static
+      address 10.2.13.20/24
+  #Storage
   
   source /etc/network/interfaces.d/*

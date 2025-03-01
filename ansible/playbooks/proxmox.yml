@@ -19,6 +19,7 @@
           - "ca-certificates"
           - "btop"
           - "vim"
+          - "sysbench"
         state: present
 
     - name: Add ssh keys
@@ -32,7 +33,25 @@
         content: "{{ proxmox_network }}"
       notify: restart network
 
+    - name: Set kernel cmd
+      lineinfile:
+        path: /etc/default/grub
+        regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='  
+        line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ proxmox_grub_cmdline }}"'
+        backup: false
+      notify: refresh boot
+      when: proxmox_grub_cmdline is defined
+
+    - name: Set modules
+      copy:
+        content: "{{ proxmox_modules }}"
+        dest: "/etc/modprobe.d/ansible.conf"
+      when: proxmox_modules is defined
+
   handlers:
+    - name: refresh boot
+      command: update-grub && proxmox-boot-tool refresh
+
     - name: restart network
       ansible.builtin.systemd:
         name: networking
