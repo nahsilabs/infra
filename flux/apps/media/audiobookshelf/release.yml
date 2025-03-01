@@ -60,11 +60,7 @@ spec:
     persistence:
       config:
         existingClaim: audiobookshelf-config
-      media:
-        globalMounts:
-          - path: /audiobooks
-            subPath: Audiobooks
-            existingClaim: audiobookshelf-audiobooks
-          - path: /podcasts
-            subPath: Podcasts
-            existingClaim: audiobookshelf-podcasts
+      audiobooks:
+        existingClaim: audiobookshelf-audiobooks
+      podcasts:
+        existingClaim: audiobookshelf-podcasts
