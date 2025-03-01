@@ -6,7 +6,7 @@ metadata:
 spec:
   nodeSelector:
     matchLabels:
-      bgp: true
+      bgp: "true"
   bgpInstances:
   - name: "cilium-bgp"
     localASN: 64513
