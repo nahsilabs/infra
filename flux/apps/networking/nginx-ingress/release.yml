@@ -15,11 +15,13 @@ spec:
       interval: 12h
   values:
     controller:
-      kind: DaemonSet
+      kind: Deployment
+      replicaCount: 2
       publishService:
         enabled: true
       service:
         type: LoadBalancer
         externalTrafficPolicy: Local
+        allocateLoadBalancerNodePorts: false 
         labels:
           cilium-bgp-public: "true"
