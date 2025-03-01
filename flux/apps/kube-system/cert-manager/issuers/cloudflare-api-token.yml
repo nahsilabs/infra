@@ -5,7 +5,6 @@ kind: Secret
 metadata:
     creationTimestamp: null
     name: cloudflare-api-token
-    namespace: kube-system
 sops:
     kms: []
     gcp_kms: []

@@ -2,7 +2,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: audiobookshelf
-  namespace: default
 spec:
   chart:
     spec:
@@ -42,7 +41,7 @@ spec:
       audiobookshelf:
         className: nginx
         annotations:
-          cert-manager.io/cluster-issuer: letsencrypt
+          cert-manager.io/cluster-issuer: nahsi.dev
           nginx.ingress.kubernetes.io/proxy-body-size: "1G"
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Audiobookshelf
@@ -58,13 +57,14 @@ spec:
           - hosts:
               - *host
             secretName: audiobookshelf-tls
-    persistence:
-      config:
-        existingClaim: audiobookshelf-config
-      media:
-        existingClaim: audiobookshelf-datastore
-        globalMounts:
-          - path: /audiobooks
-            subPath: Audiobooks
-          - path: /podcasts
-            subPath: Podcasts
+        persistence:
+          config:
+            existingClaim: audiobookshelf-config
+          media:
+            globalMounts:
+              - path: /audiobooks
+                subPath: Audiobooks
+                existingClaim: audiobookshelf-audiobooks
+              - path: /podcasts
+                subPath: Podcasts
+                existingClaim: audiobookshelf-podcasts

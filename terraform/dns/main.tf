@@ -19,6 +19,11 @@ resource "adguard_rewrite" "nfs" {
   answer = "10.2.13.40"
 }
 
+resource "adguard_rewrite" "nfs-lan" {
+  domain = "nfs.lan"
+  answer = "10.2.13.40"
+}
+
 resource "cloudflare_record" "torrents" {
   zone_id = data.cloudflare_zone.nahsi.zone_id
   name    = "torrent.nahsi.dev"

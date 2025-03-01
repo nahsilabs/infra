@@ -22,6 +22,5 @@ spec:
       service:
         type: LoadBalancer
         externalTrafficPolicy: Local
-        allocateLoadBalancerNodePorts: false 
         labels:
           cilium-bgp-public: "true"
