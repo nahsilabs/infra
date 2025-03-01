@@ -4,9 +4,6 @@ kind: CiliumBGPClusterConfig
 metadata:
   name: cilium-bgp-public
 spec:
-  nodeSelector:
-    matchLabels:
-      cilium-bgp: public
   bgpInstances:
   - name: "cilium-public"
     localASN: 64513
