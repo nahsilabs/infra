@@ -10,3 +10,4 @@ resources:
   - bjw-s.yml
   - external-dns.yml
   - cert-manager.yml
+  - cloudnative.pg

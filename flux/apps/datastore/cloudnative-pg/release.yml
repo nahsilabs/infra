@@ -2,7 +2,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: cnpg-operator
-  namespace: database
 spec:
   chart:
     spec:
@@ -24,9 +23,3 @@ spec:
   values:
     crds:
       create: true
-    resources:
-      requests:
-        cpu: 25m
-        memory: 128Mi
-      limits:
-        memory: 256Mi

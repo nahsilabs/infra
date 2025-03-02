@@ -6,4 +6,5 @@ resources:
   - ../../apps/kube-system
   - ../../apps/kube-system/cert-manager
   - ../../apps/networking
+  - ../../apps/datastore
   - ../../apps/media
