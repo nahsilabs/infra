@@ -39,7 +39,7 @@ spec:
             port: *port
     ingress:
       audiobookshelf:
-        className: nginx
+        className: nginx-public
         annotations:
           cert-manager.io/cluster-issuer: nahsi.dev
           gethomepage.dev/enabled: "true"

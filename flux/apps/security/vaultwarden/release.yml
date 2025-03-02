@@ -20,7 +20,7 @@ spec:
       logLevel: debug
     ingress:
       enabled: true
-      class: "nginx"
+      class: "nginx-public"
       hostname: "secrets.nahsi.dev"
       tlsSecret: "vaultwarden-tls"
       nginxIngressAnnotations: false

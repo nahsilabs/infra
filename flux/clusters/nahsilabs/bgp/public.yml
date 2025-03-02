@@ -1,0 +1,12 @@
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "public-ip-pool"
+  labels:
+    cilium-bgp-public: "true"
+spec:
+  blocks:
+    - start: "37.98.199.181"
+  serviceSelector:
+    matchLabels:
+      cilium-bgp-public: "true"

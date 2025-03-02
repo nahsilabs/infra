@@ -36,14 +36,14 @@ spec:
       safi: unicast
       advertisements:
         matchLabels:
-          cilium-bgp-public: "true"
+          cilium-bgp: "true"
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPAdvertisement
 metadata:
-  name: bgp-public-advertisements
+  name: bgp-advertisements
   labels:
-    cilium-bgp-public: "true"
+    cilium-bgp: "true"
 spec:
   advertisements:
     - advertisementType: "Service"
@@ -53,19 +53,7 @@ spec:
       selector:
         matchLabels:
           cilium-bgp-public: "true"
----
-apiVersion: "cilium.io/v2alpha1"
-kind: CiliumLoadBalancerIPPool
-metadata:
-  name: "public-ip-pool"
-  labels:
-    cilium-bgp-public: "true"
-spec:
-  blocks:
-    - start: "37.98.199.181"
-  serviceSelector:
-    matchLabels:
-      cilium-bgp-public: "true"
+          cilium-bgp-private: "true"
 ---
 apiVersion: v1
 data:
