@@ -29,6 +29,7 @@ spec:
         gethomepage.dev/enabled: "true"
         gethomepage.dev/name: Vaultwarden
         gethomepage.dev/icon: vaultwarden.png
+        gethomepage.dev/group: "Apps"
         nginx.ingress.kubernetes.io/enable-cors: "true"
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         nginx.ingress.kubernetes.io/proxy-body-size: 1G

@@ -48,10 +48,21 @@ spec:
         color: slate
         target: _self
         headerStyle: clean
+
+        quicklaunch:
+          searchDescription: true
+          hideInternetSearch: true
+          hideVisitURL: true
+
         layout:
-          Home:
-            style: row
-            columns: 4
+          Media:
+            style: columns
+          Apps:
+            style: columns
+          Infra:
+            style: columns
+          Observability:
+            style: columns
 
       widgets:
         - search:
@@ -66,4 +77,55 @@ spec:
             nodes:
               show: false
 
-      services: null
+      services:
+        - Infra:
+            - Proxmox:
+                icon: proxmox
+                href: https://proxmox.nahsi.dev
+                ping: https://proxmox.nahsi.dev
+            - Opnsense:
+                icon: opnsense
+                href: https://opnsense.nahsi.dev
+                ping: https://opnsense.nahsi.dev
+            - Unifi:
+                icon: ubiquiti
+                href: https://unifi.nahsi.dev
+                ping: https://unifi.nahsi.dev
+            - Adguard:
+                icon: adguard-home
+                href: https://adguard.nahsi.dev
+                ping: https://adguard.nahsi.dev
+            - IPMI:
+                icon: asrock-rack-ipmi
+                href: https://adguard.nahsi.dev
+                ping: https://adguard.nahsi.dev
+
+        - Observability:
+            - Ceph:
+                icon: ceph
+                href: https://ceph.nahsi.dev
+                ping: https://ceph.nahsi.dev
+            - Cyberpower:
+                icon: powerpanel
+                href: https://power-panel.nahsi.dev
+                ping: https://power-panel.nahsi.dev
+
+        - IoT:
+            - Home Assistant:
+                icon: home-assistant-alt
+                href: https://ha.nahsi.dev
+                ping: https://ha.nahsi.dev
+            - Valetudo:
+                icon: valetudo
+                href: https://valetudo.nahsi.dev
+                ping: https://valetudo.nahsi.dev
+
+        - Apps:
+            - Wireguard:
+                icon: wireguard
+                href: http://vpn.nahsi.dev
+                ping: http://vpn.nahsi.dev
+            - qBittorent:
+                icon: qbittorent
+                href: https://torrent.nahsi.dev
+                ping: https://torrent.nahsi.dev

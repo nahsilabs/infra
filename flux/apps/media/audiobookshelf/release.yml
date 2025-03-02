@@ -43,6 +43,7 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: nahsi.dev
           gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Media"
           gethomepage.dev/name: Audiobookshelf
           gethomepage.dev/icon: audiobookshelf.png
           nginx.ingress.kubernetes.io/proxy-body-size: "1G"
