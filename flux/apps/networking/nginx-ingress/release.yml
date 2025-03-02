@@ -17,7 +17,10 @@ spec:
     controller:
       kind: Deployment
       replicaCount: 2
+      # for fixing the issue with vaultwarden websocket not working
       allowSnippetAnnotations: true
+      config:
+        annotations-risk-level: Critical
       publishService:
         enabled: true
       service:
