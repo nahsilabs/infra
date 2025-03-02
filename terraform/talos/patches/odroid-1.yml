@@ -1,0 +1,13 @@
+machine:
+  install:
+    image: factory.talos.dev/installer-secureboot/95d432d6bb450a67e801a6ae77c96a67e38820b62ba4159ae7e997e1695207f7:v1.9.4
+  network:
+    hostname: odroid-1
+    interfaces:
+      - interface: enp6s18
+        dhcp: false
+        addresses:
+          - 10.2.15.10/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.2.15.1

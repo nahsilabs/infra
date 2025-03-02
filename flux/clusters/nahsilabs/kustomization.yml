@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - bgp.yml
+  - ../../repositories
+  - ../../apps/kube-system
+  - ../../apps/kube-system/cert-manager
+  - ../../apps/networking
+  - ../../apps/datastore
+  - ../../apps/security
+  - ../../apps/media
+  - ../../apps/general

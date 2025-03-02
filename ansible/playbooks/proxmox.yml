@@ -6,6 +6,8 @@
     ntp_timezone: Europe/Athens
     ntp_servers:
       - 10.2.1.1
+    ntp_config_file: /etc/ntpsec/ntp.conf
+    ntp_manage_config: true
 
   roles:
     - geerlingguy.ntp
@@ -17,13 +19,13 @@
           - "ca-certificates"
           - "btop"
           - "vim"
+          - "sysbench"
         state: present
 
     - name: Add ssh keys
       authorized_key:
         user: "root"
         key: "https://github.com/nahsi.keys"
-        exclusive: true
 
     - name: Setup network
       copy:
@@ -31,7 +33,25 @@
         content: "{{ proxmox_network }}"
       notify: restart network
 
+    - name: Set kernel cmd
+      lineinfile:
+        path: /etc/default/grub
+        regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='  
+        line: 'GRUB_CMDLINE_LINUX_DEFAULT="{{ proxmox_grub_cmdline }}"'
+        backup: false
+      notify: refresh boot
+      when: proxmox_grub_cmdline is defined
+
+    - name: Set modules
+      copy:
+        content: "{{ proxmox_modules }}"
+        dest: "/etc/modprobe.d/ansible.conf"
+      when: proxmox_modules is defined
+
   handlers:
+    - name: refresh boot
+      command: update-grub && proxmox-boot-tool refresh
+
     - name: restart network
       ansible.builtin.systemd:
         name: networking

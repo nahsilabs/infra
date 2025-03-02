@@ -1,0 +1,83 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: audiobookshelf-config
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd
+  persistentVolumeReclaimPolicy: Retain
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: audiobookshelf-audiobooks
+spec:
+  capacity:
+    storage: 1Gi # doesn't matter
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-audiobookshelf-audiobooks
+  mountOptions: 
+    - "nfsvers=4.2"
+    - "nconnect=8"
+    - "hard" 
+    - "noatime"
+    - "rsize=1048576"
+    - "wsize=1048576"
+  nfs:
+    server: nfs.lan
+    path: /share/media/audiobooks
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: audiobookshelf-audiobooks
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-audiobookshelf-audiobooks
+  volumeName: audiobookshelf-audiobooks
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: audiobookshelf-podcasts
+spec:
+  capacity:
+    storage: 1Gi # doesn't matter
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-audiobookshelf-podcasts
+  mountOptions: 
+    - "nfsvers=4.2"
+    - "nconnect=8"
+    - "hard" 
+    - "noatime"
+    - "rsize=1048576"
+    - "wsize=1048576"
+  nfs:
+    server: nfs.lan
+    path: /share/media/podcasts
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: audiobookshelf-podcasts
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-audiobookshelf-podcasts
+  volumeName: audiobookshelf-podcasts
+  resources:
+    requests:
+      storage: 1Gi

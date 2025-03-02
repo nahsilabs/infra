@@ -1,0 +1,55 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vaultwarden
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: vaultwarden
+      version: "0.31.x"
+      sourceRef:
+        kind: HelmRepository
+        name: vaultwarden
+        namespace: flux-system
+      interval: 1h
+  values:
+    resourceType: Deployment
+    domain: "https://secrets.nahsi.dev"
+    logging:
+      logLevel: debug
+    ingress:
+      enabled: true
+      class: "nginx"
+      hostname: "secrets.nahsi.dev"
+      tlsSecret: "vaultwarden-tls"
+      nginxIngressAnnotations: false
+      additionalAnnotations:
+        cert-manager.io/cluster-issuer: nahsi.dev
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/name: Vaultwarden
+        gethomepage.dev/icon: vaultwarden.png
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/proxy-body-size: 1G
+        nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    adminToken:
+      existingSecret: vaultwarden-secret
+      existingSecretKey: token
+    storage:
+      data:
+        name: vaultwarden-data
+        class: ceph-rbd
+        accessMode: ReadWriteOnce
+        size: 1Gi
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+    database:
+      type: postgresql
+      existingSecret: pg-vaultwarden-app
+      existingSecretKey: uri

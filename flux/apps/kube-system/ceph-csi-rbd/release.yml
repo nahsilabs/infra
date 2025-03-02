@@ -1,0 +1,28 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ceph-csi-rbd
+spec:
+  chart:
+    spec:
+      chart: ceph-csi-rbd
+      version: "3.13.0"
+      sourceRef:
+        kind: HelmRepository
+        name: ceph-csi
+        namespace: flux-system
+  interval: 5m
+  values:
+    csiConfig:
+      - clusterID: "0f97afb5-e33d-48cb-b27a-4a7ea168b1b7"
+        monitors:
+          - "10.2.13.10:6789"
+          - "10.2.13.20:6789"
+          - "10.2.13.30:6789"
+    rbac:
+      create: true
+    storageClass:
+      create: false
+    secret:
+      name: ceph-csi-rbd-secret
+      create: false

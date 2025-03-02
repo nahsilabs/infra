@@ -1,0 +1,5 @@
+proxmox_grub_cmdline: "quiet intel_iommu=on iommu=pt hugepagesz=1G hugepages=20 vfio-pci.ids=8086:46d0 vfio-pci.disable_vga=1 vfio-pci.disable_idle_d3=1"
+
+proxmox_modules: |
+  blacklist i915
+  blacklist xe

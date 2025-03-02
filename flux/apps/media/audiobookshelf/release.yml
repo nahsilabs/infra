@@ -1,0 +1,68 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: audiobookshelf
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 30m
+  values:
+    controllers:
+      audiobookshelf:
+        containers:
+          audiobookshelf:
+            image:
+              repository: ghcr.io/advplyr/audiobookshelf
+              tag: 2.19.0
+            env:
+              TZ: Europe/Athens
+              PORT: &port 8080
+              CONFIG_PATH: /config
+              METADATA_PATH: /config/metadata
+            resources:
+              requests:
+                cpu: 50m
+                memory: 200Mi
+              limits:
+                memory: 600Mi
+    service:
+      audiobookshelf:
+        controller: audiobookshelf
+        ports:
+          http:
+            port: *port
+    ingress:
+      audiobookshelf:
+        className: nginx
+        annotations:
+          cert-manager.io/cluster-issuer: nahsi.dev
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Audiobookshelf
+          gethomepage.dev/icon: audiobookshelf.png
+          nginx.ingress.kubernetes.io/proxy-body-size: "1G"
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+          nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        hosts:
+          - host: &host audio.nahsi.dev
+            paths:
+              - path: /
+                service:
+                  identifier: audiobookshelf
+                  port: http
+        tls:
+          - hosts:
+              - *host
+            secretName: audiobookshelf-tls
+    persistence:
+      config:
+        existingClaim: audiobookshelf-config
+      audiobooks:
+        existingClaim: audiobookshelf-audiobooks
+      podcasts:
+        existingClaim: audiobookshelf-podcasts
