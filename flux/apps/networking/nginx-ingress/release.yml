@@ -17,6 +17,7 @@ spec:
     controller:
       kind: Deployment
       replicaCount: 2
+      allowSnippetAnnotations: true
       publishService:
         enabled: true
       service:
