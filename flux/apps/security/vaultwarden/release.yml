@@ -27,15 +27,15 @@ spec:
         gethomepage.dev/enabled: "true"
         gethomepage.dev/name: Vaultwarden
         gethomepage.dev/icon: vaultwarden.png
-        nginx.ingress.kubernetes.io/enable-cors: true
-        nginx.ingress.kubernetes.io/force-ssl-redirect: true
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         nginx.ingress.kubernetes.io/limit-connections: 25
         nginx.ingress.kubernetes.io/limit-rps: 15
         nginx.ingress.kubernetes.io/proxy-body-size: 1024m
         nginx.ingress.kubernetes.io/proxy-connect-timeout: 10
         nginx.ingress.kubernetes.io/proxy-read-timeout: 1800
         nginx.ingress.kubernetes.io/proxy-send-timeout: 1800
-        nginx.ingress.kubernetes.io/ssl-redirect: true
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
     adminToken:
       existingSecret: vaultwarden-secret
       existingSecretKey: token
