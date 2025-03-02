@@ -23,7 +23,7 @@ spec:
     ingress:
       main:
         enabled: true
-        ingressClassName: nginx
+        ingressClassName: nginx-public
         annotations:
           cert-manager.io/cluster-issuer: "nahsi.dev"
         hosts:
