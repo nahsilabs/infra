@@ -1,0 +1,50 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: jellyfin
+spec:
+  chart:
+    spec:
+      chart: jellyfin
+      sourceRef:
+        kind: HelmRepository
+        name: jellyfin
+        namespace: flux-system
+      version: 2.1.1
+  interval: 1h
+  values:
+    image:
+      repository: docker.io/jellyfin/jellyfin
+      tag: "10.10.6@sha256:96b09723b22fdde74283274bdc1f63b9b76768afd6045dd80d4a4559fc4bb7f3"
+
+    ingress:
+      enabled: true
+      className: nginx-public
+      annotations:
+        cert-manager.io/cluster-issuer: nahsi.dev
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/group: "Media"
+        gethomepage.dev/name: Jellyfin
+        gethomepage.dev/icon: jellyfin.png
+      hosts:
+        - host: &host jellyfin.nahsi.dev
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+      tls:
+        - hosts:
+            - *host
+
+    persistence:
+      config:
+        existingClaim: jellyfin-config
+      video:
+        existingClaim: jellyfin-video
+
+    resources:
+      limits: 
+        cpu: 1000m
+        memory: 1Gi
+      requests: 
+        cpu: 1000m
+        memory: 1Gi
