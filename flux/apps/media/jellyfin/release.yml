@@ -36,6 +36,8 @@ spec:
             - *host
 
     persistence:
+      media:
+        enabled: false
       config:
         existingClaim: jellyfin-config
       video:
