@@ -28,8 +28,6 @@ spec:
     - "nconnect=8"
     - "hard" 
     - "noatime"
-    - "rsize=1048576"
-    - "wsize=1048576"
   nfs:
     server: nfs.lan
     path: /share/media/audiobooks
@@ -63,8 +61,6 @@ spec:
     - "nconnect=8"
     - "hard" 
     - "noatime"
-    - "rsize=1048576"
-    - "wsize=1048576"
   nfs:
     server: nfs.lan
     path: /share/media/podcasts
