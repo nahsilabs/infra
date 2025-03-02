@@ -16,7 +16,7 @@ spec:
   values:
     resourceType: Deployment
     domain: "https://secrets.nahsi.dev"
-    signupsAllowed: false
+    signupsAllowed: true
     signupsVerify: false
     ingress:
       enabled: true
@@ -40,8 +40,8 @@ spec:
         size: 1Gi
     resources:
       requests:
-        cpu: 10m
-        memory: 100Mi
+        cpu: 50m
+        memory: 256Mi
     database:
       type: postgresql
       existingSecret: pg-vaultwarden-app
