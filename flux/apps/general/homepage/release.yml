@@ -2,7 +2,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: homepage
-  namespace: default
 spec:
   interval: 15m
   chart:
@@ -26,7 +25,7 @@ spec:
         enabled: true
         ingressClassName: nginx
         annotations:
-          cert-manager.io/cluster-issuer: "letsencrypt"
+          cert-manager.io/cluster-issuer: "nahsi.dev"
         hosts:
           - host: &host "home.nahsi.dev"
             paths:
@@ -59,5 +58,12 @@ spec:
             provider: [duckduckgo]
             focus: false
             target: _blank
+        - kubernetes:
+            cluster:
+              show: true
+              cpu: true
+              memory: true
+            nodes:
+              show: false
 
       services: null

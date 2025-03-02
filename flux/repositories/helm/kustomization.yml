@@ -12,3 +12,4 @@ resources:
   - cert-manager.yml
   - cloudnativepg.yml
   - vaultwarden.yml
+  - jameswynn.yml

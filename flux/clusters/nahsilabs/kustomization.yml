@@ -9,3 +9,4 @@ resources:
   - ../../apps/datastore
   - ../../apps/security
   - ../../apps/media
+  - ../../apps/general
