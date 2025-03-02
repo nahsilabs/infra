@@ -5,7 +5,7 @@ metadata:
   labels:
     cilium-bgp-private: "true"
 spec:
-  allowFirstLastIPs: "no"
+  allowFirstLastIPs: "No"
   blocks:
     - cidr: "10.2.14.0/24"
   serviceSelector:
