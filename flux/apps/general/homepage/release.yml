@@ -126,6 +126,6 @@ spec:
                 href: http://vpn.nahsi.dev
                 ping: http://vpn.nahsi.dev
             - qBittorent:
-                icon: qbittorent
+                icon: qbittorrent
                 href: https://torrent.nahsi.dev
                 ping: https://torrent.nahsi.dev
