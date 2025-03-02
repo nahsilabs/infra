@@ -1,9 +1,9 @@
 gitRepository:
   spec:
     url: "https://github.com/nahsilabs/infra.git"
-    interval: "1m"
+    interval: "5m"
     ref:
-      branch: talos-home
+      branch: main
 
 kustomization:
   spec:
