@@ -35,7 +35,7 @@ spec:
     storage:
       data:
         name: vaultwarden-data
-        class: ceph-csi-rbd
+        class: ceph-rbd
         accessMode: ReadWriteOnce
         size: 1Gi
     resources:

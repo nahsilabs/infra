@@ -8,4 +8,4 @@ spec:
   primaryUpdateStrategy: unsupervised
   storage:
     size: 2Gi
-    storageClass: ceph-csi-rbd
+    storageClass: ceph-rbd
