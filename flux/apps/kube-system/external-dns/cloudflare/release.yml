@@ -22,7 +22,6 @@ spec:
             key: CF_API_TOKEN
     sources:
       - ingress
-      - service
     policy: sync
     txtOwnerId: "${CLUSTER}"
     domainFilters:
@@ -30,4 +29,3 @@ spec:
     provider: cloudflare
     extraArgs:
       - --ingress-class=nginx-public
-      - --ingress-class=nginx-private
