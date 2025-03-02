@@ -13,7 +13,7 @@ spec:
     peers:
     - name: "opnsense"
       peerASN: 64512
-      peerAddress: "10.2.1.1"
+      peerAddress: "10.2.15.2"
       peerConfigRef:
         name: "opnsense"
 ---
@@ -23,13 +23,12 @@ metadata:
   name: opnsense
 spec:
   authSecretRef: bgp-auth-secret
-  ebgpMultihop: 2
   timers:
     holdTimeSeconds: 9
     keepAliveTimeSeconds: 3
     connectRetryTimeSeconds: 12
   gracefulRestart:
-    enabled: true
+    enabled: false
     restartTimeSeconds: 15
   families:
     - afi: ipv4

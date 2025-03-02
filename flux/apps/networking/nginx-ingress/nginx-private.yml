@@ -20,6 +20,7 @@ spec:
       publishService:
         enabled: true
       ingressClassByName: true
+      electionID: nginx-private
       ingressClassResource:
         name: nginx-private
         enabled: true
