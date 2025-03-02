@@ -15,4 +15,3 @@ resources:
   - vaultwarden.yml
   - jameswynn.yml
   - intel.yml
-  - jellyfin.yml
