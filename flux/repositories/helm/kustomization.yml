@@ -11,3 +11,4 @@ resources:
   - external-dns.yml
   - cert-manager.yml
   - cloudnativepg.yml
+  - vaultwarden.yml

@@ -2,7 +2,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: vaultwarden
-  namespace: default
 spec:
   interval: 1h
   chart:
@@ -15,11 +14,10 @@ spec:
         namespace: flux-system
       interval: 1h
   values:
+    resourceType: Deployment
     domain: "https://secrets.nahsi.dev"
     signupsAllowed: false
     signupsVerify: false
-    logging:
-      logLevel: debug
     ingress:
       enabled: true
       class: "nginx"
@@ -27,7 +25,7 @@ spec:
       tlsSecret: "vaultwarden-tls"
       nginxIngressAnnotations: true
       additionalAnnotations:
-        cert-manager.io/cluster-issuer: letsencrypt
+        cert-manager.io/cluster-issuer: nahsi.dev
         gethomepage.dev/enabled: "true"
         gethomepage.dev/name: Vaultwarden
         gethomepage.dev/icon: vaultwarden.png
@@ -36,7 +34,16 @@ spec:
       existingSecretKey: token
     storage:
       data:
-        name: "vaultwarden-data"
-        size: "10Gi"
+        name: vaultwarden-data
+        class: ceph-csi-rbd
         accessMode: ReadWriteOnce
-        keepPvc: true
+        size: 1Gi
+    resources:
+      requests:
+        cpu: 10m
+        memory: 100Mi
+    database:
+      type: postgresql
+      host: pg-vaultwarden
+      existingSecret: pg-vaultwarden-app
+      existingSecretKey: uri
