@@ -6,5 +6,5 @@ resources:
   - ../../core/ingress-nginx
   - ../cert-manager.yml
   - ../../database
-  - ../../apps/vaultwarden
+  # - ../../apps/vaultwarden
   # - ../../apps/stalwart
