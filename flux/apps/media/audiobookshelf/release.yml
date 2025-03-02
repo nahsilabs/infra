@@ -19,7 +19,7 @@ spec:
           audiobookshelf:
             image:
               repository: ghcr.io/advplyr/audiobookshelf
-              tag: 2.19.0
+              tag: 2.19.5
             env:
               TZ: Europe/Athens
               PORT: &port 8080
