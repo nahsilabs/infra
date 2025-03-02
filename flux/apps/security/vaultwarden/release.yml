@@ -16,6 +16,8 @@ spec:
   values:
     resourceType: Deployment
     domain: "https://secrets.nahsi.dev"
+    logging:
+      logLevel: debug
     ingress:
       enabled: true
       class: "nginx"
