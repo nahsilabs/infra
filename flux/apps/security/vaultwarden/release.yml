@@ -27,18 +27,26 @@ spec:
         gethomepage.dev/enabled: "true"
         gethomepage.dev/name: Vaultwarden
         gethomepage.dev/icon: vaultwarden.png
+        nginx.ingress.kubernetes.io/connection-proxy-header: "keep-alive"
         nginx.ingress.kubernetes.io/enable-cors: "true"
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         nginx.ingress.kubernetes.io/limit-connections: "25"
         nginx.ingress.kubernetes.io/limit-rps: "15"
         nginx.ingress.kubernetes.io/proxy-body-size: 1024m
         nginx.ingress.kubernetes.io/proxy-connect-timeout: "10"
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"
-        nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
         nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/server-snippet: |
+          sendfile on;
+          tcp_nodelay on;
+          tcp_nopush on;
+          location /notifications/hub {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+          }
         nginx.ingress.kubernetes.io/configuration-snippet: |
-          proxy_set_header Upgrade "websocket";
-          proxy_set_header Connection "Upgrade";
+          more_set_headers "Request-Id: $req_id";
     adminToken:
       existingSecret: vaultwarden-secret
       existingSecretKey: token
