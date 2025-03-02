@@ -27,7 +27,6 @@ spec:
         gethomepage.dev/enabled: "true"
         gethomepage.dev/name: Vaultwarden
         gethomepage.dev/icon: vaultwarden.png
-        # nginx.ingress.kubernetes.io/connection-proxy-header: "keep-alive"
         nginx.ingress.kubernetes.io/enable-cors: "true"
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         nginx.ingress.kubernetes.io/limit-connections: "25"
@@ -37,9 +36,6 @@ spec:
         nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
         nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
         nginx.ingress.kubernetes.io/ssl-redirect: "true"
-        nginx.ingress.kubernetes.io/configuration-snippet: |
-          proxy_set_header Upgrade "websocket";
-          proxy_set_header Connection "Upgrade";
     adminToken:
       existingSecret: vaultwarden-secret
       existingSecretKey: token
