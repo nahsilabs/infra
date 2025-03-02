@@ -38,23 +38,6 @@ spec:
         matchLabels:
           cilium-bgp: "true"
 ---
-apiVersion: cilium.io/v2alpha1
-kind: CiliumBGPAdvertisement
-metadata:
-  name: bgp-advertisements
-  labels:
-    cilium-bgp: "true"
-spec:
-  advertisements:
-    - advertisementType: "Service"
-      service:
-        addresses:
-          - LoadBalancerIP
-      selector:
-        matchLabels:
-          cilium-bgp-public: "true"
-          cilium-bgp-private: "true"
----
 apiVersion: v1
 data:
     password: ENC[AES256_GCM,data:zhGZyi1Smb+1GdrJ04px/9bdQMMBhMBm,iv:biyXvviwd/Y+eZs0a+/3C5zK2J2kUneab2VgWGPMjIE=,tag:+/JJ0Aa2eyBH6vx3VLjcMg==,type:str]
