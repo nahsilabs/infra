@@ -10,7 +10,7 @@ spec:
         kind: HelmRepository
         name: jellyfin
         namespace: flux-system
-      version: 2.1.1
+      version: 2.1.0
   interval: 1h
   values:
     image:
@@ -40,11 +40,16 @@ spec:
         existingClaim: jellyfin-config
       video:
         existingClaim: jellyfin-video
+      cache:
+        enabled: false
+      tmp:
+        enabled: false
 
     resources:
       limits: 
         cpu: 1000m
         memory: 1Gi
+        gpu.intel.com/i915: 1
       requests: 
         cpu: 1000m
         memory: 1Gi
