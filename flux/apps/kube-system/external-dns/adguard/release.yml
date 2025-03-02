@@ -24,7 +24,7 @@ spec:
         env:
           - name: ADGUARD_URL
             value: https://adguard.nahsi.dev
-          - name: &name ADGUARD_USERNAME
+          - name: &name ADGUARD_USER
             valueFrom:
               secretKeyRef:
                 name: &secret external-dns-adguard-secret
