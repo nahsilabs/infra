@@ -2,7 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - siderolabs.yml
-  - metrics-server.yml
+  - kubernetest-sigs-metrics-server.yml
+  - kubernetest-sigs-nfd.yml
   - postfinance.yml
   - nginx-ingress.yml
   - ceph-csi.yml
@@ -13,3 +14,4 @@ resources:
   - cloudnativepg.yml
   - vaultwarden.yml
   - jameswynn.yml
+  - intel.yml

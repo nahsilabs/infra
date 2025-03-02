@@ -5,6 +5,7 @@ resources:
   - ../../repositories
   - ../../apps/kube-system
   - ../../apps/kube-system/cert-manager
+  - ../../apps/system
   - ../../apps/networking
   - ../../apps/datastore
   - ../../apps/security
