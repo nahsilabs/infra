@@ -1,13 +1,18 @@
-proxmox_grub_cmdline: "quiet amd_pstate=active kvm_amd.nested=1 kvm_amd.avic=1 kvm_amd.vapic=1 amd_iommu=on hugepagesz=1G hugepages=96"
+proxmox_grub_cmdline: "quiet amd_pstate=active iommu=pt kvm_amd.nested=1 kvm_amd.avic=1 kvm_amd.vapic=1 amd_iommu=on hugepagesz=1G hugepages=84"
+proxmox_modules: |
+  vfio
+  vfio_iommu_type1
+  vfio_pci
+proxmox_modules_options: |
+  options vfio-pci ids=15b7:5006,1b21:1182,10ec:8125,1000:0087
+  softdep vfio-pci pre: pci_stub
+  blacklist nvme
+  blacklist r8169
+  blacklist mpt3sas
+
 proxmox_network: |
   auto lo
   iface lo inet loopback
-
-  auto enp39s0
-  iface enp39s0 inet manual
-
-  auto enp40s0
-  iface enp40s0 inet manual
 
   iface enx5e46417fa2c3 inet manual
 
@@ -25,27 +30,6 @@ proxmox_network: |
       bond-xmit-hash-policy layer3+4
       bond-lacp-rate 1
   #Management
-
-  auto bond1
-  iface bond1 inet manual
-      bond-slaves enp39s0 enp40s0
-      bond-miimon 100
-      bond-mode 802.3ad
-      bond-xmit-hash-policy layer3+4
-  #NFS
-
-  auto bond1.13
-  iface bond1.13 inet static
-      address 10.2.13.40/24
-      post-up ip rule add from 10.2.13.40 table 200
-      post-up ip route add 10.2.13.0/24 dev bond1.13 table 200
-      post-up ip route add default via 10.2.13.1 dev bond1.13 table 200
-      post-up ip route add 10.2.13.0/24 dev bond1.13 src 10.2.13.40 table 200
-      pre-down ip rule del from 10.2.13.40 table 200
-      pre-down ip route del 10.2.13.0/24 dev bond1.13 table 200
-      pre-down ip route del default via 10.2.13.1 dev bond1.13 table 200
-      pre-down ip route del 10.2.13.0/24 dev bond1.13 src 10.2.13.40 table 200
-  #NFS
 
   auto vmbr0
   iface vmbr0 inet manual

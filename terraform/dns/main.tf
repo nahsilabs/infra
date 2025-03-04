@@ -16,12 +16,12 @@ resource "adguard_rewrite" "haproxy" {
 
 resource "adguard_rewrite" "nfs" {
   domain = "nfs.local"
-  answer = "10.2.13.40"
+  answer = "10.2.10.41"
 }
 
 resource "adguard_rewrite" "nfs-lan" {
   domain = "nfs.lan"
-  answer = "10.2.13.40"
+  answer = "10.2.10.41"
 }
 
 resource "cloudflare_record" "torrents" {

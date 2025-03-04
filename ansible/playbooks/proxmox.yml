@@ -1,5 +1,5 @@
 - name: Proxmox post install
-  hosts: proxmox
+  hosts: heliopolis
   user: root
   gather_facts: true
   vars:
@@ -45,8 +45,16 @@
     - name: Set modules
       copy:
         content: "{{ proxmox_modules }}"
-        dest: "/etc/modprobe.d/ansible.conf"
+        dest: "/etc/modules-load.d/ansible.conf"
+      notify: refresh boot
       when: proxmox_modules is defined
+
+    - name: Set modules options
+      copy:
+        content: "{{ proxmox_modules_options }}"
+        dest: "/etc/modprobe.d/ansible.conf"
+      notify: refresh boot
+      when: proxmox_modules_options is defined
 
   handlers:
     - name: refresh boot
