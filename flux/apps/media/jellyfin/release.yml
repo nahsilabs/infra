@@ -115,7 +115,7 @@ spec:
       nfs-nas-video-library:
         type: nfs
         server: nfs.lan
-        path: /share/media/video
+        path: /mnt/storage/media/video
         advancedMounts:
           jellyfin:
             app:

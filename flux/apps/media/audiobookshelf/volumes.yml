@@ -24,13 +24,12 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: nfs-audiobookshelf-audiobooks
   mountOptions: 
-    - "nfsvers=4.2"
     - "nconnect=8"
     - "hard" 
     - "noatime"
   nfs:
     server: nfs.lan
-    path: /share/media/audiobooks
+    path: /mnt/storage/media/audiobooks
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -57,13 +56,12 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: nfs-audiobookshelf-podcasts
   mountOptions: 
-    - "nfsvers=4.2"
     - "nconnect=8"
     - "hard" 
     - "noatime"
   nfs:
     server: nfs.lan
-    path: /share/media/podcasts
+    path: /mnt/storage/media/podcasts
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
