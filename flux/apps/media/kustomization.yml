@@ -4,4 +4,4 @@ namespace: media
 resources:
   - namespace.yml
   - audiobookshelf
-  - jellyfin
+  # - jellyfin
