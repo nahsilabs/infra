@@ -41,6 +41,10 @@ spec:
       ingressClassName: nginx-private
       hosts:
         - &host "grafana.nahsi.dev"
+      tls:
+        - hosts:
+            - *host
+          secretName: grafana-tls
     persistence:
       enabled: false
     plugins:
