@@ -30,8 +30,6 @@ spec:
         secretKeyRef:
           name: pg-grafana-app
           key: uri
-    deploymentStrategy:
-      type: RollingUpdate
     testFramework:
       enabled: false
     ingress:
