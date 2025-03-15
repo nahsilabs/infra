@@ -19,6 +19,13 @@ spec:
     remediation:
       retries: 3
   values:
+    admin:
+      existingSecret: grafana-admin-credentials
+      userKey: username
+      passwordKey: password
+    envFromSecrets:
+      - name: grafana-oauth
+        optional: false
     deploymentStrategy:
       type: RollingUpdate
     testFramework:
@@ -63,6 +70,8 @@ spec:
     ## ref: http://docs.grafana.org/installation/configuration/
     ##
     grafana.ini:
+      server:
+        root_url: https://grafana.nahsi.dev/
       analytics:
         check_for_updates: false
         check_for_plugin_updates: false
