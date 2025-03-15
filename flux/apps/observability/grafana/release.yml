@@ -29,7 +29,11 @@ spec:
       GF_DATABASE_HOST:
         secretKeyRef:
           name: pg-grafana-app
-          key: host_port
+          key: host
+      GF_DATABASE_PORT:
+        secretKeyRef:
+          name: pg-grafana-app
+          key: port
       GF_DATABASE_NAME:
         secretKeyRef:
           name: pg-grafana-app
