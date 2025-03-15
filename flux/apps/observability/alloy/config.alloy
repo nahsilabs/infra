@@ -5,12 +5,11 @@ logging {
 
 // DISCOVERY
 
-discovery.kubernetes "pod" {
-	role = "pod"
-}
-
-discovery.kubernetes "service" {
-	role = "service"
+prometheus.operator.servicemonitors "services" {
+    forward_to = [prometheus.remote_write.victoriametrics.receiver]
+    selector {
+        match_labels = {scrape = "true"}
+    }
 }
 
 prometheus.exporter.self "default" { }

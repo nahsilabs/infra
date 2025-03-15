@@ -5,4 +5,5 @@ resources:
   - namespace.yml
   - grafana
   - alloy
+  - prometheus-operator-crds
   - node-exporter

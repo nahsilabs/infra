@@ -6,7 +6,7 @@ spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
-    name: node-exporter
+    name: prometheus-node-exporter
     namespace: flux-system
   values:
     fullnameOverride: node-exporter
@@ -17,8 +17,10 @@ spec:
 
     prometheus:
       monitor:
-        enabled: false
+        enabled: true
         jobLabel: app.kubernetes.io/instance
+        additionalLabels:
+          scrape: "true"
 
         relabelings:
           - action: replace
