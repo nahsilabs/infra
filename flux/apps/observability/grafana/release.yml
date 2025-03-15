@@ -26,10 +26,26 @@ spec:
       - name: grafana-oauth
         optional: false
     envValueFrom:
-      GF_DATABASE_URL:
+      GF_DATABASE_TYPE:
+        value: "postgres"
+      GF_DATABASE_HOST:
         secretKeyRef:
           name: pg-grafana-app
-          key: uri
+          key: host_port
+      GF_DATABASE_NAME:
+        secretKeyRef:
+          name: pg-grafana-app
+          key: dbname
+      GF_DATABASE_USER:
+        secretKeyRef:
+          name: pg-grafana-app
+          key: user
+      GF_DATABASE_PASSWORD:
+        secretKeyRef:
+          name: pg-grafana-app
+          key: password
+      GF_DATABASE_SSL_MODE:
+        value: "require"
     testFramework:
       enabled: false
     ingress:
