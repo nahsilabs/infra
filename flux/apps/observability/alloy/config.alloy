@@ -21,12 +21,14 @@ prometheus.scrape "metamonitoring" {
 
 prometheus.scrape "proxmox" {
   targets = [
-    { __address__ = "10.2.10.10:9100", job = "node-exporter-proxmox", instance = "odroid-1.proxmox" },
-    { __address__ = "10.2.10.20:9100", job = "node-exporter-proxmox", instance = "odroid-2.proxmox" },
-    { __address__ = "10.2.10.30:9100", job = "node-exporter-proxmox", instance = "odroid-3.proxmox" },
-    { __address__ = "10.2.10.40:9100", job = "node-exporter-proxmox", instance = "heliopolis.proxmox" },
-    { __address__ = "10.2.10.50:9100", job = "node-exporter-proxmox", instance = "odyssey-0.proxmox" },
+    { __address__ = "10.2.10.10:9100", instance = "odroid-1.proxmox" },
+    { __address__ = "10.2.10.20:9100", instance = "odroid-2.proxmox" },
+    { __address__ = "10.2.10.30:9100", instance = "odroid-3.proxmox" },
+    { __address__ = "10.2.10.40:9100", instance = "heliopolis.proxmox" },
+    { __address__ = "10.2.10.50:9100", instance = "odyssey-0.proxmox" },
   ]
+
+  job_name = "node-exporter-proxmox"
 
   forward_to = [prometheus.remote_write.victoriametrics.receiver]
 }
