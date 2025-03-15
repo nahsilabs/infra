@@ -26,8 +26,6 @@ spec:
       - name: grafana-oauth
         optional: false
     envValueFrom:
-      GF_DATABASE_TYPE:
-        value: "postgres"
       GF_DATABASE_HOST:
         secretKeyRef:
           name: pg-grafana-app
@@ -44,8 +42,6 @@ spec:
         secretKeyRef:
           name: pg-grafana-app
           key: password
-      GF_DATABASE_SSL_MODE:
-        value: "require"
     testFramework:
       enabled: false
     ingress:
