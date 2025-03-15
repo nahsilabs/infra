@@ -215,3 +215,8 @@ spec:
           gnetId: 10229
           revision: 37
           datasource: victoriametrics
+        myspeed:
+          # renovate: depName="Myspeed"
+          gnetId: 21647
+          revision: 1
+          datasource: victoriametrics
