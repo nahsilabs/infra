@@ -61,23 +61,23 @@ spec:
     ingress:
       app:
         enabled: true
-      ingressClassName: nginx-private
-      annotations:
-        cert-manager.io/cluster-issuer: nahsi.dev
-        gethomepage.dev/enabled: "true"
-        gethomepage.dev/group: "Observability"
-        gethomepage.dev/name: MySpeed
-        gethomepage.dev/icon: myspeed.png
+        ingressClassName: nginx-private
+        annotations:
+          cert-manager.io/cluster-issuer: nahsi.dev
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Observability"
+          gethomepage.dev/name: MySpeed
+          gethomepage.dev/icon: myspeed.png
 
-      hosts:
-        - host: &host "myspeed.nahsi.dev"
-          paths:
-            - path: /
-              pathType: Prefix
-              service:
-                identifier: app
-                port: http
-      tls:
-        - hosts:
-            - *host
-          secretName: myspeed-tls
+        hosts:
+          - host: &host "myspeed.nahsi.dev"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - hosts:
+              - *host
+            secretName: myspeed-tls
