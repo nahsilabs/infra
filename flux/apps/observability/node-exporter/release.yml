@@ -43,7 +43,7 @@ spec:
             targetLabel: nodename
           - action: replace
             regex: (.*)
-            replacement: $1.lan:9100
+            replacement: $1.talos
             sourceLabels:
               - kubernetes_node
             targetLabel: instance
