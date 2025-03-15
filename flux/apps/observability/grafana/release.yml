@@ -25,12 +25,11 @@ spec:
     envFromSecrets:
       - name: grafana-oauth
         optional: false
-    # env:
-    #   - name: GF_DATABASE_URL
-    #     valueFrom: 
-    #       secretKeyRef:
-    #         name: pg-grafana-app
-    #         key: uri
+    envValueFrom:
+      GF_DATABASE_URL:
+        secretKeyRef:
+          name: pg-grafana-app
+          key: uri
     deploymentStrategy:
       type: RollingUpdate
     testFramework:
