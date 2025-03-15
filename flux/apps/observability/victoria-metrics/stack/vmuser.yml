@@ -1,0 +1,12 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMUser
+metadata:
+  name: stack
+spec:
+  username: admin
+  generatePassword: true
+  targetRefs:
+    - static:
+        url: http://vmauth-stack.observability.svc.cluster.local
+      paths:
+        - "/"
