@@ -38,6 +38,15 @@ spec:
         extra:
           - name: alloy
             mountPath: /var/lib/alloy
+    ingress:
+      enabled: true
+      annotations:
+      hosts:
+      - &host alloy.nahsi.dev
+      tls:
+      - hosts:
+        - *host
+        secretName: alloy-tls
     controller:
       type: "statefulset"
       replicas: 1
