@@ -23,14 +23,11 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
-  valuesFrom:
-    - kind: ConfigMap
-      name: alloy-config
-      targetPath: alloy.configMap.name
   values:
     alloy:
       configMap:
         create: false
+        name: alloy-config
         key: config.alloy
       clustering:
         enabled: true
