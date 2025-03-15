@@ -45,3 +45,7 @@ spec:
     extraArgs:
       - --webhook-provider-url=http://localhost:8888
       - --ingress-class=nginx-private
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        scrape: "true"
