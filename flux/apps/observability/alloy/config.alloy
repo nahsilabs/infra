@@ -19,7 +19,7 @@ prometheus.scrape "metamonitoring" {
 	forward_to = [prometheus.remote_write.victoriametrics.receiver]
 }
 
-prometheus.scrape "node-exporter-proxmox" {
+prometheus.scrape "proxmox" {
   targets = [
     { __address__ = "10.2.10.10:9100", instance = "odroid-1.proxmox" },
     { __address__ = "10.2.10.20:9100", instance = "odroid-2.proxmox" },
