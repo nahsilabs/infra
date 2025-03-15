@@ -42,6 +42,7 @@ spec:
 
       kubernetes:
         mode: cluster
+        ingress: true
 
       settings:
         title: NahsiLabs Dashboard
