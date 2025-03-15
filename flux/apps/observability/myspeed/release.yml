@@ -61,7 +61,7 @@ spec:
     ingress:
       app:
         enabled: true
-        ingressClassName: nginx-private
+        className: nginx-private
         annotations:
           cert-manager.io/cluster-issuer: nahsi.dev
           gethomepage.dev/enabled: "true"
