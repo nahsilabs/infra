@@ -9,7 +9,6 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: cert-manager
-      namespace: kube-system
   path: ./flux/apps/observability/victoria-metrics/operator
   prune: true
   sourceRef:
