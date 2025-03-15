@@ -15,11 +15,18 @@ spec:
       registry: quay.io
       repository: prometheus/node-exporter
 
-      extraArgs:
-        - --no-collector.wifi
-        - --no-collector.hwmon
-        - --collector.filesystem.ignored-mount-points=^/(run|etc|dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
-        - --collector.netclass.ignored-devices=^(veth.*)$
+    extraArgs:
+      - --no-collector.wifi
+      - --no-collector.btrfs
+      - --no-collector.dmi
+      - --no-collector.fibrechannel
+      - --no-collector.hwmon
+      - --no-collector.infiniband
+      - --no-collector.powersupplyclass
+      - --no-collector.thermal_zone
+      - --no-collector.zfs
+      - --collector.filesystem.ignored-mount-points=^/(run|etc|dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
+      - --collector.netclass.ignored-devices=^(veth.*)$
 
     prometheus:
       monitor:
