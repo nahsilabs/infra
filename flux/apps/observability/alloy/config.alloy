@@ -19,6 +19,45 @@ prometheus.scrape "metamonitoring" {
 	forward_to = [prometheus.remote_write.victoriametrics.receiver]
 }
 
+prometheus.scrape "odroid" {
+  targets = [
+    "10.2.10.10:9100",
+    "10.2.10.20:9100"
+    "10.2.10.30:9100"
+  ]
+
+  relabel {
+    source_labels = ["__address__"]
+    regex        = "10\\.2\\.10\\.([0-9]+):9100"
+    target_label = "instance"
+    replacement  = "odroid-$1.proxmox"
+  }
+
+  forward_to = [prometheus.remote_write.victoriametrics.receiver]
+}
+
+prometheus.scrape "heliopolis" {
+  targets = ["10.2.10.40:9100"]
+
+  labels = {
+    instance = "heliopolis"
+  }
+
+  forward_to = [prometheus.remote_write.victoriametrics.receiver]
+}
+
+prometheus.scrape "odyssey" {
+  targets = [
+   "10.2.10.50:9100"
+   ]
+
+  labels = {
+    instance = "odyssey-0"
+  }
+
+  forward_to = [prometheus.remote_write.victoriametrics.receiver]
+}
+
 // WRITES
 
 prometheus.remote_write "victoriametrics" {
