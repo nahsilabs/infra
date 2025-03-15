@@ -103,7 +103,7 @@ spec:
       news:
         news_feed_enabled: false
       users:
-        allow_sign_up: false
+        allow_sign_up: true
         auto_assign_org: true
         auto_assign_org_role: Admin
       database:
