@@ -16,3 +16,8 @@ spec:
     - port: http
       path: /api/prometheus/metrics
       interval: 30s
+  relabelings:
+    - action: replace
+      regex: .*
+      replacement: myspeed
+      targetLabel: instance
