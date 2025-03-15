@@ -21,7 +21,7 @@ spec:
   values:
     admin:
       existingSecret: grafana-admin-credentials
-      userKey: username
+      userKey: user
       passwordKey: password
     envFromSecrets:
       - name: grafana-oauth
