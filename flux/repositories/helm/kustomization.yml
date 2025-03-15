@@ -15,3 +15,5 @@ resources:
   - vaultwarden.yml
   - jameswynn.yml
   - intel.yml
+  - victoriametrics.yml
+  - grafanalabs.yml

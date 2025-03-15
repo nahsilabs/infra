@@ -32,3 +32,9 @@ spec:
         externalTrafficPolicy: Local
         labels:
           cilium-bgp-private: "true"
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          additionalLabels:
+            scrape: "true"

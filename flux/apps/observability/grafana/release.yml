@@ -1,0 +1,217 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grafana
+spec:
+  interval: 1h
+  timeout: 5m
+  chartRef:
+    kind: OCIRepository
+    name: grafana
+    namespace: flux-system
+  driftDetection:
+    mode: enabled
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    deploymentStrategy:
+      type: RollingUpdate
+    admin:
+      existingSecret: grafana-admin-credentials
+      userKey: user
+      passwordKey: password
+    envFromSecrets:
+      - name: grafana-oauth
+        optional: false
+    envValueFrom:
+      GF_DATABASE_HOST:
+        secretKeyRef:
+          name: pg-grafana-app
+          key: host
+      GF_DATABASE_PORT:
+        secretKeyRef:
+          name: pg-grafana-app
+          key: port
+      GF_DATABASE_NAME:
+        secretKeyRef:
+          name: pg-grafana-app
+          key: dbname
+      GF_DATABASE_USER:
+        secretKeyRef:
+          name: pg-grafana-app
+          key: user
+      GF_DATABASE_PASSWORD:
+        secretKeyRef:
+          name: pg-grafana-app
+          key: password
+    testFramework:
+      enabled: false
+    ingress:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: nahsi.dev
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/group: "Observability"
+        gethomepage.dev/name: Grafana
+        gethomepage.dev/icon: grafana.png
+      ingressClassName: nginx-private
+      hosts:
+        - &host "grafana.nahsi.dev"
+      tls:
+        - hosts:
+            - *host
+          secretName: grafana-tls
+    persistence:
+      enabled: false
+    plugins:
+      - grafana-clock-panel
+
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+          - name: VictoriaMetrics
+            type: prometheus
+            uid: victoriametrics
+            access: proxy
+            url: http://vmsingle-stack.observability.svc:8429
+            isDefault: true
+            jsonData:
+              prometheusType: Prometheus
+              timeInterval: 15s
+
+    ## Grafana's primary configuration
+    ## NOTE: values in map will be converted to ini format
+    ## ref: http://docs.grafana.org/installation/configuration/
+    grafana.ini:
+      server:
+        root_url: https://grafana.nahsi.dev/
+      analytics:
+        check_for_updates: false
+        check_for_plugin_updates: false
+        reporting_enabled: false
+      date_formats:
+        full_date: "YYYY-MM-DD HH:mm:ss"
+        interval_second: "HH:mm:ss"
+        interval_minute: "HH:mm"
+        interval_hour: "MMM DD HH:mm"
+        interval_day: "MMM DD"
+        interval_month: "YYYY-MM"
+        interval_year: "YYYY"
+      news:
+        news_feed_enabled: false
+      users:
+        allow_sign_up: true
+        auto_assign_org: true
+        auto_assign_org_role: Admin
+      database:
+        type: postgres
+
+    sidecar:
+      dashboards:
+        enabled: true
+        searchNamespace: ALL
+        folderAnnotation: grafana_folder
+        provider:
+          disableDelete: true
+          foldersFromFilesStructure: true
+      datasources:
+        enabled: true
+        searchNamespace: ALL
+      enableUniqueFilenames: true
+
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+          - name: default
+            orgId: 1
+            folder: ""
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/default
+          - name: nginx
+            orgId: 1
+            folder: Nginx
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/nginx
+          - name: kubernetes
+            orgId: 1
+            folder: Kubernetes
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/kubernetes
+          - name: observability
+            orgId: 1
+            folder: Observability
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/observability
+    dashboards:
+      default:
+        external-dns:
+          # renovate: depName="External-dns"
+          gnetId: 15038
+          revision: 3
+          datasource: victoriametrics
+        node-exporter-full:
+          # renovate: depName="Node Exporter Full"
+          gnetId: 1860
+          revision: 37
+          datasource: victoriametrics
+        cert-manager:
+          url: https://gitlab.com/uneeq-oss/cert-manager-mixin/-/raw/master/dashboards/cert-manager.json?ref_type=heads
+          datasource: victoriametrics
+        node-feature-discovery:
+          url: https://raw.githubusercontent.com/kubernetes-sigs/node-feature-discovery/master/examples/grafana-dashboard.json
+          datasource: victoriametrics
+      kubernetes:
+        k8s-system-api-server:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-system-api-server.json
+          token: ""
+        k8s-system-coredns:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-system-coredns.json
+          token: ""
+        k8s-views-global:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-global.json
+          token: ""
+        k8s-views-namespaces:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-namespaces.json
+          token: ""
+        k8s-views-nodes:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-nodes.json
+          token: ""
+        k8s-views-pods:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-pods.json
+          token: ""
+      nginx:
+        nginx:
+          url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
+          datasource: victoriametrics
+        nginx-request-handling-performance:
+          url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/request-handling-performance.json
+          datasource: victoriametrics
+      observability:
+        victoria-operator:
+          # renovate: depName="VictoriaMetrics - operator"
+          gnetId: 17869
+          revision: 3
+          datasource: victoriametrics
+        victoria-single:
+          # renovate: depName="VictoriaMetrics - single-node"
+          gnetId: 10229
+          revision: 37
+          datasource: victoriametrics

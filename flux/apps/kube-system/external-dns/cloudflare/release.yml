@@ -29,3 +29,7 @@ spec:
     provider: cloudflare
     extraArgs:
       - --ingress-class=nginx-public
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        scrape: "true"

@@ -1,0 +1,13 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMUser
+metadata:
+  name: stack-admin
+spec:
+  username: admin
+  generatePassword: true
+  targetRefs:
+    - crd:
+        kind: VMSingle
+        name: stack
+        namespace: observability
+      paths: ["/.*"]

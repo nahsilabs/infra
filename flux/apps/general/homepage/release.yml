@@ -16,6 +16,8 @@ spec:
     image:
       repository: ghcr.io/gethomepage/homepage
       tag: v1.0.2
+    env:
+      HOMEPAGE_ALLOWED_HOSTS: &host home.nahsi.dev
     serviceAccount:
       create: true
       name: homepage
@@ -27,7 +29,7 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: "nahsi.dev"
         hosts:
-          - host: &host "home.nahsi.dev"
+          - host: *host
             paths:
               - path: /
                 pathType: Prefix
@@ -40,6 +42,7 @@ spec:
 
       kubernetes:
         mode: cluster
+        ingress: true
 
       settings:
         title: NahsiLabs Dashboard

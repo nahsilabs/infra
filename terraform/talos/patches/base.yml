@@ -10,7 +10,7 @@ machine:
 
   time:
     servers:
-      - 10.2.1.1
+      - time.cloudflare.com
   network:
     nameservers:
       - 10.2.1.1
