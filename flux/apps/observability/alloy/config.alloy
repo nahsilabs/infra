@@ -22,7 +22,7 @@ prometheus.scrape "metamonitoring" {
 prometheus.scrape "odroid" {
   targets = [
     "10.2.10.10:9100",
-    "10.2.10.20:9100"
+    "10.2.10.20:9100",
     "10.2.10.30:9100"
   ]
 
@@ -48,8 +48,8 @@ prometheus.scrape "heliopolis" {
 
 prometheus.scrape "odyssey" {
   targets = [
-   "10.2.10.50:9100"
-   ]
+    "10.2.10.50:9100"
+  ]
 
   labels = {
     instance = "odyssey-0"
