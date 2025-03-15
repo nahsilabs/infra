@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - release.yml
   - pvc.yml
+  - servicemonitor.yml
