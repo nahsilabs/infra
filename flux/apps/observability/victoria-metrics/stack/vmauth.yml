@@ -6,10 +6,9 @@ spec:
   selectAllByDefault: true
   ingress:
     class_name: nginx-private
-    tlshosts:
-      - hosts:
-          - vam.nahsi.dev
-        secretName: vam-tls
+    tlsHosts:
+      - vam.nahsi.dev
+    tlsSecretName: vam-tls
     annotations:
       cert-manager.io/cluster-issuer: nahsi.dev
       gethomepage.dev/enabled: "true"
