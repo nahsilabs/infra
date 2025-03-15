@@ -7,3 +7,4 @@ resources:
   - alloy
   - prometheus-operator-crds
   - node-exporter
+  - kube-state-metrics
