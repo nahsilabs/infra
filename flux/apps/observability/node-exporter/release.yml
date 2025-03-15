@@ -15,6 +15,12 @@ spec:
       registry: quay.io
       repository: prometheus/node-exporter
 
+      extraArgs:
+        - --no-collector.wifi
+        - --no-collector.hwmon
+        - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
+        - --collector.netclass.ignored-devices=^(veth.*)$
+
     prometheus:
       monitor:
         enabled: true
