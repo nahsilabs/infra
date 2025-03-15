@@ -1,0 +1,29 @@
+logging {
+	level    = "warn"
+	format   = "json"
+}
+
+// DISCOVERY
+
+discovery.kubernetes "pod" {
+	role = "pod"
+}
+
+discovery.kubernetes "service" {
+	role = "service"
+}
+
+prometheus.exporter.self "default" { }
+
+prometheus.scrape "metamonitoring" {
+	targets    = prometheus.exporter.self.default.targets
+	forward_to = [prometheus.remote_write.victoriametrics.receiver]
+}
+
+// WRITES
+
+prometheus.remote_write "victoriametrics" {
+	endpoint {
+		url = "http://vmsingle-stack.observability.svc:8429/prometheus/api/v1/write"
+	}
+}

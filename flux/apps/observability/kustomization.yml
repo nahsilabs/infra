@@ -4,3 +4,4 @@ namespace: observability
 resources:
   - namespace.yml
   - grafana
+  - alloy
