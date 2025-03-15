@@ -3,7 +3,7 @@ kind: StorageClass
 metadata:
   name: ceph-rbd
 provisioner: rbd.csi.ceph.com
-reclaimPolicy: Delete
+reclaimPolicy: Retain
 allowVolumeExpansion: true
 parameters:
   clusterID: "0f97afb5-e33d-48cb-b27a-4a7ea168b1b7"
