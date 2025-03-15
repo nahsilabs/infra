@@ -7,6 +7,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: node-exporter
+    namespace: flux-system
   values:
     fullnameOverride: node-exporter
 
