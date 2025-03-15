@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: nahsi.dev
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Observability
+    gethomepage.dev/icon: alloy.png
+    gethomepage.dev/name: Alloy
+  name: alloy
+spec:
+  ingressClassName: nginx-private
+  rules:
+  - host: alloy.nahsi.dev
+    http:
+      paths:
+      - backend:
+          service:
+            name: alloy
+            port:
+              number: 12345
+        path: /
+        pathType: Prefix
+
+  tls:
+  - hosts:
+    - alloy.nahsi.dev
+    secretName: alloy-tls

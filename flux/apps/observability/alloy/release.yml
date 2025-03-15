@@ -38,21 +38,6 @@ spec:
         extra:
           - name: alloy
             mountPath: /var/lib/alloy
-    ingress:
-      enabled: true
-      hosts:
-      - &host alloy.nahsi.dev
-      tls:
-      - hosts:
-        - *host
-        secretName: alloy-tls
-      annotations:
-        cert-manager.io/cluster-issuer: nahsi.dev
-        gethomepage.dev/enabled: "true"
-        gethomepage.dev/group: "Observability"
-        gethomepage.dev/name: Alloy
-        gethomepage.dev/icon: alloy.png
-      ingressClassName: nginx-private
     controller:
       type: "statefulset"
       replicas: 1
