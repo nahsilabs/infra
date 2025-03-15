@@ -6,7 +6,8 @@ spec:
   username: admin
   generatePassword: true
   targetRefs:
-    - static:
-        url: http://vmauth-stack.observability.svc.cluster.local
-      paths:
-        - "/"
+    - crd:
+        kind: VMSingle
+        name: stack
+        namespace: observability
+      paths: ["/.*"]
