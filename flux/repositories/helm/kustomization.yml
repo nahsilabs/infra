@@ -16,3 +16,4 @@ resources:
   - jameswynn.yml
   - intel.yml
   - victoriametrics.yml
+  - grafanalabs.yml
