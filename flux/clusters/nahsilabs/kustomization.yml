@@ -11,3 +11,4 @@ resources:
   - ../../apps/security
   - ../../apps/media
   - ../../apps/general
+  - ../../apps/observability
