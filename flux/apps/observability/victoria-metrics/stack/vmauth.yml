@@ -15,4 +15,5 @@ spec:
       gethomepage.dev/group: "Observability"
       gethomepage.dev/name: VictoriaMetrics
       gethomepage.dev/icon: victoriametrics.png
+      gethomepage.dev/pod-selector: "app.kubernetes.io/name=vmsingle"
   replicaCount: 1
