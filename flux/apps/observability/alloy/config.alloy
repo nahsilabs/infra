@@ -21,11 +21,11 @@ prometheus.scrape "metamonitoring" {
 
 prometheus.scrape "proxmox" {
   targets = [
-    "10.2.10.10:9100",
-    "10.2.10.20:9100",
-    "10.2.10.30:9100",
-    "10.2.10.40:9100",
-    "10.2.10.50:9100",
+    { address = "10.2.10.10:9100", labels = { instance = "odroid-1.proxmox" } },
+    { address = "10.2.10.20:9100", labels = { instance = "odroid-2.proxmox" } },
+    { address = "10.2.10.30:9100", labels = { instance = "odroid-3.proxmox" } },
+    { address = "10.2.10.40:9100", labels = { instance = "heliopolis.proxmox" } },
+    { address = "10.2.10.50:9100", labels = { instance = "odyssey-0.proxmox" } },
   ]
 
   forward_to = [prometheus.remote_write.victoriametrics.receiver]
