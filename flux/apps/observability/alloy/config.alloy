@@ -28,6 +28,8 @@ prometheus.scrape "proxmox" {
     { __address__ = "10.2.10.50:9100", labels = { instance = "odyssey-0.proxmox" } },
   ]
 
+    labels = { job = "node-exporter-proxmox" }
+
   forward_to = [prometheus.remote_write.victoriametrics.receiver]
 }
 
