@@ -3,4 +3,3 @@ kind: Kustomization
 namespace: observability
 resources:
   - namespace.yml
-  - victoria-metrics

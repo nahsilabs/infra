@@ -12,3 +12,4 @@ resources:
   - ../../apps/media
   - ../../apps/general
   - ../../apps/observability
+  - ../../apps/observability/victoria-metrics
