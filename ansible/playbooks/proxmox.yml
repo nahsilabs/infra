@@ -1,5 +1,5 @@
 - name: Proxmox post install
-  hosts: heliopolis
+  hosts: all
   user: root
   gather_facts: true
   vars:
@@ -11,6 +11,7 @@
 
   roles:
     - geerlingguy.ntp
+    - node-exporter
 
   tasks:
     - name: Ensure necessary packages are installed
