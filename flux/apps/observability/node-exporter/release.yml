@@ -17,7 +17,7 @@ spec:
 
     prometheus:
       monitor:
-        enabled: true
+        enabled: false
         jobLabel: app.kubernetes.io/instance
 
         relabelings:
