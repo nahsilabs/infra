@@ -1,0 +1,48 @@
+proxmox_grub_cmdline: "quiet iommu=pt intel_iommu=on hugepagesz=1G hugepages=1"
+proxmox_modules: |
+  vfio
+  vfio_iommu_type1
+  vfio_pci
+proxmox_modules_options: |
+  options vfio-pci ids=8086:19a3,8086:15c4,8086:125c
+  softdep vfio-pci pre: pci_stub
+
+proxmox_network: |
+  auto lo
+  iface lo inet loopback
+
+  auto enp6s0
+  iface enp6s0 inet manual
+
+  auto enp7s0
+  iface enp7s0 inet manual
+
+  auto bond0
+  iface bond0 inet manual
+      bond-slaves enp6s0 enp7s0
+      bond-miimon 100
+      bond-mode 802.3ad
+      bond-xmit-hash-policy layer3+4
+      bond-lacp-rate 1
+  #Management
+
+  auto vmbr0
+  iface vmbr0 inet manual
+      bridge-ports bond0
+      bridge-stp off
+      bridge-fd 0
+      bridge-vlan-aware yes
+      bridge-vids 2-4000
+
+  auto vmbr0.10
+  iface vmbr0.10 inet static
+      address 10.2.10.90/24
+      gateway 10.2.10.1
+  #Infrastructure
+  
+  auto vmbr0.11
+  iface vmbr0.11 inet static
+      address 10.2.11.90/24
+  #Proxmox
+
+  source /etc/network/interfaces.d/*

@@ -22,3 +22,8 @@ resource "adguard_rewrite" "odyssey-0" {
   domain = "odyssey-0.local"
   answer = "10.2.10.50"
 }
+
+resource "adguard_rewrite" "qotom" {
+  domain = "qotom.local"
+  answer = "10.2.10.90"
+}

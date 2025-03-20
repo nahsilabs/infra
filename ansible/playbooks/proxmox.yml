@@ -1,5 +1,5 @@
 - name: Proxmox post install
-  hosts: all
+  hosts: qotom
   user: root
   gather_facts: true
   vars:
