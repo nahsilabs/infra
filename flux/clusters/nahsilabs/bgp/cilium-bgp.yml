@@ -11,16 +11,16 @@ spec:
   - name: "cilium-bgp"
     localASN: 64513
     peers:
-    - name: "opnsense"
+    - name: "vyos"
       peerASN: 64512
-      peerAddress: "10.2.15.2"
+      peerAddress: "10.2.15.1"
       peerConfigRef:
-        name: "opnsense"
+        name: "vyos"
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPPeerConfig
 metadata:
-  name: opnsense
+  name: vyos
 spec:
   authSecretRef: bgp-auth-secret
   timers:

@@ -23,8 +23,8 @@ metadata:
     cilium-bgp-private: "true"
 spec:
   blocks:
-    - start: "10.2.14.100"
-      stop: "10.2.14.200"
+    - start: "10.2.16.100"
+      stop: "10.2.16.200"
   serviceSelector:
     matchLabels:
       cilium-bgp-private: "true"
