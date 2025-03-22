@@ -86,6 +86,10 @@ spec:
                 icon: proxmox
                 href: https://proxmox.nahsi.dev
                 ping: https://proxmox.nahsi.dev
+            - Truenas:
+                icon: truenas
+                href: https://truenas.nahsi.dev
+                ping: https://truenas.nahsi.dev
             - Unifi:
                 icon: ubiquiti
                 href: https://unifi.nahsi.dev
