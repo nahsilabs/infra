@@ -23,13 +23,6 @@ metadata:
   name: vyos
 spec:
   authSecretRef: bgp-auth-secret
-  timers:
-    holdTimeSeconds: 9
-    keepAliveTimeSeconds: 3
-    connectRetryTimeSeconds: 12
-  gracefulRestart:
-    enabled: false
-    restartTimeSeconds: 15
   families:
     - afi: ipv4
       safi: unicast
