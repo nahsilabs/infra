@@ -86,10 +86,6 @@ spec:
                 icon: proxmox
                 href: https://proxmox.nahsi.dev
                 ping: https://proxmox.nahsi.dev
-            - Opnsense:
-                icon: opnsense
-                href: https://opnsense.nahsi.dev
-                ping: https://opnsense.nahsi.dev
             - Unifi:
                 icon: ubiquiti
                 href: https://unifi.nahsi.dev
@@ -98,6 +94,10 @@ spec:
                 icon: adguard-home
                 href: https://adguard.nahsi.dev
                 ping: https://adguard.nahsi.dev
+            - NPM:
+                icon: nginx-proxy-manager
+                href: https://npm.nahsi.dev
+                ping: https://npm.nahsi.dev
             - IPMI:
                 icon: asrock-rack-ipmi
                 href: https://adguard.nahsi.dev
