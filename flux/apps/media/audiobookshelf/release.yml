@@ -37,8 +37,9 @@ spec:
         ports:
           http:
             port: *port
+
     ingress:
-      audiobookshelf:
+      public:
         className: nginx-public
         annotations:
           cert-manager.io/cluster-issuer: nahsi.dev
@@ -60,6 +61,26 @@ spec:
           - hosts:
               - *host
             secretName: audiobookshelf-tls
+
+      private:
+        className: nginx-private
+        annotations:
+          cert-manager.io/cluster-issuer: nahsi.dev
+          nginx.ingress.kubernetes.io/proxy-body-size: "1G"
+          nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+          nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        hosts:
+          - host: &host audio.nahsi.dev
+            paths:
+              - path: /
+                service:
+                  identifier: audiobookshelf
+                  port: http
+        tls:
+          - hosts:
+              - *host
+            secretName: audiobookshelf-tls
+
     persistence:
       config:
         existingClaim: audiobookshelf-config
