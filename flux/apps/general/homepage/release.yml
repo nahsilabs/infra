@@ -23,7 +23,7 @@ spec:
       name: homepage
     enableRbac: true
     ingress:
-      main:
+      public:
         enabled: true
         ingressClassName: nginx-public
         annotations:
@@ -37,6 +37,22 @@ spec:
           - hosts:
               - *host
             secretName: homepage-tls
+
+      private:
+        enabled: true
+        ingressClassName: nginx-private
+        annotations:
+          cert-manager.io/cluster-issuer: "nahsi.dev"
+        hosts:
+          - host: *host
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+            secretName: homepage-tls
+
     config:
       bookmarks: null
 
