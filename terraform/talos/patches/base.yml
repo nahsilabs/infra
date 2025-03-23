@@ -13,7 +13,7 @@ machine:
       - time.cloudflare.com
   network:
     nameservers:
-      - 10.2.1.1
+      - 10.2.15.2
 
   kubelet:
     extraArgs:

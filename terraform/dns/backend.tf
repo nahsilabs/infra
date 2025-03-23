@@ -24,7 +24,7 @@ data "cloudflare_zone" "nahsi" {
 }
 
 provider "adguard" {
-  host     = "10.2.1.1:3000"
+  host     = "10.2.1.2:3000"
   username = var.adguard_username
   password = var.adguard_password
   scheme   = "http"

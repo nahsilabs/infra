@@ -1,11 +1,11 @@
 - name: Proxmox post install
-  hosts: qotom
+  hosts: all
   user: root
   gather_facts: true
   vars:
     ntp_timezone: Europe/Athens
     ntp_servers:
-      - 10.2.1.1
+      - 10.2.10.1
     ntp_config_file: /etc/ntpsec/ntp.conf
     ntp_manage_config: true
 
