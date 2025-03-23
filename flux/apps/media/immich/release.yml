@@ -136,7 +136,7 @@ spec:
       probes:
         liveness:
           spec:
-            initialDelaySeconds: 120
+            initialDelaySeconds: 300
         readiness:
           spec:
-            initialDelaySeconds: 120
+            initialDelaySeconds: 300
