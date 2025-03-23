@@ -87,22 +87,22 @@ spec:
               - *host
             secretName: jellyfin-public-tls
 
-      # private:
-      #   annotations:
-      #     cert-manager.io/cluster-issuer: nahsi.dev
-      #   className: "nginx-private"
-      #   hosts:
-      #     - host: &host jellyfin.nahsi.dev
-      #       paths:
-      #         - path: /
-      #           service:
-      #             identifier: app
-      #             port: http
-      #
-      #   tls:
-      #     - hosts:
-      #         - *host
-      #       secretName: jellyfin-private-tls
+      private:
+        annotations:
+          cert-manager.io/cluster-issuer: nahsi.dev
+        className: "nginx-private"
+        hosts:
+          - host: *host
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+
+        tls:
+          - hosts:
+              - *host
+            secretName: jellyfin-tls
 
     persistence:
       config:

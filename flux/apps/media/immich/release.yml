@@ -1,0 +1,121 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: immich
+      version: 0.9.1
+      sourceRef:
+        kind: HelmRepository
+        name: immich-charts
+        namespace: flux-system
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    redis:
+      enabled: true
+      master:
+        persistence:
+          existingClaim: immich-redis
+    immich:
+      metrics:
+        enabled: true
+      persistence:
+        library:
+          existingClaim: immich-photos
+    env:
+      TZ: Europe/Athens
+      REDIS_HOSTNAME: "immich-redis-headless"
+      IMMICH_MACHINE_LEARNING_URL: "http://immich-machine-learning:3003"
+      DB_HOSTNAME:
+        valueFrom:
+          secretKeyRef:
+            name: pg-immich-superuser
+            key: host
+      DB_PORT:
+        valueFrom:
+          secretKeyRef:
+            name: pg-immich-superuser
+            key: port
+      DB_USERNAME:
+        valueFrom:
+          secretKeyRef:
+            name: pg-immich-superuser
+            key: username
+      DB_PASSWORD:
+        valueFrom:
+          secretKeyRef:
+            name: pg-immich-superuser
+            key: password
+      DB_DATABASE_NAME:
+        valueFrom:
+          secretKeyRef:
+            name: pg-immich-app
+            key: dbname
+    image:
+      # renovate: datasource=github-releases depName=immich-app/immich
+      tag: "v1.129.0"
+    server:
+      resources:
+        requests:
+          cpu: 1500m
+          memory: 2048M
+      ingress:
+        public:
+          enabled: true
+          ingressClassName: nginx-public
+          annotations:
+            cert-manager.io/cluster-issuer: nahsi.dev
+            gethomepage.dev/enabled: "true"
+            gethomepage.dev/group: "Media"
+            gethomepage.dev/name: Immich
+            gethomepage.dev/icon: immich.png
+            nginx.ingress.kubernetes.io/proxy-body-size: "0"
+            nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+            nginx.ingress.kubernetes.io/ssl-redirect: "true"
+          hosts:
+            - host: &host "photos.nahsi.dev"
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - *host
+              secretName: immich-tls
+
+        private:
+          enabled: true
+          ingressClassName: nginx-private
+          annotations:
+            cert-manager.io/cluster-issuer: nahsi.dev
+            nginx.ingress.kubernetes.io/proxy-body-size: "0"
+            nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+            nginx.ingress.kubernetes.io/ssl-redirect: "true"
+          hosts:
+            - host: *host
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - *host
+              secretName: immich-tls
+
+    machine-learning:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 1024M
+          gpu.intel.com/i915: 1
+        limits:
+          cpu: 500m
+          memory: 2048M
+          gpu.intel.com/i915: 1
+      persistence:
+        cache:
+          type: pvc
+          existingClaim: immich-ml-cache

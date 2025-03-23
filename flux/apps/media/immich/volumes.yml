@@ -1,0 +1,56 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-ml-cache
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-delete
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-redis
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-delete
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: immich-photos
+spec:
+  capacity:
+    storage: 1Gi # doesn't matter
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-immich-photos
+  mountOptions: 
+    - "nconnect=8"
+    - "hard" 
+    - "noatime"
+  nfs:
+    server: nfs.lan
+    path: /mnt/storage/media/photos
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-photos
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-immich-photos
+  volumeName: immich-photos
+  resources:
+    requests:
+      storage: 1Gi
