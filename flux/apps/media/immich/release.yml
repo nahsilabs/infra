@@ -123,11 +123,11 @@ spec:
       resources:
         requests:
           cpu: 100m
-          memory: 1024M
+          memory: 2048M
           gpu.intel.com/i915: 1
         limits:
           cpu: 500m
-          memory: 2048M
+          memory: 4096M
           gpu.intel.com/i915: 1
       persistence:
         cache:
