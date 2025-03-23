@@ -118,8 +118,8 @@ spec:
       env:
         TRANSFORMERS_CACHE: /cache
         # Load ML models up front
-        MACHINE_LEARNING_PRELOAD__CLIP: ViT-B-32__openai
-        MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION: buffalo_l
+        MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: ViT-B-32__openai
+        MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__RECOGNITION: buffalo_l
       resources:
         requests:
           cpu: 100m
