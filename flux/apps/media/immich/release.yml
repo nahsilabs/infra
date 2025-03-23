@@ -133,3 +133,10 @@ spec:
         cache:
           type: pvc
           existingClaim: immich-ml-cache
+      probes:
+        liveness:
+          spec:
+            initialDelaySeconds: 120
+        readiness:
+          spec:
+            initialDelaySeconds: 120
