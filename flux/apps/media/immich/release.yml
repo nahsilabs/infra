@@ -12,9 +12,6 @@ spec:
         kind: HelmRepository
         name: immich-charts
         namespace: flux-system
-  upgrade:
-    remediation:
-      retries: 3
   values:
     redis:
       enabled: true
