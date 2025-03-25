@@ -1,0 +1,60 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app jackett
+spec:
+  interval: 2m0s
+  chart:
+    spec:
+      chart: app-template
+      version: "3.7.3"
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+
+  values:
+    controllers:
+      *app :
+        replicas: 1
+        containers:
+          *app :
+            image:
+              repository: linuxserver/jackett
+              tag: "0.22.1027"
+            env:
+              PUID: "568"
+              PGID: "568"
+              TZ: Europe/Athens
+
+    persistence:
+      config:
+        existingClaim: jackett-config
+
+    service:
+      main:
+        controller: *app
+        type: ClusterIP
+        ports:
+          http:
+            port: 9117
+
+    ingress:
+      main:
+        className: nginx-private
+        annotations:
+          cert-manager.io/cluster-issuer: "nahsi.dev"
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Arr"
+          gethomepage.dev/name: jackett-light
+          gethomepage.dev/icon: jackett.png
+        hosts:
+          - host: &host "jackett.nahsi.dev"
+            paths:
+              - path: "/"
+                service:
+                  identifier: main
+        tls:
+          - hosts:
+              - *host
+            secretName: jackett-tls

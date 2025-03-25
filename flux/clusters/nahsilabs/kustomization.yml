@@ -10,6 +10,7 @@ resources:
   - ../../apps/datastore
   - ../../apps/security
   - ../../apps/media
+  - ../../apps/arr
   - ../../apps/general
   - ../../apps/observability
   - ../../apps/observability/victoria-metrics
