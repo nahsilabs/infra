@@ -47,7 +47,6 @@ spec:
       TZ: Europe/Athens
       REDIS_HOSTNAME: "immich-redis-headless"
       IMMICH_MACHINE_LEARNING_URL: "http://immich-machine-learning:3003"
-      TRANSCODING_HWACCEL: "qsv"
       DB_HOSTNAME:
         valueFrom:
           secretKeyRef:
@@ -81,11 +80,9 @@ spec:
         requests:
           cpu: 500m
           memory: 1024M
-          gpu.intel.com/i915: 1
         limits:
           cpu: 1500m
           memory: 2048M
-          gpu.intel.com/i915: 1
       ingress:
         public:
           enabled: true
@@ -132,7 +129,7 @@ spec:
         # renovate: datasource=github-releases depName=immich-app/immich
         tag: "v1.129.0-openvino"
       env:
-        TRANSFORMERS_CACHE: /cache
+        MACHINE_LEARNING_CACHE_FOLDER: /cache
         # Load ML models up front
         MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: ViT-B-32__openai
         MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__RECOGNITION: buffalo_l
