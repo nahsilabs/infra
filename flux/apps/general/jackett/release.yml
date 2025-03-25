@@ -1,82 +1,56 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: jackett
+  name: &app jackett
 spec:
-  interval: 15m
+  interval: 2m0s
   chart:
     spec:
       chart: app-template
-      version: 3.7.3
+      version: "3.7.3"
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-      interval: 15m
+
   values:
-    image:
-      repository: ghcr.io/onedr0p/jackett
-      tag: 0.20.2297
-    env:
-      TZ: "Europe/Athens"
+    controllers:
+      *app :
+        replicas: 1
+        containers:
+          *app :
+            image:
+              repository: linuxserver/jackett
+              tag: "0.22.1027"
+            env:
+              PUID: "568"
+              PGID: "568"
+              TZ: Europe/Athens
+
+    persistence:
+      config:
+        existingClaim: jackett-config
+
     service:
       main:
+        controller: *app
+        type: ClusterIP
         ports:
           http:
             port: 9117
 
     ingress:
       main:
-        enabled: true
-        ingressClassName: "nginx-private"
+        className: nginx-private
         annotations:
+          cert-manager.io/cluster-issuer: "nahsi.dev"
         hosts:
-          - host: &host jackett.nahsi.dev
+          - host: &host "jackett.nahsi.dev"
             paths:
-              - path: /
-                pathType: Prefix
+              - path: "/"
+                service:
+                  identifier: main
         tls:
-          - secretName: jackett-tls
-            hosts:
+          - hosts:
               - *host
-
-    probes:
-      liveness:
-        enabled: true
-        custom: true
-        spec:
-          exec:
-            command:
-              - /usr/bin/env
-              - bash
-              - -c
-              - curl --fail localhost:9117/health
-          failureThreshold: 5
-          initialDelaySeconds: 60
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 10
-
-    podAnnotations:
-      setGateway: "true"
-
-    podLabels:
-      setGateway: "true"
-
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: "OnRootMismatch"
-
-    persistence:
-      config:
-        enabled: true
-        existingClaim: jackett-config
-
-    resources:
-      requests:
-        cpu: 10m
-        memory: 256M
-      limits:
-        memory: 8192M
+            secretName: jackett-tls
