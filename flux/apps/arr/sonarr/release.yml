@@ -63,7 +63,7 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: sonarr
+        existingClaim: sonarr-config
       data:
         enabled: true
         existingClaim: sonarr-video
