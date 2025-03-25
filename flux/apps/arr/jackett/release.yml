@@ -46,7 +46,7 @@ spec:
           cert-manager.io/cluster-issuer: "nahsi.dev"
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: "Arr"
-          gethomepage.dev/name: jackett-light
+          gethomepage.dev/name: jackett
           gethomepage.dev/icon: jackett.png
         hosts:
           - host: &host "jackett.nahsi.dev"
