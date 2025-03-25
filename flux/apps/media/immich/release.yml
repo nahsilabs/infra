@@ -12,6 +12,25 @@ spec:
         kind: HelmRepository
         name: immich-charts
         namespace: flux-system
+  postRenderers:
+    - kustomize:
+        patchesStrategicMerge:
+          - |
+            apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: immich-server
+            spec:
+              strategy:
+                type: Recreate
+          - |
+            apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: immich-machine-learning
+            spec:
+              strategy:
+                type: Recreate
   values:
     redis:
       enabled: true
