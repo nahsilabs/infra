@@ -14,23 +14,25 @@ spec:
         namespace: flux-system
   postRenderers:
     - kustomize:
-        patchesStrategicMerge:
-          - |
-            apiVersion: apps/v1
-            kind: Deployment
-            metadata:
+        patches:
+          - target:
+              version: v1
+              kind: Deployment
               name: immich-server
-            spec:
-              strategy:
-                type: Recreate
-          - |
-            apiVersion: apps/v1
-            kind: Deployment
-            metadata:
+            patch: |
+              - op: add
+                path: /spec/strategy
+                value:
+                  type: Recreate
+          - target:
+              version: v1
+              kind: Deployment
               name: immich-machine-learning
-            spec:
-              strategy:
-                type: Recreate
+            patch: |
+              - op: add
+                path: /spec/strategy
+                value:
+                  type: Recreate
   values:
     redis:
       enabled: true
