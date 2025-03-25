@@ -82,9 +82,11 @@ spec:
         requests:
           cpu: 500m
           memory: 1024M
+          gpu.intel.com/i915: 1
         limits:
-          cpu: 10000m
+          cpu: 1500m
           memory: 2048M
+          gpu.intel.com/i915: 1
       ingress:
         public:
           enabled: true
