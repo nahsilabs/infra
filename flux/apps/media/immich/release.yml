@@ -97,7 +97,7 @@ spec:
             gethomepage.dev/group: "Media"
             gethomepage.dev/name: Immich
             gethomepage.dev/icon: immich.png
-            gethomepage.dev/pod-selector: "app.kubernetes.io/name=immich-server"
+            gethomepage.dev/pod-selector: "app.kubernetes.io/instance=immich"
             nginx.ingress.kubernetes.io/proxy-body-size: "0"
             nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
             nginx.ingress.kubernetes.io/ssl-redirect: "true"
