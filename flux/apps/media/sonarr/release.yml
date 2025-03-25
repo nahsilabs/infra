@@ -64,7 +64,7 @@ spec:
       config:
         enabled: true
         existingClaim: sonarr
-      media:
+      data:
         enabled: true
         existingClaim: sonarr-video
 
