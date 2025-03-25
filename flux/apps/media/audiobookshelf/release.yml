@@ -47,6 +47,7 @@ spec:
           gethomepage.dev/group: "Media"
           gethomepage.dev/name: Audiobookshelf
           gethomepage.dev/icon: audiobookshelf.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=audiobookshelf"
           nginx.ingress.kubernetes.io/proxy-body-size: "1G"
           nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
           nginx.ingress.kubernetes.io/ssl-redirect: "true"
