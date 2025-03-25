@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonarr
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-retain
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sonarr-video
+spec:
+  capacity:
+    storage: 1Gi # doesn't matter
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-sonarr-video
+  mountOptions: 
+    - "nconnect=8"
+    - "hard" 
+    - "noatime"
+  nfs:
+    server: nfs.lan
+    path: /mnt/storage/media/video
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonarr-video
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-sonarr-video
+  volumeName: sonarr-video
+  resources:
+    requests:
+      storage: 1Gi
