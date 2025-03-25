@@ -4,4 +4,3 @@ namespace: general
 resources:
   - namespace.yml
   - homepage
-  - jackett
