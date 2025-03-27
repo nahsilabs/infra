@@ -49,7 +49,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: "Arr"
           gethomepage.dev/name: Radarr
-          gethomepage.dev/icon: Radarr.png
+          gethomepage.dev/icon: radarr.png
         hosts:
           - host: &host radarr.nahsi.dev
             paths:
