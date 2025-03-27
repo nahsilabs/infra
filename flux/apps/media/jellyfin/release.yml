@@ -71,6 +71,7 @@ spec:
           gethomepage.dev/group: "Media"
           gethomepage.dev/name: Jellyfin
           gethomepage.dev/icon: jellyfin.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=jellyfin"
         className: "nginx-public"
         hosts:
           - host: &host jellyfin.nahsi.dev
