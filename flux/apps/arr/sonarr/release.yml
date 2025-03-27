@@ -31,7 +31,7 @@ spec:
       TZ: "Europe/Athens"
       SONARR__INSTANCE_NAME: Sonarr
       SONARR__PORT: 8989
-      SONARR__APPLICATION_URL: "https://shows.nahsi.dev"
+      SONARR__APPLICATION_URL: "https://sonarr.nahsi.dev"
       SONARR__LOG_LEVEL: info
 
     service:
@@ -51,7 +51,7 @@ spec:
           gethomepage.dev/name: Sonarr
           gethomepage.dev/icon: sonarr.png
         hosts:
-          - host: &host shows.nahsi.dev
+          - host: &host sonarr.nahsi.dev
             paths:
               - path: /
                 pathType: Prefix
