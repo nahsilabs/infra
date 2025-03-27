@@ -3,6 +3,5 @@ kind: Kustomization
 namespace: arr
 resources:
   - namespace.yml
-  - jackett
   - prowlarr
   - sonarr
