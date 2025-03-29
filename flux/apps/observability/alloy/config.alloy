@@ -26,6 +26,7 @@ prometheus.scrape "proxmox" {
     { __address__ = "10.2.10.30:9100", instance = "odroid-3.proxmox" },
     { __address__ = "10.2.10.40:9100", instance = "heliopolis.proxmox" },
     { __address__ = "10.2.10.50:9100", instance = "odyssey-0.proxmox" },
+    { __address__ = "10.2.10.60:9100", instance = "odyssey-1.proxmox" },
   ]
 
   job_name = "node-exporter-proxmox"
