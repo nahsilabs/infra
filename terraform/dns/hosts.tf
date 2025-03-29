@@ -22,3 +22,13 @@ resource "adguard_rewrite" "odyssey-0" {
   domain = "odyssey-0.local"
   answer = "10.2.10.50"
 }
+
+resource "adguard_rewrite" "odyssey-1" {
+  domain = "odyssey-1.local"
+  answer = "10.2.10.60"
+}
+
+resource "adguard_rewrite" "vyos" {
+  domain = "vyos.local"
+  answer = "10.2.1.1"
+}

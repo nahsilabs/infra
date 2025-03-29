@@ -1,7 +1,10 @@
 [proxmox]
 odroid-[1:3]
 heliopolis
-odyssey-0
+odyssey
+
+[odyssey]
+odyssey-[0:1]
 
 [odroid]
 odroid-[1:3]
@@ -12,3 +15,4 @@ odroid-2 ansible_host=10.2.10.20
 odroid-3 ansible_host=10.2.10.30
 heliopolis ansible_host=10.2.10.40
 odyssey-0 ansible_host=10.2.10.50
+odyssey-1 ansible_host=10.2.10.60
