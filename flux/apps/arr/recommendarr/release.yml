@@ -33,13 +33,6 @@ spec:
       PORT: 3000
       FORCE_SECURE_COOKIES: true
 
-    podSecurityContext:
-      runAsUser: 65534
-      runAsGroup: 65534
-      runAsNonRoot: true
-      fsGroup: 65534
-      fsGroupChangePolicy: OnRootMismatch
-
     service:
       main:
         controller: recommendarr
