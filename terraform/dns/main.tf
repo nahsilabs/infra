@@ -1,6 +1,5 @@
 resource "adguard_rewrite" "haproxy" {
   for_each = toset([
-    "proxmox",
     "ceph",
   ])
   domain = "${each.value}.nahsi.dev"
@@ -16,6 +15,7 @@ resource "adguard_rewrite" "npm" {
     "ha",
     "power-panel",
     "valetudo",
+    "proxmox",
     "ipmi",
   ])
   domain = "${each.value}.nahsi.dev"
@@ -35,13 +35,13 @@ resource "adguard_rewrite" "nfs-lan" {
 resource "cloudflare_record" "seedbox-0" {
   zone_id = data.cloudflare_zone.nahsi.zone_id
   name    = "torrent.nahsi.dev"
-  content = "37.98.199.189"
+  content = "37.98.199.179"
   type    = "A"
 }
 
 resource "adguard_rewrite" "seedbox-0" {
   domain = "torrent.nahsi.dev"
-  answer = "10.2.14.189"
+  answer = "10.2.14.179"
 }
 
 resource "cloudflare_record" "vpn" {
