@@ -5,7 +5,10 @@
   vars:
     ntp_timezone: Europe/Athens
     ntp_servers:
-      - 10.2.10.1
+      - 0.gr.pool.ntp.org iburst
+      - 1.gr.pool.ntp.org iburst
+      - 2.gr.pool.ntp.org iburst
+
     ntp_config_file: /etc/ntpsec/ntp.conf
     ntp_manage_config: true
 
