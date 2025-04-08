@@ -120,8 +120,8 @@ spec:
                 ping: https://npm.nahsi.dev
             - IPMI:
                 icon: asrock-rack-ipmi
-                href: https://adguard.nahsi.dev
-                ping: https://adguard.nahsi.dev
+                href: https://ipmi.nahsi.dev
+                ping: https://ipmi.nahsi.dev
 
         - Observability:
             - Ceph:
