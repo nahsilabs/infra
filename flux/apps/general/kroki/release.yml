@@ -45,26 +45,26 @@ spec:
         cpu: 100m
         memory: 128Mi
 
-diagramsnet:
-  enabled: true
-  image:
-    registry: docker.io
-    repository: yuzutech/kroki-diagramsnet
-    # renovate: datasource=github-releases depName=yuzutech/kroki
-    tag: 0.27.0
+    diagramsnet:
+      enabled: true
+      image:
+        registry: docker.io
+        repository: yuzutech/kroki-diagramsnet
+        # renovate: datasource=github-releases depName=yuzutech/kroki
+        tag: 0.27.0
 
-excalidraw:
-  enabled: true
-  image:
-    registry: docker.io
-    repository: yuzutech/kroki-excalidraw
-    # renovate: datasource=github-releases depName=yuzutech/kroki
-    tag: 0.27.0
+    excalidraw:
+      enabled: true
+      image:
+        registry: docker.io
+        repository: yuzutech/kroki-excalidraw
+        # renovate: datasource=github-releases depName=yuzutech/kroki
+        tag: 0.27.0
 
-mermaid:
-  enabled: true
-  image:
-    registry: docker.io
-    repository: yuzutech/kroki-mermaid
-    # renovate: datasource=github-releases depName=yuzutech/kroki
-    tag: 0.27.0
+    mermaid:
+      enabled: true
+      image:
+        registry: docker.io
+        repository: yuzutech/kroki-mermaid
+        # renovate: datasource=github-releases depName=yuzutech/kroki
+        tag: 0.27.0
