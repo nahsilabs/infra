@@ -22,7 +22,7 @@ spec:
 
     ingress:
       enabled: true
-      ingressClassName: "nginx-public"
+      ingressClassName: "nginx-private"
 
       annotations:
         cert-manager.io/cluster-issuer: nahsi.dev
@@ -39,10 +39,10 @@ spec:
     resources:
       limits:
         cpu: 100m
-        memory: 128Mi
+        memory: 512Mi
       requests:
         cpu: 100m
-        memory: 512Mi
+        memory: 128Mi
 
     diagramsnet:
       enabled: true
