@@ -28,7 +28,7 @@ spec:
         cert-manager.io/cluster-issuer: nahsi.dev
 
       hosts:
-        - host: *host
+        - host: &host kroki.nahsi.dev
           paths:
             - path: /
               pathType: Prefix
