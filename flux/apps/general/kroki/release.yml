@@ -1,0 +1,70 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kroki
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: kroki
+      version: 0.25.0
+      sourceRef:
+        kind: HelmRepository
+        name: cowboysysop
+        namespace: flux-system
+
+  values:
+    image:
+      registry: docker.io
+      repository: yuzutech/kroki
+      # renovate: datasource=github-releases depName=yuzutech/kroki
+      tag: 0.27.0
+
+    ingress:
+      enabled: true
+      ingressClassName: "nginx-public"
+
+      annotations:
+        cert-manager.io/cluster-issuer: nahsi.dev
+
+      hosts:
+        - host: *host
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - hosts:
+            - *host
+          secretName: kroki-tls
+
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
+diagramsnet:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: yuzutech/kroki-diagramsnet
+    # renovate: datasource=github-releases depName=yuzutech/kroki
+    tag: 0.27.0
+
+excalidraw:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: yuzutech/kroki-excalidraw
+    # renovate: datasource=github-releases depName=yuzutech/kroki
+    tag: 0.27.0
+
+mermaid:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: yuzutech/kroki-mermaid
+    # renovate: datasource=github-releases depName=yuzutech/kroki
+    tag: 0.27.0

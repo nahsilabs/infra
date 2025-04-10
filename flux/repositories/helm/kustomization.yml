@@ -18,3 +18,4 @@ resources:
   - victoriametrics.yml
   - grafanalabs.yml
   - immich.yml
+  - cowboysysop.yml
