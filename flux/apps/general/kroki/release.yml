@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: kroki
-      version: 0.25.0
+      version: 5.6.0
       sourceRef:
         kind: HelmRepository
         name: cowboysysop
