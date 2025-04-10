@@ -31,7 +31,6 @@ spec:
         - host: &host kroki.nahsi.dev
           paths:
             - path: /
-              pathType: Prefix
       tls:
         - hosts:
             - *host
