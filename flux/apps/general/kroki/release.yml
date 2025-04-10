@@ -30,7 +30,7 @@ spec:
       hosts:
         - host: &host kroki.nahsi.dev
           paths:
-            - path: /
+            - /
       tls:
         - hosts:
             - *host
