@@ -25,7 +25,7 @@ spec:
   values:
     image:
       repository: docker.io/tannermiddleton/recommendarr
-      tag: v1.3.0@sha256:0462ed4689f721f1c8806c0d3d55bc5b4089015b931fab21f72f28aea8bb05c2
+      tag: v1.4.4@sha256:c946dd24542ab3cf6b0d56ab1d69e1ea1ff1d84f8a293ceeeaf3f53f09e50db6
 
     env:
       PUBLIC_URL: https://recommendarr.nahsi.dev
