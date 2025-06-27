@@ -8,6 +8,9 @@ terraform {
   }
 
   required_providers {
+    helm = {
+      version = "~> 2"
+    }
     adguard = {
       source  = "gmichels/adguard"
       version = "~> 1"
