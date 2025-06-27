@@ -1,5 +1,5 @@
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: alertmanager
@@ -12,7 +12,7 @@ spec:
   ref:
     tag: 1.21.0
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: blackbox-exporter
@@ -25,7 +25,7 @@ spec:
   ref:
     tag: 9.8.0
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: kube-state-metrics
@@ -38,7 +38,7 @@ spec:
   ref:
     tag: 5.33.1
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: prometheus-node-exporter
@@ -51,7 +51,7 @@ spec:
   ref:
     tag: 4.46.0
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: prometheus-operator-crds
