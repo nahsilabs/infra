@@ -25,7 +25,7 @@ spec:
   values:
     image:
       repository: ghcr.io/home-operations/prowlarr
-      tag: 1.35.1.5034
+      tag: 1.37.0.5076
 
     env:
       TZ: "Europe/Athens"
