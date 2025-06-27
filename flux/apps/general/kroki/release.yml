@@ -58,7 +58,7 @@ spec:
         registry: docker.io
         repository: yuzutech/kroki-excalidraw
         # renovate: datasource=github-releases depName=yuzutech/kroki
-        tag: 0.27.0
+        tag: 0.28.0
 
     mermaid:
       enabled: true
