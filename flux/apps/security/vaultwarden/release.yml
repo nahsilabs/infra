@@ -14,7 +14,7 @@ spec:
         namespace: flux-system
       interval: 1h
   values:
-    resourceType: Deployment
+    resourceType: StatefulSet
     domain: "https://secrets.nahsi.dev"
     logging:
       logLevel: debug
