@@ -14,10 +14,9 @@ spec:
         namespace: flux-system
       interval: 1h
   values:
-    resourceType: Deployment
     domain: "https://secrets.nahsi.dev"
     logging:
-      logLevel: debug
+      logLevel: info
     ingress:
       enabled: true
       class: "nginx-public"
