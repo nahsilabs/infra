@@ -4,7 +4,7 @@ metadata:
   name: pg-immich
 spec:
   instances: 2
-  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.5.0
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.4.3
   primaryUpdateStrategy: unsupervised
   enableSuperuserAccess: true
   storage:
