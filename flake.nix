@@ -33,6 +33,7 @@
             pkgs.vault
             pkgs.talosctl
             pkgs.kubectl
+            pkgs.kubectl-cnpg
             pkgs.kubelogin-oidc
             pkgs.kubernetes-helm
             pkgs.cilium-cli
