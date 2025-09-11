@@ -76,7 +76,7 @@ spec:
             key: dbname
     image:
       # renovate: datasource=github-releases depName=immich-app/immich
-      tag: "v1.129.0"
+      tag: "v1.141.1"
     server:
       resources:
         requests:
