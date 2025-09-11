@@ -4,7 +4,7 @@ metadata:
   name: pg-immich
 spec:
   instances: 2
-  imageName: ghcr.io/tensorchord/cloudnative-pgvecto.rs:16-v0.3.0
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17
   primaryUpdateStrategy: unsupervised
   enableSuperuserAccess: true
   storage:
@@ -12,4 +12,4 @@ spec:
     storageClass: ceph-rbd-retain
   postgresql:
     shared_preload_libraries:
-      - "vectors.so"
+      - "vchord.so"
