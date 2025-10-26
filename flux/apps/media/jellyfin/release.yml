@@ -111,7 +111,7 @@ spec:
             app:
               - path: /config
 
-      media:
+      video:
         type: nfs
         server: nfs.lan
         path: /mnt/storage/media/video
@@ -119,6 +119,15 @@ spec:
           jellyfin:
             app:
               - path: /data/video
+
+      music:
+        type: nfs
+        server: nfs.lan
+        path: /mnt/storage/media/music
+        advancedMounts:
+          jellyfin:
+            app:
+              - path: /data/music
 
       tmpfs:
         type: emptyDir
