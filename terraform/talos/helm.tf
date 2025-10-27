@@ -3,7 +3,7 @@ resource "helm_release" "cilium" {
   chart      = "cilium"
   repository = "https://helm.cilium.io/"
   namespace  = "kube-system"
-  version    = "1.17.5"
+  version    = "1.18.3"
   wait       = true
 
   values = [
@@ -17,7 +17,7 @@ resource "helm_release" "flux" {
   chart            = "flux2"
   repository       = "https://fluxcd-community.github.io/helm-charts/"
   namespace        = "flux-system"
-  version          = "2.16.1"
+  version          = "2.17.0"
   create_namespace = true
   wait             = true
 
@@ -43,7 +43,7 @@ resource "helm_release" "flux-sync" {
   chart      = "flux2-sync"
   repository = "https://fluxcd-community.github.io/helm-charts/"
   namespace  = "flux-system"
-  version    = "1.13.1"
+  version    = "1.14.0"
   wait       = true
 
   values = [
