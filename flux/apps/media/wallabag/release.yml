@@ -72,6 +72,7 @@ spec:
           gethomepage.dev/group: "Media"
           gethomepage.dev/name: Wallabag
           gethomepage.dev/icon: wallabag.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=wallabag"
         className: "nginx-public"
         hosts:
           - host: &host wallabag.nahsi.dev
