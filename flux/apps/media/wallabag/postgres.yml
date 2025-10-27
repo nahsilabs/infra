@@ -1,15 +1,11 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: pg-immich
+  name: pg-wallabag
 spec:
   instances: 2
-  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.4.3
+  imageName: ghcr.io/cloudnative-pg/postgresql:17
   primaryUpdateStrategy: unsupervised
-  enableSuperuserAccess: true
   storage:
-    size: 10Gi
-    storageClass: ceph-rbd-retain
-  postgresql:
-    shared_preload_libraries:
-       - "vchord.so"
+    size: 2Gi
+    storageClass: ceph-rbd
