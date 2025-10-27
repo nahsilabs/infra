@@ -26,10 +26,11 @@ spec:
               tag: 2.6.13
             env:
               TZ: Europe/Athens
+              POPULATE_DATABASE: false
               SYMFONY__ENV__DOMAIN_NAME: "https://wallabag.nahsi.dev"
               SYMFONY__ENV__SERVER_NAME: "Wallabag"
-              SYMFONY__ENV__FOSUSER_REGISTRATION: false
-              POPULATE_DATABASE: false
+              SYMFONY__ENV__FOSUSER_REGISTRATION: true
+              SYMFONY__ENV__FOSUSER_CONFIRMATION: false
               SYMFONY__ENV__DATABASE_DRIVER: pdo_pgsql
               SYMFONY__ENV__DATABASE_HOST:
                 valueFrom:
