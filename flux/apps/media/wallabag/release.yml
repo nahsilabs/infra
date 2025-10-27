@@ -88,23 +88,6 @@ spec:
               - *host
             secretName: wallabag-tls
 
-      private:
-        annotations:
-          cert-manager.io/cluster-issuer: nahsi.dev
-        className: "nginx-private"
-        hosts:
-          - host: *host
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
-
-        tls:
-          - hosts:
-              - *host
-            secretName: wallabag-tls
-
     persistence:
       data:
         enabled: true
