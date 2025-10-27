@@ -15,9 +15,6 @@ spec:
   values:
     # renovate: datasource=github-releases depName=wallabag/wallabag
     appversion: 2.6.13
-    defaultPodOptions:
-      securityContext:
-        runAsUser: 0
     controllers:
       main:
         type: statefulset
@@ -27,6 +24,8 @@ spec:
               repository: docker.io/wallabag/wallabag
               # renovate: datasource=github-releases depName=wallabag/wallabag
               tag: 2.6.13
+            securityContext:
+              runAsUser: 0
             env:
               TZ: Europe/Athens
               POPULATE_DATABASE: false
