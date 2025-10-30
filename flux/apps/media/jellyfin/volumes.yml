@@ -8,4 +8,4 @@ spec:
   storageClassName: ceph-rbd-retain
   resources:
     requests:
-      storage: 15Gi
+      storage: 50Gi
