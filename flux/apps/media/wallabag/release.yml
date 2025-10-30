@@ -23,7 +23,7 @@ spec:
             image:
               repository: docker.io/wallabag/wallabag
               # renovate: datasource=github-releases depName=wallabag/wallabag
-              tag: 2.6.13
+              tag: 2.6.14
             env:
               TZ: Europe/Athens
               SYMFONY__ENV__DOMAIN_NAME: "https://wallabag.nahsi.dev"
