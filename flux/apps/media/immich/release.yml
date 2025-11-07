@@ -47,7 +47,7 @@ spec:
           existingClaim: immich-photos
     env:
       TZ: Europe/Athens
-      REDIS_HOSTNAME: "immich-redis-headless"
+      REDIS_HOSTNAME: "immich-valkey"
       IMMICH_MACHINE_LEARNING_URL: "http://immich-machine-learning:3003"
       DB_HOSTNAME:
         valueFrom:
