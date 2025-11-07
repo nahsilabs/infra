@@ -34,11 +34,11 @@ spec:
                 value:
                   type: Recreate
   values:
-    redis:
+    valkey:
       enabled: true
       master:
         persistence:
-          existingClaim: immich-redis
+          existingClaim: immich-valkey
     immich:
       metrics:
         enabled: true
