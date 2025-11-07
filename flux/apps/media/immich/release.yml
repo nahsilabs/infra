@@ -76,7 +76,7 @@ spec:
             key: dbname
     image:
       # renovate: datasource=github-releases depName=immich-app/immich
-      tag: "v1.144.1"
+      tag: "v2.2.3"
     server:
       resources:
         requests:
@@ -132,7 +132,7 @@ spec:
     machine-learning:
       image:
         # renovate: datasource=github-releases depName=immich-app/immich
-        tag: "v1.144.1-openvino"
+        tag: "v2.2.3-openvino"
       env:
         MACHINE_LEARNING_CACHE_FOLDER: /cache
         # Load ML models up front
