@@ -34,49 +34,55 @@ spec:
                 value:
                   type: Recreate
   values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              tag: "v2.2.3"
+            env:
+              TZ: Europe/Athens
+              REDIS_HOSTNAME: "immich-valkey"
+              IMMICH_MACHINE_LEARNING_URL: "http://immich-machine-learning:3003"
+              DB_HOSTNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-immich-superuser
+                    key: host
+              DB_PORT:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-immich-superuser
+                    key: port
+              DB_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-immich-superuser
+                    key: username
+              DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-immich-superuser
+                    key: password
+              DB_DATABASE_NAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-immich-app
+                    key: dbname
+    
     valkey:
       enabled: true
-      master:
-        persistence:
+      persistence:
+        data:
           existingClaim: immich-valkey
+    
     immich:
       metrics:
         enabled: true
       persistence:
         library:
           existingClaim: immich-photos
-    env:
-      TZ: Europe/Athens
-      REDIS_HOSTNAME: "immich-valkey"
-      IMMICH_MACHINE_LEARNING_URL: "http://immich-machine-learning:3003"
-      DB_HOSTNAME:
-        valueFrom:
-          secretKeyRef:
-            name: pg-immich-superuser
-            key: host
-      DB_PORT:
-        valueFrom:
-          secretKeyRef:
-            name: pg-immich-superuser
-            key: port
-      DB_USERNAME:
-        valueFrom:
-          secretKeyRef:
-            name: pg-immich-superuser
-            key: username
-      DB_PASSWORD:
-        valueFrom:
-          secretKeyRef:
-            name: pg-immich-superuser
-            key: password
-      DB_DATABASE_NAME:
-        valueFrom:
-          secretKeyRef:
-            name: pg-immich-app
-            key: dbname
-    image:
-      # renovate: datasource=github-releases depName=immich-app/immich
-      tag: "v2.2.3"
+    
     server:
       resources:
         requests:
@@ -110,7 +116,6 @@ spec:
             - hosts:
                 - *host
               secretName: immich-tls
-
         private:
           enabled: true
           ingressClassName: nginx-private
@@ -128,14 +133,12 @@ spec:
             - hosts:
                 - *host
               secretName: immich-tls
-
+    
     machine-learning:
       image:
-        # renovate: datasource=github-releases depName=immich-app/immich
         tag: "v2.2.3-openvino"
       env:
         MACHINE_LEARNING_CACHE_FOLDER: /cache
-        # Load ML models up front
         MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: ViT-B-32__openai
         MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__RECOGNITION: buffalo_l
         MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__DETECTION: buffalo_l
