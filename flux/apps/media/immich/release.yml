@@ -150,7 +150,6 @@ spec:
           gpu.intel.com/i915: 1
       persistence:
         cache:
-          type: pvc
           existingClaim: immich-ml-cache
       probes:
         liveness:
