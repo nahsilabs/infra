@@ -38,3 +38,5 @@ spec:
           enabled: true
           additionalLabels:
             scrape: "true"
+      admissionWebhooks:
+        enabled: false
