@@ -93,6 +93,7 @@ spec:
           ingressClassName: nginx-public
           annotations:
             cert-manager.io/cluster-issuer: nahsi.dev
+            nginx.ingress.kubernetes.io/enable-validation: "false"
             gethomepage.dev/enabled: "true"
             gethomepage.dev/group: "Media"
             gethomepage.dev/name: Immich
@@ -116,6 +117,7 @@ spec:
           ingressClassName: nginx-private
           annotations:
             cert-manager.io/cluster-issuer: nahsi.dev
+            nginx.ingress.kubernetes.io/enable-validation: "false"
             nginx.ingress.kubernetes.io/proxy-body-size: "0"
             nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
             nginx.ingress.kubernetes.io/ssl-redirect: "true"
