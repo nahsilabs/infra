@@ -19,7 +19,7 @@ spec:
         type: deployment
         strategy: Recreate
         containers:
-          main:
+          actual:
             image:
               repository: ghcr.io/actualbudget/actual-server
               tag: 26.1.0
@@ -46,7 +46,7 @@ spec:
             - path: /
               pathType: Prefix
               service:
-                identifier: main
+                identifier: actual
                 port: *port
 
         tls:
@@ -63,7 +63,7 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier: main
+                  identifier: actual
                   port: *port
 
         tls:
