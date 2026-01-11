@@ -37,7 +37,8 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: "Apps"
           gethomepage.dev/name: Actual
-          gethomepage.dev/icon: actualbudget.png
+          gethomepage.dev/icon: actual-budget.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=actualbudget"
         enabled: true
         className: "nginx-public"
         hosts:
