@@ -31,7 +31,7 @@ spec:
             port: &port 5006
 
     ingress:
-      public:
+      private:
         annotations:
           cert-manager.io/cluster-issuer: nahsi.dev
           gethomepage.dev/enabled: "true"
@@ -39,28 +39,9 @@ spec:
           gethomepage.dev/name: Actual
           gethomepage.dev/icon: actual-budget.png
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=actualbudget"
-        enabled: true
-        className: "nginx-public"
-        hosts:
-          - host: &host actual.nahsi.dev
-            paths:
-            - path: /
-              pathType: Prefix
-              service:
-                identifier: actual
-                port: *port
-
-        tls:
-          - hosts:
-              - *host
-            secretName: actual-tls
-
-      private:
-        annotations:
-          cert-manager.io/cluster-issuer: nahsi.dev
         className: "nginx-private"
         hosts:
-          - host: *host
+          - host: &host actual.nahsi.dev
             paths:
               - path: /
                 service:
