@@ -100,7 +100,7 @@ spec:
 
           volumeMounts:
             - name: data
-              mountPath: /app/data
+              mountPath: /app/uploads
 
           readinessProbe:
             tcpSocket:
