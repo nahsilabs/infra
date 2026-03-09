@@ -4,7 +4,7 @@ metadata:
   name: clovalink-data
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   capacity:
     storage: 2Ti # doesn't matter
   persistentVolumeReclaimPolicy: Retain
