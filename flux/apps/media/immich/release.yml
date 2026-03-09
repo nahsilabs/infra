@@ -39,7 +39,7 @@ spec:
         containers:
           main:
             image:
-              tag: "v2.2.3"
+              tag: "v2.5.6"
             env:
               TZ: Europe/Athens
               REDIS_HOSTNAME: "immich-valkey"
@@ -136,7 +136,7 @@ spec:
     
     machine-learning:
       image:
-        tag: "v2.2.3-openvino"
+        tag: "v2.5.6-openvino"
       env:
         MACHINE_LEARNING_CACHE_FOLDER: /cache
         MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: ViT-B-32__openai
