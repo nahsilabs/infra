@@ -44,7 +44,7 @@ metadata:
 spec:
   ingressClassName: nginx-private
   rules:
-    - host: *host
+    - host: &host clovalink.nahsi.dev
       http:
         paths:
           - path: /api
