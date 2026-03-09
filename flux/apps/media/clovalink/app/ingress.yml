@@ -1,7 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: clovalink-public
+  name: clovalink-private
+  namespace: clovalink
   annotations:
     cert-manager.io/cluster-issuer: nahsi.dev
     gethomepage.dev/enabled: "true"
@@ -9,38 +10,6 @@ metadata:
     gethomepage.dev/name: "clovalink"
     gethomepage.dev/icon: "https://raw.githubusercontent.com/ClovaLink/ClovaLink/refs/heads/main/docs/assets/logo.svg"
     gethomepage.dev/pod-selector: "app.kubernetes.io/name=clovalink,app.kubernetes.io/component=backend"
-spec:
-  ingressClassName: nginx-public
-  rules:
-    - host: &host clovalink.nahsi.dev
-      http:
-        paths:
-          - path: /api
-            pathType: Prefix
-            backend:
-              service:
-                name: clovalink-backend
-                port:
-                  number: 3000
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: clovalink-frontend
-                port:
-                  number: 80
-  tls:
-    - hosts:
-        - *host
-      secretName: clovalink-tls
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: clovalink-private
-  namespace: clovalink
-  annotations:
-    cert-manager.io/cluster-issuer: nahsi.dev
 spec:
   ingressClassName: nginx-private
   rules:
