@@ -9,6 +9,6 @@ resources:
   - frontend.yml
   - ingress.yml
 
-commonLabels:
+labels:
   app.kubernetes.io/name: clovalink
   app.kubernetes.io/part-of: clovalink

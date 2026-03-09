@@ -5,9 +5,8 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  resources:
-    requests:
-      storage: 2Ti # doesn't matter
+  capacity:
+    storage: 2Ti # doesn't matter
   persistentVolumeReclaimPolicy: Retain
   storageClassName: nfs-clovalink-data
   mountOptions: 
