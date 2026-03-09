@@ -7,7 +7,7 @@ metadata:
     cert-manager.io/cluster-issuer: nahsi.dev
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: "Media"
-    gethomepage.dev/name: "clovalink"
+    gethomepage.dev/name: "Clovalink"
     gethomepage.dev/icon: "https://raw.githubusercontent.com/ClovaLink/ClovaLink/refs/heads/main/docs/assets/logo.svg"
     gethomepage.dev/pod-selector: "app.kubernetes.io/name=clovalink,app.kubernetes.io/component=backend"
 spec:
