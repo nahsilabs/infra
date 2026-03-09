@@ -16,13 +16,13 @@ spec:
     - host: &host clovalink.nahsi.dev
       http:
         paths:
-          # - path: /api
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: clovalink-backend
-          #       port:
-          #         number: 3000
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: clovalink-backend
+                port:
+                  number: 3000
           - path: /
             pathType: Prefix
             backend:
