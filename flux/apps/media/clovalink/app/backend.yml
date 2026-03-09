@@ -35,7 +35,7 @@ spec:
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: clovalink-backend-secret
+                  name: clovalink-secret
                   key: JWT_SECRET
 
             - name: ENVIRONMENT

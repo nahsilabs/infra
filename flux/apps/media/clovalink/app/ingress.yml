@@ -7,8 +7,8 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: "Media"
     gethomepage.dev/name: "clovalink"
-    gethomepage.dev/icon: "sh-cloak.png"
-    gethomepage.dev/pod-selector: "app.kubernetes.io/name=clovalink"
+    gethomepage.dev/icon: "https://raw.githubusercontent.com/ClovaLink/ClovaLink/refs/heads/main/docs/assets/logo.svg"
+    gethomepage.dev/pod-selector: "app.kubernetes.io/name=clovalink,app.kubernetes.io/component=backend"
 spec:
   ingressClassName: nginx-public
   rules:
