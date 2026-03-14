@@ -124,6 +124,10 @@ spec:
                 ping: https://ipmi.nahsi.dev
 
         - Observability:
+            - Scrutiny:
+                icon: scrutiny
+                href: https://scrutiny.nahsi.dev
+                ping: https://scrutiny.nahsi.dev
             - Ceph:
                 icon: ceph
                 href: https://ceph.nahsi.dev
@@ -138,10 +142,6 @@ spec:
                 icon: home-assistant-alt
                 href: https://ha.nahsi.dev
                 ping: https://ha.nahsi.dev
-            - Valetudo:
-                icon: valetudo
-                href: https://valetudo.nahsi.dev
-                ping: https://valetudo.nahsi.dev
 
         - Apps:
             - Wireguard:
