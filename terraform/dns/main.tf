@@ -14,9 +14,9 @@ resource "adguard_rewrite" "npm" {
     "unifi",
     "ha",
     "power-panel",
-    "valetudo",
     "proxmox",
     "ipmi",
+    "scrutiny",
   ])
   domain = "${each.value}.nahsi.dev"
   answer = "10.2.1.4"

@@ -28,6 +28,11 @@ resource "adguard_rewrite" "odyssey-1" {
   answer = "10.2.10.60"
 }
 
+resource "adguard_rewrite" "pergamon" {
+  domain = "pergamon.local"
+  answer = "10.2.10.70"
+}
+
 resource "adguard_rewrite" "vyos" {
   domain = "vyos.local"
   answer = "10.2.1.1"
