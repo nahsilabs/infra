@@ -16,6 +16,6 @@ labels:
     app.kubernetes.io/part-of: clovalink
 
 configMapGenerator:
-  - name: clovathing-frontend-nginx
+  - name: clovalink-frontend-nginx
     files:
       - default.conf=nginx.conf
