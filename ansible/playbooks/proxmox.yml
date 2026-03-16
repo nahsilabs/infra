@@ -14,16 +14,17 @@
 
   roles:
     - geerlingguy.ntp
-    - node-exporter
 
   tasks:
     - name: Ensure necessary packages are installed
       apt:
+        update_cache: true
         name:
-          - "ca-certificates"
-          - "btop"
-          - "vim"
-          - "sysbench"
+          - ca-certificates
+          - btop
+          - vim
+          - sysbench
+          - screen
         state: present
 
     - name: Add ssh keys

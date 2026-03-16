@@ -1,4 +1,2 @@
 roles:
   - src: geerlingguy.ntp
-  - src: nahsi.nodeexporter
-    name: node-exporter
