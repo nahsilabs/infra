@@ -6,7 +6,6 @@ resources:
   - kubernetest-sigs-nfd.yml
   - postfinance.yml
   - nginx-ingress.yml
-  - envoy-gateway.yml
   - ceph-csi.yml
   - csi-driver-nfs.yml
   - bjw-s.yml
