@@ -31,3 +31,11 @@ spec:
         logging:
           level:
             default: info
+        provider:
+          type: Kubernetes
+          kubernetes:
+            envoyService:
+              type: LoadBalancer
+              externalTrafficPolicy: Local
+              labels:
+                cilium-bgp-private: "true"
