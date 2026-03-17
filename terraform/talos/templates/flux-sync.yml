@@ -3,7 +3,7 @@ gitRepository:
     url: "https://github.com/nahsilabs/infra.git"
     interval: "5m"
     ref:
-      branch: main
+      branch: feat/envoy-gateway-test
 
 kustomization:
   spec:
