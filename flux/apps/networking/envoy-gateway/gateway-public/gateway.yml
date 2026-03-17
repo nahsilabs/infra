@@ -3,6 +3,8 @@ kind: Gateway
 metadata:
   name: public-gateway
   namespace: networking
+  labels:
+    cilium-bgp-public: "true"
 spec:
   gatewayClassName: envoy-gateway-public
   listeners:

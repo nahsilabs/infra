@@ -28,3 +28,19 @@ spec:
     namespace: flux-system
   dependsOn:
     - name: envoy-gateway
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: gateway-public
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./flux/apps/networking/envoy-gateway/gateway-public
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  dependsOn:
+    - name: envoy-gateway

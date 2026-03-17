@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - gatewayclass.yml
   - gateway.yml
+  - test-envoy-public.yml
