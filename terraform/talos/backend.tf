@@ -23,6 +23,10 @@ terraform {
       source  = "gavinbunney/kubectl"
       version = "~> 1.16"
     }
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.7"
+    }
   }
 }
 
