@@ -38,7 +38,5 @@ spec:
               type: LoadBalancer
               externalTrafficPolicy: Local
               allocateLoadBalancerNodePorts: true
-              annotations:
-                cilium.io/loadbalancer-ip-pool: private-ip-pool
               labels:
                 cilium-bgp-private: "true"
