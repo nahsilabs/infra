@@ -4,4 +4,3 @@ resources:
   - envoyproxy.yml
   - gatewayclass.yml
   - gateway.yml
-  - test-envoy.yml

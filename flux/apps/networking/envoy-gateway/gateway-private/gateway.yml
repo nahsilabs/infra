@@ -3,8 +3,6 @@ kind: Gateway
 metadata:
   name: private-gateway
   namespace: networking
-  labels:
-    cilium-bgp-private: "true"
 spec:
   gatewayClassName: envoy-gateway-private
   infrastructure:
