@@ -4,3 +4,4 @@ resources:
   - gatewayclass.yml
   - gateway.yml
   - certificate.yml
+  - test-envoy.yml

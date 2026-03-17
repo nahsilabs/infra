@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-envoy
+  namespace: networking
+  labels:
+    app: test-envoy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-envoy
+  template:
+    metadata:
+      labels:
+        app: test-envoy
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27.4
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-envoy
+  namespace: networking
+spec:
+  selector:
+    app: test-envoy
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: test-envoy
+  namespace: networking
+spec:
+  parentRefs:
+    - name: private-gateway
+      namespace: networking
+  hostnames:
+    - test-envoy.nahsi.dev
+  rules:
+    - backendRefs:
+        - name: test-envoy
+          port: 80
