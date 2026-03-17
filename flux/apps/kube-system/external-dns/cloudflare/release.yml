@@ -23,7 +23,6 @@ spec:
     sources:
       - ingress
       - gateway-httproute
-      - gateway-tlsroute
     policy: sync
     txtOwnerId: "${CLUSTER}"
     domainFilters:

@@ -17,7 +17,6 @@ spec:
     sources:
       - ingress
       - gateway-httproute
-      - gateway-tlsroute
     provider:
       name: webhook
       webhook:
