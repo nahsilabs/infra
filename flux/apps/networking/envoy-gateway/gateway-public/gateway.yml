@@ -7,6 +7,11 @@ metadata:
     cilium-bgp-public: "true"
 spec:
   gatewayClassName: envoy-gateway-public
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: envoy-proxy-public
   listeners:
     - name: http
       port: 80
