@@ -1,0 +1,42 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: envoy-gateway
+  namespace: networking
+spec:
+  interval: 30m
+  releaseName: envoy-gateway
+  chartRef:
+    kind: OCIRepository
+    name: envoy-gateway
+    namespace: flux-system
+  install:
+    createNamespace: true
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  values:
+    deployment:
+      replicas: 1
+      envoyGateway:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+    config:
+      envoyGateway:
+        logging:
+          level:
+            default: info
+        provider:
+          type: Kubernetes
+          kubernetes:
+            envoyService:
+              type: LoadBalancer
+              externalTrafficPolicy: Local
+              allocateLoadBalancerNodePorts: true
+              labels:
+                cilium-bgp-private: "true"

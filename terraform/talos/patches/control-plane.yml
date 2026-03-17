@@ -1,3 +1,0 @@
-machine:
-  nodeLabels:
-    cilium-bgp: true
