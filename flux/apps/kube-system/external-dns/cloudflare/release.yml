@@ -22,6 +22,8 @@ spec:
             key: CF_API_TOKEN
     sources:
       - ingress
+      - gateway-httproute
+      - gateway-tlsroute
     policy: sync
     txtOwnerId: "${CLUSTER}"
     domainFilters:
