@@ -3,7 +3,7 @@ kind: GatewayClass
 metadata:
   name: envoy-gateway-private
 spec:
-  controllerName: gateway.envoyproxy.io/gatewayclass-cr
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
   parametersRef:
     group: gateway.envoyproxy.io
     kind: EnvoyProxy
