@@ -14,3 +14,4 @@ resources:
   - ../../apps/general
   - ../../apps/observability
   - ../../apps/observability/victoria-metrics
+  - ../../apps/testapp
