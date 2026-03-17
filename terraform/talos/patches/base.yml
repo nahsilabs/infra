@@ -1,4 +1,6 @@
 machine:
+  nodeLabels:
+    cilium-bgp: true
   certSANs:
     - talos.nahsi.dev
 
