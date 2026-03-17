@@ -25,32 +25,16 @@ spec:
         externalTrafficPolicy: Local
         labels:
           cilium-bgp-private: "true"
-        ports:
-          - name: http
-            port: 80
-            protocol: HTTP
-            targetPort: 8080
-          - name: https
-            port: 443
-            protocol: HTTPS
-            targetPort: 8443
       envoyDeployment:
         replicas: 2
-        resources:
-          requests:
-            cpu: 100m
-            memory: 256Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
-      envoyDaemonSet:
-        enabled: false
+        container:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
   logging:
     level:
       default: info
-  telemetry:
-    accessLogs:
-      text:
-        path: /dev/stdout
-    tracing:
-      enabled: false
