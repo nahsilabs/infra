@@ -34,10 +34,6 @@ spec:
         provider:
           type: Kubernetes
           kubernetes:
-            envoyDeployment:
-              pod:
-                nodeSelector:
-                  cilium-bgp: "true"
             envoyService:
               type: LoadBalancer
               externalTrafficPolicy: Local

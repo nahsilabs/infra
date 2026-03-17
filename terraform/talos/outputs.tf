@@ -1,5 +1,5 @@
 resource "local_sensitive_file" "kubeconfig" {
-  content         = data.talos_cluster_kubeconfig.this.kubeconfig_raw
+  content         = talos_cluster_kubeconfig.this.kubeconfig_raw
   filename        = "${path.root}/kubeconfig"
   file_permission = "0600"
 }
