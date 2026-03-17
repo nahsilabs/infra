@@ -1,0 +1,56 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: envoy-gateway-public
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-cr
+  parametersRef:
+    group: gateway.envoyproxy.io
+    kind: EnvoyProxy
+    name: envoy-proxy-public
+  description: "Public Envoy Gateway for internet-facing traffic"
+
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: envoy-proxy-public
+  namespace: networking
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        labels:
+          cilium-bgp-public: "true"
+        ports:
+          - name: http
+            port: 80
+            protocol: HTTP
+            targetPort: 8080
+          - name: https
+            port: 443
+            protocol: HTTPS
+            targetPort: 8443
+      envoyDeployment:
+        replicas: 2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+      envoyDaemonSet:
+        enabled: false
+  logging:
+    level:
+      default: info
+  telemetry:
+    accessLogs:
+      text:
+        path: /dev/stdout
+    tracing:
+      enabled: false
