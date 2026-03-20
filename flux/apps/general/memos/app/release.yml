@@ -31,20 +31,13 @@ spec:
               MEMOS_PUBLIC: "false"
               MEMOS_PASSWORD_AUTH: "false"
               MEMOS_INSTANCE_URL: "https://memos.nahsi.dev"
-            probes:
-              liveness:
-                enabled: true
-              readiness:
-                enabled: true
-              startup:
-                enabled: true
 
     service:
       main:
         controller: main
         ports:
           http:
-            port: 8081
+            port: 5230
 
     ingress:
       private:
