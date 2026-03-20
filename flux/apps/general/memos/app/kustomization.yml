@@ -3,4 +3,3 @@ kind: Kustomization
 resources:
 - postgres.yml
 - release.yml
-- pvc.yml
