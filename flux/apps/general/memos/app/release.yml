@@ -21,7 +21,6 @@ spec:
               repository: ghcr.io/usememos/memos
               tag: 0.26.2@sha256:3eefcc231141369accbd2f42bdc1a4c1e3b291fb6e288ff0deb60afa1b5d4727
             env:
-              MEMOS_PORT: "5230"
               MEMOS_DRIVER: postgres
               MEMOS_DSN:
                 valueFrom:
@@ -31,6 +30,7 @@ spec:
               MEMOS_DATA: /data
               MEMOS_PUBLIC: "false"
               MEMOS_PASSWORD_AUTH: "false"
+              MEMOS_INSTANCE_URL: "https://memos.nahsi.dev"
             probes:
               liveness:
                 enabled: true
@@ -44,7 +44,7 @@ spec:
         controller: main
         ports:
           http:
-            port: 5230
+            port: 8081
 
     ingress:
       private:
