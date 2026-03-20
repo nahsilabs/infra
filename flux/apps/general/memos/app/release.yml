@@ -60,5 +60,5 @@ spec:
             backendRefs:
               - kind: Service
                 name: main
-                port: http
+                port: 5230
                 weight: 1
