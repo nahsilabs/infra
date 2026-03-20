@@ -38,25 +38,27 @@ spec:
           http:
             port: 5230
 
-    ingress:
+    route:
       private:
         annotations:
-          cert-manager.io/cluster-issuer: nahsi.dev
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: "Apps"
           gethomepage.dev/name: Memos
           gethomepage.dev/icon: memos.png
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=memos"
-        className: "nginx-private"
-        hosts:
-          - host: &host memos.nahsi.dev
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
-
-        tls:
-          - hosts:
-              - *host
-            secretName: memos-tls
+        parentRefs:
+          - name: private-gateway
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - memos.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - kind: Service
+                name: main
+                port: http
+                weight: 1
