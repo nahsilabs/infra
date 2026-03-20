@@ -1,0 +1,77 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: memos
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/usememos/memos
+              tag: 0.26.2@sha256:3eefcc231141369accbd2f42bdc1a4c1e3b291fb6e288ff0deb60afa1b5d4727
+            env:
+              MEMOS_PORT: "5230"
+              MEMOS_DRIVER: postgres
+              MEMOS_DSN:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-memos-app
+                    key: uri
+              MEMOS_DATA: /data
+              MEMOS_PUBLIC: "false"
+              MEMOS_PASSWORD_AUTH: "false"
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 5230
+
+    ingress:
+      private:
+        annotations:
+          cert-manager.io/cluster-issuer: nahsi.dev
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Apps"
+          gethomepage.dev/name: Memos
+          gethomepage.dev/icon: memos.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=memos"
+        className: "nginx-private"
+        hosts:
+          - host: &host memos.nahsi.dev
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+
+        tls:
+          - hosts:
+              - *host
+            secretName: memos-tls
+
+    persistence:
+      data:
+        enabled: true
+        existingClaim: memos-data
+        globalMounts:
+          - path: /data
