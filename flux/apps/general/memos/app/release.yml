@@ -62,3 +62,21 @@ spec:
                 name: main
                 port: 5230
                 weight: 1
+
+      public:
+        parentRefs:
+          - name: public-gateway
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - memos.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - kind: Service
+                name: main
+                port: 5230
+                weight: 1
