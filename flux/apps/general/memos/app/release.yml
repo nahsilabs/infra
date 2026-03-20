@@ -27,7 +27,6 @@ spec:
                   secretKeyRef:
                     name: pg-memos-app
                     key: uri
-              MEMOS_DATA: /data
               MEMOS_PUBLIC: "false"
               MEMOS_PASSWORD_AUTH: "false"
               MEMOS_INSTANCE_URL: "https://memos.nahsi.dev"
@@ -61,10 +60,3 @@ spec:
           - hosts:
               - *host
             secretName: memos-tls
-
-    persistence:
-      data:
-        enabled: true
-        existingClaim: memos-data
-        globalMounts:
-          - path: /data
