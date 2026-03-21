@@ -20,6 +20,7 @@ spec:
     remediation:
       strategy: rollback
       retries: 3
+
   values:
     controllers:
       app:
@@ -32,6 +33,9 @@ spec:
             env:
               TZ: Europe/Athens
               SECURITY_ENABLELOGIN: "false"
+              SYSTEM_ENABLEANALYTICS: "false"
+              ALLOW_GOOGLE_VISIBILITY: "false"
+              SYSTEM_GOOGLEVISIBILITY: "false"
             probes:
               liveness: &probe
                 enabled: true
@@ -43,8 +47,10 @@ spec:
                 spec:
                   failureThreshold: 90
                   periodSeconds: 5
-            securityContext:
-              readOnlyRootFilesystem: true
+            resources:
+              requests:
+                cpu: 10m
+                memory: 600Mi
         pod:
           securityContext:
             runAsNonRoot: true
@@ -53,51 +59,42 @@ spec:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
 
-    persistence:
-      config:
-        enabled: true
-        existingClaim: stirling-pdf-config
-        globalMounts:
-          - path: /configs
-      logs:
-        enabled: true
-        type: emptyDir
-      tmp:
-        enabled: true
-        type: emptyDir
-      tessdata:
-        enabled: true
-        type: emptyDir
-        globalMounts:
-          - path: /usr/share/tessdata
-
     service:
       app:
         controller: app
+        type: ClusterIP
         ports:
           http:
             port: 8080
 
-    ingress:
-      app:
-        enabled: true
-        className: "nginx-private"
+    route:
+      private:
         annotations:
-          cert-manager.io/cluster-issuer: nahsi.dev
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Stirling PDF
           gethomepage.dev/description: PDF Viewer and Editor
           gethomepage.dev/group: Apps
           gethomepage.dev/icon: https://cdn-icons-png.flaticon.com/512/4208/4208479.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=stirling-pdf"
+        parentRefs:
+          - name: private-gateway
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - pdf.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - kind: Service
+                name: app
+                port: 8080
+                weight: 1
 
-        hosts:
-          - host: &host pdf.nahsi.dev
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
-            secretName: sterling-pdf-tls
+    persistence:
+      config:
+        existingClaim: stirling-pdf-config
+        globalMounts:
+          - path: /configs

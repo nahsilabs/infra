@@ -1,0 +1,18 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: stirling-pdf
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: gateway-private
+  path: ./flux/apps/general/stirling-pdf/app
+  prune: true
+  targetNamespace: general
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m
