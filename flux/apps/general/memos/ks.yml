@@ -4,6 +4,9 @@ metadata:
   name: memos
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: gateway-private
+    - name: gateway-public
   path: ./flux/apps/general/memos/app
   prune: true
   targetNamespace: general
