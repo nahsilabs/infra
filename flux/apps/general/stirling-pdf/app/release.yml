@@ -33,6 +33,7 @@ spec:
             env:
               TZ: Europe/Athens
               SECURITY_ENABLELOGIN: "false"
+              DISABLE_ADDITIONAL_FEATURES: "true"
               SYSTEM_ENABLEANALYTICS: "false"
               ALLOW_GOOGLE_VISIBILITY: "false"
               SYSTEM_GOOGLEVISIBILITY: "false"
