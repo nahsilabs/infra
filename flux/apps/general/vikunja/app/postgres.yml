@@ -1,0 +1,11 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-vikunja
+spec:
+  instances: 2
+  imageName: paradedb/paradedb:18-v0.22.2
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 1Gi
+    storageClass: ceph-rbd-retain
