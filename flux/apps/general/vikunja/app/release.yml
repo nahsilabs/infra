@@ -124,20 +124,20 @@ spec:
                 port: http
                 weight: 1
 
-      # public:
-      #   parentRefs:
-      #     - name: public-gateway
-      #       namespace: networking
-      #       sectionName: https
-      #   hostnames:
-      #     - vikunja.nahsi.dev
-      #   rules:
-      #     - matches:
-      #         - path:
-      #             type: PathPrefix
-      #             value: /
-      #       backendRefs:
-      #         - kind: Service
-      #           name: main
-      #           port: 3456
-      #           weight: 1
+      public:
+        parentRefs:
+          - name: public-gateway
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - vikunja.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
+
