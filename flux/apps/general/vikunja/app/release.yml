@@ -24,7 +24,7 @@ spec:
               VIKUNJA_SERVICE_PUBLICURL: https://vikunja.nahsi.dev
               VIKUNJA_SERVICE_TIMEZONE: "Europe/Athens"
               VIKUNJA_SERVICE_ENABLELINKSHARING: "false"
-              VIKUNJA_SERVICE_ENABLEREGISTRATION: "true"
+              VIKUNJA_SERVICE_ENABLEREGISTRATION: "false"
               VIKUNJA_SERVICE_ENABLETASKCOMMENTS: "false"
               VIKUNJA_DEFAULTSETTINGS_WEEK_START: 1
               VIKUNJA_SERVICE_JWT_SECRET:
