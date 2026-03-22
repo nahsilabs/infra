@@ -22,7 +22,7 @@ spec:
               tag: 2.2.0@sha256:fefda8ba71c3b06cc7f53f93ee14ebf1ad155a535e572b8dc702a46d789fc6d1
             env:
               VIKUNJA_SERVICE_PUBLICURL: https://vikunja.nahsi.dev
-              VIKUNJA_SERVICE_TIMEZONE: "GR"
+              VIKUNJA_SERVICE_TIMEZONE: "Europe/Athens"
               VIKUNJA_SERVICE_ENABLELINKSHARING: "false"
               VIKUNJA_SERVICE_ENABLEREGISTRATION: "false"
               VIKUNJA_SERVICE_ENABLETASKCOMMENTS: "false"
@@ -92,8 +92,12 @@ spec:
         existingClaim: "vikunja-data"
         advancedMounts:
           main:
-            api:
+            main:
               - path: /app/vikunja/files
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
 
     route:
       private:
