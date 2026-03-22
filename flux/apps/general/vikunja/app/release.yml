@@ -71,14 +71,14 @@ spec:
               limits:
                 memory: 512Mi
 
-            pod:
-              securityContext:
-                runAsNonRoot: true
-                runAsUser: 1000
-                runAsGroup: 1000
-                fsGroup: 1000
-                fsGroupChangePolicy: Always
-                seccompProfile: {type: RuntimeDefault}
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: {type: RuntimeDefault}
 
     service:
       main:
