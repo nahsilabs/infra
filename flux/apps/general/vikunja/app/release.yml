@@ -85,7 +85,7 @@ spec:
         controller: main
         ports:
           http:
-            port: 8080
+            port: 3456
 
     persistence:
       files:
@@ -121,7 +121,7 @@ spec:
             backendRefs:
               - kind: Service
                 name: main
-                port: 8080
+                port: 3456
                 weight: 1
 
       # public:
@@ -139,5 +139,5 @@ spec:
       #       backendRefs:
       #         - kind: Service
       #           name: main
-      #           port: 8080
+      #           port: 3456
       #           weight: 1
