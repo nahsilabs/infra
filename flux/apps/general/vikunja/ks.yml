@@ -7,6 +7,10 @@ spec:
   dependsOn:
     - name: gateway-private
     - name: gateway-public
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   path: ./flux/apps/general/vikunja/app
   prune: true
   targetNamespace: general
