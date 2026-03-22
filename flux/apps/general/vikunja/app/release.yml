@@ -59,12 +59,26 @@ spec:
                     name: pg-vikunja-app
                     key: dbname
 
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+
             resources:
               requests:
                 cpu: 100m
                 memory: 256Mi
               limits:
                 memory: 512Mi
+
+          pod:
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 1000
+              runAsGroup: 1000
+              fsGroup: 1000
+              fsGroupChangePolicy: Always
+              seccompProfile: {type: RuntimeDefault}
 
     service:
       main:
