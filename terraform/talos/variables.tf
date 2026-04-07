@@ -6,21 +6,14 @@ variable "talos_version" {
   type = string
 }
 
-variable "control_planes" {
+variable "nodes" {
   type = list(object({
     name           = string
     server_ip      = string
+    role           = string
     config_patches = list(string)
+    extensions     = list(string)
   }))
-}
-
-variable "workers" {
-  type = list(object({
-    name           = string
-    server_ip      = string
-    config_patches = list(string)
-  }))
-  default = []
 }
 
 variable "flux_variables" {

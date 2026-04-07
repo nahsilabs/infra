@@ -25,3 +25,10 @@ output "talosconfig" {
   }
   sensitive = true
 }
+
+output "installer_images" {
+  value = {
+    for hostname, urls in data.talos_image_factory_urls.node :
+    hostname => urls.urls.installer_secureboot
+  }
+}
