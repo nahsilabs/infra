@@ -1,6 +1,6 @@
 {
   description = "Setup ops things";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
   inputs.systems.url = "github:nix-systems/default";
   inputs.flake-utils = {
     url = "github:numtide/flake-utils";
@@ -28,9 +28,6 @@
 
             pkgs.ansible
             pkgs.sshpass
-            pkgs.terraform
-            pkgs.packer
-            pkgs.vault
             pkgs.talosctl
             pkgs.kubectl
             pkgs.kubectl-cnpg
@@ -38,6 +35,7 @@
             pkgs.kubernetes-helm
             pkgs.cilium-cli
             pkgs.fluxcd
+            pkgs.terraform
 
             pkgs.age
             pkgs.sops
@@ -45,8 +43,8 @@
 
           shellHook = ''
             [[ -f $NAHSILABS_SECRETS ]] && source $NAHSILABS_SECRETS
-            [[ -f kubeconfig ]] && export KUBECONFIG=$(realpath kubeconfig)
-            [[ -f talosconfig ]] && export TALOSCONFIG=$(realpath talosconfig)
+            [[ -f terraform/talos/kubeconfig ]] && export KUBECONFIG=$(realpath terraform/talos/kubeconfig)
+            [[ -f terraform/talos/talosconfig ]] && export TALOSCONFIG=$(realpath terraform/talos/talosconfig)
           '';
         };
       }

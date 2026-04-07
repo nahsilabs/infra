@@ -5,14 +5,39 @@ resource "adguard_rewrite" "talos" {
 
 resource "talos_machine_secrets" "this" {
   talos_version = var.talos_version
+
+  lifecycle {
+    ignore_changes = [talos_version]
+  }
 }
 
 locals {
   cluster_endpoint = "https://talos.nahsi.dev:6443"
+  control_planes   = [for node in var.nodes : node if node.role == "controlplane"]
+  workers          = [for node in var.nodes : node if node.role == "worker"]
+}
+
+resource "talos_image_factory_schematic" "node" {
+  for_each = { for node in var.nodes : node.name => node }
+  schematic = yamlencode({
+    customization = {
+      systemExtensions = {
+        officialExtensions = each.value.extensions
+      }
+    }
+  })
+}
+
+data "talos_image_factory_urls" "node" {
+  for_each      = { for node in var.nodes : node.name => node }
+  talos_version = var.talos_version
+  schematic_id  = talos_image_factory_schematic.node[each.key].id
+  platform      = "nocloud"
+  architecture  = "arm64"
 }
 
 data "talos_machine_configuration" "control_plane" {
-  for_each         = { for control_plane in var.control_planes : control_plane.name => control_plane }
+  for_each         = { for control_plane in local.control_planes : control_plane.name => control_plane }
   talos_version    = var.talos_version
   cluster_name     = var.cluster_name
   machine_type     = "controlplane"
@@ -21,7 +46,7 @@ data "talos_machine_configuration" "control_plane" {
 }
 
 data "talos_machine_configuration" "worker" {
-  for_each         = { for worker in var.workers : worker.name => worker }
+  for_each         = { for worker in local.workers : worker.name => worker }
   talos_version    = var.talos_version
   cluster_name     = var.cluster_name
   cluster_endpoint = local.cluster_endpoint
@@ -29,41 +54,111 @@ data "talos_machine_configuration" "worker" {
   machine_secrets  = talos_machine_secrets.this.machine_secrets
 }
 
+data "talos_machine_configuration" "control_plane_patched" {
+  for_each         = { for control_plane in local.control_planes : control_plane.name => control_plane }
+  talos_version    = var.talos_version
+  cluster_name     = var.cluster_name
+  machine_type     = "controlplane"
+  cluster_endpoint = local.cluster_endpoint
+  machine_secrets  = talos_machine_secrets.this.machine_secrets
+  config_patches = concat(
+    [
+      yamlencode({
+        machine = {
+          install = {
+            image = data.talos_image_factory_urls.node[each.key].urls.installer_secureboot
+          }
+        }
+      })
+    ],
+    [for patch in each.value.config_patches : file(patch)]
+  )
+}
+
+data "talos_machine_configuration" "worker_patched" {
+  for_each         = { for worker in local.workers : worker.name => worker }
+  talos_version    = var.talos_version
+  cluster_name     = var.cluster_name
+  cluster_endpoint = local.cluster_endpoint
+  machine_type     = "worker"
+  machine_secrets  = talos_machine_secrets.this.machine_secrets
+  config_patches = concat(
+    [
+      yamlencode({
+        machine = {
+          install = {
+            image = data.talos_image_factory_urls.node[each.key].urls.installer_secureboot
+          }
+        }
+      })
+    ],
+    [for patch in each.value.config_patches : file(patch)]
+  )
+}
+
 resource "talos_machine_configuration_apply" "control_plane" {
-  for_each                    = { for control_plane in var.control_planes : control_plane.name => control_plane }
+  for_each                    = { for control_plane in local.control_planes : control_plane.name => control_plane }
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.control_plane[each.key].machine_configuration
   node                        = each.value.server_ip
-  config_patches              = [for patch in each.value.config_patches : file(patch)]
+  config_patches = concat(
+    [
+      yamlencode({
+        machine = {
+          install = {
+            image = data.talos_image_factory_urls.node[each.key].urls.installer_secureboot
+          }
+          kubelet = {
+            image = "ghcr.io/siderolabs/kubelet:v1.32.9"
+          }
+        }
+      })
+    ],
+    [for patch in each.value.config_patches : file(patch)]
+  )
 }
 
 resource "talos_machine_configuration_apply" "worker" {
-  for_each                    = { for worker in var.workers : worker.name => worker }
+  for_each                    = { for worker in local.workers : worker.name => worker }
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.worker[each.key].machine_configuration
   node                        = each.value.server_ip
-  config_patches              = [for patch in each.value.config_patches : file(patch)]
+  config_patches = concat(
+    [
+      yamlencode({
+        machine = {
+          install = {
+            image = data.talos_image_factory_urls.node[each.key].urls.installer_secureboot
+          }
+          kubelet = {
+            image = "ghcr.io/siderolabs/kubelet:v1.32.9"
+          }
+        }
+      })
+    ],
+    [for patch in each.value.config_patches : file(patch)]
+  )
 }
 
 data "talos_client_configuration" "this" {
   cluster_name         = var.cluster_name
   client_configuration = talos_machine_secrets.this.client_configuration
   endpoints = [
-    for control_plane in var.control_planes : control_plane.server_ip
+    for control_plane in local.control_planes : control_plane.server_ip
   ]
 }
 
 resource "talos_machine_bootstrap" "this" {
   depends_on           = [talos_machine_configuration_apply.control_plane]
   client_configuration = talos_machine_secrets.this.client_configuration
-  endpoint             = var.control_planes[0].server_ip
-  node                 = var.control_planes[0].server_ip
+  endpoint             = local.control_planes[0].server_ip
+  node                 = local.control_planes[0].server_ip
 }
 
 resource "talos_cluster_kubeconfig" "this" {
   depends_on           = [talos_machine_bootstrap.this]
   client_configuration = talos_machine_secrets.this.client_configuration
-  node                 = var.control_planes[0].server_ip
+  node                 = local.control_planes[0].server_ip
   timeouts = {
     create = "3m"
   }
