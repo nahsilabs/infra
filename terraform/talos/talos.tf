@@ -108,9 +108,6 @@ resource "talos_machine_configuration_apply" "control_plane" {
           install = {
             image = data.talos_image_factory_urls.node[each.key].urls.installer_secureboot
           }
-          kubelet = {
-            image = "ghcr.io/siderolabs/kubelet:v1.32.9"
-          }
         }
       })
     ],
@@ -129,9 +126,6 @@ resource "talos_machine_configuration_apply" "worker" {
         machine = {
           install = {
             image = data.talos_image_factory_urls.node[each.key].urls.installer_secureboot
-          }
-          kubelet = {
-            image = "ghcr.io/siderolabs/kubelet:v1.32.9"
           }
         }
       })
