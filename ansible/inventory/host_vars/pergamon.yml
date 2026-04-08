@@ -1,4 +1,9 @@
-proxmox_grub_cmdline: "quiet amd_pstate=active"
+proxmox_modules_options: |
+  blacklist nvidia
+  blacklist nvidia_drm
+  blacklist nvidia_modeset
+  blacklist nouveau
+
 proxmox_network: |
   auto lo
   iface lo inet loopback

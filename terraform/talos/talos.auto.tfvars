@@ -57,4 +57,19 @@ nodes = [
       "siderolabs/qemu-guest-agent",
     ]
   },
+  {
+    name      = "pergamon"
+    server_ip = "10.2.15.70"
+    role      = "worker"
+    config_patches = [
+      "./patches/base.yml",
+      "./patches/pergamon.yml",
+    ]
+    extensions = [
+      "siderolabs/amd-ucode",
+      "siderolabs/qemu-guest-agent",
+      "siderolabs/nonfree-kmod-nvidia-production",
+      "siderolabs/nvidia-container-toolkit-production",
+    ]
+  },
 ]
