@@ -2,7 +2,6 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: private-gateway
-  namespace: networking
 spec:
   gatewayClassName: envoy-gateway-private
   infrastructure:

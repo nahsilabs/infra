@@ -1,14 +1,14 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: public-gateway
+  name: agenticgateway-internal
 spec:
-  gatewayClassName: envoy-gateway-public
+  gatewayClassName: agentgateway
   infrastructure:
     parametersRef:
-      group: gateway.envoyproxy.io
-      kind: EnvoyProxy
-      name: envoy-proxy-public
+      group: agentgateway.dev
+      kind: AgentgatewayParameters
+      name: agenticgateway-private
   listeners:
     - name: http
       port: 80
@@ -19,7 +19,7 @@ spec:
     - name: https
       port: 443
       protocol: HTTPS
-      hostname: "*.nahsi.dev"
+      hostname: agenticgateway.nahsi.dev
       allowedRoutes:
         namespaces:
           from: All
