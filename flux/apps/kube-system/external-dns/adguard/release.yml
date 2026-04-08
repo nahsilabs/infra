@@ -16,7 +16,6 @@ spec:
     domainFilters: ["nahsi.dev"]
     sources:
       - ingress
-      - gateway-httproute
     provider:
       name: webhook
       webhook:

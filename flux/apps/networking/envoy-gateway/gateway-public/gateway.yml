@@ -2,6 +2,8 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: public-gateway
+  labels:
+    external-dns: cloudflare
 spec:
   gatewayClassName: envoy-gateway-public
   infrastructure:

@@ -20,3 +20,5 @@ resources:
   - grafanalabs.yml
   - immich.yml
   - cowboysysop.yml
+  - llm-d-infra.yml
+  - llm-d-modelservice.yml

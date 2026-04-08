@@ -1,0 +1,62 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../base
+patches:
+  - target:
+      group: helm.toolkit.fluxcd.io
+      version: v2
+      kind: HelmRelease
+      name: modelservice-base
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: model-qwen3-5-9b
+      - op: replace
+        path: /spec/values/modelArtifacts/uri
+        value: pvc+hf://model-qwen3-5-9b/Qwen/Qwen3.5-9B
+      - op: replace
+        path: /spec/values/modelArtifacts/name
+        value: Qwen/Qwen3.5-9B
+      - op: replace
+        path: /spec/values/modelArtifacts/labels/app
+        value: qwen3-5-9b
+  - target:
+      group: helm.toolkit.fluxcd.io
+      version: v2
+      kind: HelmRelease
+      name: inferencepool-base
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: inferencepool-qwen3-5-9b
+      - op: replace
+        path: /spec/values/inferencePool/modelServers/matchLabels/app
+        value: qwen3-5-9b
+  - target:
+      group: gateway.networking.k8s.io
+      version: v1
+      kind: HTTPRoute
+      name: httproute-base
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: qwen3-5-9b
+      - op: replace
+        path: /spec/rules/0/backendRefs/0/name
+        value: inferencepool-qwen3-5-9b
+      - op: replace
+        path: /spec/rules/0/matches/0/headers/0/value
+        value: Qwen/Qwen3.5-9B
+  - target:
+      group: ""
+      version: v1
+      kind: PersistentVolumeClaim
+      name: model-base
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: model-qwen3-5-9b
+      - op: replace
+        path: /spec/resources/requests/storage
+        value: 30Gi

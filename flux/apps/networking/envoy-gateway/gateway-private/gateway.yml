@@ -2,6 +2,8 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: private-gateway
+  labels:
+    external-dns: adguard
 spec:
   gatewayClassName: envoy-gateway-private
   infrastructure:
