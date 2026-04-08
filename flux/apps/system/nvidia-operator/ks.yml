@@ -1,0 +1,16 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: nvidia-operator
+  namespace: flux-system
+spec:
+  path: ./flux/apps/system/nvidia-operator/app
+  prune: true
+  targetNamespace: system
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m
