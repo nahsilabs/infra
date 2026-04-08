@@ -145,7 +145,7 @@ spec:
       #     memory: 256Mi
 
     sandboxDevicePlugin:
-      enabled: true
+      enabled: false
       # resources:
       #   requests:
       #     cpu: 50m
