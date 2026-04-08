@@ -1,0 +1,14 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: llm-d-models
+  namespace: flux-system
+spec:
+  interval: 30m
+  path: ./flux/apps/ai/llm-d-models/models
+  prune: true
+  targetNamespace: ai
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system

@@ -68,8 +68,8 @@ nodes = [
     extensions = [
       "siderolabs/amd-ucode",
       "siderolabs/qemu-guest-agent",
-      "siderolabs/nonfree-kmod-nvidia-production",
-      "siderolabs/nvidia-container-toolkit-production",
+      "siderolabs/nonfree-kmod-nvidia-lts",
+      "siderolabs/nvidia-container-toolkit-lts",
     ]
   },
 ]

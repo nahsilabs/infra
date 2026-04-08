@@ -1,0 +1,12 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayParameters
+metadata:
+  name: agenticgateway-private
+spec:
+  service:
+    metadata:
+      labels:
+        cilium-bgp-private: "true"
+    spec:
+      type: LoadBalancer
+      externalTrafficPolicy: Local
