@@ -1,0 +1,21 @@
+machine:
+  kernel:
+    modules:
+      - name: nvidia
+      - name: nvidia_uvm
+      - name: nvidia_drm
+      - name: nvidia_modeset
+  network:
+    interfaces:
+      - interface: enp6s18
+        dhcp: false
+        addresses:
+          - 10.2.15.70/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.2.15.1
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: pergamon
+auto: off
