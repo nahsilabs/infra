@@ -17,7 +17,7 @@ resource "helm_release" "flux" {
   chart            = "flux2"
   repository       = "https://fluxcd-community.github.io/helm-charts/"
   namespace        = "flux-system"
-  version          = "2.18.2"
+  version          = "2.18.3"
   create_namespace = true
   wait             = true
 
