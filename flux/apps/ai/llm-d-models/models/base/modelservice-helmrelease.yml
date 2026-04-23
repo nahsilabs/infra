@@ -1,0 +1,79 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: modelservice-base
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: llm-d-modelservice
+      version: v0.4.9
+      sourceRef:
+        kind: HelmRepository
+        name: llm-d-modelservice
+        namespace: flux-system
+      interval: 12h
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: ".*-llm-d-modelservice-decode"
+            patch: |-
+              - op: replace
+                path: /spec/strategy
+                value:
+                  type: RollingUpdate
+                  rollingUpdate:
+                    maxSurge: 0
+                    maxUnavailable: 1
+          - target:
+              kind: Deployment
+              name: ".*-llm-d-modelservice-decode"
+            patch: |-
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: placeholder
+              spec:
+                template:
+                  spec:
+                    runtimeClassName: nvidia
+                    volumes:
+                      - name: model-storage
+                        persistentVolumeClaim:
+                          readOnly: false
+                    securityContext:
+                      fsGroup: 1000
+                      fsGroupChangePolicy: OnRootMismatch
+  values:
+    routing:
+      proxy:
+        image: ghcr.io/llm-d/llm-d-routing-sidecar:v0.6.0
+    modelArtifacts:
+      name: MODEL_NAME
+      uri: hf://MODEL_NAME
+      authSecretName: hf-token
+      labels:
+        app: MODEL_APP
+    accelerator:
+      type: nvidia
+    decode:
+      replicas: 1
+      containers:
+        - name: vllm
+          image: ghcr.io/llm-d/llm-d-cuda:v0.6.0
+          modelCommand: vllmServe
+          mountModelVolume: true
+          args:
+            - --enforce-eager
+          env:
+            - name: TRITON_LIBCUDA_PATH
+              value: /usr/local/glibc/usr/lib
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+            requests:
+              nvidia.com/gpu: 1
+    prefill:
+      replicas: 0

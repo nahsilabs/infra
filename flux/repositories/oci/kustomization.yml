@@ -4,3 +4,5 @@ resources:
   - grafana.yml
   - envoy-gateway.yml
   - prometheus.yml
+  - agenticgateway.yml
+  - gateway-api-inference-extension.yml
