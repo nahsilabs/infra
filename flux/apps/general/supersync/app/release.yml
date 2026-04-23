@@ -1,0 +1,143 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: supersync
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        initContainers:
+          db-bootstrap:
+            image:
+              repository: nahsilabs/supersync
+              tag: latest@sha256:07f3056204edd5aec1081853595b551f1ebf0eb555c4dcadd10f566e2fb3d597
+            command:
+              - sh
+              - -lc
+            args:
+              - |
+                set -euo pipefail
+
+                # The upstream prisma/migrations do not include an initial migration.
+                # If the DB is empty, migrate deploy will fail (e.g. ALTER TABLE operations ...).
+                #
+                # Bootstrap once on an empty DB:
+                # 1) Create schema from prisma/schema.prisma via `db push`
+                # 2) Mark all existing migrations as applied (baseline)
+                #
+                # For existing DBs (operations table exists), do nothing.
+                if printf 'SELECT 1 FROM operations LIMIT 1;' | npx prisma db execute --stdin >/dev/null 2>&1; then
+                  echo "DB already initialized."
+                  exit 0
+                fi
+
+                echo "Empty DB detected. Bootstrapping via prisma db push..."
+                npx prisma db push
+
+                echo "Baselining prisma migrations as applied..."
+                for migration_dir in prisma/migrations/*; do
+                  migration_name="$(basename "$migration_dir")"
+                  npx prisma migrate resolve --applied "$migration_name" || true
+                done
+            env:
+              - name: DATABASE_URL
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-supersync-app
+                    key: uri
+        containers:
+          main:
+            image:
+              repository: nahsilabs/supersync
+              tag: latest@sha256:07f3056204edd5aec1081853595b551f1ebf0eb555c4dcadd10f566e2fb3d597
+            env:
+              NODE_ENV: production
+              PORT: "1900"
+              DATA_DIR: /app/data
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-supersync-app
+                    key: uri
+              JWT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: supersync-secret
+                    key: jwt
+              PUBLIC_URL: https://supersync.nahsi.dev
+              CORS_ORIGINS: https://super-productivity.nahsi.dev
+              WEBAUTHN_RP_ID: supersync.nahsi.dev
+              WEBAUTHN_RP_NAME: Super Productivity Sync
+              WEBAUTHN_ORIGIN: https://supersync.nahsi.dev
+              ALLOWED_EMAILS:
+                valueFrom:
+                  secretKeyRef:
+                    name: supersync-secret
+                    key: allowed_emails
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: {type: RuntimeDefault}
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 1900
+
+    persistence:
+      data:
+        existingClaim: supersync-data
+        advancedMounts:
+          main:
+            main:
+              - path: /app/data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+
+    route:
+      private:
+        enabled: true
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Apps"
+          gethomepage.dev/name: SuperSync
+          gethomepage.dev/description: Super Productivity Sync Server
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=supersync"
+        parentRefs:
+          - name: private-gateway
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - supersync.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
