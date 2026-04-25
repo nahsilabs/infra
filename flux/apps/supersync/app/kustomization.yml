@@ -4,4 +4,5 @@ resources:
   - pvc.yml
   - postgres.yml
   - secret.yml
+  - secret-smtp.yml
   - release.yml

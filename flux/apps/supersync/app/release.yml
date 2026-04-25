@@ -65,6 +65,10 @@ spec:
                     name: supersync-secret
                     key: allowed_emails
 
+            envFrom:
+              - secretRef:
+                  name: supersync-smtp
+
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
