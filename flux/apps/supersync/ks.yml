@@ -6,9 +6,13 @@ metadata:
 spec:
   dependsOn:
     - name: gateway-private
-  path: ./flux/apps/general/supersync/app
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  path: ./flux/apps/supersync/app
   prune: true
-  targetNamespace: general
+  targetNamespace: supersync
   sourceRef:
     kind: GitRepository
     name: infra

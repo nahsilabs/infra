@@ -15,45 +15,6 @@ spec:
   values:
     controllers:
       main:
-        initContainers:
-          db-bootstrap:
-            image:
-              repository: nahsilabs/supersync
-              tag: latest@sha256:07f3056204edd5aec1081853595b551f1ebf0eb555c4dcadd10f566e2fb3d597
-            command:
-              - sh
-              - -lc
-            args:
-              - |
-                set -euo pipefail
-
-                # The upstream prisma/migrations do not include an initial migration.
-                # If the DB is empty, migrate deploy will fail (e.g. ALTER TABLE operations ...).
-                #
-                # Bootstrap once on an empty DB:
-                # 1) Create schema from prisma/schema.prisma via `db push`
-                # 2) Mark all existing migrations as applied (baseline)
-                #
-                # For existing DBs (operations table exists), do nothing.
-                if printf 'SELECT 1 FROM operations LIMIT 1;' | npx prisma db execute --stdin >/dev/null 2>&1; then
-                  echo "DB already initialized."
-                  exit 0
-                fi
-
-                echo "Empty DB detected. Bootstrapping via prisma db push..."
-                npx prisma db push
-
-                echo "Baselining prisma migrations as applied..."
-                for migration_dir in prisma/migrations/*; do
-                  migration_name="$(basename "$migration_dir")"
-                  npx prisma migrate resolve --applied "$migration_name" || true
-                done
-            env:
-              - name: DATABASE_URL
-                valueFrom:
-                  secretKeyRef:
-                    name: pg-supersync-app
-                    key: uri
         containers:
           main:
             image:
