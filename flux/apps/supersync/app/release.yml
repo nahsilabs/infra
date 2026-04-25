@@ -128,3 +128,19 @@ spec:
               - identifier: main
                 port: http
                 weight: 1
+      public:
+        parentRefs:
+          - name: public-gateway
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - supersync.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
