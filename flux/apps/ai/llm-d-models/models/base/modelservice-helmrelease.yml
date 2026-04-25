@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: llm-d-modelservice
-      version: v0.4.9
+      version: v0.4.12
       sourceRef:
         kind: HelmRepository
         name: llm-d-modelservice
