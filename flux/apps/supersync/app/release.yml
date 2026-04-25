@@ -1,0 +1,146 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: supersync
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        initContainers:
+          migrate:
+            image:
+              repository: nahsilabs/supersync
+              tag: latest@sha256:07f3056204edd5aec1081853595b551f1ebf0eb555c4dcadd10f566e2fb3d597
+            command:
+              - sh
+              - -c
+              - |
+                until npx prisma db push --skip-generate 2>/dev/null; do sleep 2; done
+                for dir in /app/prisma/migrations/*/; do
+                  npx prisma migrate resolve --applied "$(basename "$dir")" 2>/dev/null || true
+                done
+                cp -r /app/public/* /tmp/public/
+            env:
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-supersync-app
+                    key: uri
+        containers:
+          main:
+            image:
+              repository: nahsilabs/supersync
+              tag: latest@sha256:07f3056204edd5aec1081853595b551f1ebf0eb555c4dcadd10f566e2fb3d597
+            env:
+              NODE_ENV: production
+              PORT: "1900"
+              DATA_DIR: /app/data
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-supersync-app
+                    key: uri
+              JWT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: supersync-secret
+                    key: jwt
+              PUBLIC_URL: https://supersync.nahsi.dev
+              CORS_ORIGINS: https://super-productivity.nahsi.dev
+              WEBAUTHN_RP_ID: supersync.nahsi.dev
+              WEBAUTHN_RP_NAME: Super Productivity Sync
+              WEBAUTHN_ORIGIN: https://supersync.nahsi.dev
+              ALLOWED_EMAILS:
+                valueFrom:
+                  secretKeyRef:
+                    name: supersync-secret
+                    key: allowed_emails
+
+            envFrom:
+              - secretRef:
+                  name: supersync-smtp
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: {type: RuntimeDefault}
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 1900
+
+    persistence:
+      data:
+        existingClaim: supersync-data
+        advancedMounts:
+          main:
+            main:
+              - path: /app/data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+      public:
+        type: emptyDir
+        advancedMounts:
+          main:
+            migrate:
+              - path: /tmp/public
+            main:
+              - path: /app/public
+
+    route:
+      private:
+        enabled: true
+        parentRefs:
+          - name: private-gateway
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - supersync.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
+      public:
+        parentRefs:
+          - name: public-gateway
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - supersync.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1

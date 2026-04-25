@@ -12,6 +12,7 @@ resources:
   - ../../apps/media
   - ../../apps/arr
   - ../../apps/general
+  - ../../apps/supersync
   - ../../apps/observability
   - ../../apps/observability/victoria-metrics
   - ../../apps/ai
