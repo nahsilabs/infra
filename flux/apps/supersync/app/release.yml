@@ -81,12 +81,6 @@ spec:
     route:
       private:
         enabled: true
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Apps"
-          gethomepage.dev/name: SuperSync
-          gethomepage.dev/description: Super Productivity Sync Server
-          gethomepage.dev/pod-selector: "app.kubernetes.io/name=supersync"
         parentRefs:
           - name: private-gateway
             namespace: networking
