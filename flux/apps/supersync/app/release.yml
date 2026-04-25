@@ -15,6 +15,26 @@ spec:
   values:
     controllers:
       main:
+        initContainers:
+          migrate:
+            image:
+              repository: nahsilabs/supersync
+              tag: latest@sha256:07f3056204edd5aec1081853595b551f1ebf0eb555c4dcadd10f566e2fb3d597
+            command:
+              - sh
+              - -c
+              - |
+                until npx prisma db push --skip-generate 2>/dev/null; do sleep 2; done
+                for dir in /app/prisma/migrations/*/; do
+                  npx prisma migrate resolve --applied "$(basename "$dir")" 2>/dev/null || true
+                done
+                cp -r /app/public/* /tmp/public/
+            env:
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-supersync-app
+                    key: uri
         containers:
           main:
             image:
@@ -77,6 +97,14 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
+      public:
+        type: emptyDir
+        advancedMounts:
+          main:
+            migrate:
+              - path: /tmp/public
+            main:
+              - path: /app/public
 
     route:
       private:
