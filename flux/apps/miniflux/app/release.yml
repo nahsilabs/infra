@@ -1,0 +1,106 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: miniflux
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: miniflux/miniflux
+              tag: latest
+            env:
+              LISTEN_ADDR: "0.0.0.0:8080"
+              BASE_URL: "https://rss.nahsi.dev"
+              HTTPS: "1"
+              RUN_MIGRATIONS: "1"
+              CREATE_ADMIN: "1"
+              WORKER_POOL_SIZE: "4"
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-miniflux-app
+                    key: uri
+
+            envFrom:
+              - secretRef:
+                  name: miniflux-secret
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: Always
+            seccompProfile: {type: RuntimeDefault}
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8080
+
+    persistence:
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+
+    route:
+      private:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Apps"
+          gethomepage.dev/name: Miniflux
+          gethomepage.dev/icon: miniflux.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=miniflux"
+        parentRefs:
+          - name: private-gateway
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - rss.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
+
+      public:
+        parentRefs:
+          - name: public-gateway
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - rss.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1

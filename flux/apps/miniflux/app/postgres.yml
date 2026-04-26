@@ -1,0 +1,14 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-miniflux
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 1Gi
+    storageClass: ceph-rbd-retain
+  bootstrap:
+    initdb:
+      database: miniflux
