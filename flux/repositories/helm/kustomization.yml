@@ -12,6 +12,7 @@ resources:
   - external-dns.yml
   - cert-manager.yml
   - cloudnativepg.yml
+  - mariadb-operator.yml
   - vaultwarden.yml
   - jameswynn.yml
   - intel.yml
