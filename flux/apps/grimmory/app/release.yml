@@ -59,7 +59,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: "Media"
           gethomepage.dev/name: Grimmory
-          gethomepage.dev/icon: grimmory.png
+          gethomepage.dev/icon: booklore.png
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=grimmory"
         parentRefs:
           - name: private-gateway
