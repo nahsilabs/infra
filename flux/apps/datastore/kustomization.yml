@@ -4,3 +4,4 @@ namespace: datastore
 resources:
   - namespace.yml
   - cloudnative-pg
+  - mariadb-operator
