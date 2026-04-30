@@ -1,0 +1,94 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grimmory
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 4.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        initContainers:
+          wait-db:
+            image:
+              repository: busybox
+              tag: latest
+            command: ['sh', '-c', 'until nc -z grimmory-mariadb.grimmory.svc.cluster.local 3306; do sleep 2; done']
+        containers:
+          main:
+            image:
+              repository: ghcr.io/grimmory-tools/grimmory
+              tag: v0.38.2
+            env:
+              TZ: UTC
+              USER_ID: "1000"
+              GROUP_ID: "1000"
+              SWAGGER_ENABLED: "false"
+              DATABASE_URL: jdbc:mariadb://grimmory-mariadb.grimmory.svc.cluster.local:3306/grimmory
+              DATABASE_USERNAME: grimmory
+              DATABASE_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: grimmory-mariadb-user
+                    key: password
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 6060
+
+    persistence:
+      books:
+        existingClaim: grimmory-books
+        globalMounts:
+          - path: /books
+
+    route:
+      private:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Media"
+          gethomepage.dev/name: Grimmory
+          gethomepage.dev/icon: grimmory.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=grimmory"
+        parentRefs:
+          - name: private-gateway
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - books.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
+
+      public:
+        parentRefs:
+          - name: public-gateway
+            namespace: networking
+            sectionName: https
+        hostnames:
+          - books.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1

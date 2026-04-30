@@ -13,6 +13,7 @@ resources:
   - ../../apps/arr
   - ../../apps/general
   - ../../apps/miniflux
+  - ../../apps/grimmory
   - ../../apps/supersync
   - ../../apps/observability
   - ../../apps/observability/victoria-metrics
