@@ -68,7 +68,7 @@ spec:
           gethomepage.dev/name: Stirling PDF
           gethomepage.dev/description: PDF Viewer and Editor
           gethomepage.dev/group: Apps
-          gethomepage.dev/icon: https://cdn-icons-png.flaticon.com/512/4208/4208479.png
+          gethomepage.dev/icon: stirling-pdf.png
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=stirling-pdf"
         parentRefs:
           - name: private-gateway

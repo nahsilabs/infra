@@ -49,7 +49,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: "Arr"
           gethomepage.dev/name: Recommendarr
-          gethomepage.dev/icon: openai.png
+          gethomepage.dev/icon: requestrr.png
         hosts:
           - host: &host recommendarr.nahsi.dev
             paths:
