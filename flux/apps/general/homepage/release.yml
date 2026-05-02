@@ -54,7 +54,10 @@ spec:
             secretName: homepage-tls
 
     config:
-      bookmarks: null
+      bookmarks:
+        - NahsiLabs:
+            - Infra Repo:
+                - href: https://github.com/nahsilabs/infra
 
       kubernetes:
         mode: cluster
@@ -75,14 +78,21 @@ spec:
           hideVisitURL: true
 
         layout:
-          Media:
-            style: columns
-          Apps:
-            style: columns
-          Infra:
-            style: columns
-          Observability:
-            style: columns
+          - Apps:
+              style: columns
+              columns: 4
+          - Media:
+              style: columns
+              columns: 3
+          - Arr:
+              style: columns
+              columns: 4
+          - Infra:
+              style: columns
+              columns: 3
+          - Observability:
+              style: columns
+              columns: 4
 
       widgets:
         - search:
@@ -108,7 +118,7 @@ spec:
                 href: https://truenas.nahsi.dev
                 ping: https://truenas.nahsi.dev
             - Unifi:
-                icon: ubiquiti
+                icon: unifi
                 href: https://unifi.nahsi.dev
                 ping: https://unifi.nahsi.dev
             - Adguard:
@@ -138,18 +148,16 @@ spec:
                 href: https://power-panel.nahsi.dev
                 ping: https://power-panel.nahsi.dev
 
-        - IoT:
+        - Apps:
             - Home Assistant:
-                icon: home-assistant-alt
+                icon: home-assistant
                 href: https://ha.nahsi.dev
                 ping: https://ha.nahsi.dev
-
-        - Apps:
             - Wireguard:
                 icon: wireguard
                 href: http://vpn.nahsi.dev
                 ping: http://vpn.nahsi.dev
-            - qBittorent:
+            - qBittorrent:
                 icon: qbittorrent
                 href: https://torrent.nahsi.dev
                 ping: https://torrent.nahsi.dev
