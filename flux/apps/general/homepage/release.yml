@@ -78,23 +78,21 @@ spec:
           hideVisitURL: true
 
         layout:
-          NahsiLabs:
-            style: row
-          Apps:
-            style: columns
-            columns: 4
-          Media:
-            style: columns
-            columns: 3
-          Arr:
-            style: columns
-            columns: 4
-          Infra:
-            style: columns
-            columns: 3
-          Observability:
-            style: columns
-            columns: 4
+          - Apps:
+              style: columns
+              columns: 4
+          - Media:
+              style: columns
+              columns: 3
+          - Arr:
+              style: columns
+              columns: 4
+          - Infra:
+              style: columns
+              columns: 3
+          - Observability:
+              style: columns
+              columns: 4
 
       widgets:
         - search:
