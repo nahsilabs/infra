@@ -5,7 +5,6 @@ resources:
   - metrics-server
   - kubelet-csr-approver
   - ceph-csi-rbd
-  - ingress-nginx
   - envoy-gateway
   - agenticgateway
   - cloudnative-pg
