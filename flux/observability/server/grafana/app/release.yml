@@ -51,20 +51,7 @@ spec:
     testFramework:
       enabled: false
     ingress:
-      enabled: true
-      annotations:
-        cert-manager.io/cluster-issuer: nahsi.dev
-        gethomepage.dev/enabled: "true"
-        gethomepage.dev/group: "Observability"
-        gethomepage.dev/name: Grafana
-        gethomepage.dev/icon: grafana.png
-      ingressClassName: nginx-private
-      hosts:
-        - &host "grafana.nahsi.dev"
-      tls:
-        - hosts:
-            - *host
-          secretName: grafana-tls
+      enabled: false
     persistence:
       enabled: false
     plugins:

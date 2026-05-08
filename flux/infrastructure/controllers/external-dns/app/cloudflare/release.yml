@@ -21,7 +21,6 @@ spec:
             name: external-dns-cloudflare
             key: CF_API_TOKEN
     sources:
-      - ingress
       - gateway-httproute
     policy: sync
     txtOwnerId: "${CLUSTER}"
@@ -29,7 +28,7 @@ spec:
       - "nahsi.dev"
     provider: cloudflare
     extraArgs:
-      - --ingress-class=nginx-public
+      - --target-net-filter=37.98.199.176/29
     serviceMonitor:
       enabled: true
       additionalLabels:

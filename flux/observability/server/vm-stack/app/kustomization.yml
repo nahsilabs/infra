@@ -5,3 +5,4 @@ resources:
   - vmauth.yml
   - vmservicescrape.yml
   - vmuser.yml
+  - route.yml

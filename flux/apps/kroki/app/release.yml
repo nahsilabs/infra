@@ -21,20 +21,7 @@ spec:
       tag: 0.30.1
 
     ingress:
-      enabled: true
-      ingressClassName: "nginx-private"
-
-      annotations:
-        cert-manager.io/cluster-issuer: nahsi.dev
-
-      hosts:
-        - host: &host kroki.nahsi.dev
-          paths:
-            - /
-      tls:
-        - hosts:
-            - *host
-          secretName: kroki-tls
+      enabled: false
 
     resources:
       limits:

@@ -19,24 +19,7 @@ spec:
     logging:
       logLevel: debug
     ingress:
-      enabled: true
-      class: "nginx-public"
-      hostname: "secrets.nahsi.dev"
-      tlsSecret: "vaultwarden-tls"
-      nginxIngressAnnotations: false
-      additionalAnnotations:
-        cert-manager.io/cluster-issuer: nahsi.dev
-        gethomepage.dev/enabled: "true"
-        gethomepage.dev/name: Vaultwarden
-        gethomepage.dev/icon: vaultwarden.png
-        gethomepage.dev/group: "Apps"
-        nginx.ingress.kubernetes.io/enable-cors: "true"
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        nginx.ingress.kubernetes.io/proxy-body-size: 1G
-        nginx.ingress.kubernetes.io/proxy-connect-timeout: "3600"
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-        nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      enabled: false
     adminToken:
       existingSecret: vaultwarden-secret
       existingSecretKey: token

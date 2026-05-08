@@ -15,7 +15,6 @@ spec:
   values:
     domainFilters: ["nahsi.dev"]
     sources:
-      - ingress
       - gateway-httproute
     provider:
       name: webhook
@@ -47,7 +46,7 @@ spec:
     registry: noop
     extraArgs:
       - --webhook-provider-url=http://localhost:8888
-      - --ingress-class=nginx-private
+      - --target-net-filter=192.168.78.0/24
     serviceMonitor:
       enabled: true
       additionalLabels:

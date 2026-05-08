@@ -95,44 +95,9 @@ spec:
           gpu.intel.com/i915: 1
       ingress:
         public:
-          enabled: true
-          className: nginx-public
-          annotations:
-            cert-manager.io/cluster-issuer: nahsi.dev
-            gethomepage.dev/enabled: "true"
-            gethomepage.dev/group: "Media"
-            gethomepage.dev/name: Immich
-            gethomepage.dev/icon: immich.png
-            gethomepage.dev/pod-selector: "app.kubernetes.io/instance=immich"
-            nginx.ingress.kubernetes.io/proxy-body-size: "0"
-            nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-            nginx.ingress.kubernetes.io/ssl-redirect: "true"
-          hosts:
-            - host: &host "photos.nahsi.dev"
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
-            - hosts:
-                - *host
-              secretName: immich-tls
+          enabled: false
         private:
-          enabled: true
-          className: nginx-private
-          annotations:
-            cert-manager.io/cluster-issuer: nahsi.dev
-            nginx.ingress.kubernetes.io/proxy-body-size: "0"
-            nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-            nginx.ingress.kubernetes.io/ssl-redirect: "true"
-          hosts:
-            - host: *host
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
-            - hosts:
-                - *host
-              secretName: immich-tls
+          enabled: false
     
     machine-learning:
       image:
