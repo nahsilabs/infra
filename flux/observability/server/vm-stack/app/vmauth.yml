@@ -4,16 +4,4 @@ metadata:
   name: stack
 spec:
   selectAllByDefault: true
-  ingress:
-    class_name: nginx-private
-    tlsHosts:
-      - vam.nahsi.dev
-    tlsSecretName: vam-tls
-    annotations:
-      cert-manager.io/cluster-issuer: nahsi.dev
-      gethomepage.dev/enabled: "true"
-      gethomepage.dev/group: "Observability"
-      gethomepage.dev/name: VictoriaMetrics
-      gethomepage.dev/icon: victoriametrics.png
-      gethomepage.dev/pod-selector: "app.kubernetes.io/name=vmsingle"
   replicaCount: 1
