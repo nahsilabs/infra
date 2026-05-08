@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prowlarr-config
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-retain
+  volumeName: pvc-e800f8c2-e105-4de4-9717-2757e57b81ea
+  resources:
+    requests:
+      storage: 2Gi

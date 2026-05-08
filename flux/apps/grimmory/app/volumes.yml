@@ -29,3 +29,16 @@ spec:
   resources:
     requests:
       storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grimmory-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-retain
+  volumeName: pvc-972a9414-78ff-4001-b3fa-bc6ce95df598
+  resources:
+    requests:
+      storage: 5Gi

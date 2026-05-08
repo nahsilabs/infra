@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - cert-manager
+  - metrics-server
+  - kubelet-csr-approver
+  - ceph-csi-rbd
+  - ingress-nginx
+  - envoy-gateway
+  - agenticgateway
+  - cloudnative-pg
+  - mariadb-operator
+  - external-dns
+  - node-feature-discovery
+  - intel-device-plugins
+  - nvidia-operator
+  - vm-operator
+  - snapshot-controller

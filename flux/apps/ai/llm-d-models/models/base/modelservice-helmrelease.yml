@@ -3,7 +3,7 @@ kind: HelmRelease
 metadata:
   name: modelservice-base
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: llm-d-modelservice
