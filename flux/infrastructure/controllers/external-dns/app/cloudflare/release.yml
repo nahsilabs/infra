@@ -28,7 +28,7 @@ spec:
       - "nahsi.dev"
     provider: cloudflare
     extraArgs:
-      - --target-net-filter=37.98.199.185/29
+      - --target-net-filter=37.98.199.176/29
     serviceMonitor:
       enabled: true
       additionalLabels:
