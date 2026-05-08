@@ -1,0 +1,140 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jellyfin
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 3.7.3
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  interval: 1h
+  values:
+    controllers:
+      jellyfin:
+        pod:
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65534
+            fsGroup: 65534
+            fsGroupChangePolicy: "OnRootMismatch"
+
+        containers:
+          app:
+            image:
+              repository: docker.io/jellyfin/jellyfin
+              tag: "10.11.8@sha256:1694ff069f0c9dafb283c36765175606866769f5d72f2ed56b6a0f1be922fc37"
+            env:
+              DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
+              JELLYFIN_PublishedServerUrl: https://jellyfin/nahsi.dev
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: &port 8096
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: false
+            resources:
+              requests:
+                cpu: 100m
+                gpu.intel.com/i915: 1
+                memory: 512Mi
+              limits:
+                gpu.intel.com/i915: 1
+                memory: 8Gi
+
+    service:
+      app:
+        controller: jellyfin
+        type: ClusterIP
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      public:
+        annotations:
+          cert-manager.io/cluster-issuer: nahsi.dev
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Media"
+          gethomepage.dev/name: Jellyfin
+          gethomepage.dev/icon: jellyfin.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=jellyfin"
+        className: "nginx-public"
+        hosts:
+          - host: &host jellyfin.nahsi.dev
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+
+        tls:
+          - hosts:
+              - *host
+            secretName: jellyfin-tls
+
+      private:
+        annotations:
+          cert-manager.io/cluster-issuer: nahsi.dev
+        className: "nginx-private"
+        hosts:
+          - host: *host
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+
+        tls:
+          - hosts:
+              - *host
+            secretName: jellyfin-tls
+
+    persistence:
+      config:
+        existingClaim: jellyfin-config
+        advancedMounts:
+          jellyfin:
+            app:
+              - path: /config
+
+      video:
+        type: nfs
+        server: nfs.lan
+        path: /mnt/storage/media/video
+        advancedMounts:
+          jellyfin:
+            app:
+              - path: /data/video
+
+      music:
+        type: nfs
+        server: nfs.lan
+        path: /mnt/storage/media/music
+        advancedMounts:
+          jellyfin:
+            app:
+              - path: /data/music
+
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          jellyfin:
+            app:
+              - path: /cache
+                subPath: cache
+              - path: /transcode
+                subPath: transcode

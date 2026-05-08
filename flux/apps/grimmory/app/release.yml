@@ -3,7 +3,7 @@ kind: HelmRelease
 metadata:
   name: grimmory
 spec:
-  interval: 15m
+  interval: 1h
   chart:
     spec:
       chart: app-template
@@ -52,6 +52,10 @@ spec:
         existingClaim: grimmory-books
         globalMounts:
           - path: /books
+      data:
+        existingClaim: grimmory-data
+        globalMounts:
+          - path: /app/data
 
     route:
       private:
@@ -63,7 +67,7 @@ spec:
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=grimmory"
         parentRefs:
           - name: private-gateway
-            namespace: networking
+            namespace: envoy-gateway
             sectionName: https
         hostnames:
           - books.nahsi.dev
@@ -80,7 +84,7 @@ spec:
       public:
         parentRefs:
           - name: public-gateway
-            namespace: networking
+            namespace: envoy-gateway
             sectionName: https
         hostnames:
           - books.nahsi.dev

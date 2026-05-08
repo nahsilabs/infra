@@ -1,0 +1,18 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: obs-vm-stack
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-vm-operator
+  path: ./flux/observability/server/vm-stack/app
+  targetNamespace: observability
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m

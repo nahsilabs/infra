@@ -1,0 +1,36 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns-cloudflare
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: external-dns
+      version: 1.15.2
+      sourceRef:
+        kind: HelmRepository
+        name: external-dns
+        namespace: flux-system
+      interval: 5m
+  values:
+    env:
+      - name: CF_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: external-dns-cloudflare
+            key: CF_API_TOKEN
+    sources:
+      - ingress
+      - gateway-httproute
+    policy: sync
+    txtOwnerId: "${CLUSTER}"
+    domainFilters:
+      - "nahsi.dev"
+    provider: cloudflare
+    extraArgs:
+      - --ingress-class=nginx-public
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        scrape: "true"

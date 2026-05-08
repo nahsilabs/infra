@@ -1,0 +1,44 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: obs-grafana-deps
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-cloudnative-pg
+  path: ./flux/observability/server/grafana/deps
+  targetNamespace: observability
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: obs-grafana
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: obs-grafana-deps
+    - name: obs-vm-stack
+  path: ./flux/observability/server/grafana/app
+  targetNamespace: observability
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m

@@ -3,7 +3,7 @@ kind: HelmRelease
 metadata:
   name: llm-d-infra
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: llm-d-infra

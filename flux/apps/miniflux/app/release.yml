@@ -3,7 +3,7 @@ kind: HelmRelease
 metadata:
   name: miniflux
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: app-template
@@ -74,7 +74,7 @@ spec:
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=miniflux"
         parentRefs:
           - name: private-gateway
-            namespace: networking
+            namespace: envoy-gateway
             sectionName: https
         hostnames:
           - rss.nahsi.dev
@@ -91,7 +91,7 @@ spec:
       public:
         parentRefs:
           - name: public-gateway
-            namespace: networking
+            namespace: envoy-gateway
             sectionName: https
         hostnames:
           - rss.nahsi.dev

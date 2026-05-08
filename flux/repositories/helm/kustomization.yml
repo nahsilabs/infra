@@ -23,3 +23,4 @@ resources:
   - cowboysysop.yml
   - llm-d-infra.yml
   - llm-d-modelservice.yml
+  - piraeus.yml

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myspeed-config
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-retain
+  volumeName: pvc-161634d8-99e3-4c11-8e16-600dc8f00c3c
+  resources:
+    requests:
+      storage: 1Gi

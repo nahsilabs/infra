@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: actualbudget-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-retain
+  volumeName: pvc-8ebf192b-84cc-4317-95a8-fb50bff14ee7
+  resources:
+    requests:
+      storage: 10Gi

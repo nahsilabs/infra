@@ -3,7 +3,7 @@ kind: HelmRelease
 metadata:
   name: supersync
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: app-template
@@ -19,7 +19,7 @@ spec:
           migrate:
             image:
               repository: nahsilabs/supersync
-              tag: latest@sha256:07f3056204edd5aec1081853595b551f1ebf0eb555c4dcadd10f566e2fb3d597
+              tag: latest@sha256:67dbcaf0b6689675d8e45e79e0a780d5590bf5d38942f774c4ba60cac51e99a8
             command:
               - sh
               - -c
@@ -39,7 +39,7 @@ spec:
           main:
             image:
               repository: nahsilabs/supersync
-              tag: latest@sha256:07f3056204edd5aec1081853595b551f1ebf0eb555c4dcadd10f566e2fb3d597
+              tag: latest@sha256:67dbcaf0b6689675d8e45e79e0a780d5590bf5d38942f774c4ba60cac51e99a8
             env:
               NODE_ENV: production
               PORT: "1900"
@@ -115,7 +115,7 @@ spec:
         enabled: true
         parentRefs:
           - name: private-gateway
-            namespace: networking
+            namespace: envoy-gateway
             sectionName: https
         hostnames:
           - supersync.nahsi.dev
@@ -131,7 +131,7 @@ spec:
       public:
         parentRefs:
           - name: public-gateway
-            namespace: networking
+            namespace: envoy-gateway
             sectionName: https
         hostnames:
           - supersync.nahsi.dev

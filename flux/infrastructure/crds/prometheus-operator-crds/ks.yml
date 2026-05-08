@@ -1,0 +1,17 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra-prometheus-operator-crds
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m
+  prune: true
+  wait: true
+  targetNamespace: crds
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  path: ./flux/infrastructure/crds/prometheus-operator-crds/app

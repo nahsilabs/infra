@@ -1,22 +1,43 @@
+---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: supersync
+  name: app-supersync-deps
   namespace: flux-system
 spec:
   dependsOn:
-    - name: gateway-private
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
-  path: ./flux/apps/supersync/app
-  prune: true
+    - name: infra-cloudnative-pg
+  path: ./flux/apps/supersync/deps
   targetNamespace: supersync
+  prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: infra
     namespace: flux-system
   interval: 1h
   retryInterval: 2m
-  timeout: 5m
+  timeout: 10m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-supersync
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-supersync-deps
+  path: ./flux/apps/supersync/app
+  targetNamespace: supersync
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m

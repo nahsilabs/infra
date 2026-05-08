@@ -1,19 +1,20 @@
----
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: llm-d-infra
+  name: app-llm-d-infra
   namespace: flux-system
 spec:
-  interval: 30m
-  path: ./flux/apps/ai/llm-d-infra/llm-d-infra
+  interval: 1h
+  timeout: 5m
+  retryInterval: 2m
   prune: true
   targetNamespace: ai
   sourceRef:
     kind: GitRepository
     name: infra
     namespace: flux-system
+  path: ./flux/apps/ai/llm-d-infra/llm-d-infra
   dependsOn:
-    - name: gateway-api-crds
-    - name: agenticgateway-crds
-    - name: agenticgateway
+    - name: infra-gateway-api-crds
+    - name: infra-agenticgateway-crds
+    - name: infra-agenticgateway

@@ -1,0 +1,39 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra-intel-device-plugins-operator
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-cert-manager
+    - name: infra-node-feature-discovery
+  interval: 1h
+  timeout: 15m
+  retryInterval: 2m
+  prune: true
+  wait: true
+  targetNamespace: inteldeviceplugins-system
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  path: ./flux/infrastructure/controllers/intel-device-plugins/app/operator
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra-intel-device-plugins-gpu
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-intel-device-plugins-operator
+  interval: 1h
+  timeout: 15m
+  retryInterval: 2m
+  prune: true
+  targetNamespace: inteldeviceplugins-system
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  path: ./flux/infrastructure/controllers/intel-device-plugins/app/gpu

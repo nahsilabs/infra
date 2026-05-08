@@ -1,0 +1,38 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra-agenticgateway-crds
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 2m
+  timeout: 15m
+  prune: true
+  wait: true
+  targetNamespace: agenticgateway
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  path: ./flux/infrastructure/controllers/agenticgateway/app/crds
+  dependsOn:
+    - name: infra-gateway-api-crds
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra-agenticgateway
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 2m
+  prune: true
+  wait: true
+  targetNamespace: agenticgateway
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  path: ./flux/infrastructure/controllers/agenticgateway/app/app
+  dependsOn:
+    - name: infra-agenticgateway-crds
