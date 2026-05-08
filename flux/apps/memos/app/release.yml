@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 3.7.3
+      version: 4.6.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -58,9 +58,8 @@ spec:
                   type: PathPrefix
                   value: /
             backendRefs:
-              - kind: Service
-                name: main
-                port: 5230
+              - identifier: main
+                port: http
                 weight: 1
 
       public:
@@ -76,7 +75,6 @@ spec:
                   type: PathPrefix
                   value: /
             backendRefs:
-              - kind: Service
-                name: main
-                port: 5230
+              - identifier: main
+                port: http
                 weight: 1
