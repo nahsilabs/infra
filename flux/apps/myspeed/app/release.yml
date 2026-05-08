@@ -2,82 +2,65 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: myspeed
-  namespace: default
 spec:
   interval: 1h
   chart:
     spec:
       chart: app-template
-      version: 3.7.3
+      version: 4.6.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  maxHistory: 2
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
   values:
     controllers:
-      app:
+      main:
         containers:
-          app:
+          main:
             image:
               repository: germannewsmaker/myspeed
               tag: 1.0.9
             env:
               TZ: Europe/Athens
-            resources:
-              requests:
-                cpu: 10m
-                memory: 100Mi
-              limits:
-                memory: 100Mi
             probes:
               liveness:
                 enabled: true
               readiness:
                 enabled: true
+
     service:
-      app:
-        controller: app
+      main:
+        controller: main
         ports:
           http:
             port: 5216
 
     persistence:
       config:
-        enabled: true
         existingClaim: myspeed-config
         globalMounts:
           - path: /myspeed/data
 
-    ingress:
-      app:
-        enabled: true
-        className: nginx-private
+    route:
+      main:
         annotations:
-          cert-manager.io/cluster-issuer: nahsi.dev
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: "Observability"
           gethomepage.dev/name: MySpeed
           gethomepage.dev/icon: myspeed.png
-
-        hosts:
-          - host: &host "myspeed.nahsi.dev"
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
-            secretName: myspeed-tls
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=myspeed"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - myspeed.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1

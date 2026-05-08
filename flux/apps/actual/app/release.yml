@@ -3,60 +3,58 @@ kind: HelmRelease
 metadata:
   name: actualbudget
 spec:
+  interval: 1h
   chart:
     spec:
       chart: app-template
-      version: 3.7.3
+      version: 4.6.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  interval: 1h
-  timeout: 10m0s
   values:
     controllers:
-      actual:
-        type: deployment
+      main:
         strategy: Recreate
         containers:
-          actual:
+          main:
             image:
               repository: ghcr.io/actualbudget/actual-server
               tag: 26.5.2
+
     service:
-      actual:
-        controller: actual
+      main:
+        controller: main
         ports:
           http:
-            port: &port 5006
+            port: 5006
 
-    ingress:
-      private:
+    persistence:
+      config:
+        existingClaim: actualbudget-data
+        globalMounts:
+          - path: /data
+
+    route:
+      main:
         annotations:
-          cert-manager.io/cluster-issuer: nahsi.dev
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: "Apps"
           gethomepage.dev/name: Actual
           gethomepage.dev/icon: actual-budget.png
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=actualbudget"
-        className: "nginx-private"
-        hosts:
-          - host: &host actual.nahsi.dev
-            paths:
-              - path: /
-                service:
-                  identifier: actual
-                  port: *port
-
-        tls:
-          - hosts:
-              - *host
-            secretName: actual-tls
-
-    persistence:
-      config:
-        existingClaim: actualbudget-data
-        advancedMounts:
-          actual:
-            actual:
-              - path: /data
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - actual.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1

@@ -3,47 +3,49 @@ kind: HelmRelease
 metadata:
   name: jellyfin
 spec:
+  interval: 1h
   chart:
     spec:
       chart: app-template
-      version: 3.7.3
-      interval: 30m
+      version: 4.6.2
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  interval: 1h
   values:
     controllers:
-      jellyfin:
-        pod:
-          securityContext:
-            runAsUser: 65534
-            runAsGroup: 65534
-            fsGroup: 65534
-            fsGroupChangePolicy: "OnRootMismatch"
-
+      main:
         containers:
-          app:
+          main:
             image:
               repository: docker.io/jellyfin/jellyfin
               tag: "10.11.8@sha256:1694ff069f0c9dafb283c36765175606866769f5d72f2ed56b6a0f1be922fc37"
             env:
               DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
-              JELLYFIN_PublishedServerUrl: https://jellyfin/nahsi.dev
+              JELLYFIN_PublishedServerUrl: https://jellyfin.nahsi.dev
             probes:
-              liveness: &probes
+              liveness:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
                     path: /health
-                    port: &port 8096
+                    port: 8096
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
-              readiness: *probes
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8096
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
               startup:
                 enabled: false
             resources:
@@ -55,86 +57,87 @@ spec:
                 gpu.intel.com/i915: 1
                 memory: 8Gi
 
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+
     service:
-      app:
-        controller: jellyfin
-        type: ClusterIP
+      main:
+        controller: main
         ports:
           http:
-            port: *port
-
-    ingress:
-      public:
-        annotations:
-          cert-manager.io/cluster-issuer: nahsi.dev
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Media"
-          gethomepage.dev/name: Jellyfin
-          gethomepage.dev/icon: jellyfin.png
-          gethomepage.dev/pod-selector: "app.kubernetes.io/name=jellyfin"
-        className: "nginx-public"
-        hosts:
-          - host: &host jellyfin.nahsi.dev
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-
-        tls:
-          - hosts:
-              - *host
-            secretName: jellyfin-tls
-
-      private:
-        annotations:
-          cert-manager.io/cluster-issuer: nahsi.dev
-        className: "nginx-private"
-        hosts:
-          - host: *host
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
-
-        tls:
-          - hosts:
-              - *host
-            secretName: jellyfin-tls
+            port: 8096
 
     persistence:
       config:
         existingClaim: jellyfin-config
-        advancedMounts:
-          jellyfin:
-            app:
-              - path: /config
+        globalMounts:
+          - path: /config
 
       video:
         type: nfs
         server: nfs.lan
         path: /mnt/storage/media/video
-        advancedMounts:
-          jellyfin:
-            app:
-              - path: /data/video
+        globalMounts:
+          - path: /data/video
 
       music:
         type: nfs
         server: nfs.lan
         path: /mnt/storage/media/music
-        advancedMounts:
-          jellyfin:
-            app:
-              - path: /data/music
+        globalMounts:
+          - path: /data/music
 
       tmpfs:
         type: emptyDir
         advancedMounts:
-          jellyfin:
-            app:
+          main:
+            main:
               - path: /cache
                 subPath: cache
               - path: /transcode
                 subPath: transcode
+
+    route:
+      private:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Media"
+          gethomepage.dev/name: Jellyfin
+          gethomepage.dev/icon: jellyfin.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=jellyfin"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - jellyfin.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
+
+      public:
+        parentRefs:
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - jellyfin.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
