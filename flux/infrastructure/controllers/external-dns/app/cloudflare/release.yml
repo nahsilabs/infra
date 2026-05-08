@@ -27,6 +27,8 @@ spec:
     domainFilters:
       - "nahsi.dev"
     provider: cloudflare
+    extraArgs:
+      - --exclude-target-nets=192.168.78.0/24
     serviceMonitor:
       enabled: true
       additionalLabels:

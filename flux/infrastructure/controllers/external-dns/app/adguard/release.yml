@@ -46,6 +46,7 @@ spec:
     registry: noop
     extraArgs:
       - --webhook-provider-url=http://localhost:8888
+      - --target-net-filter=192.168.78.0/24
     serviceMonitor:
       enabled: true
       additionalLabels:
