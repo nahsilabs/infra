@@ -1,0 +1,100 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: navidrome
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 4.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: deluan/navidrome
+              tag: 0.61.2@sha256:9fa40b3d8dec43ceb2213d1fa551da3dcfef6ac6d19c2e534efb92527c2bafd2
+            env:
+              TZ: Europe/Athens
+              ND_MUSICFOLDER: /music
+              ND_DATAFOLDER: /data
+              ND_CACHEFOLDER: /cache
+              ND_LOGLEVEL: info
+              ND_PORT: "4533"
+
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 4533
+
+    persistence:
+      data:
+        existingClaim: navidrome-data
+        globalMounts:
+          - path: /data
+      music:
+        existingClaim: navidrome-music
+        globalMounts:
+          - path: /music
+            readOnly: true
+      cache:
+        type: emptyDir
+        sizeLimit: 2Gi
+        globalMounts:
+          - path: /cache
+
+    route:
+      private:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Media"
+          gethomepage.dev/name: Navidrome
+          gethomepage.dev/icon: navidrome.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=navidrome"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - navidrome.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
+
+      public:
+        parentRefs:
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - navidrome.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
