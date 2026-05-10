@@ -64,7 +64,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Downloads
           gethomepage.dev/name: soulsync
-          gethomepage.dev/icon: soulsync
+          gethomepage.dev/icon: https://raw.githubusercontent.com/Nezreka/Soulsync/main/assets/trans.png
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=soulsync"
         parentRefs:
           - name: private-gateway
@@ -77,6 +77,8 @@ spec:
               - path:
                   type: PathPrefix
                   value: /
+            timeouts:
+              request: 120s
             backendRefs:
               - identifier: main
                 port: http
