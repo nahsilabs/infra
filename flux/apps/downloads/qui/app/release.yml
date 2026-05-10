@@ -43,7 +43,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Downloads
           gethomepage.dev/name: qui
-          gethomepage.dev/icon: https://raw.githubusercontent.com/autobrr/qui/develop/.github/assets/qui.png
+          gethomepage.dev/icon: autobrr.png
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=qui"
         parentRefs:
           - name: private-gateway
