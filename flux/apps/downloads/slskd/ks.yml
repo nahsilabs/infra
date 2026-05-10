@@ -14,3 +14,7 @@ spec:
   interval: 1h
   retryInterval: 2m
   timeout: 5m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
