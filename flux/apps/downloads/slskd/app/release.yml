@@ -26,9 +26,12 @@ spec:
               SLSKD_APP_DIR: /config
               SLSKD_DOWNLOADS_DIR: /downloads
               SLSKD_INCOMPLETE_DIR: /incomplete
-              # SLSKD_SHARED_DIR: /music
+              SLSKD_SHARED_DIR: /music
               SLSKD_REMOTE_CONFIGURATION: "true"
               SLSKD_SLSK_LISTEN_PORT: "40010"
+            envFrom:
+              - secretRef:
+                  name: slskd-credentials
             securityContext:
               runAsUser: 65534
               runAsGroup: 65534

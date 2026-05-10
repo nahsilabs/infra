@@ -4,3 +4,4 @@ resources:
   - release.yml
   - volumes.yml
   - gluetun-secret.yml
+  - secret.yml
