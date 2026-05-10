@@ -46,7 +46,7 @@ spec:
               VPN_SERVICE_PROVIDER: custom
               VPN_TYPE: wireguard
               FIREWALL_VPN_INPUT_PORTS: "40020"
-              FIREWALL_INPUT_PORTS: "7476"
+              FIREWALL_INPUT_PORTS: "7476,8080"
               DOT: "off"
             envFrom:
               - secretRef:
@@ -70,6 +70,8 @@ spec:
         ports:
           http:
             port: 7476
+          api:
+            port: 8080
 
     persistence:
       config:
