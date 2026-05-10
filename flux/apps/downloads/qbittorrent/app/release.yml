@@ -91,6 +91,12 @@ spec:
 
     route:
       main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Downloads
+          gethomepage.dev/name: qBittorrent
+          gethomepage.dev/icon: qbittorrent.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=qbittorrent"
         parentRefs:
           - name: private-gateway
             namespace: envoy-gateway
