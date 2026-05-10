@@ -21,7 +21,7 @@ spec:
             image:
               repository: busybox
               tag: latest
-            command: ["/bin/sh", "-c", "rm -f /config/qBittorrent/config/lockfile"]
+            command: ["/bin/sh", "-c", "rm -f /config/qBittorrent/lockfile"]
         containers:
           main:
             image:
