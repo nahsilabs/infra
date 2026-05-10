@@ -87,7 +87,7 @@ spec:
       music:
         type: nfs
         server: nfs.lan
-        path: /mnt/storage/media/music
+        path: /mnt/storage/media/music/library
         globalMounts:
           - path: /data/music
 

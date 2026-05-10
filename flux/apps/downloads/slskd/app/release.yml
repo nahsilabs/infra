@@ -1,0 +1,117 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: slskd
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 4.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        strategy: Recreate
+        containers:
+          main:
+            image:
+              repository: ghcr.io/slskd/slskd
+              tag: "0.25.1.65534-50608eb1@sha256:a50261ea0b8a37cfe8d93072e6673603ce3af579aef306cbc51fd1a7a1de730c"
+            env:
+              TZ: Europe/Athens
+              SLSKD_APP_DIR: /config
+              SLSKD_DOWNLOADS_DIR: /downloads
+              SLSKD_INCOMPLETE_DIR: /incomplete
+              SLSKD_SHARED_DIR: /music
+              SLSKD_REMOTE_CONFIGURATION: "true"
+              SLSKD_SLSK_LISTEN_PORT: "40010"
+            envFrom:
+              - secretRef:
+                  name: slskd-credentials
+            securityContext:
+              runAsUser: 65534
+              runAsGroup: 65534
+              runAsNonRoot: true
+
+          gluetun:
+            image:
+              repository: ghcr.io/qdm12/gluetun
+              tag: v3.41.1
+            env:
+              TZ: Europe/Athens
+              VPN_SERVICE_PROVIDER: custom
+              VPN_TYPE: wireguard
+              FIREWALL_VPN_INPUT_PORTS: "40010"
+              FIREWALL_INPUT_PORTS: "5030"
+              DOT: "off"
+            envFrom:
+              - secretRef:
+                  name: slskd-gluetun
+            securityContext:
+              capabilities:
+                add: [NET_ADMIN]
+            lifecycle:
+              postStart:
+                exec:
+                  command: ["/bin/sh", "-c", "(ip rule del table 51828; ip -6 rule del table 51828) || true"]
+
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 5030
+
+    persistence:
+      config:
+        existingClaim: slskd-config
+        globalMounts:
+          - path: /config
+      incomplete:
+        existingClaim: slskd-incomplete
+        globalMounts:
+          - path: /incomplete
+      downloads:
+        existingClaim: slskd-downloads
+        globalMounts:
+          - path: /downloads
+      music:
+        type: nfs
+        server: nfs.lan
+        path: /mnt/storage/media/music/library
+        globalMounts:
+          - path: /music
+            readOnly: true
+
+    route:
+      main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Downloads
+          gethomepage.dev/name: slskd
+          gethomepage.dev/icon: slskd
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=slskd"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - slskd.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1

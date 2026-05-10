@@ -16,3 +16,5 @@ resources:
   - supersync
   - vaultwarden
   - ai
+  - downloads
+  - navidrome
