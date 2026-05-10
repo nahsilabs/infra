@@ -1,0 +1,12 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-digarr
+spec:
+  instances: 2
+  primaryUpdateStrategy: unsupervised
+  primaryUpdateMethod: switchover
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
+  storage:
+    storageClass: ceph-rbd-retain
+    size: 4Gi

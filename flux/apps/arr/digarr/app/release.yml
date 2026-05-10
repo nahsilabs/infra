@@ -1,0 +1,121 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: digarr
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 4.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/iuliandita/digarr
+              tag: stable@sha256:3cc1b73e81471d9dcd2672f0b5a102c7632fc068e47b5346738dfd9a549608f0
+            env:
+              PORT: "3000"
+              ALLOWED_ORIGIN: https://digarr.nahsi.dev
+              AI_PROVIDER: openai
+              AI_MODEL: gpt-4o-mini
+              LIDARR_URL: http://lidarr.arr.svc.cluster.local:8686
+              DIGARR_DISABLE_REGISTRATION: "true"
+              SKIP_TLS_VERIFY: "false"
+              DB_HOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-digarr-app
+                    key: host
+              DB_PORT:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-digarr-app
+                    key: port
+              DB_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-digarr-app
+                    key: user
+              DB_PASS:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-digarr-app
+                    key: password
+              DB_NAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-digarr-app
+                    key: dbname
+              DIGARR_INITIAL_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: digarr-secret
+                    key: DIGARR_INITIAL_USERNAME
+              DIGARR_INITIAL_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: digarr-secret
+                    key: DIGARR_INITIAL_PASSWORD
+              DIGARR_ENCRYPTION_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: digarr-secret
+                    key: DIGARR_ENCRYPTION_KEY
+              AI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: digarr-secret
+                    key: AI_API_KEY
+              LIDARR_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: digarr-secret
+                    key: LIDARR_API_KEY
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 3000
+
+    persistence:
+      data:
+        existingClaim: digarr-data
+        globalMounts:
+          - path: /app/data
+      backups:
+        existingClaim: digarr-backups
+        globalMounts:
+          - path: /app/backups
+
+    route:
+      main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Arr"
+          gethomepage.dev/name: Digarr
+          gethomepage.dev/icon: https://raw.githubusercontent.com/iuliandita/digarr/main/docs/logo.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=digarr"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - digarr.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
