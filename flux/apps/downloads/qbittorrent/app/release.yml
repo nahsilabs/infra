@@ -1,0 +1,114 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: qbittorrent
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 4.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        strategy: Recreate
+        initContainers:
+          lockfile:
+            image:
+              repository: busybox
+              tag: latest
+            command: ["/bin/sh", "-c", "rm -f /config/qBittorrent/lockfile"]
+        containers:
+          main:
+            image:
+              repository: ghcr.io/home-operations/qbittorrent
+              tag: 5.2.0@sha256:08eb7ed4c7fe70425064d58154c35fccc89fafffd64ce9d1affed399e173ff20
+            env:
+              TZ: Europe/Athens
+              QBITTORRENT__PORT: "8080"
+            securityContext:
+              runAsUser: 65534
+              runAsGroup: 65534
+              runAsNonRoot: true
+
+          gluetun:
+            image:
+              repository: ghcr.io/qdm12/gluetun
+              tag: v3.41.1
+            env:
+              TZ: Europe/Athens
+              VPN_SERVICE_PROVIDER: custom
+              VPN_TYPE: wireguard
+              FIREWALL_VPN_INPUT_PORTS: "40020"
+              FIREWALL_INPUT_PORTS: "8080"
+              DOT: "off"
+            envFrom:
+              - secretRef:
+                  name: qbittorrent-gluetun
+            securityContext:
+              capabilities:
+                add: [NET_ADMIN]
+            lifecycle:
+              postStart:
+                exec:
+                  command: ["/bin/sh", "-c", "(ip rule del table 51828; ip -6 rule del table 51828) || true"]
+
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8080
+
+    persistence:
+      config:
+        existingClaim: qbittorrent-config
+        globalMounts:
+          - path: /config
+      incomplete:
+        existingClaim: qbittorrent-incomplete
+        globalMounts:
+          - path: /mnt/incomplete
+      downloads:
+        existingClaim: qbittorrent-downloads
+        globalMounts:
+          - path: /mnt/downloads
+      video:
+        type: nfs
+        server: nfs.lan
+        path: /mnt/storage/media/video
+        globalMounts:
+          - path: /mnt/video
+
+    route:
+      main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Downloads
+          gethomepage.dev/name: qBittorrent
+          gethomepage.dev/icon: qbittorrent.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=qbittorrent"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - qbittorrent.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1

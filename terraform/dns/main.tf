@@ -32,18 +32,6 @@ resource "adguard_rewrite" "nfs-lan" {
   answer = "10.2.10.41"
 }
 
-resource "cloudflare_record" "seedbox-0" {
-  zone_id = data.cloudflare_zone.nahsi.zone_id
-  name    = "torrent.nahsi.dev"
-  content = "37.98.199.179"
-  type    = "A"
-}
-
-resource "adguard_rewrite" "seedbox-0" {
-  domain = "torrent.nahsi.dev"
-  answer = "10.2.14.179"
-}
-
 resource "cloudflare_record" "vpn" {
   zone_id = data.cloudflare_zone.nahsi.zone_id
   name    = "vpn.nahsi.dev"

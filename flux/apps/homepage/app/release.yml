@@ -126,7 +126,3 @@ spec:
                 icon: wireguard
                 href: http://vpn.nahsi.dev
                 ping: http://vpn.nahsi.dev
-            - qBittorrent:
-                icon: qbittorrent
-                href: https://torrent.nahsi.dev
-                ping: https://torrent.nahsi.dev
