@@ -1,0 +1,20 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-soulsync
+  namespace: flux-system
+spec:
+  interval: 1h
+  timeout: 5m
+  retryInterval: 2m
+  prune: true
+  targetNamespace: soulsync
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  path: ./flux/apps/soulsync/app
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
