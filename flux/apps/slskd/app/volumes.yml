@@ -1,0 +1,56 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: slskd-config
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-retain
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: slskd-incomplete
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-retain
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: slskd-downloads
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-slskd-downloads
+  mountOptions:
+    - nconnect=8
+    - hard
+    - noatime
+  nfs:
+    server: nfs.lan
+    path: /mnt/storage/downloads/slskd
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: slskd-downloads
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-slskd-downloads
+  volumeName: slskd-downloads
+  resources:
+    requests:
+      storage: 1Gi
