@@ -6,3 +6,5 @@ resources:
   - radarr
   - recommendarr
   - prowlarr
+  - lidarr
+  - soularr

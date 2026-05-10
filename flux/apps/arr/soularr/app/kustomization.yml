@@ -3,5 +3,3 @@ kind: Kustomization
 resources:
   - release.yml
   - volumes/
-  - gluetun-secret.yml
-  - secret.yml
