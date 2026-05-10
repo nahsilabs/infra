@@ -29,14 +29,6 @@ spec:
               runAsGroup: 65534
               runAsNonRoot: true
 
-          qui:
-            image:
-              repository: ghcr.io/autobrr/qui
-              tag: v1.18.0
-            env:
-              TZ: Europe/Athens
-              QBT_HOST: http://localhost:8080
-
           gluetun:
             image:
               repository: ghcr.io/qdm12/gluetun
@@ -46,7 +38,7 @@ spec:
               VPN_SERVICE_PROVIDER: custom
               VPN_TYPE: wireguard
               FIREWALL_VPN_INPUT_PORTS: "40020"
-              FIREWALL_INPUT_PORTS: "7476,8080"
+              FIREWALL_INPUT_PORTS: "8080"
               DOT: "off"
             envFrom:
               - secretRef:
@@ -69,8 +61,6 @@ spec:
         controller: main
         ports:
           http:
-            port: 7476
-          api:
             port: 8080
 
     persistence:
@@ -95,18 +85,12 @@ spec:
 
     route:
       main:
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Downloads
-          gethomepage.dev/name: qBittorrent
-          gethomepage.dev/icon: qbittorrent.png
-          gethomepage.dev/pod-selector: "app.kubernetes.io/name=qbittorrent"
         parentRefs:
           - name: private-gateway
             namespace: envoy-gateway
             sectionName: https
         hostnames:
-          - torrents.nahsi.dev
+          - qbittorrent.nahsi.dev
         rules:
           - matches:
               - path:
