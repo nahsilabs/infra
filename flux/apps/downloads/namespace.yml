@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: downloads
+  labels:
+    # required for gluetun NET_ADMIN capability
+    pod-security.kubernetes.io/enforce: privileged

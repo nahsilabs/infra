@@ -4,8 +4,8 @@ metadata:
   name: app-slskd
   namespace: flux-system
 spec:
-  path: ./flux/apps/slskd/app
-  targetNamespace: slskd
+  path: ./flux/apps/downloads/slskd/app
+  targetNamespace: downloads
   prune: true
   sourceRef:
     kind: GitRepository
