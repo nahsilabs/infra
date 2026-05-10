@@ -16,6 +16,12 @@ spec:
     controllers:
       main:
         strategy: Recreate
+        initContainers:
+          lockfile:
+            image:
+              repository: busybox
+              tag: latest
+            command: ["/bin/sh", "-c", "rm -f /config/qBittorrent/config/lockfile"]
         containers:
           main:
             image:
