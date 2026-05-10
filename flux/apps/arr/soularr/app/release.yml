@@ -67,6 +67,8 @@ spec:
               - path:
                   type: PathPrefix
                   value: /
+            timeouts:
+              request: 0s
             backendRefs:
               - identifier: main
                 port: http
