@@ -11,6 +11,10 @@ spec:
   targetNamespace: arr
   prune: true
   wait: true
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   sourceRef:
     kind: GitRepository
     name: infra
