@@ -6,3 +6,4 @@ resources:
   - gateways
   - agenticgateway-gateway
   - snapshot-class
+  - external-secrets

@@ -21,3 +21,4 @@ resources:
   - llm-d-infra.yml
   - llm-d-modelservice.yml
   - piraeus.yml
+  - external-secrets.yml
