@@ -129,12 +129,6 @@ spec:
                 port: http
 
       private:
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Apps"
-          gethomepage.dev/name: Continuwuity
-          gethomepage.dev/icon: matrix.png
-          gethomepage.dev/pod-selector: "app.kubernetes.io/name=continuwuity"
         parentRefs:
           - name: private-gateway
             namespace: envoy-gateway
