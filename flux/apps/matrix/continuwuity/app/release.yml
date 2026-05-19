@@ -46,10 +46,6 @@ spec:
               CONTINUWUITY_ZSTD_COMPRESSION: true
               CONTINUWUITY_ALLOW_ANNOUNCEMENTS_CHECK: false
 
-            envFrom:
-              - secretRef:
-                  name: continuwuity-secret
-
             probes:
               liveness: &probes
                 enabled: true
