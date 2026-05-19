@@ -23,7 +23,7 @@ spec:
     sources:
       - gateway-httproute
     policy: sync
-    txtOwnerId: "${CLUSTER}"
+    txtOwnerId: nahsilabs
     domainFilters:
       - "nahsi.dev"
     provider: cloudflare
