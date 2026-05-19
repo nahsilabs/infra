@@ -30,3 +30,15 @@ spec:
         certificateRefs:
           - name: nahsi-dev-tls
             kind: Secret
+    - name: https-apex
+      port: 443
+      protocol: HTTPS
+      hostname: "nahsi.dev"
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: nahsi-dev-tls
+            kind: Secret

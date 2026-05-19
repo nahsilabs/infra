@@ -10,3 +10,4 @@ spec:
     name: nahsi.dev
   dnsNames:
     - "*.nahsi.dev"
+    - "nahsi.dev"
