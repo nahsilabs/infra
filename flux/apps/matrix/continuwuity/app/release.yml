@@ -28,8 +28,8 @@ spec:
               CONTINUWUITY_PORT: &port 8080
               CONTINUWUITY_DATABASE_PATH: "/data"
               CONTINUWUITY_NEW_USER_DISPLAYNAME_SUFFIX: ""
-              CONTINUWUITY_ALLOW_REGISTRATION: true
-              CONTINUWUITY_SUSPEND_ON_REGISTER: true
+              CONTINUWUITY_ALLOW_REGISTRATION: false
+              CONTINUWUITY_SUSPEND_ON_REGISTER: false
               CONTINUWUITY_WELL_KNOWN__CLIENT: "https://matrix.nahsi.dev"
               CONTINUWUITY_WELL_KNOWN__SERVER: "matrix.nahsi.dev:443"
               CONTINUWUITY_ALLOW_FEDERATION: true

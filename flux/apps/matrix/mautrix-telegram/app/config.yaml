@@ -1,0 +1,328 @@
+# Network-specific config options
+network:
+    # Get your own API keys at https://my.telegram.org/apps
+    api_id: 0
+    api_hash: placeholder
+
+    # Device info shown in the Telegram device list.
+    device_info:
+        device_model: mautrix-telegram
+        system_version:
+        app_version: auto
+        lang_code: en
+        system_lang_code: en
+
+    # Settings for converting animated stickers.
+    animated_sticker:
+        # Format to which animated stickers should be converted.
+        #
+        # disable - no conversion, send as-is (gzipped lottie)
+        # png -     converts to non-animated png (fastest),
+        # gif -     converts to animated gif
+        # webm -    converts to webm video, requires ffmpeg executable with vp9 codec
+        #           and webm container support
+        # webp -    converts to animated webp, requires ffmpeg executable with webp
+        #           codec/container support
+        target: gif
+        # Should video stickers be converted to the specified format as well?
+        convert_from_webm: false
+        # Arguments for converter. All converters take width and height.
+        args:
+            width: 256
+            height: 256
+            fps: 25 # only for webm, webp and gif (2, 5, 10, 20 or 25 recommended)
+
+    # Settings for syncing the member list for portals.
+    member_list:
+        # Maximum number of members to sync per portal when starting up. Other
+        # members will be synced when they send messages. The maximum is 10000,
+        # after which the Telegram server will not send any more members.
+        #
+        # -1 means no limit (which means it's limited to 10000 by the server)
+        max_initial_sync: 100
+        # Whether or not to sync the member list in broadcast channels. If
+        # disabled, members will still be synced when they send messages.
+        #
+        # If no channel admins have logged into the bridge, the bridge won't be
+        # able to sync the member list regardless of this setting.
+        sync_broadcast_channels: false
+        # Whether or not to skip deleted members when syncing members.
+        skip_deleted: true
+
+    # Settings for pings to the Telegram server.
+    ping:
+        # The interval (in seconds) between pings.
+        interval_seconds: 30
+        # The timeout (in seconds) for a single ping.
+        timeout_seconds: 10
+
+    # Proxy settings
+    proxy:
+        # Allowed types: disabled, socks5, mtproxy
+        type: disabled
+
+    sync:
+        # Number of most recently active dialogs to check when syncing chats.
+        # Set to -1 to remove limit.
+        update_limit: 100
+        # Number of most recently active dialogs to create portals for when syncing chats.
+        # Set to 0 to disable automatic portal creation on sync.
+        create_limit: -1
+        # Number of chats to sync immediately on login before the data export is accepted.
+        login_sync_limit: 0
+        # Whether or not to sync and create portals for direct chats at startup.
+        direct_chats: true
+
+    takeout:
+        # Should the bridge use the data export mode for syncing the full chat list?
+        dialog_sync: false
+        # Should the bridge use the data export mode for forward backfilling messages?
+        forward_backfill: false
+        # Should the bridge use the data export mode for backward backfilling messages?
+        backward_backfill: false
+
+    # Maximum number of participants in chats to bridge. Only applies when the
+    # portal is being created.
+    # -1 means no limit
+    max_member_count: -1
+    # Should personal avatars (that are only visible to specific users) be allowed?
+    contact_avatars: false
+    # Should contact names be updated from any source even if a name is already set?
+    contact_names: false
+    always_custom_emoji_reaction: false
+    saved_message_avatar: mxc://maunium.net/XhhfHoPejeneOngMyBbtyWDk
+    always_tombstone_on_supergroup_migration: false
+    image_as_file_pixels: 16777216
+    disable_view_once: false
+    displayname_template: "{{ if .Deleted }}Deleted account {{ .UserID }}{{ else }}{{ .FullName }}{{ end }}"
+
+# Config options that affect the central bridge module.
+bridge:
+    command_prefix: '!tg'
+    personal_filtering_spaces: true
+    private_chat_portal_meta: true
+    async_events: false
+    split_portals: false
+    resend_bridge_info: false
+    no_bridge_info_state_key: false
+    # Allowed values: none, errors, all
+    bridge_status_notices: errors
+    unknown_error_auto_reconnect: null
+    unknown_error_max_auto_reconnects: 10
+    bridge_matrix_leave: false
+    bridge_notices: false
+    tag_only_on_create: true
+    only_bridge_tags: [m.favourite, m.lowpriority]
+    mute_only_on_create: true
+    deduplicate_matrix_messages: false
+    cross_room_replies: false
+    revert_failed_state_changes: false
+    kick_matrix_users: true
+    enable_send_state_requests: false
+    phone_numbers_in_profile: false
+
+    # What should be done to portal rooms when a user logs out or is logged out?
+    cleanup_on_logout:
+        enabled: false
+        manual:
+            private: nothing
+            relayed: nothing
+            shared_no_users: nothing
+            shared_has_users: nothing
+        bad_credentials:
+            private: nothing
+            relayed: nothing
+            shared_no_users: nothing
+            shared_has_users: nothing
+
+    relay:
+        enabled: false
+        admin_only: true
+        prefer_default: true
+        allow_bridge: true
+        default_relays: []
+        message_formats:
+            m.text: "<b>{{ .Sender.DisambiguatedName }}</b>: {{ .Message }}"
+            m.notice: "<b>{{ .Sender.DisambiguatedName }}</b>: {{ .Message }}"
+            m.emote: "* <b>{{ .Sender.DisambiguatedName }}</b> {{ .Message }}"
+            m.file: "<b>{{ .Sender.DisambiguatedName }}</b> sent a file{{ if .Caption }}: {{ .Caption }}{{ end }}"
+            m.image: "<b>{{ .Sender.DisambiguatedName }}</b> sent an image{{ if .Caption }}: {{ .Caption }}{{ end }}"
+            m.audio: "<b>{{ .Sender.DisambiguatedName }}</b> sent an audio file{{ if .Caption }}: {{ .Caption }}{{ end }}"
+            m.video: "<b>{{ .Sender.DisambiguatedName }}</b> sent a video{{ if .Caption }}: {{ .Caption }}{{ end }}"
+            m.location: "<b>{{ .Sender.DisambiguatedName }}</b> sent a location{{ if .Caption }}: {{ .Caption }}{{ end }}"
+        displayname_format: "{{ .DisambiguatedName }}"
+
+    # Filter for automatically creating portals. Mode: deny means no auto-creation.
+    portal_create_filter:
+        mode: allow
+        list: []
+        always_deny_from_login: []
+
+    # Permissions for using the bridge.
+    # Permitted values:
+    #    relay    - Talk through the relaybot (if enabled), no access otherwise
+    # commands    - Access to use commands in the bridge, but not login
+    #     user    - Access to use the bridge with puppeting
+    #    admin    - Full access
+    permissions:
+        "*": relay
+        "nahsi.dev": user
+        "@me:nahsi.dev": admin
+
+# Config for the bridge's database.
+database:
+    # "sqlite3-fk-wal" and "postgres" are supported.
+    type: postgres
+    # Overridden by env var MAUTRIX_TELEGRAM_DATABASE__URI
+    uri: placeholder
+    max_open_conns: 5
+    max_idle_conns: 1
+    max_conn_idle_time: null
+    max_conn_lifetime: null
+
+# Homeserver details.
+homeserver:
+    address: http://continuwuity.matrix.svc.cluster.local:8080
+    domain: nahsi.dev
+    software: standard
+    status_endpoint:
+    message_send_checkpoint_endpoint:
+    async_media: false
+    websocket: false
+    ping_interval_seconds: 0
+
+# Application service host/registration related details.
+# Changing these values requires regeneration of the registration (except when noted otherwise)
+appservice:
+    address: http://mautrix-telegram.matrix.svc.cluster.local:29317
+    # Hostname to listen on. For Docker/k8s 0.0.0.0 is required.
+    hostname: 0.0.0.0
+    port: 29317
+    id: telegram
+    bot:
+        username: telegrambot
+        displayname: Telegram bridge bot
+        avatar: mxc://maunium.net/tJCRmUyJDsgRNgqhOgoiHWbX
+    ephemeral_events: true
+    async_transactions: false
+    # Authentication tokens. Overridden by env vars. Do not leave as "generate".
+    as_token: placeholder
+    hs_token: placeholder
+    # Localpart template of MXIDs for remote users.
+    username_template: telegram_{{.}}
+
+# Config options that affect the Matrix connector of the bridge.
+matrix:
+    message_status_events: false
+    delivery_receipts: false
+    message_error_notices: true
+    sync_direct_chat_list: true
+    federate_rooms: true
+    upload_file_threshold: 5242880
+    ghost_extra_profile_info: false
+
+# Segment-compatible analytics. Disabled.
+analytics:
+    token: null
+    url: https://api.segment.io/v1/track
+    user_id: null
+
+# Settings for provisioning API
+provisioning:
+    # disable = provisioning API is disabled entirely
+    shared_secret: disable
+    allow_matrix_auth: true
+    debug_endpoints: false
+    enable_session_transfers: false
+
+# Public media: serve publicly accessible URLs for bridge media (e.g. Discord webhook avatars).
+# Not needed for Telegram.
+public_media:
+    enabled: false
+    # disable = don't generate signing key
+    signing_key: disable
+    expiry: 0
+    hash_length: 32
+    path_prefix: /_mautrix/publicmedia
+    use_database: false
+
+# Direct media: use custom mxc:// URIs pointing to remote CDN instead of reuploading.
+# Not needed for Telegram.
+direct_media:
+    enabled: false
+    server_name: discord-media.example.com
+    well_known_response:
+    media_id_prefix:
+    allow_proxy: true
+    # disable = don't generate server signing key
+    server_key: disable
+
+# Settings for backfilling messages.
+backfill:
+    enabled: true
+    max_initial_messages: -1
+    max_catchup_messages: -1
+    unread_hours_threshold: 720
+    threads:
+        max_initial_messages: 50
+    queue:
+        enabled: false
+        manual: false
+        batch_size: 100
+        batch_delay: 20
+        max_batches: -1
+        max_batches_override: {}
+
+# Settings for enabling double puppeting.
+# See https://docs.mau.fi/bridges/general/double-puppeting.html
+double_puppet:
+    # Only for OTHER servers, not for the server this bridge is on.
+    servers: {}
+    allow_discovery: false
+    # Shared secrets for automatic double puppeting.
+    # For nahsi.dev use: login-matrix <access_token> in the bridge management room.
+    secrets: {}
+
+# End-to-bridge encryption support options.
+encryption:
+    allow: true
+    default: false
+    require: false
+    appservice: false
+    msc4190: false
+    msc4392: false
+    self_sign: false
+    allow_key_sharing: true
+    # Pickle key for encrypting encryption keys in the bridge database.
+    # Overridden by env var MAUTRIX_TELEGRAM_ENCRYPTION__PICKLE_KEY. Do not leave as "generate".
+    pickle_key: placeholder
+    delete_keys:
+        delete_outbound_on_ack: false
+        dont_store_outbound: false
+        ratchet_on_decrypt: false
+        delete_fully_used_on_decrypt: false
+        delete_prev_on_new_session: false
+        delete_on_device_delete: false
+        periodically_delete_expired: false
+        delete_outdated_inbound: false
+    verification_levels:
+        receive: unverified
+        send: unverified
+        share: cross-signed-tofu
+    rotation:
+        enable_custom: false
+        milliseconds: 604800000
+        messages: 100
+        disable_device_change_key_rotation: false
+
+# Prefix for environment variables. All variables with this prefix must map to valid config fields.
+# Two underscores (__) in a variable name map to a dot (.) in the config path.
+# e.g. MAUTRIX_TELEGRAM_APPSERVICE__AS_TOKEN sets appservice.as_token
+env_config_prefix: MAUTRIX_TELEGRAM_
+
+# Logging config.
+logging:
+    min_level: info
+    writers:
+        - type: stdout
+          format: pretty-colored
