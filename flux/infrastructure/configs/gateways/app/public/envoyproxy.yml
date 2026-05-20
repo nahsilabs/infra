@@ -3,6 +3,7 @@ kind: EnvoyProxy
 metadata:
   name: envoy-proxy-public
 spec:
+  pathWithEscapedSlashesAction: KeepUnchanged
   provider:
     type: Kubernetes
     kubernetes:
