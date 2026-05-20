@@ -124,6 +124,8 @@ spec:
               - path:
                   type: PathPrefix
                   value: /
+            timeouts:
+              request: "60s"
             backendRefs:
               - identifier: main
                 port: http
@@ -140,6 +142,8 @@ spec:
               - path:
                   type: PathPrefix
                   value: /
+            timeouts:
+              request: "60s"
             backendRefs:
               - identifier: main
                 port: http
