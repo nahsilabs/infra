@@ -4,3 +4,4 @@ resources:
   - envoyproxy.yml
   - gatewayclass.yml
   - gateway.yml
+  - clienttrafficpolicy.yml
