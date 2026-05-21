@@ -67,9 +67,9 @@ network:
         update_limit: 100
         # Number of most recently active dialogs to create portals for when syncing chats.
         # Set to 0 to disable automatic portal creation on sync.
-        create_limit: -1
+        create_limit: 15
         # Number of chats to sync immediately on login before the data export is accepted.
-        login_sync_limit: 0
+        login_sync_limit: 15
         # Whether or not to sync and create portals for direct chats at startup.
         direct_chats: true
 
@@ -152,9 +152,9 @@ bridge:
             m.location: "<b>{{ .Sender.DisambiguatedName }}</b> sent a location{{ if .Caption }}: {{ .Caption }}{{ end }}"
         displayname_format: "{{ .DisambiguatedName }}"
 
-    # Filter for automatically creating portals. Mode: deny means no auto-creation.
+    # Filter for automatically creating portals. Mode: deny + empty list = allow all.
     portal_create_filter:
-        mode: allow
+        mode: deny
         list: []
         always_deny_from_login: []
 
