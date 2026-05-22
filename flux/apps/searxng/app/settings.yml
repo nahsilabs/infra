@@ -5,8 +5,15 @@ use_default_settings:
       - duckduckgo
       - startpage
       - github
-      - stack overflow
+      - stackoverflow
       - reddit
+      - duckduckgo images
+      - brave.images
+      - startpage images
+      - duckduckgo videos
+      - brave.videos
+      - youtube
+      - openstreetmap
 
 general:
   instance_name: "SearXNG"
