@@ -22,3 +22,4 @@ resources:
   - llm-d-modelservice.yml
   - piraeus.yml
   - external-secrets.yml
+  - valkey.yml

@@ -19,3 +19,4 @@ resources:
   - downloads
   - navidrome
   - matrix
+  - searxng
