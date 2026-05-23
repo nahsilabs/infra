@@ -6,4 +6,7 @@ data:
   config.hjson: |
     {
       hostname: "lemmy.nahsi.dev"
+      pictrs: {
+        url: "http://lemmy-pictrs:8080/"
+      }
     }

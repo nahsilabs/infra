@@ -22,7 +22,7 @@ spec:
               # renovate: datasource=docker depName=docker.io/dessalines/lemmy
               tag: 1.0.0-beta.0
             env:
-              RUST_LOG: warn
+              RUST_LOG: info
               LEMMY__HOSTNAME: lemmy.nahsi.dev
               LEMMY__TLS_ENABLED: "true"
               LEMMY__PICTRS__URL: http://lemmy-pictrs:8080/
