@@ -1,0 +1,43 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-lemmy-deps
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-cloudnative-pg
+  path: ./flux/apps/lemmy/deps
+  targetNamespace: lemmy
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-lemmy
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-lemmy-deps
+  path: ./flux/apps/lemmy/app
+  targetNamespace: lemmy
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m

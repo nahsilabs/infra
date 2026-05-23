@@ -20,3 +20,4 @@ resources:
   - navidrome
   - matrix
   - searxng
+  - lemmy

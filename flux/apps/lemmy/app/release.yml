@@ -1,0 +1,213 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: lemmy
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 4.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      server:
+        containers:
+          app:
+            image:
+              repository: docker.io/dessalines/lemmy
+              # renovate: datasource=docker depName=docker.io/dessalines/lemmy
+              tag: 1.0.0-beta.0
+            env:
+              RUST_LOG: warn
+              LEMMY__HOSTNAME: lemmy.nahsi.dev
+              LEMMY__TLS_ENABLED: "true"
+              LEMMY__PICTRS__URL: http://lemmy-pictrs:8080/
+              LEMMY_DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-lemmy-app
+                    key: uri
+              LEMMY__PICTRS__API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: lemmy-secret
+                    key: pictrs_api_key
+            envFrom:
+              - secretRef:
+                  name: lemmy-smtp
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+
+      pictrs:
+        pod:
+          securityContext:
+            fsGroup: 991
+            fsGroupChangePolicy: OnRootMismatch
+        containers:
+          app:
+            image:
+              repository: docker.io/asonix/pictrs
+              # renovate: datasource=docker depName=docker.io/asonix/pictrs
+              tag: 0.5.23
+            env:
+              RUST_BACKTRACE: full
+              PICTRS__MEDIA__ANIMATION__MAX_FRAME_COUNT: "400"
+              PICTRS__MEDIA__ANIMATION__MAX_HEIGHT: "256"
+              PICTRS__MEDIA__ANIMATION__MAX_WIDTH: "256"
+              PICTRS__MEDIA__VIDEO__VIDEO_CODEC: vp9
+              PICTRS__SERVER__API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: lemmy-secret
+                    key: pictrs_api_key
+            securityContext:
+              runAsUser: 991
+              runAsGroup: 991
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+
+      ui:
+        containers:
+          app:
+            image:
+              repository: docker.io/dessalines/lemmy-ui
+              # renovate: datasource=docker depName=docker.io/dessalines/lemmy-ui
+              tag: 1.0.0-beta.0
+            env:
+              LEMMY_UI_BACKEND: https://lemmy.nahsi.dev
+              LEMMY_UI_BACKEND_INTERNAL: http://lemmy-server:8536
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+
+    service:
+      server:
+        controller: server
+        ports:
+          http:
+            port: 8536
+      pictrs:
+        controller: pictrs
+        ports:
+          http:
+            port: 8080
+      ui:
+        controller: ui
+        ports:
+          http:
+            port: 1234
+
+    persistence:
+      pictrs-data:
+        type: persistentVolumeClaim
+        existingClaim: lemmy-pictrs
+        advancedMounts:
+          pictrs:
+            app:
+              - path: /mnt
+
+    route:
+      main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Apps"
+          gethomepage.dev/name: "Lemmy"
+          gethomepage.dev/icon: "lemmy"
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=lemmy"
+        parentRefs:
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - lemmy.nahsi.dev
+        rules:
+          - matches:
+              - method: POST
+            backendRefs:
+              - identifier: server
+                port: 8536
+          - matches:
+              - headers:
+                  - name: Accept
+                    type: RegularExpression
+                    value: application/.*
+            backendRefs:
+              - identifier: server
+                port: 8536
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /api
+            backendRefs:
+              - identifier: server
+                port: 8536
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /pictrs
+            backendRefs:
+              - identifier: server
+                port: 8536
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /feeds
+            backendRefs:
+              - identifier: server
+                port: 8536
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /nodeinfo
+            backendRefs:
+              - identifier: server
+                port: 8536
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /.well-known
+            backendRefs:
+              - identifier: server
+                port: 8536
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /inbox
+            backendRefs:
+              - identifier: server
+                port: 8536
+          - matches:
+              - path:
+                  type: Exact
+                  value: /version
+            backendRefs:
+              - identifier: server
+                port: 8536
+          - matches:
+              - path:
+                  type: Exact
+                  value: /sitemap.xml
+            backendRefs:
+              - identifier: server
+                port: 8536
+          - backendRefs:
+              - identifier: ui
+                port: 1234
