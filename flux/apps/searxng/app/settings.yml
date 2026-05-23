@@ -3,16 +3,13 @@ use_default_settings:
     keep_only:
       - duckduckgo
       - qwant
-      - brave
+      - mojeek
       - startpage
       - github
       - stackoverflow
       - reddit
       - duckduckgo images
-      - brave.images
-      - startpage images
       - duckduckgo videos
-      - brave.videos
       - youtube
       - openstreetmap
 
