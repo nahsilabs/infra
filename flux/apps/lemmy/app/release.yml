@@ -29,7 +29,7 @@ spec:
               LEMMY_DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
-                    name: pg-lemmy-app
+                    name: pg-lemmy-superuser
                     key: uri
               LEMMY__PICTRS__API_KEY:
                 valueFrom:
