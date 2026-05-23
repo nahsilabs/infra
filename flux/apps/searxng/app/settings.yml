@@ -1,8 +1,9 @@
 use_default_settings:
   engines:
     keep_only:
-      - brave
       - duckduckgo
+      - qwant
+      - brave
       - startpage
       - github
       - stackoverflow
@@ -17,7 +18,7 @@ use_default_settings:
 
 general:
   instance_name: "SearXNG"
-  enable_metrics: false
+  enable_metrics: true
 
 server:
   limiter: true
