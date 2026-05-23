@@ -1,23 +1,21 @@
 use_default_settings:
   engines:
     keep_only:
-      - brave
       - duckduckgo
+      - qwant
+      - mojeek
       - startpage
       - github
       - stackoverflow
       - reddit
       - duckduckgo images
-      - brave.images
-      - startpage images
       - duckduckgo videos
-      - brave.videos
       - youtube
       - openstreetmap
 
 general:
   instance_name: "SearXNG"
-  enable_metrics: false
+  enable_metrics: true
 
 server:
   limiter: true

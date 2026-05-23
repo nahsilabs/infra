@@ -1,8 +1,11 @@
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: ClientTrafficPolicy
 metadata:
-  name: escaped-slashes-private
+  name: private-gateway
 spec:
+  clientIPDetection:
+    xForwardedFor:
+      numTrustedHops: 0
   path:
     escapedSlashesAction: KeepUnchanged
   targetRefs:

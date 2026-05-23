@@ -2,7 +2,6 @@
 ipv4_prefix = 32
 ipv6_prefix = 48
 
-# Trust the envoy gateway to pass real client IPs
 trusted_proxies = [
   '127.0.0.0/8',
   '::1',
