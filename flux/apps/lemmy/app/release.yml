@@ -113,6 +113,14 @@ spec:
             port: 1234
 
     persistence:
+      config:
+        type: configMap
+        name: lemmy-config
+        advancedMounts:
+          server:
+            app:
+              - path: /config/config.hjson
+                subPath: config.hjson
       pictrs-data:
         type: persistentVolumeClaim
         existingClaim: lemmy-pictrs
