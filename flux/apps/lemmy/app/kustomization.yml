@@ -4,3 +4,10 @@ resources:
   - pvc.yml
   - configmap.yml
   - release.yml
+
+configMapGenerator:
+  - name: lemmy-themes
+    files:
+      - catppuccin-mocha.css
+    options:
+      disableNameSuffixHash: true

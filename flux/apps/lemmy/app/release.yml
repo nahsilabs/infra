@@ -88,6 +88,7 @@ spec:
             env:
               LEMMY_UI_BACKEND: https://lemmy.nahsi.dev
               LEMMY_UI_BACKEND_INTERNAL: http://lemmy-server:8536
+              LEMMY_UI_EXTRA_THEMES_FOLDER: /themes
             resources:
               requests:
                 cpu: 50m
@@ -113,6 +114,13 @@ spec:
             port: 1234
 
     persistence:
+      themes:
+        type: configMap
+        name: lemmy-themes
+        advancedMounts:
+          ui:
+            app:
+              - path: /themes
       config:
         type: configMap
         name: lemmy-config
