@@ -107,7 +107,7 @@ spec:
             main:
               image:
                 repository: ghcr.io/immich-app/immich-machine-learning
-                tag: "v2.5.6-openvino@sha256:fec6fd64c322b962a7f9830be805096c569b658d99b7732c43e0d7ea472b6e8f"
+                tag: "v2.7.5-openvino@sha256:71cd5a681823c4b818f4b24b3f05816eccc3d085559e7615f695bde77e64f1f2"
       env:
         MACHINE_LEARNING_CACHE_FOLDER: /cache
         MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: ViT-B-32__openai
