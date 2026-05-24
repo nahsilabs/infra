@@ -15,7 +15,7 @@ spec:
   values:
     image:
       repository: ghcr.io/gethomepage/homepage
-      tag: v1.13.1
+      tag: v1.13.1@sha256:d8d784e5090111b6e4c56dfd90e272d2953a2094e87349f647165df0fa6c4401
     env:
       HOMEPAGE_ALLOWED_HOSTS: &host home.nahsi.dev
     serviceAccount:

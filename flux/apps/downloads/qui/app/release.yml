@@ -19,7 +19,7 @@ spec:
           main:
             image:
               repository: ghcr.io/autobrr/qui
-              tag: v1.19.0
+              tag: v1.19.0@sha256:baa07db5326f75f8c2246703603cbe2132476c8ad0ab31c976a960cb4c4731f5
             env:
               TZ: Europe/Athens
               QBT_HOST: http://qbittorrent.downloads.svc.cluster.local:8080
