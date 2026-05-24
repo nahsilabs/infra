@@ -1,0 +1,17 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-lemmy
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
+  primaryUpdateStrategy: unsupervised
+  enableSuperuserAccess: true
+  managed:
+    roles:
+      - name: app
+        superuser: true
+        login: true
+  storage:
+    size: 5Gi
+    storageClass: ceph-rbd-retain
