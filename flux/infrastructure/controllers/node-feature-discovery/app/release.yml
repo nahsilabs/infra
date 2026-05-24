@@ -21,7 +21,7 @@ spec:
   values:
     image:
       repository: registry.k8s.io/nfd/node-feature-discovery
-      tag: v0.17.2@sha256:b86ad9a33a42dc371fe32a7c67d0705c6246db0a7fa8f0c119810582e6199241
+      tag: v0.18.3@sha256:f9ef2ebee55141a1758d3c0a87bb701f5db2adf6856f7218b11bc2bac7b63862
     master:
       startupProbe:
         failureThreshold: 60
