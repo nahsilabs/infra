@@ -16,5 +16,5 @@ spec:
   storage:
     size: 1Gi
     storageClassName: ceph-rbd-retain
-  image: docker-registry1.mariadb.com/library/mariadb:11.8.5@sha256:345fa26d595e8c7fe298e0c4098ed400356f502458769c8902229b3437d6da2b
+  image: docker-registry1.mariadb.com/library/mariadb:11.8.7@sha256:78185355dd49b54dd6909072531ce8d7e06aa0eccd7aa5b23c93ebb7e34c5aaa
   replicas: 1
