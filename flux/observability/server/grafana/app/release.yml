@@ -113,7 +113,18 @@ spec:
       database:
         type: postgres
 
+    downloadDashboardsImage:
+      registry: docker.io
+      repository: curlimages/curl
+      tag: 8.9.1
+      sha: sha256:8addc281f0ea517409209f76832b6ddc2cabc3264feb1ebbec2a2521ffad24e4
+
     sidecar:
+      image:
+        registry: quay.io
+        repository: kiwigrid/k8s-sidecar
+        tag: 2.5.0
+        sha: sha256:a6b3f707f883108376514489a94d6629109a327b2978e1d826cd104c4ca436df
       dashboards:
         enabled: true
         searchNamespace: ALL
