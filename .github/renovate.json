@@ -1,6 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "dependencyDashboard": true,
+  "hostRules": [
+    {
+      "matchHost": "dock.mau.dev",
+      "hostType": "docker"
+    }
+  ],
   "flux": {
     "managerFilePatterns": [
       "/flux/*/.+\\.ya?ml$/"
