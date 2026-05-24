@@ -5,3 +5,4 @@ resources:
   - gatewayclass.yml
   - gateway.yml
   - clienttrafficpolicy.yml
+  - httproute-redirect.yml
