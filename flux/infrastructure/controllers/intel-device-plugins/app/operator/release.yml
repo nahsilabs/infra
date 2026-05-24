@@ -18,5 +18,9 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
+    manager:
+      image:
+        hub: docker.io/intel
+        tag: 0.32.0@sha256:9be71af95085a0b821ea4d542265c28011debbc8963b0a1f38041afed67956ef
     controllerExtraArgs: |
       - --devices=gpu

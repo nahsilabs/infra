@@ -14,6 +14,8 @@ spec:
         name: nvidia
         namespace: flux-system
   values:
+    operator:
+      version: v25.10.1@sha256:634471cdfedcc3bd6b4412a905a9fbc9a9bf91df7f436aa00454b088d087c60a
     driver:
       enabled: false
     toolkit:
