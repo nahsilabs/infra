@@ -8,6 +8,11 @@ spec:
       numTrustedHops: 0
   path:
     escapedSlashesAction: KeepUnchanged
+  headers:
+    lateResponseHeaders:
+      set:
+        - name: Strict-Transport-Security
+          value: "max-age=63072000; includeSubDomains; preload"
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
