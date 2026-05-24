@@ -1,8 +1,7 @@
----
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: immich-private
+  name: immich
   annotations:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: "Media"
@@ -14,24 +13,6 @@ spec:
     - name: private-gateway
       namespace: envoy-gateway
       sectionName: https
-  hostnames:
-    - photos.nahsi.dev
-  rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
-        - name: immich-server
-          port: 2283
-          weight: 1
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
-metadata:
-  name: immich-public
-spec:
-  parentRefs:
     - name: public-gateway
       namespace: envoy-gateway
       sectionName: https

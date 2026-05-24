@@ -112,26 +112,11 @@ spec:
           - path: /tmp
 
     route:
-      public:
+      main:
         parentRefs:
           - name: public-gateway
             namespace: envoy-gateway
             sectionName: https
-        hostnames:
-          - matrix.nahsi.dev
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            timeouts:
-              request: "60s"
-            backendRefs:
-              - identifier: main
-                port: http
-
-      private:
-        parentRefs:
           - name: private-gateway
             namespace: envoy-gateway
             sectionName: https

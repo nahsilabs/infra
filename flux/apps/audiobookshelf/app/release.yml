@@ -48,7 +48,7 @@ spec:
           - path: /podcasts
 
     route:
-      private:
+      main:
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: "Media"
@@ -59,20 +59,6 @@ spec:
           - name: private-gateway
             namespace: envoy-gateway
             sectionName: https
-        hostnames:
-          - audio.nahsi.dev
-        rules:
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /
-            backendRefs:
-              - identifier: main
-                port: http
-                weight: 1
-
-      public:
-        parentRefs:
           - name: public-gateway
             namespace: envoy-gateway
             sectionName: https
