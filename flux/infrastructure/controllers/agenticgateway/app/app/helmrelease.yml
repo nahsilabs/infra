@@ -9,5 +9,11 @@ spec:
     name: agenticgateway
     namespace: flux-system
   values:
+    controller:
+      image:
+        tag: "v1.2.1@sha256:3f2e78fbaefa094bf664fac3629b01a2ef67b1c69d647f96ec12f1e0381853fb"
+    agentgateway:
+      image:
+        tag: "v1.2.1@sha256:60f7d4fbb7cec7f31aae5c2834c2e94ee46d88381fbca0600596b9e38efce760"
     inferenceExtension:
       enabled: true
