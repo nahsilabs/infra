@@ -21,5 +21,8 @@ spec:
       strategy: rollback
       retries: 3
   values:
+    image:
+      repository: ghcr.io/cloudnative-pg/cloudnative-pg
+      tag: 1.28.1@sha256:0edcdaefaa83d68822158cf4370d83d185c54db2b6beb7e0848aca16eafa6344
     crds:
       create: true

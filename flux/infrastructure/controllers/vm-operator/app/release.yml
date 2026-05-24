@@ -23,6 +23,9 @@ spec:
       strategy: rollback
       retries: 3
   values:
+    image:
+      repository: victoriametrics/operator
+      tag: v0.54.1@sha256:d7060c26de897704e75ad10451f81366367718389c0d7aedd76008010fedf041
     env:
     fullnameOverride: vm-operator
     operator:

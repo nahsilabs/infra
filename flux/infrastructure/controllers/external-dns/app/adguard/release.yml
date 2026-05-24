@@ -13,6 +13,9 @@ spec:
         name: external-dns
         namespace: flux-system
   values:
+    image:
+      repository: registry.k8s.io/external-dns/external-dns
+      tag: v0.15.1@sha256:4f3ba4c2bd28030caad05bb7b47fbf47549a46d5e8443b74f0be463550b4fc2b
     domainFilters: ["nahsi.dev"]
     sources:
       - gateway-httproute

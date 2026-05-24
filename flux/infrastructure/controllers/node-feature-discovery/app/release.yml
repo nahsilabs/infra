@@ -19,6 +19,9 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
+    image:
+      repository: registry.k8s.io/nfd/node-feature-discovery
+      tag: v0.17.2@sha256:b86ad9a33a42dc371fe32a7c67d0705c6246db0a7fa8f0c119810582e6199241
     master:
       startupProbe:
         failureThreshold: 60
