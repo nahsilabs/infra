@@ -16,7 +16,7 @@ spec:
     controller:
       image:
         repository: registry.k8s.io/sig-storage/snapshot-controller
-        tag: v8.1.0@sha256:a8a6749641849a6d7e560d26647e88dbd605a75cbff1823568ab90287ea29038
+        tag: v8.5.0@sha256:74ca61ab13e978f03cf0f336a607281d15f04cda0a38a881306365473b28a3d8
     webhook:
       image:
         repository: registry.k8s.io/sig-storage/snapshot-validation-webhook
