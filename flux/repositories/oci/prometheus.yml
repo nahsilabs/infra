@@ -3,6 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: alertmanager
+  namespace: flux-system
 spec:
   interval: 2h
   layerSelector:
@@ -16,6 +17,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: blackbox-exporter
+  namespace: flux-system
 spec:
   interval: 2h
   layerSelector:
@@ -29,6 +31,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: kube-state-metrics
+  namespace: flux-system
 spec:
   interval: 2h
   layerSelector:
@@ -42,6 +45,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: prometheus-node-exporter
+  namespace: flux-system
 spec:
   interval: 2h
   layerSelector:
@@ -55,6 +59,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: prometheus-operator-crds
+  namespace: flux-system
 spec:
   interval: 2h
   layerSelector:
