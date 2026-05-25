@@ -1,0 +1,85 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: invidious
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 4.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: quay.io/invidious/invidious
+              tag: latest@sha256:9d972ea5930c2e170b3c4d49bdd9fa09bf03f077d555f58747342062dffc5876
+            env:
+              INVIDIOUS_CONFIG: |
+                domain: iv.nahsi.dev
+                https_only: true
+                external_port: 443
+                registration_enabled: false
+                login_enabled: true
+                captcha_enabled: false
+                popular_enabled: false
+                statistics_enabled: false
+                check_tables: true
+                use_innertube_for_captions: true
+                invidious_companion:
+                  - private_url: "http://companion.youtube:8282/companion"
+                    public_url: "https://iv.nahsi.dev"
+                default_user_preferences:
+                  local: true
+                  save_player_pos: true
+                  quality: dash
+                  quality_dash: auto
+                  default_home: Trending
+                  feed_menu:
+                    - Subscriptions
+                    - Trending
+                    - Playlists
+              INVIDIOUS_DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-invidious-app
+                    key: uri
+              INVIDIOUS_INVIDIOUS_COMPANION_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: companion-secret
+                    key: COMPANION_KEY
+            envFrom:
+              - secretRef:
+                  name: invidious-secret
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: Always
+        seccompProfile: {type: RuntimeDefault}
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 3000
+
+    persistence:
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
