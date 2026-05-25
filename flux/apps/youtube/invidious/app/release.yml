@@ -34,7 +34,6 @@ spec:
                 use_innertube_for_captions: true
                 invidious_companion:
                   - private_url: "http://companion.youtube:8282/companion"
-                    public_url: "https://iv.nahsi.dev"
                 default_user_preferences:
                   local: true
                   save_player_pos: true
