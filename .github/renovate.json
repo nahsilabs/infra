@@ -1,5 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":disableRateLimiting"
+  ],
   "dependencyDashboard": true,
   "hostRules": [
     {
@@ -9,17 +13,25 @@
   ],
   "flux": {
     "managerFilePatterns": [
-      "/flux/*/.+\\.ya?ml$/"
-    ]
-  },
-  "kubernetes": {
-    "managerFilePatterns": [
-      "/flux/*/.+\\.ya?ml$/"
+      "/flux/.+\\.ya?ml$/"
     ]
   },
   "helm-values": {
     "managerFilePatterns": [
-      "/flux/*/.+\\.ya?ml$/"
+      "/flux/.+\\.ya?ml$/"
     ]
-  }
+  },
+  "packageRules": [
+    {
+      "description": "Group chart and image updates from the same directory",
+      "matchManagers": ["flux", "helm-values"],
+      "matchFileNames": ["flux/**"],
+      "groupName": "{{{parentDir}}}"
+    },
+    {
+      "description": "Automerge patch updates",
+      "matchUpdateTypes": ["patch", "digest"],
+      "automerge": true
+    }
+  ]
 }

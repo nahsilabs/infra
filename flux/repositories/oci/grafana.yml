@@ -2,6 +2,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: grafana
+  namespace: flux-system
 spec:
   interval: 2h
   layerSelector:
