@@ -43,7 +43,7 @@ resource "helm_release" "flux-sync" {
   chart      = "flux2-sync"
   repository = "https://fluxcd-community.github.io/helm-charts/"
   namespace  = "flux-system"
-  version    = "1.14.5"
+  version    = "1.14.6"
   wait       = true
 
   values = [
