@@ -82,12 +82,11 @@ spec:
         containers:
           app:
             image:
-              repository: docker.io/dessalines/lemmy-ui
-              # renovate: datasource=docker depName=docker.io/dessalines/lemmy-ui
-              tag: 1.0.0-beta.0@sha256:b9c6b7023518ae2ed0d19053259788df87ef86e43d20fc524e830498f9dd92c2
+              repository: ghcr.io/xyphyn/photon
+              # renovate: datasource=docker depName=ghcr.io/xyphyn/photon
+              tag: v2.3.1
             env:
-              LEMMY_UI_BACKEND: https://lemmy.nahsi.dev
-              LEMMY_UI_BACKEND_INTERNAL: http://lemmy-server:8536
+              PUBLIC_INSTANCE_URL: lemmy.nahsi.dev
 
             resources:
               requests:
@@ -111,7 +110,7 @@ spec:
         controller: ui
         ports:
           http:
-            port: 1234
+            port: 3000
 
     persistence:
       config:
@@ -219,4 +218,4 @@ spec:
                 port: 8536
           - backendRefs:
               - identifier: ui
-                port: 1234
+                port: 3000
