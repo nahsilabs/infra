@@ -1,0 +1,7 @@
+launch_url: https://audio.nahsi.dev
+ui_group: Media
+redirect_uris:
+  - https://audio.nahsi.dev/auth/openid/callback
+  - https://audio.nahsi.dev/auth/openid/mobile-redirect
+allowed_groups:
+  - superusers
