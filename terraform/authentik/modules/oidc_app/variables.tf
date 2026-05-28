@@ -34,6 +34,12 @@ variable "ui_group" {
   default     = ""
 }
 
+variable "logout_uri" {
+  description = "URI to redirect to after logout"
+  type        = string
+  default     = ""
+}
+
 variable "scopes" {
   description = "Additional managed scope mapping IDs to include"
   type        = list(string)
