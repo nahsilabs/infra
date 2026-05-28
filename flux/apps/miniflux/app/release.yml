@@ -25,7 +25,6 @@ spec:
               BASE_URL: "https://rss.nahsi.dev"
               HTTPS: "1"
               RUN_MIGRATIONS: "1"
-              CREATE_ADMIN: "1"
               WORKER_POOL_SIZE: "4"
               DATABASE_URL:
                 valueFrom:
@@ -35,7 +34,7 @@ spec:
 
             envFrom:
               - secretRef:
-                  name: miniflux-secret
+                  name: miniflux-oidc
 
             securityContext:
               allowPrivilegeEscalation: false
