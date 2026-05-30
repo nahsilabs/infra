@@ -9,7 +9,6 @@ resource "adguard_rewrite" "haproxy" {
 resource "adguard_rewrite" "npm" {
   for_each = toset([
     "npm",
-    "truenas",
     "adguard",
     "unifi",
     "ha",
@@ -17,18 +16,20 @@ resource "adguard_rewrite" "npm" {
     "proxmox",
     "ipmi",
     "scrutiny",
+    "rustfs",
   ])
   domain = "${each.value}.nahsi.dev"
   answer = "10.2.1.4"
 }
 
-resource "adguard_rewrite" "nfs" {
-  domain = "nfs.local"
-  answer = "10.2.10.41"
-}
-
-resource "adguard_rewrite" "nfs-lan" {
-  domain = "nfs.lan"
+resource "adguard_rewrite" "truenas" {
+  for_each = toset([
+    "nfs.local",
+    "nfs.lan",
+    "s3.nahsi.dev",
+    "truenas.nahsi.dev",
+  ])
+  domain = each.key
   answer = "10.2.10.41"
 }
 

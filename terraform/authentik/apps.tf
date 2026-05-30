@@ -23,12 +23,6 @@ output "oidc_apps" {
     for name, app in module.oidc_apps : name => {
       client_id          = app.client_id
       client_secret      = app.client_secret
-      oidc_discovery_url = app.oidc_discovery_url
-      authorize_url      = app.authorize_url
-      token_url          = app.token_url
-      userinfo_url       = app.userinfo_url
-      logout_url         = app.logout_url
-      provider_pk        = app.provider_pk
     }
   }
   sensitive = true
