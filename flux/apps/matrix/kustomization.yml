@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
   - namespace.yml
   - secret-store
-  - continuwuity
   - mautrix-telegram
   - synapse
   - mas

@@ -59,6 +59,9 @@ spec:
           gethomepage.dev/name: "Element"
           gethomepage.dev/icon: "element"
         parentRefs:
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
           - name: private-gateway
             namespace: envoy-gateway
             sectionName: https

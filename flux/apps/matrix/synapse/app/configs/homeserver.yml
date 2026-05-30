@@ -1,8 +1,8 @@
 server_name: nahsi.dev
-public_baseurl: https://synapse.nahsi.dev
+public_baseurl: https://matrix.nahsi.dev
 pid_file: /tmp/homeserver.pid
 admin_contact: "@me:nahsi.dev"
-serve_server_wellknown: false
+serve_server_wellknown: true
 report_stats: false
 default_room_version: "12"
 
@@ -39,7 +39,7 @@ matrix_authentication_service:
 old_signing_keys:
   "ed25519:N2orWB1J":
     key: "zk5f9qQz5prClLyjntWudirNxnGtBacLuiy/CuIXixA"
-    expired_ts: 1717200000000
+    expired_ts: 1780164357290
 
 media_store_path: /data/media_store
 max_upload_size: 500M
@@ -91,3 +91,13 @@ delete_stale_devices_after: 90d
 user_ips_max_age: 28d
 
 log_config: /data/log.config
+
+use_appservice_legacy_authorization: true
+app_service_config_files:
+  - /appservices/telegram.yaml
+  - /appservices/telegram-double-puppet.yaml
+
+experimental_features:
+  msc2409_to_device_messages_enabled: true
+  msc3202_device_masquerading: true
+  msc3202_transaction_extensions: true

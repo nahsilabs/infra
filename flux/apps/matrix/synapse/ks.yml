@@ -8,6 +8,7 @@ spec:
   dependsOn:
     - name: infra-cloudnative-pg
     - name: app-mas-deps
+    - name: app-mautrix-telegram-deps
     - name: app-matrix-secret-store
   path: ./flux/apps/matrix/synapse/deps
   targetNamespace: matrix

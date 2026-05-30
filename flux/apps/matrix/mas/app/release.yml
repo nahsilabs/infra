@@ -86,6 +86,9 @@ spec:
     route:
       main:
         parentRefs:
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
           - name: private-gateway
             namespace: envoy-gateway
             sectionName: https
@@ -102,11 +105,14 @@ spec:
 
       compat:
         parentRefs:
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
           - name: private-gateway
             namespace: envoy-gateway
             sectionName: https
         hostnames:
-          - synapse.nahsi.dev
+          - matrix.nahsi.dev
         rules:
           - matches:
               - path:

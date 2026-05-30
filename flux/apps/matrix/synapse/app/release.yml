@@ -197,6 +197,19 @@ spec:
                 subPath: shared_secret
                 readOnly: true
 
+      appservices:
+        type: secret
+        name: mautrix-telegram-registration
+        advancedMounts:
+          main:
+            main:
+              - path: /appservices/telegram.yaml
+                subPath: registration.yaml
+                readOnly: true
+              - path: /appservices/telegram-double-puppet.yaml
+                subPath: double-puppet-registration.yaml
+                readOnly: true
+
       media:
         existingClaim: synapse-media
         advancedMounts:
@@ -220,11 +233,14 @@ spec:
     route:
       main:
         parentRefs:
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
           - name: private-gateway
             namespace: envoy-gateway
             sectionName: https
         hostnames:
-          - synapse.nahsi.dev
+          - matrix.nahsi.dev
         rules:
           - matches:
               - path:
@@ -232,6 +248,22 @@ spec:
                   value: /
             timeouts:
               request: "60s"
+            backendRefs:
+              - identifier: main
+                port: http
+
+      well-known:
+        parentRefs:
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https-apex
+        hostnames:
+          - nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /.well-known/matrix/
             backendRefs:
               - identifier: main
                 port: http

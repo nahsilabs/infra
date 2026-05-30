@@ -1,3 +1,7 @@
 {
-  "restrictBaseUrl": ["https://synapse.nahsi.dev"]
+  "restrictBaseUrl": ["https://matrix.nahsi.dev"],
+  "asManagedUsers": [
+    "^@telegrambot:nahsi\\.dev$",
+    "^@telegram_.+:nahsi\\.dev$"
+  ]
 }
