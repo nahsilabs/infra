@@ -18,7 +18,7 @@ resources:
   - ai
   - downloads
   - navidrome
-  - matrix
+  #- matrix
   - searxng
   - lemmy
   - youtube
