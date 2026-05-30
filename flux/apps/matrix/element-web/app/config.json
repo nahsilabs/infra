@@ -1,0 +1,20 @@
+{
+  "default_server_config": {
+    "m.homeserver": {
+      "base_url": "https://synapse.nahsi.dev",
+      "server_name": "nahsi.dev"
+    }
+  },
+  "disable_custom_urls": true,
+  "disable_guests": true,
+  "disable_3pid_login": true,
+  "brand": "nahsilabs",
+  "default_theme": "dark",
+  "default_federate": true,
+  "room_directory": {
+    "servers": ["nahsi.dev"]
+  },
+  "setting_defaults": {
+    "breadcrumbs": true
+  }
+}

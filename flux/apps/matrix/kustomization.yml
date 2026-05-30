@@ -7,3 +7,5 @@ resources:
   - mautrix-telegram
   - synapse
   - mas
+  - element-web
+  - ketesa

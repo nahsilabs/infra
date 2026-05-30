@@ -99,3 +99,19 @@ spec:
             backendRefs:
               - identifier: main
                 port: http
+
+      compat:
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - synapse.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: RegularExpression
+                  value: "^/_matrix/client/.*/(?:login|logout|refresh).*"
+            backendRefs:
+              - identifier: main
+                port: http
