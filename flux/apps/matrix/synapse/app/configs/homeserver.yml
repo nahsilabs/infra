@@ -1,0 +1,88 @@
+server_name: nahsi.dev
+public_baseurl: https://synapse.nahsi.dev
+pid_file: /tmp/homeserver.pid
+admin_contact: "@me:nahsi.dev"
+serve_server_wellknown: false
+report_stats: false
+default_room_version: "12"
+
+listeners:
+  - port: 8008
+    type: http
+    tls: false
+    x_forwarded: true
+    resources:
+      - names: [client, federation]
+
+database:
+  name: psycopg2
+  args:
+    user: app
+    dbname: app
+    host: pg-synapse-rw.matrix.svc
+    port: 5432
+    cp_min: 5
+    cp_max: 10
+    keepalives_idle: 10
+    keepalives_interval: 10
+    keepalives_count: 3
+
+signing_key_path: /data/signing.key
+macaroon_secret_key_path: /secrets/macaroon
+registration_shared_secret_path: /secrets/registration_shared_secret
+
+old_signing_keys:
+  "ed25519:N2orWB1J":
+    key: "zk5f9qQz5prClLyjntWudirNxnGtBacLuiy/CuIXixA"
+    expired_ts: 1717200000000
+
+media_store_path: /data/media_store
+max_upload_size: 500M
+enable_authenticated_media: true
+media_retention:
+  remote_media_lifetime: 90d
+
+media_storage_providers:
+  - module: s3_storage_provider.S3StorageProviderBackend
+    store_local: true
+    store_remote: true
+    store_synchronous: true
+    config:
+      bucket: synapse
+      endpoint_url: https://s3.nahsi.dev:9000
+      region_name: us-east-1
+
+enable_registration: false
+
+presence:
+  enabled: true
+
+caches:
+  global_factor: 0.5
+
+url_preview_enabled: true
+url_preview_ip_range_blacklist:
+  - "127.0.0.0/8"
+  - "10.0.0.0/8"
+  - "172.16.0.0/12"
+  - "192.168.0.0/16"
+  - "100.64.0.0/10"
+  - "169.254.0.0/16"
+  - "::1/128"
+  - "fe80::/64"
+  - "fc00::/7"
+
+trusted_key_servers:
+  - server_name: matrix.org
+suppress_key_server_warning: true
+allow_public_rooms_over_federation: false
+allow_profile_lookup_over_federation: false
+allow_device_name_lookup_over_federation: false
+
+require_auth_for_profile_requests: true
+request_token_inhibit_3pid_errors: true
+
+delete_stale_devices_after: 90d
+user_ips_max_age: 28d
+
+log_config: /data/log.config

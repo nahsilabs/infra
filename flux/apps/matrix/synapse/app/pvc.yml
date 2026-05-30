@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: synapse-media
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-retain
+  resources:
+    requests:
+      storage: 20Gi
