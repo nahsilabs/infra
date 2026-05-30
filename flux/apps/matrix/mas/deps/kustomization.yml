@@ -3,5 +3,4 @@ kind: Kustomization
 resources:
   - postgres.yml
   - secret.yml
-  - secret-s3.yml
-  - externalsecret.yml
+  - secret-smtp.yml

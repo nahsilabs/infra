@@ -1,0 +1,6 @@
+launch_url: https://mas.nahsi.dev
+ui_group: Apps
+redirect_uris:
+  - https://mas.nahsi.dev/upstream/callback/01KSWKABKK3Y4YV91MY6P8FCA9
+allowed_groups:
+  - superusers

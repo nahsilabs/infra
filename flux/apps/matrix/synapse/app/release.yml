@@ -22,12 +22,8 @@ spec:
               repository: dotwee/matrix-synapse-s3
               tag: v1.153.0@sha256:fe6abcbb1fcd207d2a1218476a214a4583bb500e13d81a5a0dc269e994502551
 
-            command: [python, -m, synapse.app.homeserver]
-            args:
-              - --config-path=/config/homeserver.yaml
-              - --config-path=/smtp/secrets.yaml
-
             env:
+              SYNAPSE_CONFIG_PATH: /config/homeserver.yaml
               PGPASSWORD:
                 valueFrom:
                   secretKeyRef:
@@ -191,14 +187,14 @@ spec:
                 subPath: registration_shared_secret
                 readOnly: true
 
-      smtp:
+      mas:
         type: secret
-        name: synapse-smtp
+        name: synapse-mas
         advancedMounts:
           main:
             main:
-              - path: /smtp/secrets.yaml
-                subPath: secrets.yaml
+              - path: /secrets/mas_shared_secret
+                subPath: shared_secret
                 readOnly: true
 
       media:

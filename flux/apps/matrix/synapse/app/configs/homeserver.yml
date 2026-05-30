@@ -31,6 +31,11 @@ signing_key_path: /data/signing.key
 macaroon_secret_key_path: /secrets/macaroon
 registration_shared_secret_path: /secrets/registration_shared_secret
 
+matrix_authentication_service:
+  enabled: true
+  endpoint: http://mas.matrix.svc:8080/
+  secret_path: /secrets/mas_shared_secret
+
 old_signing_keys:
   "ed25519:N2orWB1J":
     key: "zk5f9qQz5prClLyjntWudirNxnGtBacLuiy/CuIXixA"
