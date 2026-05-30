@@ -1,0 +1,6 @@
+launch_url: https://rustfs.nahsi.dev
+ui_group: Infra
+redirect_uris:
+  - https://rustfs.nahsi.dev/rustfs/admin/v3/oidc/callback/default
+allowed_groups:
+  - superusers
