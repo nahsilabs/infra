@@ -1,11 +1,11 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: pg-mautrix-telegram
+  name: pg-mas
 spec:
   instances: 1
   imageName: ghcr.io/cloudnative-pg/postgresql:18.4@sha256:7a9a68272eb5f192c5826fdd72b1ebc81c185fea21678993c5583610c7e59739
   primaryUpdateStrategy: unsupervised
   storage:
-    size: 1Gi
+    size: 2Gi
     storageClass: ceph-rbd-retain

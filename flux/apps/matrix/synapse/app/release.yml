@@ -1,0 +1,269 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: synapse
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 4.6.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: dotwee/matrix-synapse-s3
+              tag: v1.153.0@sha256:fe6abcbb1fcd207d2a1218476a214a4583bb500e13d81a5a0dc269e994502551
+
+            env:
+              SYNAPSE_CONFIG_PATH: /config/homeserver.yaml
+              PGPASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-synapse-app
+                    key: password
+              AWS_ACCESS_KEY_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: synapse-s3
+                    key: S3_ACCESS_KEY
+              AWS_SECRET_ACCESS_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: synapse-s3
+                    key: S3_SECRET_KEY
+
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: &port 8008
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  timeoutSeconds: 10
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *port
+                  failureThreshold: 30
+                  periodSeconds: 10
+
+            resources:
+              requests:
+                cpu: 100m
+                memory: 384Mi
+              limits:
+                memory: 2Gi
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+
+      s3-cleanup:
+        type: cronjob
+        cronjob:
+          schedule: "0 3 * * *"
+          concurrencyPolicy: Forbid
+        pod:
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: synapse
+                  topologyKey: kubernetes.io/hostname
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 991
+            runAsGroup: 991
+            fsGroup: 991
+            seccompProfile: {type: RuntimeDefault}
+        containers:
+          main:
+            image:
+              repository: dotwee/matrix-synapse-s3
+              tag: v1.153.0@sha256:fe6abcbb1fcd207d2a1218476a214a4583bb500e13d81a5a0dc269e994502551
+            command: [sh, -c]
+            args:
+              - |
+                cd /data/media_store &&
+                s3_media_upload --no-progress \
+                  update /data/media_store 1d \
+                  --homeserver-config-path /config/homeserver.yaml &&
+                s3_media_upload --no-progress \
+                  upload /data/media_store synapse \
+                  --delete \
+                  --endpoint-url https://s3.nahsi.dev:9000
+            env:
+              PGPASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-synapse-app
+                    key: password
+              AWS_ACCESS_KEY_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: synapse-s3
+                    key: S3_ACCESS_KEY
+              AWS_SECRET_ACCESS_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: synapse-s3
+                    key: S3_SECRET_KEY
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 991
+        runAsGroup: 991
+        fsGroup: 991
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: {type: RuntimeDefault}
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: *port
+
+    persistence:
+      config:
+        type: configMap
+        name: synapse-config
+        advancedMounts:
+          main:
+            main:
+              - path: /config/homeserver.yaml
+                subPath: homeserver.yaml
+                readOnly: true
+              - path: /data/log.config
+                subPath: log.config
+                readOnly: true
+          s3-cleanup:
+            main:
+              - path: /config/homeserver.yaml
+                subPath: homeserver.yaml
+                readOnly: true
+
+      secrets:
+        type: secret
+        name: synapse-secret
+        advancedMounts:
+          main:
+            main:
+              - path: /data/signing.key
+                subPath: signing.key
+                readOnly: true
+              - path: /secrets/macaroon
+                subPath: macaroon
+                readOnly: true
+              - path: /secrets/registration_shared_secret
+                subPath: registration_shared_secret
+                readOnly: true
+
+      mas:
+        type: secret
+        name: synapse-mas
+        advancedMounts:
+          main:
+            main:
+              - path: /secrets/mas_shared_secret
+                subPath: shared_secret
+                readOnly: true
+
+      appservices:
+        type: secret
+        name: mautrix-telegram-registration
+        advancedMounts:
+          main:
+            main:
+              - path: /appservices/telegram.yaml
+                subPath: registration.yaml
+                readOnly: true
+              - path: /appservices/telegram-double-puppet.yaml
+                subPath: double-puppet-registration.yaml
+                readOnly: true
+
+      media:
+        existingClaim: synapse-media
+        advancedMounts:
+          main:
+            main:
+              - path: /data/media_store
+          s3-cleanup:
+            main:
+              - path: /data/media_store
+
+      tmp:
+        type: emptyDir
+        advancedMounts:
+          main:
+            main:
+              - path: /tmp
+          s3-cleanup:
+            main:
+              - path: /tmp
+
+    route:
+      main:
+        parentRefs:
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - matrix.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            timeouts:
+              request: "60s"
+            backendRefs:
+              - identifier: main
+                port: http
+
+      well-known:
+        parentRefs:
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https-apex
+        hostnames:
+          - nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /.well-known/matrix/
+            backendRefs:
+              - identifier: main
+                port: http

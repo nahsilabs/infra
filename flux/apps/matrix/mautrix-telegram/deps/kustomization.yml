@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - postgres.yml
   - secret.yml
+  - secret-registration.yml

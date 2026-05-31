@@ -28,38 +28,6 @@ spec:
               - /data/config.yaml
               - -n
 
-            env:
-              MAUTRIX_TELEGRAM_APPSERVICE__AS_TOKEN:
-                valueFrom:
-                  secretKeyRef:
-                    name: mautrix-telegram-secret
-                    key: as_token
-              MAUTRIX_TELEGRAM_APPSERVICE__HS_TOKEN:
-                valueFrom:
-                  secretKeyRef:
-                    name: mautrix-telegram-secret
-                    key: hs_token
-              MAUTRIX_TELEGRAM_NETWORK__API_ID:
-                valueFrom:
-                  secretKeyRef:
-                    name: mautrix-telegram-secret
-                    key: api_id
-              MAUTRIX_TELEGRAM_NETWORK__API_HASH:
-                valueFrom:
-                  secretKeyRef:
-                    name: mautrix-telegram-secret
-                    key: api_hash
-              MAUTRIX_TELEGRAM_ENCRYPTION__PICKLE_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: mautrix-telegram-secret
-                    key: pickle_key
-              MAUTRIX_TELEGRAM_DATABASE__URI:
-                valueFrom:
-                  secretKeyRef:
-                    name: pg-mautrix-telegram-app
-                    key: uri
-
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -85,8 +53,8 @@ spec:
 
     persistence:
       config:
-        type: configMap
-        name: mautrix-telegram-config
+        type: secret
+        name: mautrix-telegram-config-secret
         globalMounts:
           - path: /data/config.yaml
             subPath: config.yaml

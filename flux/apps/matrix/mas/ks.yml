@@ -2,12 +2,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: app-mautrix-telegram-deps
+  name: app-mas-deps
   namespace: flux-system
 spec:
   dependsOn:
     - name: infra-cloudnative-pg
-  path: ./flux/apps/matrix/mautrix-telegram/deps
+  path: ./flux/apps/matrix/mas/deps
   targetNamespace: matrix
   prune: true
   wait: true
@@ -26,13 +26,14 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: app-mautrix-telegram
+  name: app-mas
   namespace: flux-system
 spec:
   dependsOn:
-    - name: app-mautrix-telegram-deps
+    - name: app-mas-deps
+    - name: app-synapse
     - name: app-matrix-secret-store
-  path: ./flux/apps/matrix/mautrix-telegram/app
+  path: ./flux/apps/matrix/mas/app
   targetNamespace: matrix
   prune: true
   sourceRef:
