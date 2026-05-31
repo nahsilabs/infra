@@ -65,6 +65,9 @@ presence:
 caches:
   global_factor: 0.5
 
+ip_range_whitelist:
+  - "192.168.78.0/24"
+
 url_preview_enabled: true
 url_preview_ip_range_blacklist:
   - "127.0.0.0/8"
