@@ -36,11 +36,10 @@ data "authentik_source" "inbuilt" {
 }
 
 resource "authentik_stage_identification" "id" {
-  name           = "identification"
-  user_fields    = ["username", "email"]
-  sources        = [data.authentik_source.inbuilt.uuid]
-  recovery_flow  = authentik_flow.recovery.uuid
-  password_stage = authentik_stage_password.password.id
+  name          = "identification"
+  user_fields   = ["username", "email"]
+  sources       = [data.authentik_source.inbuilt.uuid]
+  recovery_flow = authentik_flow.recovery.uuid
 }
 
 resource "authentik_stage_password" "password" {

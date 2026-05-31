@@ -21,8 +21,8 @@ output "oidc_apps" {
   description = "OIDC app credentials"
   value = {
     for name, app in module.oidc_apps : name => {
-      client_id          = app.client_id
-      client_secret      = app.client_secret
+      client_id     = app.client_id
+      client_secret = app.client_secret
     }
   }
   sensitive = true
