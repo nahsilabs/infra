@@ -1,0 +1,44 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-ntfy-deps
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-cloudnative-pg
+    - name: app-ntfy-secret-store
+  path: ./flux/apps/ntfy/ntfy/deps
+  targetNamespace: ntfy
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-ntfy
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-ntfy-deps
+  path: ./flux/apps/ntfy/ntfy/app
+  targetNamespace: ntfy
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
