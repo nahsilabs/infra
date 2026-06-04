@@ -21,7 +21,7 @@ spec:
     image:
       registry: docker.io
       repository: grafana/grafana
-      tag: 13.0.1
+      tag: 13.0.2
     deploymentStrategy:
       type: RollingUpdate
     admin:
