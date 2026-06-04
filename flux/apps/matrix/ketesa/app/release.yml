@@ -19,8 +19,8 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/etkecc/synapse-admin
-              tag: v1.2.1@sha256:ce1eaf7d890f44c0e40896dcbee9e560484a5b6953ffd3deaf2ecc625a74dc25
+              repository: ghcr.io/etkecc/ketesa
+              tag: v1.2.1@sha256:87925787e239d626d47ec55a514eba3f6610f92da2ee4e994c6b22ecfb53e6e2
 
             resources:
               requests:
