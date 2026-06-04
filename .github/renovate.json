@@ -5,29 +5,33 @@
     ":disableRateLimiting"
   ],
   "dependencyDashboard": true,
-  "hostRules": [
-    {
-      "matchHost": "dock.mau.dev",
-      "hostType": "docker"
-    }
-  ],
   "flux": {
-    "managerFilePatterns": [
-      "/flux/.+\\.ya?ml$/"
-    ]
+    "managerFilePatterns": ["/flux/.+\\.ya?ml$/"]
   },
   "helm-values": {
-    "managerFilePatterns": [
-      "/flux/.+\\.ya?ml$/"
-    ]
+    "managerFilePatterns": ["/flux/.+\\.ya?ml$/"]
   },
-  "packageRules": [
+  "customManagers": [
     {
-      "description": "Group chart and image updates from the same directory",
-      "matchManagers": ["flux", "helm-values"],
-      "matchFileNames": ["flux/**"],
-      "groupName": "{{{parentDir}}}"
+      "description": "CloudNativePG Cluster imageName",
+      "customType": "regex",
+      "managerFilePatterns": ["/flux/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "imageName:\\s+(?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)(?:@(?<currentDigest>sha256:[a-f0-9]+))?"
+      ],
+      "datasourceTemplate": "docker"
     },
+    {
+      "description": "Kustomization github ?ref= URLs",
+      "customType": "regex",
+      "managerFilePatterns": ["/flux/.+/kustomization\\.ya?ml$/"],
+      "matchStrings": [
+        "https://github\\.com/(?<depName>[^/]+/[^/]+)(?:/[^?\\s]*)?\\?ref=(?<currentValue>\\S+)"
+      ],
+      "datasourceTemplate": "github-tags"
+    }
+  ],
+  "packageRules": [
     {
       "description": "Automerge patch updates",
       "matchUpdateTypes": ["patch", "digest"],
