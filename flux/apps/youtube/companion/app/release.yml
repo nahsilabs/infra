@@ -19,7 +19,7 @@ spec:
           main:
             image:
               repository: quay.io/invidious/invidious-companion
-              tag: latest@sha256:1ddd3f1c6ba5c4b8b786b91830926bb510376918a7d43b2f142df6650c239951
+              tag: latest@sha256:14345834ab722034c0ecca3bd6ac0777dc38db7a5015f33db34c74a3b9cc5ddf
             env:
               SERVER_SECRET_KEY:
                 valueFrom:
