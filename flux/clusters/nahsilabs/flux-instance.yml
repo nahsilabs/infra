@@ -23,6 +23,5 @@ spec:
     kind: GitRepository
     name: "infra"
     url: "https://github.com/nahsilabs/infra"
-    # testing on the branch — flip to refs/heads/main before merging
-    ref: "refs/heads/flux-operator"
+    ref: "refs/heads/main"
     path: "flux/clusters/nahsilabs"
