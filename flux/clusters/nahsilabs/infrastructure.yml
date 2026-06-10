@@ -15,8 +15,6 @@ spec:
     name: infra
     namespace: flux-system
   path: ./flux/infrastructure/crds
-  dependsOn:
-    - name: cluster-sources
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
