@@ -31,9 +31,12 @@ metadata:
 spec:
   dependsOn:
     - name: app-invidious-deps
+    - name: infra-gateway-api-crds
+    - name: infra-envoy-gateway
   path: ./flux/apps/youtube/invidious/app
   targetNamespace: youtube
   prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: infra

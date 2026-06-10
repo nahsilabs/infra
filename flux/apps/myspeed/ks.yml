@@ -7,6 +7,8 @@ spec:
   path: ./flux/apps/myspeed/app
   targetNamespace: myspeed
   prune: true
+  dependsOn:
+    - name: infra-prometheus-operator-crds
   sourceRef:
     kind: GitRepository
     name: infra

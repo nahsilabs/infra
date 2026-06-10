@@ -8,6 +8,7 @@ spec:
     - name: infra-external-secrets
   path: ./flux/apps/ntfy/secret-store/app
   prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: infra

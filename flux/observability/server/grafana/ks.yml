@@ -32,6 +32,7 @@ spec:
   dependsOn:
     - name: obs-grafana-deps
     - name: obs-vm-stack
+    - name: infra-gateway-api-crds
   path: ./flux/observability/server/grafana/app
   targetNamespace: observability
   prune: true

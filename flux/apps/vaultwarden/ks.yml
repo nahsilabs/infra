@@ -31,6 +31,7 @@ metadata:
 spec:
   dependsOn:
     - name: app-vaultwarden-deps
+    - name: infra-gateway-api-crds
   path: ./flux/apps/vaultwarden/app
   targetNamespace: vaultwarden
   prune: true

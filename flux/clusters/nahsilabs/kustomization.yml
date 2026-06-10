@@ -2,7 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../repositories
-  - sources.yml
-  - infrastructure.yml
-  - observability.yml
-  - apps.yml
+  - ../../infrastructure
+  - ../../observability
+  - ../../apps
