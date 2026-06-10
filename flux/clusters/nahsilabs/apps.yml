@@ -12,8 +12,6 @@ spec:
     name: infra
     namespace: flux-system
   path: ./flux/apps
-  dependsOn:
-    - name: cluster-infra-configs
   decryption:
     provider: sops
     secretRef:
