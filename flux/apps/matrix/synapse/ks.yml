@@ -37,6 +37,7 @@ spec:
   path: ./flux/apps/matrix/synapse/app
   targetNamespace: matrix
   prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: infra

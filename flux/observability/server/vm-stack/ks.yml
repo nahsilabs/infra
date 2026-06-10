@@ -9,6 +9,7 @@ spec:
   path: ./flux/observability/server/vm-stack/app
   targetNamespace: observability
   prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: infra

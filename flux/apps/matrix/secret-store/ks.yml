@@ -6,6 +6,7 @@ metadata:
 spec:
   path: ./flux/apps/matrix/secret-store/app
   prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: infra
