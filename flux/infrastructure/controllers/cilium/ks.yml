@@ -1,21 +1,17 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infra-bgp
+  name: infra-cilium
   namespace: flux-system
 spec:
   interval: 1h
-  timeout: 5m
   retryInterval: 2m
+  timeout: 10m
   prune: true
-  dependsOn:
-    - name: infra-cilium
+  wait: true
+  targetNamespace: kube-system
   sourceRef:
     kind: GitRepository
     name: infra
     namespace: flux-system
-  path: ./flux/infrastructure/configs/bgp/app
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
+  path: ./flux/infrastructure/controllers/cilium/app
