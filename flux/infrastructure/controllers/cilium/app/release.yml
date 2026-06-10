@@ -23,8 +23,6 @@ spec:
 
     kubeProxyReplacement: true
 
-    enableIPv4BIGTCP: true
-
     bpf:
       masquerade: true
 
