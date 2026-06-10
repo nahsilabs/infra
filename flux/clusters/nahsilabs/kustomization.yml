@@ -4,4 +4,4 @@ resources:
   - ../../repositories
   - ../../infrastructure
   - ../../observability
-  - apps.yml
+  - ../../apps
