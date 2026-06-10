@@ -9,7 +9,7 @@ spec:
     - name: cluster-infra-configs
   interval: 1h
   retryInterval: 1m
-  prune: true
+  prune: false
   path: ./flux/observability/server
   sourceRef:
     kind: GitRepository
@@ -30,7 +30,7 @@ spec:
     - name: cluster-infra-configs
   interval: 1h
   retryInterval: 1m
-  prune: true
+  prune: false
   path: ./flux/observability/collect
   sourceRef:
     kind: GitRepository
