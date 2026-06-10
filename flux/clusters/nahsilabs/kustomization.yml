@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
   - ../../repositories
   - infrastructure.yml
-  - observability.yml
+  - ../../observability
   - apps.yml
