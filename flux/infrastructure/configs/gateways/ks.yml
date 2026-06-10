@@ -7,7 +7,7 @@ spec:
   interval: 1h
   timeout: 5m
   retryInterval: 2m
-  prune: true
+  prune: false
   wait: true
   targetNamespace: envoy-gateway
   sourceRef:
@@ -17,7 +17,6 @@ spec:
   path: ./flux/infrastructure/configs/gateways/app
   dependsOn:
     - name: infra-cert-manager
-    - name: infra-envoy-gateway
   decryption:
     provider: sops
     secretRef:
@@ -41,6 +40,8 @@ spec:
   path: ./flux/infrastructure/configs/gateways/app/private
   dependsOn:
     - name: infra-gateway-cert
+    - name: infra-gateway-api-crds
+    - name: infra-envoy-gateway
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -60,3 +61,5 @@ spec:
   path: ./flux/infrastructure/configs/gateways/app/public
   dependsOn:
     - name: infra-gateway-cert
+    - name: infra-gateway-api-crds
+    - name: infra-envoy-gateway

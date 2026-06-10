@@ -27,6 +27,7 @@ metadata:
 spec:
   dependsOn:
     - name: app-immich-deps
+    - name: infra-gateway-api-crds
   path: ./flux/apps/immich/app
   targetNamespace: immich
   prune: true

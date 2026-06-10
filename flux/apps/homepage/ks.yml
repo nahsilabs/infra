@@ -8,6 +8,8 @@ spec:
   timeout: 5m
   retryInterval: 2m
   prune: true
+  dependsOn:
+    - name: infra-gateway-api-crds
   targetNamespace: homepage
   sourceRef:
     kind: GitRepository

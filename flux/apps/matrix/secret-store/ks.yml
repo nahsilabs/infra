@@ -7,6 +7,8 @@ spec:
   path: ./flux/apps/matrix/secret-store/app
   prune: true
   wait: true
+  dependsOn:
+    - name: infra-external-secrets
   sourceRef:
     kind: GitRepository
     name: infra
