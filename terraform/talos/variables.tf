@@ -15,8 +15,3 @@ variable "nodes" {
     extensions     = list(string)
   }))
 }
-
-variable "flux_variables" {
-  type    = map(string)
-  default = {}
-}

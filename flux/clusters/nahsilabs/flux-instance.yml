@@ -1,0 +1,27 @@
+# Bootstrap manifest — applied out-of-band, NOT reconciled by the sync.
+# Tells flux-operator to manage the flux controllers and create the
+# GitRepository/Kustomization named "infra" that syncs this repo.
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+spec:
+  distribution:
+    version: "2.x"
+    registry: "ghcr.io/fluxcd"
+  components:
+    - source-controller
+    - kustomize-controller
+    - helm-controller
+  cluster:
+    type: kubernetes
+    size: small
+  sync:
+    kind: GitRepository
+    name: "infra"
+    url: "https://github.com/nahsilabs/infra"
+    ref: "refs/heads/main"
+    path: "flux/clusters/nahsilabs"

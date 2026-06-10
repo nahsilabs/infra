@@ -8,9 +8,6 @@ terraform {
   }
 
   required_providers {
-    helm = {
-      version = "~> 2"
-    }
     adguard = {
       source  = "gmichels/adguard"
       version = "~> 1"
@@ -29,13 +26,6 @@ terraform {
     }
   }
 }
-
-provider "helm" {
-  kubernetes {
-    config_path = local_sensitive_file.kubeconfig.filename
-  }
-}
-
 
 provider "adguard" {
   host     = "10.2.1.2:3000"
