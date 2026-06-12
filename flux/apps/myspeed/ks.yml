@@ -27,7 +27,7 @@ spec:
     - name: infra-grafana-operator
     - name: obs-grafana
   path: ./flux/apps/myspeed/obs
-  targetNamespace: observability
+  targetNamespace: obs-stack
   prune: true
   sourceRef:
     kind: GitRepository

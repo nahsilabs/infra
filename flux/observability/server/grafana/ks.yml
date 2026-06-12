@@ -9,7 +9,7 @@ spec:
     - name: obs-vm-stack
     - name: infra-gateway-api-crds
   path: ./flux/observability/server/grafana/app
-  targetNamespace: observability
+  targetNamespace: obs-stack
   prune: true
   sourceRef:
     kind: GitRepository

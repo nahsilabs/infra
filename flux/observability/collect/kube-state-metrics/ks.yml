@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   path: ./flux/observability/collect/kube-state-metrics/app
-  targetNamespace: observability
+  targetNamespace: obs-collect
   prune: true
   sourceRef:
     kind: GitRepository

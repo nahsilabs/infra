@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   path: ./flux/observability/collect/vmagent/app
-  targetNamespace: observability
+  targetNamespace: obs-collect
   prune: true
   wait: true
   dependsOn:
