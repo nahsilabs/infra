@@ -15,3 +15,52 @@ spec:
     jsonData:
       prometheusType: Prometheus
       timeInterval: 30s
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: victorialogs
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: "grafana"
+  datasource:
+    name: VictoriaLogs
+    type: victoriametrics-logs-datasource
+    access: proxy
+    url: http://vlsingle-stack.obs-stack.svc:9428
+    editable: false
+    jsonData:
+      # The plugin uses a valid string `level` field verbatim; these rules only
+      # kick in (first match wins) when level is numeric, under another field, or
+      # only present inside _msg. Postgres (CNPG) can't be covered here — it stamps
+      # every line level=info, which wins over any rule, so DB errors render as info.
+      logLevelRules:
+        # numeric/string `level` (e.g. pino emits 10..60)
+        - { field: level, operator: regex, value: "^(panic|fatal|crit|critical|60)$", level: critical, enabled: true }
+        - { field: level, operator: regex, value: "^(error|err|eror|50)$", level: error, enabled: true }
+        - { field: level, operator: regex, value: "^(warn|warning|40)$", level: warning, enabled: true }
+        - { field: level, operator: regex, value: "^(info|information|notice|30)$", level: info, enabled: true }
+        - { field: level, operator: regex, value: "^(debug|dbug|20)$", level: debug, enabled: true }
+        - { field: level, operator: regex, value: "^(trace|10)$", level: trace, enabled: true }
+        # otel-style `severity` field
+        - { field: severity, operator: caseInsensitiveEquals, value: fatal, level: critical, enabled: true }
+        - { field: severity, operator: caseInsensitiveEquals, value: error, level: error, enabled: true }
+        - { field: severity, operator: caseInsensitiveEquals, value: warning, level: warning, enabled: true }
+        - { field: severity, operator: caseInsensitiveEquals, value: warn, level: warning, enabled: true }
+        - { field: severity, operator: caseInsensitiveEquals, value: info, level: info, enabled: true }
+        - { field: severity, operator: caseInsensitiveEquals, value: debug, level: debug, enabled: true }
+        - { field: severity, operator: caseInsensitiveEquals, value: trace, level: trace, enabled: true }
+        # logfmt plaintext loggers (e.g. cilium) — level lives inside the message
+        - { field: _msg, operator: regex, value: "level=(fatal|panic|crit)", level: critical, enabled: true }
+        - { field: _msg, operator: regex, value: "level=err", level: error, enabled: true }
+        - { field: _msg, operator: regex, value: "level=warn", level: warning, enabled: true }
+        - { field: _msg, operator: regex, value: "level=info", level: info, enabled: true }
+        - { field: _msg, operator: regex, value: "level=debug", level: debug, enabled: true }
+        # envoy access logs have no level — derive from HTTP status (last, so real levels win)
+        - { field: status, operator: regex, value: "^5[0-9][0-9]$", level: error, enabled: true }
+        - { field: status, operator: regex, value: "^4[0-9][0-9]$", level: warning, enabled: true }
+        - { field: status, operator: regex, value: "^[123][0-9][0-9]$", level: info, enabled: true }
+  plugins:
+    - name: victoriametrics-logs-datasource
+      version: 0.27.1

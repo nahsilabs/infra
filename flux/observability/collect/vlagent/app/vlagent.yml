@@ -1,0 +1,33 @@
+apiVersion: operator.victoriametrics.com/v1
+kind: VLAgent
+metadata:
+  name: stack
+spec:
+  k8sCollector:
+    enabled: true
+    extraFields: '{"job":"kubernetes","cluster":"nahsilabs"}'
+    msgFields:
+      - record.message
+      - message
+      - msg
+      - log
+      - event
+      - error
+    ignoreFields:
+      - output.*
+      - spec_diff.*
+    streamFields:
+      - job
+      - cluster
+      - kubernetes.pod_namespace
+      - kubernetes.container_name
+      - kubernetes.pod_name
+  remoteWrite:
+    - url: http://vlsingle-stack.obs-stack.svc:9428/internal/insert
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi

@@ -5,14 +5,6 @@ metadata:
   labels:
     dashboards: "grafana"
 spec:
-  persistentVolumeClaim:
-    spec:
-      accessModes: [ReadWriteOnce]
-      resources:
-        requests:
-          storage: 1Gi
-      storageClassName: ceph-rbd-retain
-
   deployment:
     spec:
       template:
@@ -30,6 +22,30 @@ spec:
                     secretKeyRef:
                       name: grafana-oidc
                       key: client_secret
+                - name: GF_DATABASE_TYPE
+                  value: postgres
+                - name: GF_DATABASE_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: pg-grafana-app
+                      key: host
+                - name: GF_DATABASE_NAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: pg-grafana-app
+                      key: dbname
+                - name: GF_DATABASE_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: pg-grafana-app
+                      key: username
+                - name: GF_DATABASE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: pg-grafana-app
+                      key: password
+                - name: GF_DATABASE_SSL_MODE
+                  value: require
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:

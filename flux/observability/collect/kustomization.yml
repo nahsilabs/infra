@@ -3,5 +3,6 @@ kind: Kustomization
 resources:
   - namespace.yml
   - vmagent
+  - vlagent
   - node-exporter
   - kube-state-metrics
