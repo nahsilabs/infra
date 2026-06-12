@@ -175,6 +175,8 @@ A component directory holds:
 - **Secrets**: **SOPS** (`sops-age`) for inline secrets — each `ks.yml` carries its
   own `decryption` block (key is a Secret in `flux-system`); **external-secrets** for
   the rest.
+- **Skills**: reusable task procedures live in `.skills/<name>/SKILL.md` — read the
+  relevant one before that kind of work.
 
 ## Working guardrails
 
