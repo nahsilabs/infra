@@ -2,7 +2,7 @@ terraform {
   required_providers {
     authentik = {
       source  = "goauthentik/authentik"
-      version = "~> 2026.2"
+      version = "~> 2026.5"
     }
     tls = {
       source  = "hashicorp/tls"
@@ -71,6 +71,7 @@ resource "authentik_provider_oauth2" "this" {
   authorization_flow = data.authentik_flow.default_authorization.id
   invalidation_flow  = data.authentik_flow.default_invalidation.id
   client_type        = "confidential"
+  grant_types        = ["authorization_code"]
   signing_key        = authentik_certificate_key_pair.signing.id
   property_mappings  = sort(distinct(concat(data.authentik_property_mapping_provider_scope.default.ids, var.scopes)))
 
