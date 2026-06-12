@@ -3,7 +3,10 @@ kind: VMAgent
 metadata:
   name: stack
 spec:
-  selectAllByDefault: true
+  selectAllByDefault: false
+  serviceScrapeSelector:
+    matchLabels:
+      obs.nahsilabs/metrics: "true"
   replicaCount: 1
   scrapeInterval: 30s
   externalLabels:
