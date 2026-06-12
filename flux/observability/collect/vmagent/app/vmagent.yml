@@ -13,7 +13,7 @@ spec:
   externalLabels:
     cluster: nahsilabs
   remoteWrite:
-    - url: http://vmsingle-stack.observability.svc:8429/api/v1/write
+    - url: http://vmsingle-stack.obs-stack.svc:8429/api/v1/write
   resources:
     requests:
       cpu: 100m
