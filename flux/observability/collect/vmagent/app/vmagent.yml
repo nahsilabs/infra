@@ -1,0 +1,18 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAgent
+metadata:
+  name: stack
+spec:
+  selectAllByDefault: true
+  replicaCount: 1
+  scrapeInterval: 30s
+  externalLabels:
+    cluster: nahsilabs
+  remoteWrite:
+    - url: http://vmsingle-stack.observability.svc:8429/api/v1/write
+  resources:
+    requests:
+      cpu: 100m
+      memory: 200Mi
+    limits:
+      memory: 256Mi

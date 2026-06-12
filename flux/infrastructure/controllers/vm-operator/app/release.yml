@@ -29,7 +29,7 @@ spec:
     env:
     fullnameOverride: vm-operator
     operator:
-      disable_prometheus_converter: true
+      disable_prometheus_converter: false
     admissionWebhooks:
       enabled: true
       certManager:
