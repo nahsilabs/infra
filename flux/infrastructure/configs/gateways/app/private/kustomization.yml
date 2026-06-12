@@ -1,8 +1,27 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - envoyproxy.yml
+  - ../base
   - gatewayclass.yml
   - gateway.yml
-  - clienttrafficpolicy.yml
   - httproute-redirect.yml
+patches:
+  - target:
+      kind: EnvoyProxy
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: envoy-proxy-private
+      - op: add
+        path: /spec/provider/kubernetes/envoyService/labels
+        value:
+          cilium-bgp-private: "true"
+  - target:
+      kind: ClientTrafficPolicy
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: private-gateway
+      - op: replace
+        path: /spec/targetRefs/0/name
+        value: private-gateway
