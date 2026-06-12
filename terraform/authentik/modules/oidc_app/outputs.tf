@@ -10,5 +10,5 @@ output "client_secret" {
 }
 
 output "oidc_config_url" {
-  value       = "https://${var.authentik_domain}/application/o/${var.app_name}/.well-known/openid-configuration"
+  value = "https://${var.authentik_domain}/application/o/${var.app_name}/.well-known/openid-configuration"
 }
