@@ -16,5 +16,6 @@ resources:
   - intel-device-plugins
   - nvidia-operator
   - vm-operator
+  - grafana-operator
   - snapshot-controller
   - external-secrets

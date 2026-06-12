@@ -34,7 +34,7 @@ spec:
         enabled: true
         jobLabel: app.kubernetes.io/instance
         additionalLabels:
-          scrape: "true"
+          obs.nahsilabs/metrics: "true"
 
         relabelings:
           - action: replace

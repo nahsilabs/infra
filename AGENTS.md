@@ -118,6 +118,24 @@ cluster, so the multi-cluster comparison flow above rarely applies.
 - One sync source: **`GitRepository/infra`** (path `flux/clusters/nahsilabs`). Every
   `ks.yml` uses `sourceRef: { kind: GitRepository, name: infra }`.
 
+## Developing from a branch
+
+To test changes on the live cluster before merging, point Flux at a feature branch
+instead of `main`:
+
+- **Key fact:** `flux/clusters/nahsilabs/flux-instance.yml` is applied **out-of-band** —
+  it is *not* listed in the cluster `kustomization.yml`, so the sync never re-applies it.
+  You can therefore live-patch the FluxInstance `sync.ref` and the reconcile **won't
+  revert it** (no chicken-and-egg). Edit the live resource, not the file — `main`'s
+  `flux-instance.yml` should always read `refs/heads/main`.
+- Workflow:
+  1. `git push -u origin <branch>`
+  2. Point Flux at it:
+     `kubectl patch fluxinstance flux -n flux-system --type=merge -p '{"spec":{"sync":{"ref":"refs/heads/<branch>"}}}'`
+  3. Reconcile: `flux reconcile source git infra` (the operator then resyncs the root),
+     or wait for the 1m interval.
+  4. Done testing → switch back with the same patch using `refs/heads/main`.
+
 ## Adding a component
 
 A component directory holds:
@@ -157,6 +175,8 @@ A component directory holds:
 - **Secrets**: **SOPS** (`sops-age`) for inline secrets — each `ks.yml` carries its
   own `decryption` block (key is a Secret in `flux-system`); **external-secrets** for
   the rest.
+- **Skills**: reusable task procedures live in `.skills/<name>/SKILL.md` — read the
+  relevant one before that kind of work.
 
 ## Working guardrails
 

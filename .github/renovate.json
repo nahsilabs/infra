@@ -29,8 +29,27 @@
         "https://github\\.com/(?<depName>[^/]+/[^/]+)(?:/[^?\\s]*)?\\?ref=(?<currentValue>\\S+)"
       ],
       "datasourceTemplate": "github-tags"
+    },
+    {
+      "description": "Grafana dashboards (grafana.com revision)",
+      "customType": "regex",
+      "managerFilePatterns": ["/flux/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "#\\s+renovate:\\s+depName=\"(?<depName>.*)\"\\s*\\n\\s+id:\\s+(?<packageName>\\d+)\\s*\\n\\s+revision:\\s+(?<currentValue>\\d+)"
+      ],
+      "versioningTemplate": "regex:^(?<major>\\d+)$",
+      "datasourceTemplate": "custom.grafana-dashboards"
     }
   ],
+  "customDatasources": {
+    "grafana-dashboards": {
+      "defaultRegistryUrlTemplate": "https://grafana.com/api/dashboards/{{packageName}}",
+      "format": "json",
+      "transformTemplates": [
+        "{\"releases\":[{\"version\": $string(revision)}]}"
+      ]
+    }
+  },
   "packageRules": [
     {
       "description": "Automerge patch updates",

@@ -15,7 +15,6 @@ resources:
   - intel.yml
   - nvidia.yml
   - victoriametrics.yml
-  - grafanalabs.yml
   - immich.yml
   - cowboysysop.yml
   - llm-d-infra.yml

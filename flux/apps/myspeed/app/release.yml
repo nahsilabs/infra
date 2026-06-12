@@ -35,6 +35,21 @@ spec:
           http:
             port: 5216
 
+    serviceMonitor:
+      main:
+        enabled: true
+        labels:
+          obs.nahsilabs/metrics: "true"
+        endpoints:
+          - port: http
+            path: /api/prometheus/metrics
+            interval: 30s
+            relabelings:
+              - action: replace
+                regex: .*
+                replacement: myspeed
+                targetLabel: instance
+
     persistence:
       config:
         existingClaim: myspeed-config

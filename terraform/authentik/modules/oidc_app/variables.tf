@@ -15,17 +15,20 @@ variable "launch_url" {
 }
 
 variable "allowed_groups" {
-  description = "List of group IDs that can access this app"
+  description = "List of group names that can access this app"
   type        = list(string)
   default     = []
 }
 
+variable "groups" {
+  description = "Group name -> ID map, used to resolve allowed_groups and entitlement groups"
+  type        = map(string)
+  default     = {}
+}
+
 variable "redirect_uris" {
   description = "OAuth2 redirect URIs"
-  type = list(object({
-    url           = string
-    matching_mode = optional(string, "strict")
-  }))
+  type        = list(string)
 }
 
 variable "ui_group" {
@@ -44,4 +47,13 @@ variable "scopes" {
   description = "Additional managed scope mapping IDs to include"
   type        = list(string)
   default     = []
+}
+
+variable "entitlements" {
+  description = "Application entitlements: name -> { groups = [group names], users = [usernames] }"
+  type = map(object({
+    groups = optional(list(string), [])
+    users  = optional(list(string), [])
+  }))
+  default = {}
 }

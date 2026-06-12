@@ -1,0 +1,28 @@
+# Lives in the component's obs/ dir. instanceSelector matches the Grafana instance.
+# Do NOT set resyncPeriod — the operator already re-asserts every ~10m by default.
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: <name>
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: "grafana"
+
+  # Option A — import by grafana.com id. The `# renovate:` comment lets Renovate bump the
+  # revision automatically (see .github/renovate.json grafana-dashboards datasource).
+  grafanaCom:
+    # renovate: depName="<dashboard name>"
+    id: <grafana.com-dashboard-id>
+    revision: <revision>      # pin an initial value; Renovate updates it
+
+  # Option B — inline JSON (dashboards-as-code authored in repo)
+  # json: |
+  #   { "title": "<name>", ... }
+
+  # Only for OLDER dashboards that declare an __inputs datasource (e.g. DS_PROMETHEUS).
+  # Modern dashboards use a datasource template variable that auto-resolves to the default
+  # (VictoriaMetrics), so this is usually unnecessary.
+  # datasources:
+  #   - inputName: DS_PROMETHEUS
+  #     datasourceName: VictoriaMetrics

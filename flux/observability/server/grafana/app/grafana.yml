@@ -1,0 +1,86 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: grafana
+  labels:
+    dashboards: "grafana"
+spec:
+  persistentVolumeClaim:
+    spec:
+      accessModes: [ReadWriteOnce]
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: ceph-rbd-retain
+
+  deployment:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: grafana
+              env:
+                - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-oidc
+                      key: client_id
+                - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-oidc
+                      key: client_secret
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
+          securityContext:
+            fsGroup: 472
+            runAsGroup: 472
+            runAsNonRoot: true
+            runAsUser: 472
+
+  httpRoute:
+    metadata:
+      annotations:
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/group: Observability
+        gethomepage.dev/name: Grafana
+        gethomepage.dev/icon: grafana.png
+        gethomepage.dev/pod-selector: "app=grafana"
+    spec:
+      parentRefs:
+        - name: private-gateway
+          namespace: envoy-gateway
+          sectionName: https
+      hostnames:
+        - grafana.nahsi.dev
+
+  config:
+    server:
+      root_url: https://grafana.nahsi.dev
+    analytics:
+      reporting_enabled: "false"
+      check_for_updates: "false"
+      check_for_plugin_updates: "false"
+      feedback_links_enabled: "false"
+    news:
+      news_feed_enabled: "false"
+    security:
+      cookie_secure: "true"
+    users:
+      allow_sign_up: "false"
+      allow_org_create: "false"
+      auto_assign_org: "true"
+    auth:
+      disable_login_form: "true"
+    auth.generic_oauth:
+      enabled: "true"
+      name: authentik
+      scopes: "openid profile email entitlements"
+      auth_url: https://auth.nahsi.dev/application/o/authorize/
+      token_url: https://auth.nahsi.dev/application/o/token/
+      api_url: https://auth.nahsi.dev/application/o/userinfo/
+      role_attribute_path: "contains(entitlements[*], 'Grafana Admins') && 'GrafanaAdmin' || 'Viewer'"
+      allow_assign_grafana_admin: "true"
+      use_pkce: "true"

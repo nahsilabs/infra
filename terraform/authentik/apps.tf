@@ -13,8 +13,10 @@ module "oidc_apps" {
   authentik_domain = "auth.nahsi.dev"
   launch_url       = each.value.launch_url
   ui_group         = lookup(each.value, "ui_group", "")
-  allowed_groups   = [for g in each.value.allowed_groups : module.core.groups[g]]
-  redirect_uris    = [for u in each.value.redirect_uris : { url = u }]
+  allowed_groups   = each.value.allowed_groups
+  redirect_uris    = each.value.redirect_uris
+  entitlements     = lookup(each.value, "entitlements", {})
+  groups           = module.core.groups
 }
 
 output "oidc_apps" {
