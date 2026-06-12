@@ -7,6 +7,7 @@ spec:
   serviceScrapeSelector:
     matchLabels:
       obs.nahsilabs/metrics: "true"
+  serviceScrapeNamespaceSelector: {}
   replicaCount: 1
   scrapeInterval: 30s
   externalLabels:
