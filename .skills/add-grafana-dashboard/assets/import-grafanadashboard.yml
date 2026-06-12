@@ -1,4 +1,5 @@
-# Lives in the component's obs/ dir. instanceSelector matches the Grafana instance.
+# Import a published grafana.com dashboard by id. Lives in the component's obs/ dir.
+# (For a custom in-repo dashboard, use the configMapRef pattern in dashboard-kustomization.yml.)
 # Do NOT set resyncPeriod — the operator already re-asserts every ~10m by default.
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
@@ -9,16 +10,12 @@ spec:
     matchLabels:
       dashboards: "grafana"
 
-  # Option A — import by grafana.com id. The `# renovate:` comment lets Renovate bump the
-  # revision automatically (see .github/renovate.json grafana-dashboards datasource).
+  # The `# renovate:` comment lets Renovate bump the revision automatically
+  # (see .github/renovate.json grafana-dashboards datasource).
   grafanaCom:
     # renovate: depName="<dashboard name>"
     id: <grafana.com-dashboard-id>
     revision: <revision>      # pin an initial value; Renovate updates it
-
-  # Option B — inline JSON (dashboards-as-code authored in repo)
-  # json: |
-  #   { "title": "<name>", ... }
 
   # Only for OLDER dashboards that declare an __inputs datasource (e.g. DS_PROMETHEUS).
   # Modern dashboards use a datasource template variable that auto-resolves to the default

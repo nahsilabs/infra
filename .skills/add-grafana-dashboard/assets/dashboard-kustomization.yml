@@ -1,0 +1,57 @@
+# Custom dashboard authored in-repo, served from a ConfigMap. Three pieces:
+
+# (1) flux/apps/<app>/obs/<app>.json
+#     The exported + normalized dashboard model (uid/title set; id/version/tags removed).
+
+# (2) flux/apps/<app>/obs/kustomization.yml
+#     Generates the ConfigMap from the .json file. disableNameSuffixHash keeps the name
+#     stable so the GrafanaDashboard's configMapRef below doesn't break on every edit.
+# ---
+# apiVersion: kustomize.config.k8s.io/v1beta1
+# kind: Kustomization
+# resources:
+#   - dashboard.yml
+# configMapGenerator:
+#   - name: <app>-dashboard
+#     files:
+#       - <app>.json
+# generatorOptions:
+#   disableNameSuffixHash: true
+
+# (3) flux/apps/<app>/obs/dashboard.yml
+#     The GrafanaDashboard CR pointing at the generated ConfigMap.
+# ---
+# apiVersion: grafana.integreatly.org/v1beta1
+# kind: GrafanaDashboard
+# metadata:
+#   name: <app>
+# spec:
+#   instanceSelector:
+#     matchLabels:
+#       dashboards: "grafana"
+#   configMapRef:
+#     name: <app>-dashboard
+#     key: <app>.json
+
+# (4) a dedicated Flux Kustomization appended to flux/apps/<app>/ks.yml (after `---`),
+#     mirroring obs-node-exporter-dashboards:
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: obs-<app>-dashboard
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-grafana-operator
+    - name: obs-grafana
+  path: ./flux/apps/<app>/obs
+  targetNamespace: observability
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m

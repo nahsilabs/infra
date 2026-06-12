@@ -16,3 +16,23 @@ spec:
   interval: 1h
   retryInterval: 2m
   timeout: 5m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: obs-myspeed-dashboard
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-grafana-operator
+    - name: obs-grafana
+  path: ./flux/apps/myspeed/obs
+  targetNamespace: observability
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m

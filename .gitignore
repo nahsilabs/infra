@@ -5,6 +5,7 @@
 **/certs/*
 **/env
 .direnv
+.mcp.json
 kubeconfig
 talosconfig
 secrets/
