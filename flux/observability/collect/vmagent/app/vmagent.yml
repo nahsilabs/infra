@@ -8,6 +8,9 @@ spec:
     matchLabels:
       obs.nahsilabs/metrics: "true"
   serviceScrapeNamespaceSelector: {}
+  nodeScrapeSelector:
+    matchLabels:
+      obs.nahsilabs/metrics: "true"
   replicaCount: 1
   scrapeInterval: 30s
   externalLabels:

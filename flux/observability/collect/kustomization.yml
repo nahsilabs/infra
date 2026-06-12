@@ -6,3 +6,4 @@ resources:
   - vlagent
   - node-exporter
   - kube-state-metrics
+  - cluster

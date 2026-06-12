@@ -19,4 +19,4 @@ spec:
       monitor:
         enabled: true
         additionalLabels:
-          scrape: "true"
+          obs.nahsilabs/metrics: "true"
