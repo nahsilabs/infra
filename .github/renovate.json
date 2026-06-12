@@ -39,6 +39,15 @@
       ],
       "versioningTemplate": "regex:^(?<major>\\d+)$",
       "datasourceTemplate": "custom.grafana-dashboards"
+    },
+    {
+      "description": "Grafana plugins (grafana.com version)",
+      "customType": "regex",
+      "managerFilePatterns": ["/flux/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "#\\s+renovate:\\s+depName=\"(?<depName>[^\"]+)\"\\s*\\n\\s+-\\s+name:\\s+\\S+\\s*\\n\\s+version:\\s+(?<currentValue>\\S+)"
+      ],
+      "datasourceTemplate": "custom.grafana-plugins"
     }
   ],
   "customDatasources": {
@@ -47,6 +56,13 @@
       "format": "json",
       "transformTemplates": [
         "{\"releases\":[{\"version\": $string(revision)}]}"
+      ]
+    },
+    "grafana-plugins": {
+      "defaultRegistryUrlTemplate": "https://grafana.com/api/plugins/{{packageName}}",
+      "format": "json",
+      "transformTemplates": [
+        "{\"releases\":[{\"version\": $string(version)}]}"
       ]
     }
   },

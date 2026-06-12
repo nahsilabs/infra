@@ -57,10 +57,31 @@ spec:
         - { field: _msg, operator: regex, value: "level=warn", level: warning, enabled: true }
         - { field: _msg, operator: regex, value: "level=info", level: info, enabled: true }
         - { field: _msg, operator: regex, value: "level=debug", level: debug, enabled: true }
+        # zap/VictoriaMetrics tab-delimited console (`<ts>\tinfo\t<logger>`) — every
+        # Go controller-runtime operator (cert-manager, external-secrets, cnpg, vm,
+        # mariadb…) plus vmagent. Level is a bare tab-wrapped word, no level= key.
+        - { field: _msg, operator: regex, value: "\\t(fatal|panic|dpanic)\\t", level: critical, enabled: true }
+        - { field: _msg, operator: regex, value: "\\terror\\t", level: error, enabled: true }
+        - { field: _msg, operator: regex, value: "\\twarn\\t", level: warning, enabled: true }
+        - { field: _msg, operator: regex, value: "\\tinfo\\t", level: info, enabled: true }
+        - { field: _msg, operator: regex, value: "\\tdebug\\t", level: debug, enabled: true }
+        # servarr bracket prefix (`[Info] logger: msg`) — sonarr/radarr/prowlarr
+        - { field: _msg, operator: regex, value: "^\\[Fatal\\]", level: critical, enabled: true }
+        - { field: _msg, operator: regex, value: "^\\[Error\\]", level: error, enabled: true }
+        - { field: _msg, operator: regex, value: "^\\[Warn\\]", level: warning, enabled: true }
+        - { field: _msg, operator: regex, value: "^\\[Info\\]", level: info, enabled: true }
+        - { field: _msg, operator: regex, value: "^\\[(Debug|Trace)\\]", level: debug, enabled: true }
+        # synapse dash-delimited (`<ts> - logger - 111 - INFO - msg`) — matrix
+        - { field: _msg, operator: regex, value: " - (CRITICAL|FATAL) - ", level: critical, enabled: true }
+        - { field: _msg, operator: regex, value: " - ERROR - ", level: error, enabled: true }
+        - { field: _msg, operator: regex, value: " - WARNING - ", level: warning, enabled: true }
+        - { field: _msg, operator: regex, value: " - INFO - ", level: info, enabled: true }
+        - { field: _msg, operator: regex, value: " - DEBUG - ", level: debug, enabled: true }
         # envoy access logs have no level — derive from HTTP status (last, so real levels win)
         - { field: status, operator: regex, value: "^5[0-9][0-9]$", level: error, enabled: true }
         - { field: status, operator: regex, value: "^4[0-9][0-9]$", level: warning, enabled: true }
         - { field: status, operator: regex, value: "^[123][0-9][0-9]$", level: info, enabled: true }
   plugins:
+    # renovate: depName="victoriametrics-logs-datasource"
     - name: victoriametrics-logs-datasource
-      version: 0.27.1
+      version: 0.28.0
