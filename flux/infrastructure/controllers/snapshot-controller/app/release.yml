@@ -12,12 +12,3 @@ spec:
         kind: HelmRepository
         name: piraeus
         namespace: flux-system
-  values:
-    controller:
-      image:
-        repository: registry.k8s.io/sig-storage/snapshot-controller
-        tag: v8.6.0@sha256:81e79f205083f105e573ba2ebfe5964ede7f69a154e8627f53ebbbccd3ed9f70
-    webhook:
-      image:
-        repository: registry.k8s.io/sig-storage/snapshot-validation-webhook
-        tag: v8.1.1@sha256:979842f9a6c23ae1b2ddd26603c27412dfc4d3c027d9cda1cb87a67b91ae9ac8
