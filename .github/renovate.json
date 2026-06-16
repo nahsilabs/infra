@@ -72,6 +72,14 @@
       "matchUpdateTypes": ["patch", "digest"],
       "automerge": true,
       "ignoreTests": true
+    },
+    {
+      "description": "YouTube stack: automerge everything, no delay",
+      "matchFileNames": ["flux/apps/youtube/**"],
+      "automerge": true,
+      "ignoreTests": true,
+      "minimumReleaseAge": "0 seconds",
+      "prPriority": 10
     }
   ]
 }
