@@ -5,9 +5,6 @@ metadata:
 spec:
   interval: 1h
   values:
-    image:
-      hub: docker.io/intel
-      tag: 0.32.0
     tolerations: []
   chart:
     spec:
