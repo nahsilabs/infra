@@ -6,6 +6,7 @@ metadata:
 spec:
   dependsOn:
     - name: app-invidious
+    - name: infra-prometheus-operator-crds
   path: ./flux/apps/youtube/companion/app
   targetNamespace: youtube
   prune: true

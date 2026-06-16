@@ -21,6 +21,7 @@ spec:
               repository: quay.io/invidious/invidious-companion
               tag: latest@sha256:c73e5edd921b543ce01b456cde4df4622c94ce699d093fa07aadbe3ad1d94497
             env:
+              SERVER_ENABLE_METRICS: "true"
               SERVER_SECRET_KEY:
                 valueFrom:
                   secretKeyRef:
@@ -46,6 +47,21 @@ spec:
         ports:
           http:
             port: 8282
+
+    serviceMonitor:
+      main:
+        enabled: true
+        labels:
+          obs.nahsilabs/metrics: "true"
+        endpoints:
+          - port: http
+            path: /metrics
+            interval: 30s
+            relabelings:
+              - action: replace
+                regex: .*
+                replacement: companion
+                targetLabel: instance
 
     persistence:
       cache:
