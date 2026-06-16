@@ -25,7 +25,7 @@ spec:
   values:
     image:
       repository: victoriametrics/operator
-      tag: v0.71.0@sha256:5bc7895d42b73e7652932e1c8ee94fddf3d7984ba8e2519864dccee89c32efd2
+      tag: v0.72.0@sha256:5137b8ddeed33429845595394d1537b53ff8b054d92578cfb4e999554d310e93
     env:
     fullnameOverride: vm-operator
     operator:
