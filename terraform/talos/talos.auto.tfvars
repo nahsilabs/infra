@@ -1,4 +1,4 @@
-talos_version = "v1.13.0-beta.1"
+talos_version = "v1.13.4"
 cluster_name  = "nahsilabs"
 
 nodes = [
