@@ -3,6 +3,8 @@ kind: GrafanaDashboard
 metadata:
   name: myspeed
 spec:
+  allowCrossNamespaceImport: true
+  folder: General
   instanceSelector:
     matchLabels:
       dashboards: "grafana"

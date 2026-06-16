@@ -22,7 +22,30 @@ choices, and layout problems in seconds that take many edit rounds to find in ra
 Prereqs: the metrics are already scraped (use the **scrape-app-metrics** skill first to gate the
 ServiceMonitor), and the **grafana MCP** is connected (`mcp__grafana__*` tools).
 
-## First: is there a published dashboard?
+## First: does a dashboard already exist? (search both, verify, then decide)
+
+Don't author blind — and don't wire a found one blind either. **Find → load it live to confirm it
+works against this cluster's metrics → only then wire or iterate.**
+
+**Find — search two places (an empty result is often a wrong query, not "nothing exists"):**
+
+1. **grafana.com registry** — the search param is **`filter`**, not `search` (which errors
+   `Unexpected parameter`). Sanity-check with a control term first:
+   `curl -s 'https://grafana.com/api/dashboards?filter=<app>&orderBy=downloads&direction=desc' | jq '.items[] | {id,name,downloads,revision}'`
+   (control `filter=node%20exporter` must return hits — if it doesn't, your call is wrong.)
+2. **The app's own repo / GitHub** — upstream frequently ships a `grafana_dashboard.json` in-repo
+   that was never published to grafana.com. Search by the **metric prefix** (surest signal):
+   `gh search code '<metric_prefix>' --json repository,path` — e.g. `invidious_companion_` surfaces
+   `iv-org/invidious-companion/grafana_dashboard.json`.
+
+**Verify before wiring — load it into a scratch first.** Import the found JSON (or grafana.com id)
+onto a throwaway scratch (step 2) and look at it against live data. Found dashboards routinely
+reference metrics your scrape doesn't expose, assume a different datasource/label set, or need unit
+fixes — wiring one as code unseen ships a broken dashboard. If it renders clean and useful as-is,
+go straight to wire-as-code (step 4). **If it needs changes, drop into the scratch → iterate loop
+(step 2) using that JSON as the starting point** rather than committing blind.
+
+## Wiring a grafana.com dashboard by id
 
 If the app has a community dashboard on grafana.com, importing it by id is far less work than
 authoring one — a small `GrafanaDashboard` with `grafanaCom: {id, revision}`, annotated

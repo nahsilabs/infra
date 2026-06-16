@@ -27,7 +27,7 @@ spec:
     - name: infra-grafana-operator
     - name: obs-grafana
   path: ./flux/observability/collect/cluster/obs
-  targetNamespace: obs-stack
+  targetNamespace: obs-collect
   prune: true
   sourceRef:
     kind: GitRepository
