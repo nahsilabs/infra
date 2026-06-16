@@ -3,6 +3,8 @@ kind: GrafanaDashboard
 metadata:
   name: k8s-views-global
 spec:
+  allowCrossNamespaceImport: true
+  folder: Kubernetes
   instanceSelector:
     matchLabels:
       dashboards: "grafana"
@@ -16,6 +18,8 @@ kind: GrafanaDashboard
 metadata:
   name: k8s-views-namespaces
 spec:
+  allowCrossNamespaceImport: true
+  folder: Kubernetes
   instanceSelector:
     matchLabels:
       dashboards: "grafana"
@@ -29,6 +33,8 @@ kind: GrafanaDashboard
 metadata:
   name: k8s-views-nodes
 spec:
+  allowCrossNamespaceImport: true
+  folder: Kubernetes
   instanceSelector:
     matchLabels:
       dashboards: "grafana"
@@ -42,6 +48,8 @@ kind: GrafanaDashboard
 metadata:
   name: k8s-views-pods
 spec:
+  allowCrossNamespaceImport: true
+  folder: Kubernetes
   instanceSelector:
     matchLabels:
       dashboards: "grafana"
@@ -55,6 +63,8 @@ kind: GrafanaDashboard
 metadata:
   name: k8s-system-apiserver
 spec:
+  allowCrossNamespaceImport: true
+  folder: Kubernetes
   instanceSelector:
     matchLabels:
       dashboards: "grafana"
@@ -68,6 +78,8 @@ kind: GrafanaDashboard
 metadata:
   name: k8s-system-coredns
 spec:
+  allowCrossNamespaceImport: true
+  folder: Kubernetes
   instanceSelector:
     matchLabels:
       dashboards: "grafana"

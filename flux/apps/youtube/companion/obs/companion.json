@@ -1,0 +1,153 @@
+{
+  "uid": "companion",
+  "title": "Invidious Companion",
+  "schemaVersion": 39,
+  "editable": true,
+  "time": { "from": "now-6h", "to": "now" },
+  "refresh": "30s",
+  "templating": {
+    "list": [
+      {
+        "type": "datasource",
+        "name": "datasource",
+        "label": "Datasource",
+        "query": "prometheus",
+        "current": {},
+        "hide": 0,
+        "refresh": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Status",
+      "gridPos": { "h": 4, "w": 8, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "targets": [
+        { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "max(up{job=\"companion\"})", "instant": true }
+      ],
+      "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1 } ] },
+          "mappings": [ { "type": "value", "options": { "0": { "text": "DOWN", "index": 0 }, "1": { "text": "UP", "index": 1 } } } ]
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "YouTube download rate (now)",
+      "gridPos": { "h": 4, "w": 8, "x": 8, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "targets": [
+        { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum(rate(container_network_receive_bytes_total{namespace=\"youtube\",pod=~\"companion.*\",interface=\"eth0\"}[5m]))*8", "instant": true }
+      ],
+      "options": { "colorMode": "background", "graphMode": "area", "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bps",
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "orange", "value": 1000000 }, { "color": "green", "value": 5000000 } ] }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "PoToken failures (1h)",
+      "gridPos": { "h": 4, "w": 8, "x": 16, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "targets": [
+        { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "max(increase(invidious_companion_potoken_generation_failure_total[1h]))", "instant": true }
+      ],
+      "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "green", "value": null }, { "color": "red", "value": 1 } ] }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Download throughput from YouTube",
+      "description": "Bytes/sec pulled from googlevideo — the primary throttle signal (no app metric exists for it). Sitting below the 1 Mbit/s line during playback = throttled.",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "targets": [
+        { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum(rate(container_network_receive_bytes_total{namespace=\"youtube\",pod=~\"companion.*\",interface=\"eth0\"}[5m]))*8", "legendFormat": "download" }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bps",
+          "min": 0,
+          "custom": { "drawStyle": "line", "fillOpacity": 15, "lineWidth": 1, "showPoints": "never", "gradientMode": "opacity", "thresholdsStyle": { "mode": "line" } },
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [ { "color": "red", "value": null }, { "color": "green", "value": 1000000 } ] }
+        },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["min", "mean", "max"] }, "tooltip": { "mode": "single" } }
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "YouTube API requests (Innertube)",
+      "description": "Rate of metadata/player requests to YouTube's internal API. 'failed' rising = YouTube rejecting requests.",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "targets": [
+        { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum(rate(invidious_companion_innertube_successful_request_total[$__rate_interval]))", "legendFormat": "success" },
+        { "refId": "B", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum(rate(invidious_companion_innertube_failed_request_total[$__rate_interval]))", "legendFormat": "failed" }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "reqps", "custom": { "drawStyle": "line", "fillOpacity": 10, "lineWidth": 1, "showPoints": "never" } },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi" } }
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Bot-detection / ban signals",
+      "description": "YouTube challenging us as a bot. Flat at zero = not banned. A sustained rise = your IP is being blocked/challenged, not just throttled.",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "targets": [
+        { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum(rate(invidious_companion_innertube_error_status_loginRequired_total[$__rate_interval]))", "legendFormat": "LOGIN_REQUIRED" },
+        { "refId": "B", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum(rate(invidious_companion_innertube_error_reason_SignIn_total[$__rate_interval]))", "legendFormat": "not a bot" },
+        { "refId": "C", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum(rate(invidious_companion_innertube_error_subreason_ProtectCommunity_total[$__rate_interval]))", "legendFormat": "protect community" }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "reqps", "custom": { "drawStyle": "line", "fillOpacity": 10, "lineWidth": 1, "showPoints": "never" } },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi" } }
+    },
+    {
+      "id": 8,
+      "type": "timeseries",
+      "title": "Blocked video streams (HTTP 403)",
+      "description": "403s from googlevideo on /videoplayback. No data until a newer companion build adds invidious_companion_videoplayback_forbidden_total.",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 20 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "targets": [
+        { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum(rate(invidious_companion_videoplayback_forbidden_total[$__rate_interval]))", "legendFormat": "403" }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "reqps", "custom": { "drawStyle": "line", "fillOpacity": 10, "lineWidth": 1, "showPoints": "never" } },
+        "overrides": []
+      },
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "single" } }
+    }
+  ]
+}
