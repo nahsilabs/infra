@@ -24,6 +24,24 @@ spec:
       logLevel: debug
     ingress:
       enabled: false
+    httpRoute:
+      enabled: true
+      additionalAnnotations:
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/group: "Apps"
+        gethomepage.dev/name: Vaultwarden
+        gethomepage.dev/icon: vaultwarden.png
+        gethomepage.dev/pod-selector: "app.kubernetes.io/name=vaultwarden"
+      parentRefs:
+        - name: private-gateway
+          namespace: envoy-gateway
+          sectionName: https
+        - name: public-gateway
+          namespace: envoy-gateway
+          sectionName: https
+      hostnames:
+        - secrets.nahsi.dev
+      path: /
     adminToken:
       existingSecret: vaultwarden-secret
       existingSecretKey: token
