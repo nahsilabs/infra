@@ -7,6 +7,7 @@ resources:
   - metrics-server
   - kubelet-csr-approver
   - ceph-csi-rbd
+  - csi-driver-nfs
   - envoy-gateway
   - agenticgateway
   - cloudnative-pg

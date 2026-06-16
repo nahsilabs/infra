@@ -3,6 +3,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: navidrome-music
+  annotations:
+    pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
 spec:
   capacity:
     storage: 1Gi
@@ -11,12 +13,19 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: nfs-navidrome-music
   mountOptions:
+    - nfsvers=4.1
     - nconnect=8
-    - hard
     - noatime
-  nfs:
-    server: nfs.lan
-    path: /mnt/storage/media/music/library
+    - soft
+    - softerr
+    - timeo=50
+    - retrans=3
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: nfs.lan#mnt/storage/media/music/library#navidrome
+    volumeAttributes:
+      server: nfs.lan
+      share: /mnt/storage/media/music/library
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
