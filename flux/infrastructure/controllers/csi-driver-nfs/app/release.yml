@@ -23,3 +23,5 @@ spec:
       replicas: 2
     externalSnapshotter:
       enabled: false
+    feature:
+      enableFSGroupPolicy: false
