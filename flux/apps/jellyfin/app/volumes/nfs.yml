@@ -1,21 +1,8 @@
 ---
 apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: audiobookshelf-config
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: ceph-rbd-retain
-  volumeName: pvc-8d615b53-0933-476d-b088-27c3680423ef
-  resources:
-    requests:
-      storage: 1Gi
----
-apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs-audiobookshelf-audiobooks
+  name: nfs-jellyfin-video
   annotations:
     pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
 spec:
@@ -35,20 +22,20 @@ spec:
     - retrans=3
   csi:
     driver: nfs.csi.k8s.io
-    volumeHandle: nfs.lan#mnt/storage/media/audiobooks#audiobookshelf
+    volumeHandle: nfs.lan#mnt/storage/media/video#jellyfin
     volumeAttributes:
       server: nfs.lan
-      share: /mnt/storage/media/audiobooks
+      share: /mnt/storage/media/video
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: audiobookshelf-audiobooks
+  name: jellyfin-video
 spec:
   accessModes:
     - ReadWriteMany
   storageClassName: ""
-  volumeName: nfs-audiobookshelf-audiobooks
+  volumeName: nfs-jellyfin-video
   resources:
     requests:
       storage: 1Gi
@@ -56,7 +43,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs-audiobookshelf-podcasts
+  name: nfs-jellyfin-music
   annotations:
     pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
 spec:
@@ -76,20 +63,20 @@ spec:
     - retrans=3
   csi:
     driver: nfs.csi.k8s.io
-    volumeHandle: nfs.lan#mnt/storage/media/podcasts#audiobookshelf
+    volumeHandle: nfs.lan#mnt/storage/media/music/library#jellyfin
     volumeAttributes:
       server: nfs.lan
-      share: /mnt/storage/media/podcasts
+      share: /mnt/storage/media/music/library
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: audiobookshelf-podcasts
+  name: jellyfin-music
 spec:
   accessModes:
     - ReadWriteMany
   storageClassName: ""
-  volumeName: nfs-audiobookshelf-podcasts
+  volumeName: nfs-jellyfin-music
   resources:
     requests:
       storage: 1Gi

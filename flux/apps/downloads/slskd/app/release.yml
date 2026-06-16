@@ -85,9 +85,7 @@ spec:
         globalMounts:
           - path: /downloads
       music:
-        type: nfs
-        server: nfs.lan
-        path: /mnt/storage/media/music/library
+        existingClaim: slskd-music
         globalMounts:
           - path: /music
             readOnly: true

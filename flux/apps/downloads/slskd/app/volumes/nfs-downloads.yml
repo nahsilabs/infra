@@ -2,21 +2,30 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: slskd-downloads
+  name: nfs-slskd-downloads
+  annotations:
+    pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
 spec:
   capacity:
     storage: 1Gi
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: nfs-slskd-downloads
+  storageClassName: ""
   mountOptions:
+    - nfsvers=4.1
     - nconnect=8
-    - hard
     - noatime
-  nfs:
-    server: nfs.lan
-    path: /mnt/storage/media/music/slskd
+    - soft
+    - softerr
+    - timeo=50
+    - retrans=3
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: nfs.lan#mnt/storage/media/music/slskd#slskd
+    volumeAttributes:
+      server: nfs.lan
+      share: /mnt/storage/media/music/slskd
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -25,8 +34,8 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: nfs-slskd-downloads
-  volumeName: slskd-downloads
+  storageClassName: ""
+  volumeName: nfs-slskd-downloads
   resources:
     requests:
       storage: 1Gi

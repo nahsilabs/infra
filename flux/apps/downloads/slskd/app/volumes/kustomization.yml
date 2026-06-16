@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - ceph.yml
   - nfs-downloads.yml
+  - nfs-music.yml
