@@ -9,11 +9,38 @@ spec:
     name: cilium
     namespace: flux-system
   values:
+    # Run everywhere operationally needed, but respect the nahsilabs/offline
+    # taint: by NOT tolerating it, cilium is evicted from offline nodes (e.g.
+    # pergamon) and they drop out of the DaemonSet's desired count, so the
+    # rollout can reach all-ready instead of waiting forever on a dead node.
+    tolerations: &cilium-tolerations
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      - key: node.cilium.io/agent-not-ready
+        operator: Exists
+      - key: node.kubernetes.io/not-ready
+        operator: Exists
+      - key: node.kubernetes.io/unreachable
+        operator: Exists
+      - key: node.kubernetes.io/unschedulable
+        operator: Exists
+      - key: node.kubernetes.io/network-unavailable
+        operator: Exists
+      - key: node.kubernetes.io/disk-pressure
+        operator: Exists
+      - key: node.kubernetes.io/memory-pressure
+        operator: Exists
+      - key: node.kubernetes.io/pid-pressure
+        operator: Exists
+
+    envoy:
+      rollOutPods: true
+      tolerations: *cilium-tolerations
+
     operator:
       rollOutPods: true
 
     rollOutCiliumPods: true
-    envoy.rollOutPods: true
 
     ipam:
       mode: kubernetes
