@@ -83,9 +83,7 @@ spec:
         globalMounts:
           - path: /mnt/downloads
       video:
-        type: nfs
-        server: nfs.lan
-        path: /mnt/storage/media/video
+        existingClaim: qbittorrent-video
         globalMounts:
           - path: /mnt/video
 

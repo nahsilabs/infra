@@ -15,21 +15,30 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: sonarr-video
+  name: nfs-sonarr-video
+  annotations:
+    pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
 spec:
   capacity:
-    storage: 1Gi # doesn't matter
+    storage: 1Gi
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: nfs-sonarr-video
-  mountOptions: 
-    - "nconnect=8"
-    - "hard" 
-    - "noatime"
-  nfs:
-    server: nfs.lan
-    path: /mnt/storage/media/video
+  storageClassName: ""
+  mountOptions:
+    - nfsvers=4.1
+    - nconnect=8
+    - noatime
+    - soft
+    - softerr
+    - timeo=50
+    - retrans=3
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: nfs.lan#mnt/storage/media/video#sonarr
+    volumeAttributes:
+      server: nfs.lan
+      share: /mnt/storage/media/video
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -38,8 +47,8 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: nfs-sonarr-video
-  volumeName: sonarr-video
+  storageClassName: ""
+  volumeName: nfs-sonarr-video
   resources:
     requests:
       storage: 1Gi

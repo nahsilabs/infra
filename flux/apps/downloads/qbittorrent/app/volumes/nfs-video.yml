@@ -1,32 +1,8 @@
 ---
 apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: immich-ml-cache
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: ceph-rbd-delete
-  resources:
-    requests:
-      storage: 10Gi
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: immich-valkey
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: ceph-rbd-delete
-  resources:
-    requests:
-      storage: 2Gi
----
-apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs-immich-photos
+  name: nfs-qbittorrent-video
   annotations:
     pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
 spec:
@@ -46,20 +22,20 @@ spec:
     - retrans=3
   csi:
     driver: nfs.csi.k8s.io
-    volumeHandle: nfs.lan#mnt/storage/media/photos#immich
+    volumeHandle: nfs.lan#mnt/storage/media/video#qbittorrent
     volumeAttributes:
       server: nfs.lan
-      share: /mnt/storage/media/photos
+      share: /mnt/storage/media/video
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: immich-photos
+  name: qbittorrent-video
 spec:
   accessModes:
     - ReadWriteMany
   storageClassName: ""
-  volumeName: nfs-immich-photos
+  volumeName: nfs-qbittorrent-video
   resources:
     requests:
       storage: 1Gi

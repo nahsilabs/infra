@@ -78,16 +78,12 @@ spec:
           - path: /config
 
       video:
-        type: nfs
-        server: nfs.lan
-        path: /mnt/storage/media/video
+        existingClaim: jellyfin-video
         globalMounts:
           - path: /data/video
 
       music:
-        type: nfs
-        server: nfs.lan
-        path: /mnt/storage/media/music/library
+        existingClaim: jellyfin-music
         globalMounts:
           - path: /data/music
 

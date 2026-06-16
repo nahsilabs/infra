@@ -27,12 +27,14 @@ spec:
       startupProbe:
         failureThreshold: 60
         timeoutSeconds: 5
+      livenessProbe:
+        timeoutSeconds: 5
       resources:
         requests:
           cpu: 21m
-          memory: 51Mi
+          memory: 128Mi
         limits:
-          memory: 51Mi
+          memory: 128Mi
     worker:
       config:
         core:

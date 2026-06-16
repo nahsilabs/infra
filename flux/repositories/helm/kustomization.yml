@@ -5,6 +5,7 @@ resources:
   - kubernetest-sigs-nfd.yml
   - postfinance.yml
   - ceph-csi.yml
+  - csi-driver-nfs.yml
   - bjw-s.yml
   - external-dns.yml
   - cert-manager.yml
