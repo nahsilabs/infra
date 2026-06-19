@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: vaultwarden
-      version: "0.39.0"
+      version: "0.39.1"
       sourceRef:
         kind: HelmRepository
         name: vaultwarden
