@@ -20,7 +20,7 @@ spec:
           main:
             image:
               repository: dotwee/matrix-synapse-s3
-              tag: v1.154.0@sha256:3b585bae33ac34346f5c403f54a3d88e616ff988a4b050b20314fc9f973990b9
+              tag: v1.155.0@sha256:4d22000e511911e2ffa559d41290ad0fd403fb65ce4bfd0cc97d723c2958c0ed
 
             env:
               SYNAPSE_CONFIG_PATH: /config/homeserver.yaml
@@ -97,7 +97,7 @@ spec:
           main:
             image:
               repository: dotwee/matrix-synapse-s3
-              tag: v1.154.0@sha256:3b585bae33ac34346f5c403f54a3d88e616ff988a4b050b20314fc9f973990b9
+              tag: v1.155.0@sha256:4d22000e511911e2ffa559d41290ad0fd403fb65ce4bfd0cc97d723c2958c0ed
             command: [sh, -c]
             args:
               - |
