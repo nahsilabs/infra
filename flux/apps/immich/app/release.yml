@@ -113,10 +113,10 @@ spec:
               resources:
                 requests:
                   cpu: 200m
-                  memory: 3Gi
+                  memory: 5Gi
                 limits:
                   cpu: "2"
-                  memory: 6Gi
+                  memory: 10Gi
                   gpu.intel.com/i915: "1"
               probes:
                 startup:
