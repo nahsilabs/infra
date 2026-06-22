@@ -86,6 +86,10 @@ spec:
           existingClaim: immich-photos
     
     server:
+      serviceMonitor:
+        main:
+          labels:
+            obs.nahsilabs/metrics: "true"
       controllers:
         main:
           containers:
