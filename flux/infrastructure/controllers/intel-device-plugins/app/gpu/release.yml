@@ -5,6 +5,7 @@ metadata:
 spec:
   interval: 1h
   values:
+    sharedDevNum: 2
     tolerations: []
   chart:
     spec:

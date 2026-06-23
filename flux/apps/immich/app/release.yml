@@ -75,6 +75,7 @@ spec:
       enabled: true
       persistence:
         data:
+          type: persistentVolumeClaim
           existingClaim: immich-valkey
     
     immich:
@@ -85,20 +86,22 @@ spec:
           existingClaim: immich-photos
     
     server:
-      resources:
-        requests:
-          cpu: 500m
-          memory: 1024M
-          gpu.intel.com/i915: 1
-        limits:
-          cpu: 1500m
-          memory: 3096M
-          gpu.intel.com/i915: 1
-      ingress:
-        public:
-          enabled: false
-        private:
-          enabled: false
+      serviceMonitor:
+        main:
+          labels:
+            obs.nahsilabs/metrics: "true"
+      controllers:
+        main:
+          containers:
+            main:
+              resources:
+                requests:
+                  cpu: 500m
+                  memory: 1Gi
+                limits:
+                  cpu: "2"
+                  memory: 3Gi
+                  gpu.intel.com/i915: "1"
     
     machine-learning:
       controllers:
@@ -108,27 +111,29 @@ spec:
               image:
                 repository: ghcr.io/immich-app/immich-machine-learning
                 tag: "v2.7.5-openvino@sha256:71cd5a681823c4b818f4b24b3f05816eccc3d085559e7615f695bde77e64f1f2"
-      env:
-        MACHINE_LEARNING_CACHE_FOLDER: /cache
-        MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: ViT-B-32__openai
-        MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__RECOGNITION: buffalo_l
-        MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__DETECTION: buffalo_l
-      resources:
-        requests:
-          cpu: 100m
-          memory: 4096M
-          gpu.intel.com/i915: 1
-        limits:
-          cpu: 500m
-          memory: 5120M
-          gpu.intel.com/i915: 1
+              env:
+                MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: ViT-L-16-SigLIP2-512__webli
+                MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__RECOGNITION: buffalo_l
+                MACHINE_LEARNING_PRELOAD__FACIAL_RECOGNITION__DETECTION: buffalo_l
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 5Gi
+                limits:
+                  cpu: "2"
+                  memory: 10Gi
+                  gpu.intel.com/i915: "1"
+              probes:
+                startup:
+                  enabled: true
+                  custom: true
+                  spec:
+                    httpGet:
+                      path: /ping
+                      port: 3003
+                    periodSeconds: 10
+                    failureThreshold: 180
       persistence:
         cache:
+          type: persistentVolumeClaim
           existingClaim: immich-ml-cache
-      probes:
-        liveness:
-          spec:
-            initialDelaySeconds: 300
-        readiness:
-          spec:
-            initialDelaySeconds: 300
