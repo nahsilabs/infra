@@ -15,7 +15,7 @@ resources:
   - stirling-pdf
   - supersync
   - vaultwarden
-  - ai
+  # - ai
   - downloads
   - navidrome
   - matrix
