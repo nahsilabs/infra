@@ -21,7 +21,7 @@ spec:
     toolkit:
       enabled: false
     hostPaths:
-      driverInstallDir: /usr/local/glibc/usr/lib
+      driverInstallDir: /usr/local
 
     sandboxWorkloads:
       enabled: true
