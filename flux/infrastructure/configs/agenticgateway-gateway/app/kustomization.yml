@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - agentgatewayparameters.yml
   - gateway.yml
+  - certificate.yml
