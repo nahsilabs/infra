@@ -127,6 +127,18 @@ spec:
 
     dcgmExporter:
       enabled: true
+      serviceMonitor:
+        enabled: true
+        interval: 30s
+        additionalLabels:
+          obs.nahsilabs/metrics: "true"
+        relabelings:
+          - action: replace
+            sourceLabels:
+              - __meta_kubernetes_pod_node_name
+            targetLabel: instance
+            regex: (.*)
+            replacement: $1.talos
       resources:
         requests:
           cpu: 100m
