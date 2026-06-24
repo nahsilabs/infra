@@ -18,8 +18,6 @@ resources:
   - victoriametrics.yml
   - immich.yml
   - cowboysysop.yml
-  - llm-d-infra.yml
-  - llm-d-modelservice.yml
   - piraeus.yml
   - external-secrets.yml
   - valkey.yml
