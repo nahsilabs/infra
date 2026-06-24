@@ -1,0 +1,28 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: LLMInferenceService
+metadata:
+  name: qwen3-0-6b
+spec:
+  model:
+    uri: hf://Qwen/Qwen3-0.6B
+    name: Qwen/Qwen3-0.6B
+  replicas: 1
+  template:
+    containers:
+      - name: main
+        resources:
+          limits:
+            nvidia.com/gpu: "1"
+            cpu: "4"
+            memory: 8Gi
+          requests:
+            nvidia.com/gpu: "1"
+            cpu: "2"
+            memory: 4Gi
+  router:
+    gateway:
+      refs:
+        - name: agenticgateway-internal
+          namespace: agenticgateway
+    route: {}
+    scheduler: {}

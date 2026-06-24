@@ -7,3 +7,4 @@ resources:
   - envoy-gateway.yml
   - prometheus.yml
   - agenticgateway.yml
+  - kserve-llmisvc.yml

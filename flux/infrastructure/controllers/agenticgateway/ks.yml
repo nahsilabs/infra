@@ -36,3 +36,4 @@ spec:
   path: ./flux/infrastructure/controllers/agenticgateway/app/app
   dependsOn:
     - name: infra-agenticgateway-crds
+    - name: infra-kserve

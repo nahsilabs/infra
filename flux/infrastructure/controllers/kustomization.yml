@@ -10,6 +10,7 @@ resources:
   - csi-driver-nfs
   - envoy-gateway
   - agenticgateway
+  - kserve
   - cloudnative-pg
   - mariadb-operator
   - external-dns

@@ -1,0 +1,27 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: kserve-llmisvc-crd
+  namespace: flux-system
+spec:
+  interval: 2h
+  layerSelector:
+    mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
+    operation: copy
+  url: oci://ghcr.io/kserve/charts/kserve-llmisvc-crd
+  ref:
+    tag: v0.19.0
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: kserve-llmisvc-resources
+  namespace: flux-system
+spec:
+  interval: 2h
+  layerSelector:
+    mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
+    operation: copy
+  url: oci://ghcr.io/kserve/charts/kserve-llmisvc-resources
+  ref:
+    tag: v0.19.0
