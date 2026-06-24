@@ -1,0 +1,38 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: obs-intel-gpu-exporter
+  namespace: flux-system
+spec:
+  path: ./flux/observability/collect/intel-gpu-exporter/app
+  targetNamespace: obs-collect
+  prune: true
+  dependsOn:
+    - name: infra-vm-operator
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: obs-intel-gpu-dashboard
+  namespace: flux-system
+spec:
+  path: ./flux/observability/collect/intel-gpu-exporter/obs
+  targetNamespace: obs-collect
+  prune: true
+  dependsOn:
+    - name: infra-grafana-operator
+    - name: obs-grafana
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m

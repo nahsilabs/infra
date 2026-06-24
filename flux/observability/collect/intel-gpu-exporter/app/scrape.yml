@@ -1,0 +1,22 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: intel-gpu-exporter
+  labels:
+    obs.nahsilabs/metrics: "true"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: intel-gpu-exporter
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s
+      relabelConfigs:
+        - sourceLabels: [__meta_kubernetes_pod_node_name]
+          targetLabel: instance
+          regex: (.*)
+          replacement: ${1}.talos
+      metricRelabelConfigs:
+        - action: labeldrop
+          regex: exported_instance
