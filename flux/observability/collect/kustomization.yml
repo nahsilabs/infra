@@ -7,3 +7,4 @@ resources:
   - node-exporter
   - kube-state-metrics
   - cluster
+  - intel-gpu-exporter

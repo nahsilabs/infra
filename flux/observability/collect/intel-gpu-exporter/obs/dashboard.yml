@@ -1,7 +1,7 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: nvidia-gpu
+  name: intel-igpu
 spec:
   allowCrossNamespaceImport: true
   folder: GPU
@@ -9,5 +9,5 @@ spec:
     matchLabels:
       dashboards: "grafana"
   configMapRef:
-    name: nvidia-gpu-dashboard
-    key: nvidia-gpu.json
+    name: intel-igpu-dashboard
+    key: intel-igpu.json
