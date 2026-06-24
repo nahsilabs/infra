@@ -11,3 +11,8 @@ spec:
   values:
     inferenceExtension:
       enabled: true
+    monitoring:
+      enabled: true
+      serviceMonitor:
+        extraLabels:
+          obs.nahsilabs/metrics: "true"

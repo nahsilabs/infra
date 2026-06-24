@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: agentgateway-proxy
+  labels:
+    obs.nahsilabs/metrics: "true"
+spec:
+  selector:
+    matchLabels:
+      gateway.networking.k8s.io/gateway-class-name: agentgateway
+  podMetricsEndpoints:
+    - port: metrics
+      path: /metrics
+      interval: 15s

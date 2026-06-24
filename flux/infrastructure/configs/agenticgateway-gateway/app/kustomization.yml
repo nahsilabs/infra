@@ -4,3 +4,4 @@ resources:
   - agentgatewayparameters.yml
   - gateway.yml
   - certificate.yml
+  - podmonitor.yml

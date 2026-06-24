@@ -37,3 +37,4 @@ spec:
   dependsOn:
     - name: infra-agenticgateway-crds
     - name: infra-kserve
+    - name: infra-prometheus-operator-crds
