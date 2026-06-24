@@ -9,6 +9,8 @@ spec:
   timeout: 15m
   prune: true
   wait: true
+  dependsOn:
+    - name: infra-prometheus-operator-crds
   targetNamespace: gpu-operator
   sourceRef:
     kind: GitRepository
