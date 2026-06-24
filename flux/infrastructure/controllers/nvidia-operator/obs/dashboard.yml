@@ -9,9 +9,9 @@ spec:
     matchLabels:
       dashboards: "grafana"
   grafanaCom:
-    # renovate: depName="NVIDIA DCGM Exporter Dashboard"
-    id: 12239
-    revision: 2
+    # renovate: depName="Better NVIDIA DCGM Dashboard"
+    id: 22515
+    revision: 1
   datasources:
     - inputName: DS_PROMETHEUS
       datasourceName: VictoriaMetrics
