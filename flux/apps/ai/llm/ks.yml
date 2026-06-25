@@ -7,7 +7,7 @@ spec:
   dependsOn:
     - name: infra-kserve-config
     - name: infra-agenticgateway-config
-  path: ./flux/apps/ai/llm/models
+  path: ./flux/apps/ai/llm/catalog
   targetNamespace: ai
   prune: true
   sourceRef:
@@ -28,6 +28,24 @@ spec:
     - name: infra-prometheus-operator-crds
   path: ./flux/apps/ai/llm/obs
   targetNamespace: ai
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-ai-llm-gateway
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-ai-llm
+  path: ./flux/apps/ai/llm/gateway
   prune: true
   sourceRef:
     kind: GitRepository
