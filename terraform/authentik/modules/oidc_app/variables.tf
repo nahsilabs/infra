@@ -65,6 +65,12 @@ variable "client_type" {
   }
 }
 
+variable "offline_access" {
+  description = "Offer the offline_access scope so clients receive a refresh token"
+  type        = bool
+  default     = false
+}
+
 variable "entitlements" {
   description = "Application entitlements: name -> { groups = [group names], users = [usernames] }"
   type = map(object({

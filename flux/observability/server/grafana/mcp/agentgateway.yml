@@ -74,5 +74,6 @@ spec:
             - openid
             - profile
             - email
+            - offline_access
           bearerMethodsSupported:
             - header

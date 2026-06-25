@@ -70,8 +70,14 @@ data "authentik_property_mapping_provider_scope" "entitlements" {
   managed = "goauthentik.io/providers/oauth2/scope-entitlements"
 }
 
+data "authentik_property_mapping_provider_scope" "offline_access" {
+  count   = var.offline_access ? 1 : 0
+  managed = "goauthentik.io/providers/oauth2/scope-offline_access"
+}
+
 locals {
-  entitlement_scope_ids = length(var.entitlements) > 0 ? [data.authentik_property_mapping_provider_scope.entitlements[0].id] : []
+  entitlement_scope_ids   = length(var.entitlements) > 0 ? [data.authentik_property_mapping_provider_scope.entitlements[0].id] : []
+  offline_access_scope_ids = var.offline_access ? [data.authentik_property_mapping_provider_scope.offline_access[0].id] : []
 
   entitlement_group_bindings = {
     for b in flatten([
@@ -106,6 +112,7 @@ resource "authentik_provider_oauth2" "this" {
     data.authentik_property_mapping_provider_scope.default.ids,
     var.scopes,
     local.entitlement_scope_ids,
+    local.offline_access_scope_ids,
   )))
 
   allowed_redirect_uris = concat(
