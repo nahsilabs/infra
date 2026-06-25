@@ -7,7 +7,7 @@ spec:
     sources:
       - configMap:
           name: llm-model-costs
-          key: catalog.json
+          key: llm-model-costs.json
   service:
     metadata:
       labels:
