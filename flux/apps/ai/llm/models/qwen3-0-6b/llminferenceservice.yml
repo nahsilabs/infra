@@ -8,6 +8,8 @@ spec:
     name: Qwen/Qwen3-0.6B
   replicas: 1
   template:
+    securityContext:
+      fsGroup: 1000
     containers:
       - name: main
         resources:
@@ -19,6 +21,10 @@ spec:
             nvidia.com/gpu: "1"
             cpu: "2"
             memory: 4Gi
+    volumes:
+      - name: kserve-provision-location
+        persistentVolumeClaim:
+          claimName: qwen3-0-6b
   router:
     gateway:
       refs:
