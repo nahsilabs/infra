@@ -5,3 +5,4 @@ resources:
   - llminferenceservice.yml
   - backend.yml
   - route.yml
+  - policies.yml

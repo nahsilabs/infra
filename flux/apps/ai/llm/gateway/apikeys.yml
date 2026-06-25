@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: llm-apikeys
+    namespace: ai
+stringData:
+    nahsi: ENC[AES256_GCM,data:W7xnOG/fLMYv938jPHirdXzOUuKVmcM77ebHOvWcsBR0IJBfAag6/EYwhTHZdj7cts9kYX+gZsTnL3vldXixk+/LFrEmEfP8n2lkJ160F+CfR0x/D4jOK4YnwxJeU7K0jSqPeZpoorvlUEKuUbWkyaMRTFhJy70HvpGS,iv:fLEpjSFRp2LJSV6qPVxdq6A+EloxQOyOEqI2+fof4hQ=,tag:rOe1pv+hUbipEm95KtUYfw==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA5WkNQWkR1RGlvZkFyaTR1
+            K3JuazAySTRXS1NzS0JKRU13N2lGbU4vV2hzCmw3YmFyWUdCQ25FTFFZS291WEhy
+            RmRYQkdIZEhKY1Y4ek8vYmJuMUw5UFkKLS0tIDZjZXlPUkdTS0VodlBkUVY2WEJ3
+            ZVJwdjgyaXBTMEZNTnp2RTlYT0g4TTgKitaNqUtStqYOCvsBMwmXUB5RPS6FYDDy
+            XAszTdw1kkKmdW4YuOEJq8DsBhFaN1JbxCu+AJY7hb4BAcF3tUPQBw==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age17kf3tfnhtv36pjscj7mzuv5dc0xjcj388764258uwgad78mzzs2qtu05pw
+    encrypted_regex: ^(data|stringData)$
+    lastmodified: "2026-06-25T16:50:56Z"
+    mac: ENC[AES256_GCM,data:y7o3RiO2TI97fzWvI6j3s1Dj4xzaq3mY9A3OQda5rkfzzlKlRT3231eszmjmhPNX872d8AeSUlBXymnrdb9jXTX27T8c/6r9p4WxOIk9Cqsko8QrLirKUYoyCRGAqreEsJsdcqKSXdn177sqBlagn9yxbPKgu6H7HqeIa8+Tz48=,iv:eNnILMIXyIlCaGV1krgIFZlIBRLumO35h6Tduc0Zbw4=,tag:rqGVibWoKP4vrfYIgvtgEQ==,type:str]
+    version: 3.13.1

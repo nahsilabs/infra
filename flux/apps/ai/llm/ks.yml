@@ -47,6 +47,10 @@ spec:
     - name: app-ai-llm
   path: ./flux/apps/ai/llm/gateway
   prune: true
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   sourceRef:
     kind: GitRepository
     name: infra
