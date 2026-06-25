@@ -1,0 +1,19 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: deepinfra
+spec:
+  ai:
+    groups:
+      - providers:
+          - name: deepinfra
+            openai: {}
+            host: api.deepinfra.com
+            port: 443
+            pathPrefix: /v1/openai
+            policies:
+              auth:
+                secretRef:
+                  name: deepinfra
+              tls:
+                sni: api.deepinfra.com
