@@ -1,0 +1,7 @@
+launch_url: https://ai.nahsi.dev/mcp/flux
+ui_group: mcp
+allowed_groups:
+  - superusers
+redirect_uris:
+  - http://localhost:8080/callback
+  - https://claude.ai/api/mcp/auth_callback
