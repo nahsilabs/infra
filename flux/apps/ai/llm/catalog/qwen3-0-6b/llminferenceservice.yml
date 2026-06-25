@@ -26,9 +26,4 @@ spec:
         persistentVolumeClaim:
           claimName: qwen3-0-6b
   router:
-    gateway:
-      refs:
-        - name: agenticgateway-internal
-          namespace: agenticgateway
-    route: {}
     scheduler: {}

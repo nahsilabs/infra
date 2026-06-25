@@ -1,0 +1,24 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: deepseek-v4-flash-ai
+spec:
+  parentRefs:
+    - name: agenticgateway-internal
+      namespace: agenticgateway
+      sectionName: https
+  hostnames:
+    - ai.nahsi.dev
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /v1/chat/completions
+          headers:
+            - type: Exact
+              name: X-Gateway-Base-Model-Name
+              value: deepseek-ai/DeepSeek-V4-Flash
+      backendRefs:
+        - group: agentgateway.dev
+          kind: AgentgatewayBackend
+          name: deepinfra
