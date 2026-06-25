@@ -4,9 +4,6 @@ metadata:
   name: llm-model-costs
   namespace: agenticgateway
 data:
-  # USD per 1,000,000 tokens. Keyed by gen_ai_system (protocol) + the RESOLVED upstream model id
-  # (agentgateway's cost lookup uses response.provider_model, not the requested/alias name).
-  # Rates verified against deepinfra.com model pages. Local Qwen omitted (self-hosted, no per-token cost).
   catalog.json: |
     {
       "providers": {

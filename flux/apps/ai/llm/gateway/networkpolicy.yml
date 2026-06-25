@@ -9,12 +9,10 @@ spec:
       app.kubernetes.io/part-of: llminferenceservice
       kserve.io/component: workload
   ingress:
-    # kubelet liveness/readiness probes (on 8000) + cilium health — keep the GPU pod alive
     - fromEntities:
         - host
         - remote-node
         - health
-    # agentgateway data plane → inference
     - fromEndpoints:
         - matchLabels:
             io.kubernetes.pod.namespace: agenticgateway
@@ -23,12 +21,10 @@ spec:
         - ports:
             - port: "8000"
               protocol: TCP
-    # EPP/scheduler + sibling prefill/decode/worker pods (endpoint-pick metrics, distributed serving)
     - fromEndpoints:
         - matchLabels:
             io.kubernetes.pod.namespace: ai
             app.kubernetes.io/part-of: llminferenceservice
-    # metrics scrape (vmagent)
     - fromEndpoints:
         - matchLabels:
             io.kubernetes.pod.namespace: obs-collect
