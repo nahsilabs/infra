@@ -18,6 +18,4 @@ spec:
   values:
     transport: http
     networkPolicy:
-      ingress:
-        namespaces:
-          - agenticgateway
+      create: false

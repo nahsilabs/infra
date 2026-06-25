@@ -1,0 +1,17 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: flux-operator-mcp
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: flux-operator-mcp
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: agenticgateway
+            gateway.networking.k8s.io/gateway-name: agenticgateway-internal
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP

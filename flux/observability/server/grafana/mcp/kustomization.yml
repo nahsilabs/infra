@@ -4,3 +4,4 @@ resources:
   - serviceaccount.yml
   - release.yml
   - agentgateway.yml
+  - networkpolicy.yml
