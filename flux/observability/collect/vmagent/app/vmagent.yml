@@ -8,6 +8,10 @@ spec:
     matchLabels:
       obs.nahsilabs/metrics: "true"
   serviceScrapeNamespaceSelector: {}
+  podScrapeSelector:
+    matchLabels:
+      obs.nahsilabs/metrics: "true"
+  podScrapeNamespaceSelector: {}
   nodeScrapeSelector:
     matchLabels:
       obs.nahsilabs/metrics: "true"

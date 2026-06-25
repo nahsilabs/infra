@@ -18,3 +18,4 @@ spec:
     - name: infra-cert-manager
     - name: infra-agenticgateway-crds
     - name: infra-agenticgateway
+    - name: infra-prometheus-operator-crds
