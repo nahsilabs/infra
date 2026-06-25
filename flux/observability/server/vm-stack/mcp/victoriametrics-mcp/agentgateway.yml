@@ -1,0 +1,79 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: victoriametrics-mcp
+spec:
+  mcp:
+    sessionRouting: Stateful
+    targets:
+      - name: victoriametrics
+        static:
+          host: victoria-metrics-mcp.obs-stack.svc.cluster.local
+          port: 8080
+          path: /mcp
+          protocol: StreamableHTTP
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: victoriametrics-mcp
+spec:
+  parentRefs:
+    - name: agenticgateway-internal
+      namespace: agenticgateway
+      sectionName: https
+  hostnames:
+    - ai.nahsi.dev
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mcp/victoriametrics
+        - path:
+            type: PathPrefix
+            value: /.well-known/oauth-protected-resource/mcp/victoriametrics
+        - path:
+            type: PathPrefix
+            value: /.well-known/oauth-authorization-server/mcp/victoriametrics
+      backendRefs:
+        - group: agentgateway.dev
+          kind: AgentgatewayBackend
+          name: victoriametrics-mcp
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: victoriametrics-mcp
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: victoriametrics-mcp
+  traffic:
+    jwtAuthentication:
+      mode: Strict
+      providers:
+        - issuer: https://auth.nahsi.dev/application/o/victoriametrics-mcp/
+          audiences:
+            - https://ai.nahsi.dev/mcp/victoriametrics
+            - "e2e576888a416c0e"
+          jwks:
+            remote:
+              backendRef:
+                kind: Service
+                name: authentik-server
+                namespace: authentik
+                port: 80
+              jwksPath: /application/o/victoriametrics-mcp/jwks/
+      mcp:
+        provider: Okta
+        clientId: "e2e576888a416c0e"
+        resourceMetadata:
+          resource: https://ai.nahsi.dev/mcp/victoriametrics
+          scopesSupported:
+            - openid
+            - profile
+            - email
+            - offline_access
+          bearerMethodsSupported:
+            - header

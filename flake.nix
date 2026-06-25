@@ -36,6 +36,14 @@
             type = "http";
             url = "https://ai.nahsi.dev/mcp/grafana";
           };
+          settings.servers.victorialogs = {
+            type = "http";
+            url = "https://ai.nahsi.dev/mcp/victorialogs";
+          };
+          settings.servers.victoriametrics = {
+            type = "http";
+            url = "https://ai.nahsi.dev/mcp/victoriametrics";
+          };
         };
       in
       {
