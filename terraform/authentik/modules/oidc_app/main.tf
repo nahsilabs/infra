@@ -108,11 +108,18 @@ resource "authentik_provider_oauth2" "this" {
     local.entitlement_scope_ids,
   )))
 
-  allowed_redirect_uris = [for url in var.redirect_uris : {
-    url               = url
-    matching_mode     = "strict"
-    redirect_uri_type = "authorization"
-  }]
+  allowed_redirect_uris = concat(
+    [for url in var.redirect_uris : {
+      url               = url
+      matching_mode     = "strict"
+      redirect_uri_type = "authorization"
+    }],
+    [for url in var.redirect_uris_regex : {
+      url               = url
+      matching_mode     = "regex"
+      redirect_uri_type = "authorization"
+    }],
+  )
 }
 
 resource "authentik_application" "this" {

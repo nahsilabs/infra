@@ -1,4 +1,4 @@
-launch_url: https://ai.nahsi.dev/mcp/flux
+launch_url: https://ai.nahsi.dev/mcp/grafana
 ui_group: mcp
 client_type: public
 allowed_groups:

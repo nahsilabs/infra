@@ -32,6 +32,10 @@
             enable = true;
             env.GRAFANA_URL = "https://grafana.nahsi.dev";
           };
+          settings.servers.flux = {
+            type = "http";
+            url = "https://ai.nahsi.dev/mcp/flux";
+          };
         };
       in
       {

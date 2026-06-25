@@ -27,8 +27,14 @@ variable "groups" {
 }
 
 variable "redirect_uris" {
-  description = "OAuth2 redirect URIs"
+  description = "OAuth2 redirect URIs matched strictly"
   type        = list(string)
+}
+
+variable "redirect_uris_regex" {
+  description = "OAuth2 redirect URIs matched as regex (e.g. RFC 8252 loopback with dynamic ports)"
+  type        = list(string)
+  default     = []
 }
 
 variable "ui_group" {

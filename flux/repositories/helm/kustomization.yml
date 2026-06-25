@@ -22,3 +22,4 @@ resources:
   - external-secrets.yml
   - valkey.yml
   - authentik.yml
+  - grafana-community.yml
