@@ -106,7 +106,7 @@ resource "authentik_provider_oauth2" "this" {
   authorization_flow = data.authentik_flow.default_authorization.id
   invalidation_flow  = data.authentik_flow.default_invalidation.id
   client_type        = var.client_type
-  grant_types        = ["authorization_code"]
+  grant_types        = var.offline_access ? ["authorization_code", "refresh_token"] : ["authorization_code"]
   signing_key        = authentik_certificate_key_pair.signing.id
   property_mappings = sort(distinct(concat(
     data.authentik_property_mapping_provider_scope.default.ids,
