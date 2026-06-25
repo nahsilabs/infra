@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - cilium.yml
   - flux-operator.yml
+  - flux-operator-mcp.yml
   - grafana-operator.yml
   - envoy-gateway.yml
   - prometheus.yml

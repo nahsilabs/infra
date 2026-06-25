@@ -27,8 +27,14 @@ variable "groups" {
 }
 
 variable "redirect_uris" {
-  description = "OAuth2 redirect URIs"
+  description = "OAuth2 redirect URIs matched strictly"
   type        = list(string)
+}
+
+variable "redirect_uris_regex" {
+  description = "OAuth2 redirect URIs matched as regex (e.g. RFC 8252 loopback with dynamic ports)"
+  type        = list(string)
+  default     = []
 }
 
 variable "ui_group" {
@@ -47,6 +53,22 @@ variable "scopes" {
   description = "Additional managed scope mapping IDs to include"
   type        = list(string)
   default     = []
+}
+
+variable "client_type" {
+  description = "OAuth2 client type. Use 'public' for PKCE clients that cannot hold a secret (native/MCP)."
+  type        = string
+  default     = "confidential"
+  validation {
+    condition     = contains(["confidential", "public"], var.client_type)
+    error_message = "client_type must be 'confidential' or 'public'."
+  }
+}
+
+variable "offline_access" {
+  description = "Offer the offline_access scope so clients receive a refresh token"
+  type        = bool
+  default     = false
 }
 
 variable "entitlements" {

@@ -1,0 +1,28 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: victoria-metrics-mcp
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: victoria-metrics-mcp
+      version: 0.3.0
+      sourceRef:
+        kind: HelmRepository
+        name: victoriametrics
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    fullnameOverride: victoria-metrics-mcp
+    mcp:
+      mode: http
+    vm:
+      type: single
+      entrypoint: http://vmsingle-stack.obs-stack.svc:8429

@@ -43,3 +43,24 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: obs-grafana-mcp
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: obs-grafana
+    - name: infra-gateway-api-crds
+    - name: infra-agenticgateway
+  path: ./flux/observability/server/grafana/mcp
+  targetNamespace: obs-stack
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m

@@ -1,0 +1,10 @@
+launch_url: https://ai.nahsi.dev/mcp/grafana
+ui_group: mcp
+client_type: public
+offline_access: true
+allowed_groups:
+  - superusers
+redirect_uris:
+  - https://claude.ai/api/mcp/auth_callback
+redirect_uris_regex:
+  - 'http://(localhost|127\.0\.0\.1):[0-9]+/callback'

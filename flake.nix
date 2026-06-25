@@ -28,9 +28,21 @@
 
         mcpConfig = mcp-servers-nix.lib.mkConfig pkgs {
           flavor = "claude-code";
-          programs.grafana = {
-            enable = true;
-            env.GRAFANA_URL = "https://grafana.nahsi.dev";
+          settings.servers.flux = {
+            type = "http";
+            url = "https://ai.nahsi.dev/mcp/flux";
+          };
+          settings.servers.grafana = {
+            type = "http";
+            url = "https://ai.nahsi.dev/mcp/grafana";
+          };
+          settings.servers.victorialogs = {
+            type = "http";
+            url = "https://ai.nahsi.dev/mcp/victorialogs";
+          };
+          settings.servers.victoriametrics = {
+            type = "http";
+            url = "https://ai.nahsi.dev/mcp/victoriametrics";
           };
         };
       in

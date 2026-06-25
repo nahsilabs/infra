@@ -1,0 +1,79 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: flux-mcp
+spec:
+  mcp:
+    sessionRouting: Stateful
+    targets:
+      - name: flux
+        static:
+          host: flux-operator-mcp.flux-system.svc.cluster.local
+          port: 9090
+          path: /mcp
+          protocol: StreamableHTTP
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: flux-mcp
+spec:
+  parentRefs:
+    - name: agenticgateway-internal
+      namespace: agenticgateway
+      sectionName: https
+  hostnames:
+    - ai.nahsi.dev
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mcp/flux
+        - path:
+            type: PathPrefix
+            value: /.well-known/oauth-protected-resource/mcp/flux
+        - path:
+            type: PathPrefix
+            value: /.well-known/oauth-authorization-server/mcp/flux
+      backendRefs:
+        - group: agentgateway.dev
+          kind: AgentgatewayBackend
+          name: flux-mcp
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: flux-mcp
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: flux-mcp
+  traffic:
+    jwtAuthentication:
+      mode: Strict
+      providers:
+        - issuer: https://auth.nahsi.dev/application/o/flux-mcp/
+          audiences:
+            - https://ai.nahsi.dev/mcp/flux
+            - "0828d20757190928"
+          jwks:
+            remote:
+              backendRef:
+                kind: Service
+                name: authentik-server
+                namespace: authentik
+                port: 80
+              jwksPath: /application/o/flux-mcp/jwks/
+      mcp:
+        provider: Okta
+        clientId: "0828d20757190928"
+        resourceMetadata:
+          resource: https://ai.nahsi.dev/mcp/flux
+          scopesSupported:
+            - openid
+            - profile
+            - email
+            - offline_access
+          bearerMethodsSupported:
+            - header
