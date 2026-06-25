@@ -8,6 +8,8 @@ spec:
     name: Qwen/Qwen3-0.6B
   replicas: 1
   template:
+    securityContext:
+      fsGroup: 1000
     containers:
       - name: main
         resources:
