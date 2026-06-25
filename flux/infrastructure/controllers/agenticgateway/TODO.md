@@ -9,7 +9,15 @@ Registration** wrapping Authentik). That wasn't in the tagged `v1.3.1` release, 
 plane** image is pinned to a custom build:
 
 - `app/app/helmrelease.yml` → `values.proxy.image` = `docker.io/nahsilabs/agentgateway:v1.3.1-pr2016-dcr`
-  (upstream **PR #2016** + DCR), instead of the chart's default `v1.3.1` proxy.
+  (a local build of `v1.3.1` + DCR work, branched around upstream PR #2016), instead of the chart's
+  default `v1.3.1` proxy.
+
+**Upstream to watch (un-fork when merged + released):**
+- https://github.com/agentgateway/agentgateway/pull/2016 — *"feat(mcp): add Amazon Cognito as a native
+  MCP authentication provider"* — **OPEN** as of 2026-06-25.
+- Note: PR #2016's title is *Cognito*, not Authentik/DCR. The tag references `pr2016` + `dcr`, so the
+  Authentik-enabling change is the **DCR** work in the build branch — confirm the exact upstream PR(s)
+  for DCR (and for the cost-catalog mount fix + `custom.providerOverride`) and track those too.
 
 ## The skew (current state)
 
