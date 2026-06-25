@@ -17,3 +17,7 @@ spec:
       retries: 3
   values:
     transport: http
+    networkPolicy:
+      ingress:
+        namespaces:
+          - agenticgateway
