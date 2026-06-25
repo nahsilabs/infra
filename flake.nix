@@ -28,13 +28,13 @@
 
         mcpConfig = mcp-servers-nix.lib.mkConfig pkgs {
           flavor = "claude-code";
-          programs.grafana = {
-            enable = true;
-            env.GRAFANA_URL = "https://grafana.nahsi.dev";
-          };
           settings.servers.flux = {
             type = "http";
             url = "https://ai.nahsi.dev/mcp/flux";
+          };
+          settings.servers.grafana = {
+            type = "http";
+            url = "https://ai.nahsi.dev/mcp/grafana";
           };
         };
       in
