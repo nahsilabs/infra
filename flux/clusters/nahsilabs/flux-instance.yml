@@ -18,7 +18,7 @@ spec:
     - helm-controller
   cluster:
     type: kubernetes
-    size: small
+    size: medium
   sync:
     kind: GitRepository
     name: "infra"
