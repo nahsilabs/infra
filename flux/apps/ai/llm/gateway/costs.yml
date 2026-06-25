@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: llm-model-costs
+  namespace: agenticgateway
+data:
+  # Rates are USD per 1,000,000 tokens. Keyed by gen_ai_system (provider) + model id.
+  # Local Qwen is self-hosted -> 0 (set a notional GPU-amortized rate if you want).
+  catalog.json: |
+    {
+      "providers": {
+        "openai": {
+          "models": {
+            "openai/gpt-oss-20b": { "rates": { "input": "0.04", "output": "0.15" } },
+            "deepseek-ai/DeepSeek-V4-Flash": { "rates": { "input": "0.10", "output": "0.20" } }
+          }
+        },
+        "custom": {
+          "models": {
+            "Qwen/Qwen3-0.6B": { "rates": { "input": "0", "output": "0" } }
+          }
+        }
+      }
+    }

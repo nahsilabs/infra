@@ -4,3 +4,4 @@ resources:
   - model-routing.yml
   - networkpolicy.yml
   - apikeys.yml
+  - costs.yml

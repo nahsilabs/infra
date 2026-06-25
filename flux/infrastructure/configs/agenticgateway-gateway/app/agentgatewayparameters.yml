@@ -3,6 +3,11 @@ kind: AgentgatewayParameters
 metadata:
   name: agenticgateway-private
 spec:
+  modelCatalog:
+    sources:
+      - configMap:
+          name: llm-model-costs
+          key: catalog.json
   service:
     metadata:
       labels:
