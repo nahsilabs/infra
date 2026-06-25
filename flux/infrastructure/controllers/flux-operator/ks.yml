@@ -30,6 +30,8 @@ spec:
   targetNamespace: flux-system
   dependsOn:
     - name: infra-flux-operator
+    - name: infra-gateway-api-crds
+    - name: infra-agenticgateway
   sourceRef:
     kind: GitRepository
     name: infra

@@ -1,5 +1,6 @@
 launch_url: https://ai.nahsi.dev/mcp/flux
 ui_group: mcp
+client_type: public
 allowed_groups:
   - superusers
 redirect_uris:

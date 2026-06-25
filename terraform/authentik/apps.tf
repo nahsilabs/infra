@@ -15,6 +15,7 @@ module "oidc_apps" {
   ui_group         = lookup(each.value, "ui_group", "")
   allowed_groups   = each.value.allowed_groups
   redirect_uris    = each.value.redirect_uris
+  client_type      = lookup(each.value, "client_type", "confidential")
   entitlements     = lookup(each.value, "entitlements", {})
   groups           = module.core.groups
 }

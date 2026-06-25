@@ -99,7 +99,7 @@ resource "authentik_provider_oauth2" "this" {
   client_id          = random_id.client_id.hex
   authorization_flow = data.authentik_flow.default_authorization.id
   invalidation_flow  = data.authentik_flow.default_invalidation.id
-  client_type        = "confidential"
+  client_type        = var.client_type
   grant_types        = ["authorization_code"]
   signing_key        = authentik_certificate_key_pair.signing.id
   property_mappings = sort(distinct(concat(

@@ -49,6 +49,16 @@ variable "scopes" {
   default     = []
 }
 
+variable "client_type" {
+  description = "OAuth2 client type. Use 'public' for PKCE clients that cannot hold a secret (native/MCP)."
+  type        = string
+  default     = "confidential"
+  validation {
+    condition     = contains(["confidential", "public"], var.client_type)
+    error_message = "client_type must be 'confidential' or 'public'."
+  }
+}
+
 variable "entitlements" {
   description = "Application entitlements: name -> { groups = [group names], users = [usernames] }"
   type = map(object({
