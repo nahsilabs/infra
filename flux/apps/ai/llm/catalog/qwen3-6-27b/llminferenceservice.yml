@@ -6,7 +6,6 @@ spec:
   model:
     uri: hf://cyankiwi/Qwen3.6-27B-AWQ-INT4
     name: Qwen/Qwen3.6-27B
-  replicas: 1
   template:
     securityContext:
       fsGroup: 1000
