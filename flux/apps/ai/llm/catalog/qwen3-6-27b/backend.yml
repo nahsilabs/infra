@@ -1,7 +1,7 @@
 apiVersion: agentgateway.dev/v1alpha1
 kind: AgentgatewayBackend
 metadata:
-  name: qwen3-0-6b-llm
+  name: qwen3-6-27b-llm
 spec:
   ai:
     provider:
@@ -9,9 +9,9 @@ spec:
         backendRef:
           group: inference.networking.k8s.io
           kind: InferencePool
-          name: qwen3-0-6b-inference-pool
+          name: qwen3-6-27b-inference-pool
           port: 8000
         formats:
           - type: Completions
             path: /v1/chat/completions
-        model: Qwen/Qwen3-0.6B
+        model: Qwen/Qwen3.6-27B
