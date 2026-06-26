@@ -1,0 +1,60 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: LLMInferenceService
+metadata:
+  name: qwen3-6-27b
+spec:
+  model:
+    uri: hf://cyankiwi/Qwen3.6-27B-AWQ-INT4
+    name: Qwen/Qwen3.6-27B
+  replicas: 1
+  template:
+    securityContext:
+      fsGroup: 1000
+    containers:
+      - name: main
+        env:
+          - name: VLLM_ATTENTION_BACKEND
+            value: FLASHINFER
+          - name: PYTORCH_CUDA_ALLOC_CONF
+            value: expandable_segments:True
+          - name: VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS
+            value: "0"
+        args:
+          - --quantization
+          - compressed-tensors
+          - --kv-cache-dtype
+          - fp8
+          - --max-model-len
+          - "81920"
+          - --gpu-memory-utilization
+          - "0.95"
+          - --max-num-seqs
+          - "2"
+          - --max-num-batched-tokens
+          - "2048"
+          - --enable-prefix-caching
+          - --enable-chunked-prefill
+          - --enable-auto-tool-choice
+          - --tool-call-parser
+          - qwen3_coder
+          - --reasoning-parser
+          - qwen3
+          - --language-model-only
+          - --generation-config
+          - vllm
+          - --trust-remote-code
+        resources:
+          limits:
+            nvidia.com/gpu: "1"
+            cpu: "8"
+            memory: 24Gi
+          requests:
+            nvidia.com/gpu: "1"
+            cpu: "4"
+            memory: 16Gi
+    volumes:
+      - name: kserve-provision-location
+        persistentVolumeClaim:
+          claimName: qwen3-6-27b
+  router:
+    scheduler: {}
