@@ -1,7 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - qwen3-6-27b
-  - gpt-oss-20b
-  - deepseek-v4-flash
-  - deepseek-v4-pro
+  - backend.yml
+  - secret.yml
