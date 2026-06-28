@@ -1,0 +1,19 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: deepseek
+spec:
+  ai:
+    groups:
+      - providers:
+          - name: deepseek
+            openai: {}
+            host: api.deepseek.com
+            port: 443
+            pathPrefix: /v1
+            policies:
+              auth:
+                secretRef:
+                  name: deepseek
+              tls:
+                sni: api.deepseek.com
