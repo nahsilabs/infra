@@ -56,7 +56,7 @@ spec:
             image:
               repository: docker.io/asonix/pictrs
               # renovate: datasource=docker depName=docker.io/asonix/pictrs
-              tag: 0.5.23@sha256:85bb2303fefdc6b47c37ecad55a02810e6d118f8499f250f2d32ace1097a2bdc
+              tag: 0.5.24@sha256:7c1cada5566fe729c2bd3c2e2c246d3ac031d95268edeed6670a70861d905e83
             env:
               RUST_BACKTRACE: full
               PICTRS__MEDIA__ANIMATION__MAX_FRAME_COUNT: "400"
