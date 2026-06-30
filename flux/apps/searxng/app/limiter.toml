@@ -14,5 +14,10 @@ link_token = true
 
 [botdetection.ip_lists]
 block_ip = []
-pass_ip = []
+pass_ip = [
+  '127.0.0.0/8',
+  '::1',
+  '10.244.0.0/16',
+  '10.2.20.0/24',
+]
 pass_searxng_org = false

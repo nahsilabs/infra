@@ -20,7 +20,7 @@ spec:
           - --kv-cache-dtype
           - turboquant_k8v4
           - --max-model-len
-          - "110592"
+          - "131072"
           - --gpu-memory-utilization
           - "0.98"
           - --max-num-seqs
@@ -29,6 +29,7 @@ spec:
           - "2560"
           - --enable-prefix-caching
           - --enable-chunked-prefill
+          - --enforce-eager
           - --enable-auto-tool-choice
           - --tool-call-parser
           - qwen3_coder
