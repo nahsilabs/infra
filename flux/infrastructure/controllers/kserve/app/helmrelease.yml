@@ -23,3 +23,7 @@ spec:
         deploymentMode: Standard
       llmisvc:
         createGIECRDs: true
+      storage:
+        resources:
+          limits:
+            memory: 4Gi
