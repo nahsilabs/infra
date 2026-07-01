@@ -1,12 +1,12 @@
 apiVersion: agentgateway.dev/v1alpha1
 kind: AgentgatewayPolicy
 metadata:
-  name: qwen3-1-7b-auth
+  name: qwen3-5-2b-auth
 spec:
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
-      name: qwen3-1-7b-ai
+      name: qwen3-5-2b-ai
   traffic:
     apiKeyAuthentication:
       mode: Strict

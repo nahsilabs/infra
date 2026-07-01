@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: qwen3-1-7b
+  name: qwen3-5-2b
   labels:
-    app.kubernetes.io/name: qwen3-1-7b
+    app.kubernetes.io/name: qwen3-5-2b
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: qwen3-1-7b
+      app.kubernetes.io/name: qwen3-5-2b
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: qwen3-1-7b
+        app.kubernetes.io/name: qwen3-5-2b
     spec:
       nodeSelector:
         kubernetes.io/hostname: heliopolis
@@ -28,9 +28,9 @@ spec:
           image: ghcr.io/ggml-org/llama.cpp:server-b9853
           args:
             - -hf
-            - unsloth/Qwen3-1.7B-GGUF:Q8_0
+            - unsloth/Qwen3.5-2B-GGUF:Q8_0
             - -a
-            - Qwen/Qwen3-1.7B
+            - Qwen/Qwen3.5-2B
             - -c
             - "16384"
             - -t
@@ -40,8 +40,6 @@ spec:
             - --port
             - "8080"
             - --jinja
-            - --reasoning-budget
-            - "0"
             - --metrics
           env:
             - name: HOME
@@ -85,13 +83,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: qwen3-1-7b
+  name: qwen3-5-2b
   labels:
-    app.kubernetes.io/name: qwen3-1-7b
+    app.kubernetes.io/name: qwen3-5-2b
     app.kubernetes.io/part-of: llama-cpp
 spec:
   selector:
-    app.kubernetes.io/name: qwen3-1-7b
+    app.kubernetes.io/name: qwen3-5-2b
   ports:
     - name: http
       port: 8080
