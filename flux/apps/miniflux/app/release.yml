@@ -26,6 +26,9 @@ spec:
               HTTPS: "1"
               RUN_MIGRATIONS: "1"
               WORKER_POOL_SIZE: "4"
+              # Allow integration POSTs to private-network targets (e.g. saving
+              # entries to readeck.nahsi.dev, which resolves to an internal IP).
+              INTEGRATION_ALLOW_PRIVATE_NETWORKS: "1"
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
