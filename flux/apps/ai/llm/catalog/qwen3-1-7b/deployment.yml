@@ -30,7 +30,7 @@ spec:
             - -hf
             - unsloth/Qwen3-1.7B-GGUF:Q8_0
             - -a
-            - qwen3-1.7b
+            - Qwen/Qwen3-1.7B
             - -c
             - "16384"
             - -t
@@ -88,6 +88,7 @@ metadata:
   name: qwen3-1-7b
   labels:
     app.kubernetes.io/name: qwen3-1-7b
+    app.kubernetes.io/part-of: llama-cpp
 spec:
   selector:
     app.kubernetes.io/name: qwen3-1-7b

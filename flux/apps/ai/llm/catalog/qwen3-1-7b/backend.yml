@@ -6,6 +6,6 @@ spec:
   ai:
     provider:
       openai:
-        model: qwen3-1.7b
+        model: Qwen/Qwen3-1.7B
       host: qwen3-1-7b.ai.svc.cluster.local
       port: 8080

@@ -17,7 +17,7 @@ spec:
           headers:
             - type: Exact
               name: X-Gateway-Base-Model-Name
-              value: deepseek-v4-pro
+              value: deepseek-ai/DeepSeek-V4-Pro
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend

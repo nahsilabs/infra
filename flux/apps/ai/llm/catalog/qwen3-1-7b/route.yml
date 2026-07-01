@@ -17,7 +17,7 @@ spec:
           headers:
             - type: Exact
               name: X-Gateway-Base-Model-Name
-              value: qwen3-1.7b
+              value: Qwen/Qwen3-1.7B
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend
