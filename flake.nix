@@ -31,18 +31,22 @@
           settings.servers.flux = {
             type = "http";
             url = "https://ai.nahsi.dev/mcp/flux";
+            oauth.clientId = "0828d20757190928";
           };
           settings.servers.grafana = {
             type = "http";
             url = "https://ai.nahsi.dev/mcp/grafana";
+            oauth.clientId = "9c9f8850dc579f51";
           };
           settings.servers.victorialogs = {
             type = "http";
             url = "https://ai.nahsi.dev/mcp/victorialogs";
+            oauth.clientId = "0d26a34d5060ae09";
           };
           settings.servers.victoriametrics = {
             type = "http";
             url = "https://ai.nahsi.dev/mcp/victoriametrics";
+            oauth.clientId = "e2e576888a416c0e";
           };
         };
       in
