@@ -20,6 +20,22 @@
         "type": "github"
       }
     },
+    "grafana-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782917740,
+        "narHash": "sha256-dyx8BViI7NViJZfuuH+anB9SBmzob2ferSP0UTOv1S8=",
+        "owner": "grafana",
+        "repo": "skills",
+        "rev": "dd1c8b5babfa676b164494cacb679e76d6d734ea",
+        "type": "github"
+      },
+      "original": {
+        "owner": "grafana",
+        "repo": "skills",
+        "type": "github"
+      }
+    },
     "mcp-servers-nix": {
       "inputs": {
         "nixpkgs": [
@@ -59,6 +75,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "grafana-skills": "grafana-skills",
         "mcp-servers-nix": "mcp-servers-nix",
         "nixpkgs": "nixpkgs",
         "systems": "systems"
