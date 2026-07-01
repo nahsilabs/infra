@@ -72,12 +72,16 @@ spec:
 
     persistence:
       config:
-        type: configMap
-        name: searxng-configmap
+        type: secret
+        name: searxng-config
         globalMounts:
           - path: /etc/searxng/settings.yml
             subPath: settings.yml
             readOnly: true
+      config-limiter:
+        type: configMap
+        name: searxng-configmap
+        globalMounts:
           - path: /etc/searxng/limiter.toml
             subPath: limiter.toml
             readOnly: true
