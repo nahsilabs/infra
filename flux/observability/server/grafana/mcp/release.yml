@@ -27,6 +27,8 @@ spec:
       - streamable-http
       - --address
       - 0.0.0.0:8000
+      - --enabled-tools
+      - dashboard,search,datasource,navigation
     grafana:
       url: http://grafana-service.obs-stack:3000
       apiKeySecret:
