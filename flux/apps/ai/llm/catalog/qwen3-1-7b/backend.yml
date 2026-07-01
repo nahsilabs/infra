@@ -1,0 +1,11 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: qwen3-1-7b-llm
+spec:
+  ai:
+    provider:
+      openai:
+        model: qwen3-1.7b
+      host: qwen3-1-7b.ai.svc.cluster.local
+      port: 8080
