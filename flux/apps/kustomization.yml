@@ -12,6 +12,7 @@ resources:
   - memos
   - miniflux
   - myspeed
+  - readeck
   - stirling-pdf
   - supersync
   - vaultwarden
