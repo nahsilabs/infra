@@ -6,6 +6,7 @@
 **/env
 .direnv
 .mcp.json
+.agents/skills/dashboarding
 kubeconfig
 talosconfig
 secrets/
