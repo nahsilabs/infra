@@ -40,8 +40,8 @@ spec:
             - --port
             - "8080"
             - --jinja
-            - --chat-template-kwargs
-            - '{"enable_thinking":false}'
+            - --reasoning
+            - "off"
             - --metrics
           env:
             - name: HOME
