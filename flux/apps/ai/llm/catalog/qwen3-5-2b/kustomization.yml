@@ -1,5 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - vllm.yml
-  - llama-cpp.yml
+  - deployment.yml
+  - backend.yml
+  - route.yml
+  - policies.yml

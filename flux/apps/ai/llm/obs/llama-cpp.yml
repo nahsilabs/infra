@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: llama-cpp
+  labels:
+    obs.nahsilabs/metrics: "true"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/part-of: llama-cpp
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s

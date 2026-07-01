@@ -1,7 +1,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: deepseek-v4-pro-ai
+  name: qwen3-5-2b-ai
 spec:
   parentRefs:
     - name: agenticgateway-internal
@@ -17,8 +17,8 @@ spec:
           headers:
             - type: Exact
               name: X-Gateway-Base-Model-Name
-              value: deepseek-ai/DeepSeek-V4-Pro
+              value: Qwen/Qwen3.5-2B
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend
-          name: deepseek
+          name: qwen3-5-2b-llm

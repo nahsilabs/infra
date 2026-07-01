@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qwen3-5-2b
+  labels:
+    app.kubernetes.io/name: qwen3-5-2b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: qwen3-5-2b
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: qwen3-5-2b
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: heliopolis
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: llama-server
+          image: ghcr.io/ggml-org/llama.cpp:server-b9853
+          args:
+            - -hf
+            - unsloth/Qwen3.5-2B-GGUF:Q8_0
+            - -a
+            - Qwen/Qwen3.5-2B
+            - -c
+            - "16384"
+            - -t
+            - "8"
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8080"
+            - --jinja
+            - --reasoning
+            - "off"
+            - --metrics
+          env:
+            - name: HOME
+              value: /models
+            - name: LLAMA_CACHE
+              value: /models
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: "2"
+              memory: 2Gi
+            limits:
+              cpu: "8"
+              memory: 4Gi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            failureThreshold: 60
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: models
+              mountPath: /models
+      volumes:
+        - name: models
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qwen3-5-2b
+  labels:
+    app.kubernetes.io/name: qwen3-5-2b
+    app.kubernetes.io/part-of: llama-cpp
+spec:
+  selector:
+    app.kubernetes.io/name: qwen3-5-2b
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
