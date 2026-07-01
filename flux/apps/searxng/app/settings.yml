@@ -2,9 +2,9 @@ use_default_settings:
   engines:
     keep_only:
       - duckduckgo
-      - qwant
-      - mojeek
-      - startpage
+      - brave
+      - wikipedia
+      - wikidata
       - github
       - stackoverflow
       - reddit
