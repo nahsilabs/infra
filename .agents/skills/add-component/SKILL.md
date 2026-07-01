@@ -16,22 +16,28 @@ deployment and adapt it** — don't compose from memory. Do the research below f
 
 ## Research first
 
-Before writing any YAML, gather three references and reconcile them:
+Before writing any YAML, gather three references **in this order** — each tells you what the next is
+looking for (you can't pick the sibling until you know the app's shape):
 
-1. **Nearest in-repo sibling** (house style). Find the local component that most resembles the
-   target — same shape (Helm vs raw, has `deps/`/`obs/` or not). `flux/apps/memos` (app + Postgres)
-   is a good generic template. The sibling wins for *how we wire things here*.
-2. **A proven public deployment** (full example). Search popular homelab repos for the same app on
-   our stack — use exa/web search (`<app> HelmRelease`, or scan `onedr0p`, `bjw-s-labs`, `auricom`,
-   `joryirving` home-ops on GitHub). Prefer one already using Flux HelmRelease + Envoy Gateway
-   `HTTPRoute` + external-secrets/SOPS + CNPG/MariaDB. It shows *what a complete, working config looks like*.
-3. **Upstream docs / chart values** (correct settings). Read what the component is and how it's
-   configured: `helm show values <chart>`, the project's install/config docs, required vs optional
-   settings. Decide the **minimal** values we actually need and why.
+1. **Upstream docs / chart values** (what it is, how it deploys). `helm show values <chart>` + the
+   project's install/config docs: required vs optional settings, storage, database, ports, secrets,
+   and **how its clients authenticate**. Decide the **minimal** values you actually need.
+2. **A proven public deployment** (a complete, working config). Find the same app on our stack via
+   **`gh search code`** and **kubesearch.dev** (indexes Flux/Argo HelmReleases across homelab repos);
+   scan `onedr0p`, `bjw-s-labs`, `auricom`, `joryirving`. Prefer Flux HelmRelease + Envoy Gateway
+   `HTTPRoute` + external-secrets/SOPS + CNPG/MariaDB.
+3. **Nearest in-repo sibling** (house style). *Now* that you know the shape, find the local component
+   that matches it (Helm vs raw, has `deps/`/`obs/` or not). `flux/apps/memos` (app + Postgres) is a
+   good generic template. The sibling wins for *how we wire things here*.
 
-**Done when:** you can point to a concrete deployment you're basing this on and list the minimal
-values, sources, and dependencies it needs. Then author by adapting it — structure/wiring from #1,
-completeness from #2, correct values from #3.
+**Done when** you can point to a concrete deployment you're basing this on and its minimal values,
+sources, and dependencies — **and the user has _chosen_ on every fork the app opens**: database
+engine, exposure/ingress, auth/SSO, replica count, storage class + size. These are the user's calls —
+surface them and **wait; do not infer a default to keep moving**. (Fronting with SSO? Confirm how the
+app's non-browser clients — API tokens, feeds, e-readers — authenticate; they can't follow a browser
+redirect, so they need their own path.)
+
+Then author by adapting: values from #1, completeness from #2, structure/wiring from #3.
 
 ## Anatomy
 
@@ -88,17 +94,20 @@ Rules:
 4. Done → patch `sync.ref` back to `refs/heads/main`.
 
 ### Prototype — still figuring it out
-Suspend the **whole chain top-down** — each parent re-applies and un-suspends its child every
-interval, so a leaf-only suspend gets reverted. Chain: FluxInstance `flux` → root ks `infra` → component.
-1. `kubectl annotate --overwrite fluxinstance/flux -n flux-system fluxcd.controlplane.io/reconcile=disabled`
-   — stops flux-operator re-applying the root Kustomization.
-2. `flux suspend kustomization infra` — the root Kustomization (created by the FluxInstance).
-3. `flux suspend kustomization <name>` — the component (and its `<name>-deps` / `<name>-obs` if you touch those).
-4. Iterate imperatively (`kubectl apply`/`edit`, `helm install`) until it works.
-5. Codify into manifests, then **resume bottom-up**:
-   `flux resume kustomization <name>` → `flux resume kustomization infra` →
-   `kubectl annotate --overwrite fluxinstance/flux -n flux-system fluxcd.controlplane.io/reconcile=enabled`.
-6. Run the Branch flow to confirm it reconciles cleanly from git.
+Iterate on the **workload directly** — don't wait on the HelmRelease/Flux reconcile loop:
+`kubectl apply -k <path>`, then `kubectl set env` / `kubectl edit` / `kubectl logs -f` for instant cycles.
+
+- **New component** (not yet in the synced branch): Flux doesn't manage it and `prune` is disabled,
+  so just apply it directly and iterate. **No suspend needed.**
+- **Changing something Flux already manages:** suspend the **whole chain top-down** first, or each
+  parent re-applies and un-suspends your target every interval (a leaf-only suspend gets reverted).
+  Chain: FluxInstance `flux` → root ks `infra` → component.
+  1. `kubectl annotate --overwrite fluxinstance/flux -n flux-system fluxcd.controlplane.io/reconcile=disabled`
+  2. `flux suspend kustomization infra` (root ks) → `flux suspend kustomization <name>` (+ its `-deps`/`-obs`)
+  3. Iterate; then codify and **resume bottom-up**: `flux resume kustomization <name>` →
+     `flux resume kustomization infra` → re-enable the FluxInstance `reconcile` annotation.
+
+Then run the Branch flow to confirm it reconciles cleanly from git.
 
 ## Finish
 - Commit. Open a PR / merge **only when asked**.
