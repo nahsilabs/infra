@@ -83,6 +83,9 @@ spec:
           - name: private-gateway
             namespace: envoy-gateway
             sectionName: https
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
         hostnames:
           - readeck.nahsi.dev
         rules:
