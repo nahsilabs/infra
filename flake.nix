@@ -10,12 +10,17 @@
     url = "github:natsukium/mcp-servers-nix";
     inputs.nixpkgs.follows = "nixpkgs";
   };
+  inputs.grafana-skills = {
+    url = "github:grafana/skills";
+    flake = false;
+  };
 
   outputs =
     {
       nixpkgs,
       flake-utils,
       mcp-servers-nix,
+      grafana-skills,
       ...
     }:
     flake-utils.lib.eachDefaultSystem (
@@ -77,6 +82,7 @@
           shellHook = ''
             [[ -L .mcp.json ]] && unlink .mcp.json
             ln -sf ${mcpConfig} .mcp.json
+            ln -sfn ${grafana-skills}/skills/grafana-core/dashboarding .agents/skills/dashboarding
             [[ -f $NAHSILABS_SECRETS ]] && source $NAHSILABS_SECRETS
             [[ -f terraform/talos/kubeconfig ]] && export KUBECONFIG=$(realpath terraform/talos/kubeconfig)
             [[ -f terraform/talos/talosconfig ]] && export TALOSCONFIG=$(realpath terraform/talos/talosconfig)
