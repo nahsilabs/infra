@@ -18,6 +18,9 @@ spec:
             - type: Exact
               name: X-Gateway-Base-Model-Name
               value: deepseek-ai/DeepSeek-V4-Flash
+      timeouts:
+        request: 130s
+        backendRequest: 60s
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend

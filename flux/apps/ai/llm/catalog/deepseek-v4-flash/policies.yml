@@ -12,3 +12,7 @@ spec:
       mode: Strict
       secretRef:
         name: llm-apikeys
+    retry:
+      attempts: 2
+      backoff: 2s
+      codes: [429, 500, 502, 503, 504]
