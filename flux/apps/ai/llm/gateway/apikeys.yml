@@ -5,6 +5,7 @@ metadata:
     namespace: ai
 stringData:
     nahsi: ENC[AES256_GCM,data:W7xnOG/fLMYv938jPHirdXzOUuKVmcM77ebHOvWcsBR0IJBfAag6/EYwhTHZdj7cts9kYX+gZsTnL3vldXixk+/LFrEmEfP8n2lkJ160F+CfR0x/D4jOK4YnwxJeU7K0jSqPeZpoorvlUEKuUbWkyaMRTFhJy70HvpGS,iv:fLEpjSFRp2LJSV6qPVxdq6A+EloxQOyOEqI2+fof4hQ=,tag:rOe1pv+hUbipEm95KtUYfw==,type:str]
+    hindsight: ENC[AES256_GCM,data:uB6I7RIg0anepiwsmt4Ud1440dryyIknKxWw64SEw8jJqZwQTEKUOQaQVxjR/kRFCsfOJUumGcW+98fFALzUsCVAedqZOTyG4CRTMPl74RR2ISOeMXdNkQXAnFMBFHj0JMN5Mk8WYWjG5dJ+EhkJj41QOwN6VcUgMA==,iv:lNtPWteeOyVH5P+Dxh7x3R4LO8wwl0lB0mXJlacMYq0=,tag:nO/S6d16wE+C6RzeZqhF0Q==,type:str]
 sops:
     age:
         - enc: |
@@ -17,6 +18,6 @@ sops:
             -----END AGE ENCRYPTED FILE-----
           recipient: age17kf3tfnhtv36pjscj7mzuv5dc0xjcj388764258uwgad78mzzs2qtu05pw
     encrypted_regex: ^(data|stringData)$
-    lastmodified: "2026-06-25T16:50:56Z"
-    mac: ENC[AES256_GCM,data:y7o3RiO2TI97fzWvI6j3s1Dj4xzaq3mY9A3OQda5rkfzzlKlRT3231eszmjmhPNX872d8AeSUlBXymnrdb9jXTX27T8c/6r9p4WxOIk9Cqsko8QrLirKUYoyCRGAqreEsJsdcqKSXdn177sqBlagn9yxbPKgu6H7HqeIa8+Tz48=,iv:eNnILMIXyIlCaGV1krgIFZlIBRLumO35h6Tduc0Zbw4=,tag:rqGVibWoKP4vrfYIgvtgEQ==,type:str]
+    lastmodified: "2026-07-04T20:39:44Z"
+    mac: ENC[AES256_GCM,data:oqHwP7ChnaUQ/9vwBnaLyFnERMApA4uKaHgD7gh+CsoX7FrU93BY2Ef5/Rfcw8Nu+Xd3zB/quJK/t+TpXkPztAs2sy7GMqMGEyAiJX0e8I+fSV/8do5774sIAIveXFD9tLSV50eVuW378o9U6SF8r5oDgZXQtrM+D8Y7vxk7xHU=,iv:Um2lz2X9XzE79lQ1vBQ8LYH5Q6PRDRdKszsCOYaly+s=,tag:NyMHwgRZ/9dmg9a6JOhKBQ==,type:str]
     version: 3.13.1
