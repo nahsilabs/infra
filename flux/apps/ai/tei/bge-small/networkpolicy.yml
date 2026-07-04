@@ -1,0 +1,28 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: bge-small-lockdown
+  namespace: ai
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: bge-small
+  ingress:
+    - fromEntities:
+        - host
+        - remote-node
+        - health
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: hindsight
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: obs-collect
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP

@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: tei
+  labels:
+    obs.nahsilabs/metrics: "true"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/part-of: tei
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
