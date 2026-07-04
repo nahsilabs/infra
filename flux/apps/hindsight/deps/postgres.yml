@@ -1,0 +1,29 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-hindsight
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.4@sha256:9f8d4500ed53901dba42907b05fc7520988b347a79b85c8cf2fa1cb460f2e177
+  primaryUpdateStrategy: unsupervised
+  postgresql:
+    extensions:
+      - name: pgvector
+        image:
+          reference: ghcr.io/cloudnative-pg/pgvector:0.8.4-18-trixie@sha256:8285ceb870b819f5854c1343e775cbafe23579bdb676c981ec6795d6466f8300
+  storage:
+    size: 10Gi
+    storageClass: ceph-rbd-retain
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: app
+spec:
+  cluster:
+    name: pg-hindsight
+  name: app
+  owner: app
+  extensions:
+    - name: vector
+      ensure: present

@@ -1,0 +1,63 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-hindsight-deps
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-cloudnative-pg
+  path: ./flux/apps/hindsight/deps
+  targetNamespace: hindsight
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-hindsight
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-hindsight-deps
+    - name: infra-gateway-api-crds
+  path: ./flux/apps/hindsight/app
+  targetNamespace: hindsight
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-hindsight-obs
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-prometheus-operator-crds
+  path: ./flux/apps/hindsight/obs
+  targetNamespace: hindsight
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m

@@ -9,3 +9,4 @@ resources:
   - prometheus.yml
   - agenticgateway.yml
   - kserve-llmisvc.yml
+  - hindsight.yml
