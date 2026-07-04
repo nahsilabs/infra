@@ -19,6 +19,26 @@ spec:
     - matches:
         - path:
             type: PathPrefix
+            value: /mcp
+        - path:
+            type: PathPrefix
+            value: /v1
+        - path:
+            type: PathPrefix
+            value: /docs
+        - path:
+            type: PathPrefix
+            value: /redoc
+        - path:
+            type: PathPrefix
+            value: /openapi.json
+      backendRefs:
+        - name: hindsight-api
+          port: 8888
+          weight: 1
+    - matches:
+        - path:
+            type: PathPrefix
             value: /
       backendRefs:
         - name: hindsight-control-plane
