@@ -73,8 +73,6 @@ spec:
                   - ALL
 
     defaultPodOptions:
-      nodeSelector:
-        kubernetes.io/hostname: heliopolis
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
