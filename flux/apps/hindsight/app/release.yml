@@ -33,6 +33,7 @@ spec:
           cpu: "2"
           memory: 4Gi
       env:
+        HINDSIGHT_API_WORKER_ID: hindsight-api
         HINDSIGHT_API_LLM_PROVIDER: openai
         HINDSIGHT_API_LLM_BASE_URL: https://ai.nahsi.dev/v1
         HINDSIGHT_API_LLM_MODEL: deepseek-ai/DeepSeek-V4-Flash
