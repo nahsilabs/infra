@@ -1,0 +1,75 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hindsight
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: hindsight
+    namespace: flux-system
+  values:
+    worker:
+      enabled: false
+    tei:
+      reranker:
+        enabled: false
+      embedding:
+        enabled: false
+    ingress:
+      enabled: false
+
+    existingSecret: hindsight-secret
+
+    postgresql:
+      enabled: false
+
+    api:
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: "2"
+          memory: 4Gi
+      env:
+        HINDSIGHT_API_LLM_PROVIDER: openai
+        HINDSIGHT_API_LLM_BASE_URL: https://ai.nahsi.dev/v1
+        HINDSIGHT_API_LLM_MODEL: deepseek-ai/DeepSeek-V4-Flash
+        HINDSIGHT_API_REFLECT_LLM_MODEL: openai/gpt-oss-20b
+        HINDSIGHT_API_EMBEDDINGS_PROVIDER: tei
+        HINDSIGHT_API_EMBEDDINGS_TEI_URL: http://bge-small.ai.svc.cluster.local:8080
+        HINDSIGHT_API_RERANKER_PROVIDER: tei
+        HINDSIGHT_API_RERANKER_TEI_URL: http://ms-marco-minilm.ai.svc.cluster.local:8080
+
+    controlPlane:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: "1"
+          memory: 1Gi
+
+  postRenderers:
+    - kustomize:
+        patches:
+          - patch: |
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: hindsight-api
+              spec:
+                template:
+                  spec:
+                    containers:
+                      - name: api
+                        env:
+                          - name: POSTGRES_PASSWORD
+                            $patch: delete
+                          - name: HINDSIGHT_API_DATABASE_URL
+                            value: null
+                            valueFrom:
+                              secretKeyRef:
+                                name: pg-hindsight-app
+                                key: uri
