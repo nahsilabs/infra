@@ -37,7 +37,7 @@ spec:
         HINDSIGHT_API_LLM_PROVIDER: openai
         HINDSIGHT_API_LLM_BASE_URL: https://ai.nahsi.dev/v1
         HINDSIGHT_API_LLM_MODEL: deepseek-ai/DeepSeek-V4-Flash
-        HINDSIGHT_API_REFLECT_LLM_MODEL: openai/gpt-oss-20b
+        HINDSIGHT_API_REFLECT_LLM_MODEL: openai/gpt-oss-120b
         HINDSIGHT_API_EMBEDDINGS_PROVIDER: tei
         HINDSIGHT_API_EMBEDDINGS_TEI_URL: http://bge-small.ai.svc.cluster.local:8080
         HINDSIGHT_API_RERANKER_PROVIDER: tei

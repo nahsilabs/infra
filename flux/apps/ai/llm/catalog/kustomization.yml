@@ -4,5 +4,6 @@ resources:
   - qwen3-6-27b
   - qwen3-5-2b
   - gpt-oss-20b
+  - gpt-oss-120b
   - deepseek-v4-flash
   - deepseek-v4-pro
