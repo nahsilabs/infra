@@ -40,6 +40,9 @@ spec:
         - path:
             type: PathPrefix
             value: /openapi.json
+      timeouts:
+        request: "300s"
+        backendRequest: "300s"
       backendRefs:
         - name: hindsight-api
           port: 8888
