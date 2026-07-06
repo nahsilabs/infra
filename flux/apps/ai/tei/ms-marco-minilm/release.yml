@@ -29,6 +29,8 @@ spec:
               - --port
               - "8080"
               - --auto-truncate
+              - --max-client-batch-size
+              - "128"
             probes:
               readiness:
                 enabled: true
