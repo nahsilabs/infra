@@ -14,3 +14,7 @@ spec:
     name: infra
     namespace: flux-system
   path: ./flux/apps/navidrome/app
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age

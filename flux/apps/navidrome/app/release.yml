@@ -27,6 +27,9 @@ spec:
               ND_CACHEFOLDER: /cache
               ND_LOGLEVEL: info
               ND_PORT: "4533"
+            envFrom:
+              - secretRef:
+                  name: navidrome-lastfm
 
     defaultPodOptions:
       securityContext:
