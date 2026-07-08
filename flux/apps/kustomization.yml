@@ -15,6 +15,7 @@ resources:
   - readeck
   - stirling-pdf
   - supersync
+  - trek
   - vaultwarden
   - ai
   - downloads
