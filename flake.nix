@@ -53,6 +53,7 @@
             url = "https://ai.nahsi.dev/mcp/victoriametrics";
             oauth.clientId = "e2e576888a416c0e";
           };
+          settings.servers.terraform.command = pkgs.lib.getExe pkgs.terraform-mcp-server;
         };
       in
       {
@@ -74,6 +75,7 @@
             pkgs.cilium-cli
             pkgs.fluxcd
             pkgs.terraform
+            pkgs.google-cloud-sdk
 
             pkgs.age
             pkgs.sops
