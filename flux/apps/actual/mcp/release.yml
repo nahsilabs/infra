@@ -27,6 +27,9 @@ spec:
               MCP_BRIDGE_DATA_DIR: /app/data
               MCP_BRIDGE_PORT: "3600"
               MCP_HTTP_PATH: /http
+              MCP_BRIDGE_HTTP_PATH: /mcp/actual
+              MCP_BRIDGE_PUBLIC_HOST: ai.nahsi.dev
+              MCP_BRIDGE_PUBLIC_SCHEME: https
               NODE_ENV: production
               LOG_FORMAT: json
               MCP_BRIDGE_LOG_LEVEL: info
