@@ -32,9 +32,6 @@ spec:
         - path:
             type: PathPrefix
             value: /.well-known/oauth-protected-resource/mcp/victorialogs
-        - path:
-            type: PathPrefix
-            value: /.well-known/oauth-authorization-server/mcp/victorialogs
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend
@@ -66,8 +63,6 @@ spec:
                 port: 80
               jwksPath: /application/o/victorialogs-mcp/jwks/
       mcp:
-        provider: Okta
-        clientId: "0d26a34d5060ae09"
         resourceMetadata:
           resource: https://ai.nahsi.dev/mcp/victorialogs
           scopesSupported:
@@ -77,3 +72,27 @@ spec:
             - offline_access
           bearerMethodsSupported:
             - header
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: victorialogs-mcp-oidc-discovery
+spec:
+  parentRefs:
+    - name: private-gateway
+      namespace: envoy-gateway
+      sectionName: https
+  hostnames:
+    - auth.nahsi.dev
+  rules:
+    - matches:
+        - path:
+            type: Exact
+            value: /.well-known/openid-configuration/application/o/victorialogs-mcp
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /application/o/victorialogs-mcp/.well-known/openid-configuration
+            statusCode: 302

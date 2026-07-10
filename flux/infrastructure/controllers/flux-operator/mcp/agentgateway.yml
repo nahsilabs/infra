@@ -32,9 +32,6 @@ spec:
         - path:
             type: PathPrefix
             value: /.well-known/oauth-protected-resource/mcp/flux
-        - path:
-            type: PathPrefix
-            value: /.well-known/oauth-authorization-server/mcp/flux
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend
@@ -66,8 +63,6 @@ spec:
                 port: 80
               jwksPath: /application/o/flux-mcp/jwks/
       mcp:
-        provider: Okta
-        clientId: "0828d20757190928"
         resourceMetadata:
           resource: https://ai.nahsi.dev/mcp/flux
           scopesSupported:
@@ -77,3 +72,27 @@ spec:
             - offline_access
           bearerMethodsSupported:
             - header
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: flux-mcp-oidc-discovery
+spec:
+  parentRefs:
+    - name: private-gateway
+      namespace: envoy-gateway
+      sectionName: https
+  hostnames:
+    - auth.nahsi.dev
+  rules:
+    - matches:
+        - path:
+            type: Exact
+            value: /.well-known/openid-configuration/application/o/flux-mcp
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /application/o/flux-mcp/.well-known/openid-configuration
+            statusCode: 302

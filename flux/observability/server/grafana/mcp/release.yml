@@ -27,6 +27,8 @@ spec:
       - streamable-http
       - --address
       - 0.0.0.0:8000
+      - --allowed-hosts
+      - ai.nahsi.dev
       - --enabled-tools
       - dashboard,search,datasource,navigation
     grafana:

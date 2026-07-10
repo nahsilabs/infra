@@ -9,11 +9,6 @@ spec:
     name: agenticgateway
     namespace: flux-system
   values:
-    proxy:
-      image:
-        registry: docker.io
-        repository: nahsilabs/agentgateway
-        tag: v1.3.1-pr2016-dcr
     inferenceExtension:
       enabled: true
     monitoring:
