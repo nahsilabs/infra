@@ -10,3 +10,4 @@
 kubeconfig
 talosconfig
 secrets/
+.codebase-memory
