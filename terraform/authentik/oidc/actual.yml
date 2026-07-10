@@ -1,0 +1,5 @@
+launch_url: https://actual.nahsi.dev
+allowed_groups:
+  - superusers
+redirect_uris:
+  - https://actual.nahsi.dev/openid/callback
