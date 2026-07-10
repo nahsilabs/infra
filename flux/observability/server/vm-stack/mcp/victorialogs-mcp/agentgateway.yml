@@ -32,9 +32,6 @@ spec:
         - path:
             type: PathPrefix
             value: /.well-known/oauth-protected-resource/mcp/victorialogs
-        - path:
-            type: PathPrefix
-            value: /.well-known/oauth-authorization-server/mcp/victorialogs
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend
@@ -66,8 +63,6 @@ spec:
                 port: 80
               jwksPath: /application/o/victorialogs-mcp/jwks/
       mcp:
-        provider: Okta
-        clientId: "0d26a34d5060ae09"
         resourceMetadata:
           resource: https://ai.nahsi.dev/mcp/victorialogs
           scopesSupported:

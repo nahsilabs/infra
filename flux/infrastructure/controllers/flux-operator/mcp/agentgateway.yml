@@ -32,9 +32,6 @@ spec:
         - path:
             type: PathPrefix
             value: /.well-known/oauth-protected-resource/mcp/flux
-        - path:
-            type: PathPrefix
-            value: /.well-known/oauth-authorization-server/mcp/flux
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend
@@ -66,8 +63,6 @@ spec:
                 port: 80
               jwksPath: /application/o/flux-mcp/jwks/
       mcp:
-        provider: Okta
-        clientId: "0828d20757190928"
         resourceMetadata:
           resource: https://ai.nahsi.dev/mcp/flux
           scopesSupported:
