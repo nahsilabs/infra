@@ -82,8 +82,7 @@
           ];
 
           shellHook = ''
-            [[ -L .mcp.json ]] && unlink .mcp.json
-            ln -sf ${mcpConfig} .mcp.json
+            nix-store --add-root .mcp.json --indirect --realise ${mcpConfig}
             ln -sfn ${grafana-skills}/skills/grafana-core/dashboarding .agents/skills/dashboarding
             [[ -f $NAHSILABS_SECRETS ]] && source $NAHSILABS_SECRETS
             [[ -f terraform/talos/kubeconfig ]] && export KUBECONFIG=$(realpath terraform/talos/kubeconfig)
