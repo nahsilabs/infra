@@ -11,7 +11,7 @@ spec:
     operation: copy
   url: oci://ghcr.io/prometheus-community/charts/alertmanager
   ref:
-    tag: 1.40.2
+    tag: 1.40.3
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
