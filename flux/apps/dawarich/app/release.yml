@@ -1,0 +1,197 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: dawarich
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 5.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        containers:
+          app:
+            image:
+              repository: mirror.gcr.io/freikin/dawarich
+              tag: 1.10.0@sha256:25ba1dc02e5571cc915bd104aae9c4c28929848ad1741c1829f5c40f86489a16
+            command:
+              - web-entrypoint.sh
+            args:
+              - bin/rails
+              - server
+              - -p
+              - "3000"
+              - -b
+              - "::"
+            env: &appEnv
+              ALLOW_EMAIL_PASSWORD_LOGIN: "false"
+              ALLOW_EMAIL_PASSWORD_REGISTRATION: "false"
+              APPLICATION_HOSTS: dawarich.nahsi.dev
+              APPLICATION_PROTOCOL: http
+              DATABASE_HOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-dawarich-app
+                    key: hostname
+              DATABASE_NAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-dawarich-app
+                    key: dbname
+              DATABASE_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-dawarich-app
+                    key: password
+              DATABASE_PORT:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-dawarich-app
+                    key: port
+              DATABASE_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-dawarich-app
+                    key: username
+              DOMAIN: dawarich.nahsi.dev
+              OIDC_AUTO_REGISTER: "true"
+              OIDC_ISSUER: https://auth.nahsi.dev/application/o/dawarich/
+              OIDC_PKCE_ENABLED: "true"
+              OIDC_PROVIDER_NAME: Authentik
+              OIDC_REDIRECT_URI: https://dawarich.nahsi.dev/users/auth/openid_connect/callback
+              PROMETHEUS_EXPORTER_ENABLED: "true"
+              RAILS_ENV: production
+              RAILS_LOG_TO_STDOUT: "true"
+              REDIS_URL: redis://dawarich-valkey.dawarich.svc.cluster.local:6379/0
+              SELF_HOSTED: "true"
+              STORE_GEODATA: "false"
+              TIME_ZONE: Europe/Athens
+              TZ: Europe/Athens
+              WEB_CONCURRENCY: "1"
+            envFrom: &envFrom
+              - secretRef:
+                  name: dawarich-secret
+              - secretRef:
+                  name: dawarich-smtp
+            probes:
+              liveness: &probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/health
+                    port: &httpPort 3000
+              readiness: *probe
+            resources:
+              requests:
+                cpu: 10m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+          sidekiq:
+            image:
+              repository: mirror.gcr.io/freikin/dawarich
+              tag: 1.10.0@sha256:25ba1dc02e5571cc915bd104aae9c4c28929848ad1741c1829f5c40f86489a16
+            command:
+              - sidekiq-entrypoint.sh
+            args:
+              - sidekiq
+            env:
+              <<: *appEnv
+              BACKGROUND_PROCESSING_CONCURRENCY: "3"
+              PROMETHEUS_EXPORTER_ENABLED: "false"
+              PROMETHEUS_EXPORTER_HOST: dawarich
+            envFrom: *envFrom
+            resources:
+              requests:
+                cpu: 10m
+                memory: 512Mi
+              limits:
+                memory: 4Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: *httpPort
+          metrics:
+            port: 9394
+
+    serviceMonitor:
+      main:
+        enabled: true
+        labels:
+          obs.nahsilabs/metrics: "true"
+        endpoints:
+          - port: metrics
+            path: /metrics
+            interval: 30s
+
+    persistence:
+      data:
+        size: 5Gi
+        storageClass: ceph-rbd-retain
+        accessMode: ReadWriteOnce
+        advancedMounts:
+          main:
+            app: &dataMounts
+              - path: /var/app/storage
+                subPath: storage
+              - path: /var/app/tmp/imports/watched
+                subPath: watched
+            sidekiq: *dataMounts
+      public:
+        type: emptyDir
+        advancedMounts:
+          main:
+            app: &publicMounts
+              - path: /var/app/public
+            sidekiq: *publicMounts
+
+    route:
+      main:
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - dawarich.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1

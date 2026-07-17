@@ -1,0 +1,18 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-dawarich
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.4@sha256:dabf20b4a1d0d2d26ad3f39b25dc57a270ffdaf0ca7105a6c897dc9f17c0ac83
+  primaryUpdateStrategy: unsupervised
+  postgresql:
+    extensions:
+      - name: postgis
+        image:
+          reference: ghcr.io/cloudnative-pg/postgis-extension:3.6.2-18-trixie@sha256:93584892e25a57e47e988b0f80ad9988035d1396d4a87824307eddf2242348c8
+        ld_library_path:
+          - system
+  storage:
+    size: 10Gi
+    storageClass: ceph-rbd-retain
