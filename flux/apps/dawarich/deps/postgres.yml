@@ -16,3 +16,16 @@ spec:
   storage:
     size: 10Gi
     storageClass: ceph-rbd-retain
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: app
+spec:
+  cluster:
+    name: pg-dawarich
+  name: app
+  owner: app
+  extensions:
+    - name: postgis
+      ensure: present
