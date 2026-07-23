@@ -20,7 +20,7 @@ spec:
           main:
             image:
               repository: ghcr.io/etkecc/ketesa
-              tag: v1.3.0@sha256:609ad2e5b68e7250344929ea2c54a894a5a6be26d6b97b5578e30a935abf46e9
+              tag: v1.4.0@sha256:ec8216e940f9b1490539bff8dde303846a4809b17f6c5ad31603701a3f575c3e
 
             resources:
               requests:
