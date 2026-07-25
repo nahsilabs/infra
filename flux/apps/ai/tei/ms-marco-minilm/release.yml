@@ -31,6 +31,8 @@ spec:
               - --auto-truncate
               - --max-client-batch-size
               - "128"
+              - --max-concurrent-requests
+              - "1024"
             probes:
               readiness:
                 enabled: true
@@ -66,7 +68,7 @@ spec:
                 cpu: 250m
                 memory: 1Gi
               limits:
-                cpu: "2"
+                cpu: "4"
                 memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false

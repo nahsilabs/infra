@@ -42,6 +42,7 @@ spec:
         HINDSIGHT_API_EMBEDDINGS_TEI_URL: http://bge-small.ai.svc.cluster.local:8080
         HINDSIGHT_API_RERANKER_PROVIDER: tei
         HINDSIGHT_API_RERANKER_TEI_URL: http://ms-marco-minilm.ai.svc.cluster.local:8080
+        HINDSIGHT_API_RERANKER_TEI_MAX_CONCURRENT: "4"
 
     controlPlane:
       resources:
