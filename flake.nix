@@ -1,5 +1,5 @@
 {
-  description = "Setup ops things";
+  description = "NahsiLabs infra";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
   inputs.systems.url = "github:nix-systems/default";
   inputs.flake-utils = {
@@ -57,13 +57,13 @@
         };
       in
       {
-        formatter = pkgs.nixfmt-rfc-style;
+        formatter = pkgs.nixfmt;
         devShells.default = pkgs.mkShell {
           name = "infra";
 
           packages = [
             pkgs.bashInteractive
-            pkgs.nixfmt-rfc-style
+            pkgs.nixfmt
 
             pkgs.ansible
             pkgs.sshpass
