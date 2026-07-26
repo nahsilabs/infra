@@ -28,3 +28,4 @@ resources:
   - authentik
   - ntfy
   - hindsight
+  - open-notebook

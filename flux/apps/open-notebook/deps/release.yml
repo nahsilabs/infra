@@ -1,0 +1,51 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: surrealdb
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: surrealdb
+      version: 0.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: surrealdb
+        namespace: flux-system
+  values:
+    fullnameOverride: surrealdb
+    replicaCount: 1
+    strategy:
+      type: Recreate
+    surrealdb:
+      path: rocksdb:/data/open-notebook.db
+    podExtraEnv:
+      - name: SURREAL_USER
+        valueFrom:
+          secretKeyRef:
+            name: open-notebook
+            key: surreal-username
+      - name: SURREAL_PASS
+        valueFrom:
+          secretKeyRef:
+            name: open-notebook
+            key: surreal-password
+    podSecurityContext:
+      fsGroup: 65532
+      runAsUser: 65532
+      runAsGroup: 65532
+    securityContext:
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+      capabilities:
+        drop:
+          - ALL
+    persistence:
+      enabled: true
+      storageClassName: ceph-rbd-retain
+      accessModes:
+        - ReadWriteOnce
+      size: 10Gi
+      mountPath: /data
