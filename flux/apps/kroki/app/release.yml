@@ -18,7 +18,7 @@ spec:
       registry: docker.io
       repository: yuzutech/kroki
       # renovate: datasource=github-releases depName=yuzutech/kroki
-      tag: 0.31.1@sha256:9cdc4aac5f54fabc7f8bb041ea7c4c0f0a0ffa178cc0a31541a6d312daa3731b
+      tag: 0.31.2@sha256:63a74a0ab9e70c2f30bfdbd0628a5a938442c616c01600e0395f58094d0dba7a
 
     ingress:
       enabled: false
@@ -37,7 +37,7 @@ spec:
         registry: docker.io
         repository: yuzutech/kroki-diagramsnet
         # renovate: datasource=github-releases depName=yuzutech/kroki
-        tag: 0.31.1@sha256:195f89d3af451659916ec54fbd2ebba1d5c02914e0d35216b8515b3df7c218cb
+        tag: 0.31.2@sha256:7aa03dcfdfe631cb7fa3ffc84b85dfa044e640350438552fe6e54ab3760bb706
 
     excalidraw:
       enabled: true
@@ -45,7 +45,7 @@ spec:
         registry: docker.io
         repository: yuzutech/kroki-excalidraw
         # renovate: datasource=github-releases depName=yuzutech/kroki
-        tag: 0.31.1@sha256:9b3b1f6e8d8fd9a9c4356fd1353a04c89881971417d14bcf5a0cbfff80aa550e
+        tag: 0.31.2@sha256:87aa068a3e68287f84f36a9ee043e5810be45fef728e62e701ade75f0dd65c09
 
     mermaid:
       enabled: true
@@ -53,4 +53,4 @@ spec:
         registry: docker.io
         repository: yuzutech/kroki-mermaid
         # renovate: datasource=github-releases depName=yuzutech/kroki
-        tag: 0.31.1@sha256:d711507b5c4c0ab5764a188e5643119dc084f222c1cc951e8c2512fc20f80a0f
+        tag: 0.31.2@sha256:0456d6dd9c1b6cb62af119b5a099d035c4d04c8ece1947db60d31e24e42afd1e
