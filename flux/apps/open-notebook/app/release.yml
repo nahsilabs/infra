@@ -27,23 +27,11 @@ spec:
               INTERNAL_API_URL: http://localhost:5055
               CORS_ORIGINS: https://notebook.nahsi.dev
               SURREAL_URL: ws://surrealdb.open-notebook.svc.cluster.local:8000/rpc
-              SURREAL_USER:
-                valueFrom:
-                  secretKeyRef:
-                    name: open-notebook
-                    key: surreal-username
-              SURREAL_PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: open-notebook
-                    key: surreal-password
               SURREAL_NAMESPACE: open_notebook
               SURREAL_DATABASE: open_notebook
-              OPEN_NOTEBOOK_ENCRYPTION_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: open-notebook
-                    key: encryption-key
+            envFrom:
+              - secretRef:
+                  name: open-notebook
             probes:
               liveness:
                 type: HTTP
