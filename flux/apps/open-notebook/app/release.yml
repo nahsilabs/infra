@@ -29,6 +29,7 @@ spec:
               SURREAL_URL: ws://surrealdb.open-notebook.svc.cluster.local:8000/rpc
               SURREAL_NAMESPACE: open_notebook
               SURREAL_DATABASE: open_notebook
+              OPEN_NOTEBOOK_EMBEDDING_BATCH_SIZE: "8"
             envFrom:
               - secretRef:
                   name: open-notebook
