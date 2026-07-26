@@ -32,7 +32,7 @@ spec:
               - --max-batch-tokens
               - "4096"
               - --max-client-batch-size
-              - "16"
+              - "64"
             probes:
               readiness:
                 enabled: true
