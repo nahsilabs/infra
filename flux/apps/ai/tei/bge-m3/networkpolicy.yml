@@ -1,20 +1,18 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: bge-small-lockdown
+  name: bge-m3-lockdown
   namespace: ai
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: bge-small
+      app.kubernetes.io/name: bge-m3
   ingress:
     - fromEntities:
         - host
         - remote-node
         - health
     - fromEndpoints:
-        - matchLabels:
-            io.kubernetes.pod.namespace: hindsight
         - matchLabels:
             io.kubernetes.pod.namespace: open-notebook
       toPorts:

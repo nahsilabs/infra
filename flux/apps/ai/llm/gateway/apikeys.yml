@@ -7,6 +7,7 @@ stringData:
     nahsi: ENC[AES256_GCM,data:W7xnOG/fLMYv938jPHirdXzOUuKVmcM77ebHOvWcsBR0IJBfAag6/EYwhTHZdj7cts9kYX+gZsTnL3vldXixk+/LFrEmEfP8n2lkJ160F+CfR0x/D4jOK4YnwxJeU7K0jSqPeZpoorvlUEKuUbWkyaMRTFhJy70HvpGS,iv:fLEpjSFRp2LJSV6qPVxdq6A+EloxQOyOEqI2+fof4hQ=,tag:rOe1pv+hUbipEm95KtUYfw==,type:str]
     hindsight: ENC[AES256_GCM,data:uB6I7RIg0anepiwsmt4Ud1440dryyIknKxWw64SEw8jJqZwQTEKUOQaQVxjR/kRFCsfOJUumGcW+98fFALzUsCVAedqZOTyG4CRTMPl74RR2ISOeMXdNkQXAnFMBFHj0JMN5Mk8WYWjG5dJ+EhkJj41QOwN6VcUgMA==,iv:lNtPWteeOyVH5P+Dxh7x3R4LO8wwl0lB0mXJlacMYq0=,tag:nO/S6d16wE+C6RzeZqhF0Q==,type:str]
     digarr: ENC[AES256_GCM,data:GW9fFlBq+YBO1k2RwP1G2KdDMvkI8AK/0YhQ9JodLQaqmXjEYK+aL7BVVgdPi9s0GG6ItrGqC823jkHSBy3oOOIHiNyOP2i7d5N37kaz7YoSSHHORRjVulaASbCxzqGBUiVsfNWO11DBgDR2oP5IikR/M8Fu/Q==,iv:sG+be1LDYKxHI99qQx4SJeDmCQ8u7dnSD8L7DsV7GOI=,tag:MnGMVEN9ripVs8HUkQzi9Q==,type:str]
+    open-notebook: ENC[AES256_GCM,data:gUPCiP0Xg1Vl8yMYBeUwCbEOvwISRzm0xNaGMcWM6mHPB0XD1n2/WlfGi5unaCyx39UhcG0ihwX2qQSVZYT8qYUj75LQRuNem8j618pLQcABi2C1UF3yZIA7f2jrIwNp3gxWlNMiu6G2H9X09xREVrdcdog0rPrg5gyG7Ho=,iv:4rsgdP1mBOh8w+KFKqP+6uImh8c2CijfFIc1Lpp2++8=,tag:6JnLDgYviq36WYqoyH/u1w==,type:str]
 sops:
     age:
         - enc: |
@@ -19,6 +20,6 @@ sops:
             -----END AGE ENCRYPTED FILE-----
           recipient: age17kf3tfnhtv36pjscj7mzuv5dc0xjcj388764258uwgad78mzzs2qtu05pw
     encrypted_regex: ^(data|stringData)$
-    lastmodified: "2026-07-07T06:11:40Z"
-    mac: ENC[AES256_GCM,data:QykwNbvSS3KlXJfoLUMDGmWEekCoVRtx8mshZc6YGHvwTNYw00SZFs6k1B0ifrlRSseEEjxAG6VyoUIfTab3iR5a0bqP0UgzpVbcQszuq7PjD45Ye3H+0T5229x4sDaVGPvgLScXKnB1bl8qTXrm59nSZr3ktNyaTmfKAaMIfdI=,iv:Eqc0nvzXf7F3WcNiu6PhgrA1m9EBlCGlTfLujIlo6l0=,tag:1J0kET4eU4XVJd4aR6Y1Ww==,type:str]
+    lastmodified: "2026-07-26T18:18:44Z"
+    mac: ENC[AES256_GCM,data:0i7FfG/u/IxG7Oo2mFyRj1EZjUgFJEr3j7VI8aBhgtGdL0V5H3eq9DfZi0aZMJLK3rDF6iv8pEdeMAZMqu/UHZkmF2nq6lYrdmE5xBQ8SDINCeZOhkupYuTuo4uk0Yj16SM02E0zGqI3w++ZsafVfcGUtFyaC1WwzTHWpdyOhjQ=,iv:DCKXHBul1Gl93Mezr3DYFRMfznlCsi0vHA5FGQRO12o=,tag:RCqwJ2bQCKFUNDzmywoW2w==,type:str]
     version: 3.13.1

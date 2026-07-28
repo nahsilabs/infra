@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: bge-small
+  name: bge-m3
 spec:
   interval: 1h
   chart:
@@ -23,12 +23,16 @@ spec:
               tag: cpu-1.9.3@sha256:ad950d30878eceb72aaf32024d26fa2b1d04a75304fa0b4776b49aa1941fea07
             args:
               - --model-id
-              - BAAI/bge-small-en-v1.5
+              - BAAI/bge-m3
               - --hostname
               - 0.0.0.0
               - --port
               - "8080"
               - --auto-truncate
+              - --max-batch-tokens
+              - "4096"
+              - --max-client-batch-size
+              - "64"
             probes:
               readiness:
                 enabled: true
@@ -58,14 +62,14 @@ spec:
                     path: /health
                     port: 8080
                   periodSeconds: 10
-                  failureThreshold: 60
+                  failureThreshold: 120
             resources:
               requests:
-                cpu: 250m
-                memory: 1Gi
+                cpu: "1"
+                memory: 8Gi
               limits:
-                cpu: "2"
-                memory: 2Gi
+                cpu: "4"
+                memory: 16Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -73,6 +77,8 @@ spec:
                   - ALL
 
     defaultPodOptions:
+      nodeSelector:
+        kubernetes.io/hostname: heliopolis
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -92,6 +98,6 @@ spec:
 
     persistence:
       data:
-        existingClaim: bge-small-cache
+        existingClaim: bge-m3-cache
         globalMounts:
           - path: /data
