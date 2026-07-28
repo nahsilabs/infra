@@ -11,11 +11,6 @@ spec:
   values:
     fullnameOverride: node-exporter
 
-    image:
-      registry: quay.io
-      repository: prometheus/node-exporter
-      tag: v1.11.1
-
     extraArgs:
       - --no-collector.wifi
       - --no-collector.btrfs

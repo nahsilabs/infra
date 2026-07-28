@@ -12,10 +12,6 @@ spec:
         kind: HelmRepository
         name: postfinance
         namespace: flux-system
-  values:
-    image:
-      repository: ghcr.io/postfinance/kubelet-csr-approver
-      tag: v1.2.14@sha256:c0f6aa1abdc225a32f9a29992fd97f711e78e2df21434f9ce7bc60981f96a5f8
   valuesFrom:
     - kind: ConfigMap
       name: kubelet-csr-approver-values

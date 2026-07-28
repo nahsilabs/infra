@@ -9,10 +9,6 @@ spec:
     name: kube-state-metrics
     namespace: flux-system
   values:
-    image:
-      registry: registry.k8s.io
-      repository: kube-state-metrics/kube-state-metrics
-      tag: v2.19.1@sha256:85108987d044b18a098126732f98602df408888c0f7d456241f5abefb9744bc1
     fullnameOverride: kube-state-metrics
 
     prometheus:
