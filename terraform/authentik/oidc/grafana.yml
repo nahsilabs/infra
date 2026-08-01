@@ -1,5 +1,5 @@
 launch_url: https://grafana.nahsi.dev
-ui_group: Obs
+ui_group: Observability
 redirect_uris:
   - https://grafana.nahsi.dev/login/generic_oauth
 allowed_groups:

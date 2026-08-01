@@ -74,7 +74,7 @@ spec:
           enabled: true
           annotations:
             gethomepage.dev/enabled: "true"
-            gethomepage.dev/group: "Infra"
+            gethomepage.dev/group: "Platform"
             gethomepage.dev/name: Authentik
             gethomepage.dev/icon: authentik.png
             gethomepage.dev/pod-selector: "app.kubernetes.io/name=authentik"

@@ -134,7 +134,7 @@ spec:
       main:
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Apps
+          gethomepage.dev/group: Productivity
           gethomepage.dev/name: OpenCloud
           gethomepage.dev/icon: open-cloud.svg
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=opencloud"

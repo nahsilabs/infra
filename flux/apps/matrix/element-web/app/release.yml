@@ -55,7 +55,7 @@ spec:
       main:
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Matrix"
+          gethomepage.dev/group: "Comms"
           gethomepage.dev/name: "Element"
           gethomepage.dev/icon: "element"
         parentRefs:

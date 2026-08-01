@@ -47,7 +47,7 @@ spec:
       main:
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Apps"
+          gethomepage.dev/group: "Productivity"
           gethomepage.dev/name: Actual
           gethomepage.dev/icon: actual-budget.png
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=actualbudget"

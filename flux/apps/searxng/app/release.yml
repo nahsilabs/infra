@@ -97,7 +97,7 @@ spec:
       main:
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Apps"
+          gethomepage.dev/group: "Platform"
           gethomepage.dev/name: "SearXNG"
           gethomepage.dev/icon: "searxng"
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=searxng"

@@ -70,7 +70,7 @@ spec:
       main:
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Apps"
+          gethomepage.dev/group: "Knowledge"
           gethomepage.dev/name: Miniflux
           gethomepage.dev/icon: miniflux.png
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=miniflux"

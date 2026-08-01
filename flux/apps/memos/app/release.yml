@@ -42,7 +42,7 @@ spec:
       main:
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Apps"
+          gethomepage.dev/group: "Productivity"
           gethomepage.dev/name: Memos
           gethomepage.dev/icon: memos.png
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=memos"

@@ -1,4 +1,5 @@
 launch_url: https://actual.nahsi.dev
+ui_group: Productivity
 allowed_groups:
   - superusers
 redirect_uris:

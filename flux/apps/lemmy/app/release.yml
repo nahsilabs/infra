@@ -134,7 +134,7 @@ spec:
       main:
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Apps"
+          gethomepage.dev/group: "Comms"
           gethomepage.dev/name: "Lemmy"
           gethomepage.dev/icon: "lemmy"
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=lemmy"

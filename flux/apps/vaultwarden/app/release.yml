@@ -24,7 +24,7 @@ spec:
       enabled: true
       additionalAnnotations:
         gethomepage.dev/enabled: "true"
-        gethomepage.dev/group: "Apps"
+        gethomepage.dev/group: "Productivity"
         gethomepage.dev/name: Vaultwarden
         gethomepage.dev/icon: vaultwarden.png
         gethomepage.dev/pod-selector: "app.kubernetes.io/name=vaultwarden"

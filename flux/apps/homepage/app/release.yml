@@ -47,19 +47,36 @@ spec:
           hideVisitURL: true
 
         layout:
-          - Apps:
+          - Productivity:
+              tab: Daily Use
               style: columns
               columns: 4
+          - Knowledge:
+              tab: Daily Use
+              style: columns
+              columns: 3
           - Media:
+              tab: Daily Use
               style: columns
               columns: 3
+          - Comms:
+              tab: Daily Use
+              style: columns
+              columns: 2
           - Arr:
+              tab: Data Hoarding
               style: columns
               columns: 4
-          - Infra:
+          - Downloads:
+              tab: Data Hoarding
               style: columns
               columns: 3
+          - Platform:
+              tab: Systems
+              style: columns
+              columns: 4
           - Observability:
+              tab: Systems
               style: columns
               columns: 4
 
@@ -77,7 +94,7 @@ spec:
               show: false
 
       services:
-        - Infra:
+        - Platform:
             - Proxmox:
                 icon: proxmox
                 href: https://proxmox.nahsi.dev
@@ -106,6 +123,10 @@ spec:
                 icon: asrock-rack-ipmi
                 href: https://ipmi.nahsi.dev
                 ping: https://ipmi.nahsi.dev
+            - Wireguard:
+                icon: wireguard
+                href: http://vpn.nahsi.dev
+                ping: http://vpn.nahsi.dev
 
         - Observability:
             - Scrutiny:
@@ -121,12 +142,8 @@ spec:
                 href: https://power-panel.nahsi.dev
                 ping: https://power-panel.nahsi.dev
 
-        - Apps:
+        - Productivity:
             - Home Assistant:
                 icon: home-assistant
                 href: https://ha.nahsi.dev
                 ping: https://ha.nahsi.dev
-            - Wireguard:
-                icon: wireguard
-                href: http://vpn.nahsi.dev
-                ping: http://vpn.nahsi.dev

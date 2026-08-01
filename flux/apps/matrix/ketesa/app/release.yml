@@ -61,7 +61,7 @@ spec:
       main:
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Matrix"
+          gethomepage.dev/group: "Platform"
           gethomepage.dev/name: "Ketesa"
           gethomepage.dev/icon: "matrix"
         parentRefs:

@@ -83,7 +83,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Stirling PDF
           gethomepage.dev/description: PDF Viewer and Editor
-          gethomepage.dev/group: Apps
+          gethomepage.dev/group: Productivity
           gethomepage.dev/icon: stirling-pdf.png
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=stirling-pdf"
         parentRefs:

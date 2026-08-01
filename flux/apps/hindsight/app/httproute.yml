@@ -4,7 +4,7 @@ metadata:
   name: hindsight
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: "Ai"
+    gethomepage.dev/group: "Platform"
     gethomepage.dev/name: Hindsight
     gethomepage.dev/icon: hindsight.png
     gethomepage.dev/pod-selector: "app.kubernetes.io/name=hindsight"

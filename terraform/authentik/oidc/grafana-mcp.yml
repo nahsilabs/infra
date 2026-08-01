@@ -1,5 +1,5 @@
 launch_url: https://ai.nahsi.dev/mcp/grafana
-ui_group: mcp
+ui_group: MCP
 client_type: public
 offline_access: true
 allowed_groups:

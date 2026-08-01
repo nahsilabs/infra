@@ -1,5 +1,5 @@
 launch_url: https://dawarich.nahsi.dev
-ui_group: Apps
+ui_group: Productivity
 redirect_uris:
   - https://dawarich.nahsi.dev/users/auth/openid_connect/callback
 allowed_groups:

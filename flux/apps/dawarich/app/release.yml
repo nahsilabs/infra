@@ -179,7 +179,7 @@ spec:
       main:
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Apps"
+          gethomepage.dev/group: "Productivity"
           gethomepage.dev/name: Dawarich
           gethomepage.dev/icon: dawarich.png
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=dawarich"

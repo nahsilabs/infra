@@ -90,7 +90,7 @@ spec:
       main:
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Infra"
+          gethomepage.dev/group: "Platform"
           gethomepage.dev/name: "ntfy"
           gethomepage.dev/icon: "ntfy"
         parentRefs:

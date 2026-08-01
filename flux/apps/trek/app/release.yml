@@ -49,7 +49,7 @@ spec:
       main:
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: "Apps"
+          gethomepage.dev/group: "Productivity"
           gethomepage.dev/name: TREK
           gethomepage.dev/icon: https://raw.githubusercontent.com/mauriceboe/TREK/main/client/public/icons/icon.svg
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=trek"

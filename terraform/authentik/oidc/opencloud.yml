@@ -1,5 +1,5 @@
 launch_url: https://opencloud.nahsi.dev
-ui_group: Apps
+ui_group: Productivity
 client_type: public
 offline_access: true
 allowed_groups:
