@@ -1,0 +1,16 @@
+launch_url: https://opencloud.nahsi.dev
+ui_group: Apps
+client_type: public
+offline_access: true
+allowed_groups:
+  - superusers
+redirect_uris:
+  - https://opencloud.nahsi.dev/
+  - https://opencloud.nahsi.dev/oidc-callback.html
+  - https://opencloud.nahsi.dev/oidc-silent-redirect.html
+  - oc://android.opencloud.eu
+  - oc://ios.opencloud.eu
+entitlements:
+  opencloudAdmin:
+    groups:
+      - superusers
