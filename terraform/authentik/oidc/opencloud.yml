@@ -4,6 +4,7 @@ client_type: public
 offline_access: true
 allowed_groups:
   - superusers
+  - users
 redirect_uris:
   - https://opencloud.nahsi.dev/
   - https://opencloud.nahsi.dev/oidc-callback.html
@@ -14,3 +15,6 @@ entitlements:
   opencloudAdmin:
     groups:
       - superusers
+  opencloudUser:
+    groups:
+      - users
