@@ -1,0 +1,24 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-opencloud
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-gateway-api-crds
+    - name: infra-prometheus-operator-crds
+  path: ./flux/apps/opencloud/app
+  targetNamespace: opencloud
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age

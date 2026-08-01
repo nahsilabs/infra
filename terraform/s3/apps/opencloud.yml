@@ -1,0 +1,4 @@
+acl: private
+versioning: false
+force_destroy: false
+quota_gib: 1024
