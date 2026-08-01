@@ -42,6 +42,7 @@ spec:
               PROXY_ENABLE_BASIC_AUTH: "false"
               PROXY_ENABLE_APP_AUTH: "true"
               PROXY_DEBUG_ADDR: 0.0.0.0:9205
+              PROXY_CSP_CONFIG_FILE_LOCATION: /etc/opencloud/csp.yaml
               IDM_CREATE_DEMO_USERS: "false"
               FRONTEND_CHECK_FOR_UPDATES: "false"
               OC_SHARING_PUBLIC_SHARE_MUST_HAVE_PASSWORD: "true"
@@ -121,6 +122,13 @@ spec:
         accessMode: ReadWriteOnce
         globalMounts:
           - path: /var/lib/opencloud
+      csp:
+        type: configMap
+        name: opencloud-csp
+        globalMounts:
+          - path: /etc/opencloud/csp.yaml
+            subPath: csp.yaml
+            readOnly: true
 
     route:
       main:
@@ -128,7 +136,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: Apps
           gethomepage.dev/name: OpenCloud
-          gethomepage.dev/icon: opencloud.png
+          gethomepage.dev/icon: open-cloud.svg
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=opencloud"
         parentRefs:
           - name: private-gateway
