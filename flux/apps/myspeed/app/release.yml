@@ -20,7 +20,7 @@ spec:
             image:
               repository: germannewsmaker/myspeed
               # renovate: datasource=docker depName=germannewsmaker/myspeed
-              tag: development@sha256:913f5fffe1219da410efe43e24a86611a4f52960099cac7fd9557a956a869d72
+              tag: development@sha256:043c2f00980f5f1a91b44ad918a52ebb2d47dd6adc9c1abb738f048bf8a2ee94
             env:
               TZ: Europe/Athens
             probes:
