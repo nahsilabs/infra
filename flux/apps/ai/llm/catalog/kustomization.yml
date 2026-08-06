@@ -7,3 +7,4 @@ resources:
   - gpt-oss-120b
   - deepseek-v4-flash
   - deepseek-v4-pro
+  - translategemma-4b

@@ -1,0 +1,35 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: LLMInferenceService
+metadata:
+  name: translategemma-4b
+spec:
+  model:
+    uri: hf://Infomaniak-AI/vllm-translategemma-4b-it
+    name: google/translategemma-4b-it
+  template:
+    securityContext:
+      fsGroup: 1000
+    containers:
+      - name: main
+        args:
+          - --max-model-len
+          - "2048"
+          - --gpu-memory-utilization
+          - "0.8"
+          - --generation-config
+          - vllm
+        resources:
+          limits:
+            cpu: "8"
+            memory: 16Gi
+            nvidia.com/gpu: "1"
+          requests:
+            cpu: "2"
+            memory: 8Gi
+            nvidia.com/gpu: "1"
+    volumes:
+      - name: kserve-provision-location
+        persistentVolumeClaim:
+          claimName: translategemma-4b
+  router:
+    scheduler: {}

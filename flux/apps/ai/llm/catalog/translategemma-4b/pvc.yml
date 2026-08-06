@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: translategemma-4b
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-delete
+  resources:
+    requests:
+      storage: 20Gi
