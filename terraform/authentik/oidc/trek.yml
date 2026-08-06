@@ -4,3 +4,4 @@ redirect_uris:
   - https://trek.nahsi.dev/api/auth/oidc/callback
 allowed_groups:
   - superusers
+  - users
