@@ -8,6 +8,7 @@ stringData:
     hindsight: ENC[AES256_GCM,data:uB6I7RIg0anepiwsmt4Ud1440dryyIknKxWw64SEw8jJqZwQTEKUOQaQVxjR/kRFCsfOJUumGcW+98fFALzUsCVAedqZOTyG4CRTMPl74RR2ISOeMXdNkQXAnFMBFHj0JMN5Mk8WYWjG5dJ+EhkJj41QOwN6VcUgMA==,iv:lNtPWteeOyVH5P+Dxh7x3R4LO8wwl0lB0mXJlacMYq0=,tag:nO/S6d16wE+C6RzeZqhF0Q==,type:str]
     digarr: ENC[AES256_GCM,data:GW9fFlBq+YBO1k2RwP1G2KdDMvkI8AK/0YhQ9JodLQaqmXjEYK+aL7BVVgdPi9s0GG6ItrGqC823jkHSBy3oOOIHiNyOP2i7d5N37kaz7YoSSHHORRjVulaASbCxzqGBUiVsfNWO11DBgDR2oP5IikR/M8Fu/Q==,iv:sG+be1LDYKxHI99qQx4SJeDmCQ8u7dnSD8L7DsV7GOI=,tag:MnGMVEN9ripVs8HUkQzi9Q==,type:str]
     open-notebook: ENC[AES256_GCM,data:gUPCiP0Xg1Vl8yMYBeUwCbEOvwISRzm0xNaGMcWM6mHPB0XD1n2/WlfGi5unaCyx39UhcG0ihwX2qQSVZYT8qYUj75LQRuNem8j618pLQcABi2C1UF3yZIA7f2jrIwNp3gxWlNMiu6G2H9X09xREVrdcdog0rPrg5gyG7Ho=,iv:4rsgdP1mBOh8w+KFKqP+6uImh8c2CijfFIc1Lpp2++8=,tag:6JnLDgYviq36WYqoyH/u1w==,type:str]
+    translategemma: ENC[AES256_GCM,data:JYKMkSZHdYi7TSR2OFDCxwjLrjZiWMd37tZAczC439iC1ct7iZ1Bl4r4YkgDiwUg/n5um+px4lY9KE7/FbKnoBQf18kYmr0hIR3dsbW+bZ9hYG0wVq9VGwsJmCWmDk78NtQnb7Oh/HFuMVFs+j67ffbWyI2aw8jXxvHymeVX,iv:CKpmnDxrYIW2xI882yhpcEesWkNe4a3z7bK203K3j2A=,tag:DesRSeLinQdsNJ02On6qeg==,type:str]
 sops:
     age:
         - enc: |
@@ -20,6 +21,6 @@ sops:
             -----END AGE ENCRYPTED FILE-----
           recipient: age17kf3tfnhtv36pjscj7mzuv5dc0xjcj388764258uwgad78mzzs2qtu05pw
     encrypted_regex: ^(data|stringData)$
-    lastmodified: "2026-07-26T18:18:44Z"
-    mac: ENC[AES256_GCM,data:0i7FfG/u/IxG7Oo2mFyRj1EZjUgFJEr3j7VI8aBhgtGdL0V5H3eq9DfZi0aZMJLK3rDF6iv8pEdeMAZMqu/UHZkmF2nq6lYrdmE5xBQ8SDINCeZOhkupYuTuo4uk0Yj16SM02E0zGqI3w++ZsafVfcGUtFyaC1WwzTHWpdyOhjQ=,iv:DCKXHBul1Gl93Mezr3DYFRMfznlCsi0vHA5FGQRO12o=,tag:RCqwJ2bQCKFUNDzmywoW2w==,type:str]
+    lastmodified: "2026-08-06T09:59:32Z"
+    mac: ENC[AES256_GCM,data:h6f9oS5YPF0DG5hsrV5MKu5fvR8BTwoRswy2GHLBj4JEFk5TD/DiYl0nksoduEf7V/z/PRoWo6PJAq1vK2+IaJgQLSM+u6LZ8XzXvMDhrR657lpxuhYVEJBZDVXDsSxD3mB7onNCENv5ZzjfyS9M/MHckKV1XqEg3Q3T3NKZqzg=,iv:xMQD7sFJCAv2nNyNcFYOv8dbTz1n7sySyC+MOSJ5ROs=,tag:ye9FAZlBurT2XE5o0xME6Q==,type:str]
     version: 3.13.1
