@@ -40,7 +40,7 @@ spec:
                 memory: 16Gi
               limits:
                 memory: 20Gi
-                # nvidia.com/gpu: "1"
+                nvidia.com/gpu: "1"
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
