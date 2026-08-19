@@ -46,6 +46,12 @@ spec:
               capabilities:
                 drop:
                   - ALL
+                add:
+                  - CHOWN
+                  - SETUID
+                  - SETGID
+                  - DAC_OVERRIDE
+                  - FOWNER
 
     service:
       main:
