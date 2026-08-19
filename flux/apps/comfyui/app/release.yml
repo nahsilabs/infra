@@ -17,6 +17,24 @@ spec:
     controllers:
       main:
         strategy: Recreate
+        # initContainers:
+          # sync-models:
+          #   image:
+          #     repository: alpine
+          #     tag: "3.20"
+          #   command:
+          #     - sh
+          #     - -c
+          #     - |
+          #       apk add --no-cache rsync >/dev/null
+          #       rsync -a --info=progress2 /nfs-data/models/ /local-models/
+          #   resources:
+          #     requests:
+          #       cpu: "1"
+          #       memory: 1Gi
+          #     limits:
+          #       cpu: "4"
+          #       memory: 2Gi
         containers:
           main:
             image:
@@ -24,6 +42,13 @@ spec:
               tag: cu130-slim-v2@sha256:0887f75dc2fed5a1d89af37f2451fe5fb11883d909ef0a7bb21898a3d12a0b9e
             env:
               CLI_ARGS: --disable-mmap
+            command:
+              - bash
+              - -c
+            args:
+              - |
+                sed -i 's/export PIP_USER=true/export PIP_USER=false/' /runner-scripts/entrypoint.sh
+                exec bash /runner-scripts/entrypoint.sh
             probes:
               startup:
                 enabled: true
@@ -94,9 +119,22 @@ spec:
       data:
         existingClaim: comfyui-data
         globalMounts:
-          - path: /root/ComfyUI/models
-            subPath: models
           - path: /root/ComfyUI/output
             subPath: output
           - path: /root/ComfyUI/input
             subPath: input
+        advancedMounts:
+          main:
+            sync-models:
+              - path: /nfs-data
+                readOnly: true
+      models-cache:
+        type: hostPath
+        hostPath: /var/lib/comfyui-models
+        hostPathType: DirectoryOrCreate
+        globalMounts:
+          - path: /root/ComfyUI/models
+        advancedMounts:
+          main:
+            sync-models:
+              - path: /local-models
