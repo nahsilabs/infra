@@ -1,0 +1,94 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: comfyui
+spec:
+  interval: 1h
+  timeout: 10m
+  chart:
+    spec:
+      chart: app-template
+      version: 5.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        strategy: Recreate
+        containers:
+          main:
+            image:
+              repository: yanwk/comfyui-boot
+              tag: cu130-slim-v2@sha256:0887f75dc2fed5a1d89af37f2451fe5fb11883d909ef0a7bb21898a3d12a0b9e
+            env:
+              CLI_ARGS: --disable-mmap
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 8188
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 60
+            resources:
+              requests:
+                cpu: "2"
+                memory: 16Gi
+              limits:
+                memory: 20Gi
+                # nvidia.com/gpu: "1"
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8188
+
+    route:
+      main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Productivity
+          gethomepage.dev/name: ComfyUI
+          gethomepage.dev/icon: comfyui.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=comfyui"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - comfyui.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
+
+    persistence:
+      root:
+        existingClaim: comfyui-root
+        globalMounts:
+          - path: /root/ComfyUI/
+      data:
+        existingClaim: comfyui-data
+        globalMounts:
+          - path: /root/ComfyUI/models
+            subPath: models
+          - path: /root/ComfyUI/output
+            subPath: output
+          - path: /root/ComfyUI/input
+            subPath: input

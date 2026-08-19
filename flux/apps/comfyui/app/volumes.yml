@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-comfyui-data
+  annotations:
+    pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  mountOptions:
+    - nfsvers=4.1
+    - nconnect=8
+    - noatime
+    - soft
+    - softerr
+    - timeo=50
+    - retrans=3
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: nfs.lan#mnt/storage/data/comfyui#comfyui
+    volumeAttributes:
+      server: nfs.lan
+      share: /mnt/storage/data/comfyui
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: comfyui-data
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  volumeName: nfs-comfyui-data
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: comfyui-root
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd
+  resources:
+    requests:
+      storage: 20Gi
