@@ -1,0 +1,26 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-ai-llm-qwen3-6-27b
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-kserve-config
+    - name: app-ai-llm-gateway
+  path: ./flux/apps/ai/llm/catalog/qwen3-6-27b/app
+  targetNamespace: ai
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 30m
+  ignore:
+    - paths:
+        - /spec/replicas
+      target:
+        kind: LLMInferenceService
+        name: qwen3-6-27b
+        namespace: ai
