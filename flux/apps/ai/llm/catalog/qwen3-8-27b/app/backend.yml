@@ -14,20 +14,3 @@ spec:
           - type: Completions
             path: /v1/chat/completions
         model: qwen3.8-27b
----
-apiVersion: agentgateway.dev/v1alpha1
-kind: AgentgatewayBackend
-metadata:
-  name: qwen3-8-27b-responses
-spec:
-  ai:
-    provider:
-      custom:
-        backendRef:
-          kind: Service
-          name: qwen3-8-27b
-          port: 8080
-        formats:
-          - type: Responses
-            path: /v1/responses
-        model: qwen3.8-27b

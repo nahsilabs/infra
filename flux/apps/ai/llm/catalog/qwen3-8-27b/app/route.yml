@@ -37,6 +37,6 @@ spec:
         request: 900s
         backendRequest: 900s
       backendRefs:
-        - group: agentgateway.dev
-          kind: AgentgatewayBackend
-          name: qwen3-8-27b-responses
+        - kind: Service
+          name: qwen3-8-27b
+          port: 8080
