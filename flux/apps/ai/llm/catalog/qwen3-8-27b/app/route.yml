@@ -18,6 +18,13 @@ spec:
             - type: Exact
               name: X-Gateway-Base-Model-Name
               value: qwen3.8-27b
+        - path:
+            type: PathPrefix
+            value: /v1/responses
+          headers:
+            - type: Exact
+              name: X-Gateway-Base-Model-Name
+              value: qwen3.8-27b
       timeouts:
         request: 900s
         backendRequest: 900s

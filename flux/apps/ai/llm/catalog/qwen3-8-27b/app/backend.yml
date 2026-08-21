@@ -13,4 +13,6 @@ spec:
         formats:
           - type: Completions
             path: /v1/chat/completions
+          - type: Responses
+            path: /v1/responses
         model: qwen3.8-27b
