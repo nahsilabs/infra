@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: qwen3-8-27b
     app.kubernetes.io/part-of: ninfer
 spec:
-  replicas: 1
+  replicas: 0
   strategy:
     type: Recreate
   selector:
