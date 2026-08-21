@@ -1,0 +1,42 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: qwen3-8-27b-ai
+spec:
+  parentRefs:
+    - name: agenticgateway-internal
+      namespace: agenticgateway
+      sectionName: https
+  hostnames:
+    - ai.nahsi.dev
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /v1/chat/completions
+          headers:
+            - type: Exact
+              name: X-Gateway-Base-Model-Name
+              value: Qwen/Qwen3.8-27B
+      timeouts:
+        request: 900s
+        backendRequest: 900s
+      backendRefs:
+        - group: agentgateway.dev
+          kind: AgentgatewayBackend
+          name: qwen3-8-27b-llm
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /v1/responses
+          headers:
+            - type: Exact
+              name: X-Gateway-Base-Model-Name
+              value: qwen3.8-27b
+      timeouts:
+        request: 900s
+        backendRequest: 900s
+      backendRefs:
+        - kind: Service
+          name: qwen3-8-27b
+          port: 8080

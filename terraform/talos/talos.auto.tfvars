@@ -1,4 +1,4 @@
-talos_version = "v1.13.4"
+talos_version = "v1.13.9"
 cluster_name  = "nahsilabs"
 
 nodes = [
@@ -68,8 +68,8 @@ nodes = [
     extensions = [
       "siderolabs/amd-ucode",
       "siderolabs/qemu-guest-agent",
-      "siderolabs/nonfree-kmod-nvidia-lts",
-      "siderolabs/nvidia-container-toolkit-lts",
+      "siderolabs/nonfree-kmod-nvidia-production",
+      "siderolabs/nvidia-container-toolkit-production",
     ]
   },
 ]

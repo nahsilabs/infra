@@ -18,3 +18,9 @@ spec:
               set:
                 - name: X-Gateway-Base-Model-Name
                   value: string(json(request.body).model)
+        - condition: request.path.startsWith("/v1/responses")
+          policy:
+            request:
+              set:
+                - name: X-Gateway-Base-Model-Name
+                  value: string(json(request.body).model)

@@ -33,7 +33,7 @@ data "talos_image_factory_urls" "node" {
   talos_version = var.talos_version
   schematic_id  = talos_image_factory_schematic.node[each.key].id
   platform      = "nocloud"
-  architecture  = "arm64"
+  architecture  = "amd64"
 }
 
 data "talos_machine_configuration" "control_plane" {

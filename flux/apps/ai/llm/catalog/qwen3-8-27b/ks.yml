@@ -1,0 +1,65 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-ai-llm-qwen3-8-27b-model
+  namespace: flux-system
+spec:
+  path: ./flux/apps/ai/llm/catalog/qwen3-8-27b/model
+  targetNamespace: ai
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 6h
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-ai-llm-qwen3-8-27b
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-ai-llm-qwen3-8-27b-model
+    - name: app-ai-llm-gateway
+  path: ./flux/apps/ai/llm/catalog/qwen3-8-27b/app
+  targetNamespace: ai
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 15m
+  ignore:
+    - paths:
+        - /spec/replicas
+      target:
+        group: apps
+        kind: Deployment
+        name: qwen3-8-27b
+        namespace: ai
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: obs-ai-llm-qwen3-8-27b
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-ai-llm-qwen3-8-27b
+    - name: infra-prometheus-operator-crds
+  path: ./flux/apps/ai/llm/catalog/qwen3-8-27b/obs
+  targetNamespace: ai
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m

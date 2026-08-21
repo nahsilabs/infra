@@ -38,3 +38,23 @@ spec:
     - name: infra-agenticgateway-crds
     - name: infra-kserve
     - name: infra-prometheus-operator-crds
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: obs-agenticgateway-dashboard
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-grafana-operator
+    - name: obs-grafana
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m
+  prune: true
+  targetNamespace: agenticgateway
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  path: ./flux/infrastructure/controllers/agenticgateway/obs
