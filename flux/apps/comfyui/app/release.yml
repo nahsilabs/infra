@@ -17,6 +17,7 @@ spec:
     controllers:
       main:
         strategy: Recreate
+        replicas: 1
         containers:
           main:
             image:

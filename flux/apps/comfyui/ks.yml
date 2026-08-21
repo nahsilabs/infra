@@ -10,6 +10,13 @@ spec:
   path: ./flux/apps/comfyui/app
   targetNamespace: comfyui
   prune: true
+  ignore:
+    - paths:
+        - /spec/values/controllers/main/replicas
+      target:
+        kind: HelmRelease
+        name: comfyui
+        namespace: comfyui
   sourceRef:
     kind: GitRepository
     name: infra
