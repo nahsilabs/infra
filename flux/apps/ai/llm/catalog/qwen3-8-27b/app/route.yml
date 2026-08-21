@@ -18,6 +18,14 @@ spec:
             - type: Exact
               name: X-Gateway-Base-Model-Name
               value: qwen3.8-27b
+      timeouts:
+        request: 900s
+        backendRequest: 900s
+      backendRefs:
+        - group: agentgateway.dev
+          kind: AgentgatewayBackend
+          name: qwen3-8-27b-llm
+    - matches:
         - path:
             type: PathPrefix
             value: /v1/responses
@@ -31,4 +39,4 @@ spec:
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend
-          name: qwen3-8-27b-llm
+          name: qwen3-8-27b-responses
