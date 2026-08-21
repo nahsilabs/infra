@@ -1,0 +1,16 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: qwen3-8-27b-llm
+spec:
+  ai:
+    provider:
+      custom:
+        backendRef:
+          kind: Service
+          name: qwen3-8-27b
+          port: 8080
+        formats:
+          - type: Completions
+            path: /v1/chat/completions
+        model: qwen3.8-27b
