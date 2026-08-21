@@ -11,8 +11,8 @@ spec:
           name: qwen3-8-27b
           port: 8080
         formats:
-          - type: Completions
-            path: /v1/chat/completions
           - type: Responses
             path: /v1/responses
+          - type: Completions
+            path: /v1/chat/completions
         model: qwen3.8-27b
