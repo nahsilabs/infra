@@ -3,7 +3,7 @@ kind: Cluster
 metadata:
   name: pg-memos
 spec:
-  instances: 2
+  instances: 1
   imageName: ghcr.io/cloudnative-pg/postgresql:18.4@sha256:6138f19539304b585c6cafd1af82ca407f184139459a8e06f0880df4556d3588
   primaryUpdateStrategy: unsupervised
   storage:
