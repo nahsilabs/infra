@@ -4,7 +4,7 @@ metadata:
   name: pg-invidious
 spec:
   instances: 1
-  imageName: ghcr.io/cloudnative-pg/postgresql:18.4@sha256:6138f19539304b585c6cafd1af82ca407f184139459a8e06f0880df4556d3588
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.6@sha256:d7a81cb5da3182d95d0da5fabfb9e484e375db899dcd54b684105f1e8966e9ca
   primaryUpdateStrategy: unsupervised
   storage:
     size: 1Gi
