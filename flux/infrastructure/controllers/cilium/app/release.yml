@@ -93,7 +93,7 @@ spec:
       tls:
         enabled: true
         auto:
-          method: controller
+          method: helm
       metrics:
         enableOpenMetrics: true
         enabled:
