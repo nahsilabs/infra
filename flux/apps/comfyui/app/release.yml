@@ -63,6 +63,10 @@ spec:
                   - DAC_OVERRIDE
                   - FOWNER
 
+    defaultPodOptions:
+      nodeSelector:
+        kubernetes.io/hostname: pergamon
+
     service:
       main:
         controller: main
@@ -99,11 +103,13 @@ spec:
         existingClaim: comfyui-root
         globalMounts:
           - path: /root/ComfyUI/
+      models:
+        existingClaim: comfyui-models
+        globalMounts:
+          - path: /root/ComfyUI/models
       data:
         existingClaim: comfyui-data
         globalMounts:
-          - path: /root/ComfyUI/models
-            subPath: models
           - path: /root/ComfyUI/output
             subPath: output
           - path: /root/ComfyUI/input
