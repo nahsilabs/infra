@@ -9,6 +9,8 @@ spec:
     name: cilium
     namespace: flux-system
   values:
+    upgradeCompatibility: "1.19"
+
     # Run everywhere operationally needed, but respect the nahsilabs/offline
     # taint: by NOT tolerating it, cilium is evicted from offline nodes (e.g.
     # pergamon) and they drop out of the DaemonSet's desired count, so the
