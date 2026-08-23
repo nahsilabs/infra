@@ -19,3 +19,17 @@ apiVersion: v1alpha1
 kind: HostnameConfig
 hostname: pergamon
 auto: off
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: comfyui-models
+volumeType: partition
+provisioning:
+  diskSelector:
+    match: disk.wwid == "eui.002538da21a151c6" && disk.serial == "S649NL0TA48827H" && disk.dev_path == "/dev/nvme0n1" && disk.transport == "nvme" && !system_disk
+  minSize: 900GiB
+  grow: true
+filesystem:
+  type: xfs
+mount:
+  disableAccessTime: true
