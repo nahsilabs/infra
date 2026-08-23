@@ -15,6 +15,10 @@ spec:
   upgrade:
     crds: Skip
   values:
+    crds:
+      gatewayAPI:
+        safeUpgradePolicy:
+          enabled: false
     deployment:
       replicas: 1
       envoyGateway:

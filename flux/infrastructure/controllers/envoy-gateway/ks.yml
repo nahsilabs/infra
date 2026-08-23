@@ -4,6 +4,8 @@ metadata:
   name: infra-envoy-gateway
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: infra-gateway-api-crds
   interval: 1h
   retryInterval: 2m
   timeout: 15m
