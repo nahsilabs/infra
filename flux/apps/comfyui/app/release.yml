@@ -22,7 +22,7 @@ spec:
           main:
             image:
               repository: yanwk/comfyui-boot
-              tag: cu130-megapak-pt211@sha256:ae62a7406b4159662a5322a3060a19d3ea3b3e9460c03e7ebc18154d09df7c60
+              tag: cu130-megapak-pt211@sha256:991827953d7e9fdcf294d3fcd539b8f9466b1ef4c9ce247c32370e10f35b06a5
             env:
               CLI_ARGS: --disable-mmap
             command:
