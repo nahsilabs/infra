@@ -2,23 +2,67 @@ terraform {
   required_providers {
     authentik = {
       source  = "goauthentik/authentik"
-      version = "~> 2026.5"
+      version = "~> 2026.5.1"
     }
   }
 }
 
-# ── Groups ──────────────────────────────────────────────
-
-resource "authentik_group" "superusers" {
-  name         = "superusers"
-  is_superuser = true
-  lifecycle { ignore_changes = [users] }
+moved {
+  from = authentik_group.superusers
+  to   = authentik_group.admins
 }
 
-resource "authentik_group" "extra" {
-  for_each = var.extra_groups
-  name     = each.value
-  lifecycle { ignore_changes = [users] }
+moved {
+  from = authentik_group.extra["users"]
+  to   = authentik_group.users
+}
+
+
+resource "authentik_group" "users" {
+  name = "users"
+
+  lifecycle {
+    ignore_changes = [users]
+  }
+}
+
+resource "authentik_group" "applications" {
+  name    = "applications"
+  parents = [authentik_group.users.id]
+
+  lifecycle {
+    ignore_changes = [users]
+  }
+}
+
+resource "authentik_group" "application" {
+  for_each = var.application_groups
+
+  name    = each.value
+  parents = [authentik_group.applications.id]
+
+  lifecycle {
+    ignore_changes = [users]
+  }
+}
+
+resource "authentik_group" "operators" {
+  name    = "operators"
+  parents = [authentik_group.users.id]
+
+  lifecycle {
+    ignore_changes = [users]
+  }
+}
+
+resource "authentik_group" "admins" {
+  name         = "admins"
+  is_superuser = true
+  parents      = [authentik_group.operators.id]
+
+  lifecycle {
+    ignore_changes = [users]
+  }
 }
 
 # ── Authentication flow ─────────────────────────────────
@@ -266,6 +310,8 @@ resource "authentik_flow_stage_binding" "recovery_login" {
 
 resource "authentik_brand" "main" {
   domain              = var.organization_domain
+  branding_favicon    = "/static/dist/assets/icons/icon.png"
+  branding_logo       = "/static/dist/assets/icons/icon_left_brand.svg"
   branding_title      = var.organization_name
   flow_authentication = authentik_flow.authentication.uuid
   flow_recovery       = authentik_flow.recovery.uuid

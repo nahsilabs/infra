@@ -3,7 +3,7 @@ ui_group: MCP
 client_type: public
 offline_access: true
 allowed_groups:
-  - superusers
+  - operators
 redirect_uris:
   - https://claude.ai/api/mcp/auth_callback
 redirect_uris_regex:

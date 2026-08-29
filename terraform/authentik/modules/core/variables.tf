@@ -14,8 +14,7 @@ variable "session_duration" {
   default     = "days=30"
 }
 
-variable "extra_groups" {
-  description = "Additional groups to create"
+variable "application_groups" {
+  description = "Access-group names created beneath applications"
   type        = set(string)
-  default     = []
 }

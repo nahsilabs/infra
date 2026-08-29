@@ -3,8 +3,8 @@ ui_group: Observability
 redirect_uris:
   - https://grafana.nahsi.dev/login/generic_oauth
 allowed_groups:
-  - superusers
+  - operators
 entitlements:
   Grafana Admins:
     groups:
-      - superusers
+      - admins

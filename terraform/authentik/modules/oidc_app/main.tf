@@ -2,7 +2,7 @@ terraform {
   required_providers {
     authentik = {
       source  = "goauthentik/authentik"
-      version = "~> 2026.5"
+      version = "~> 2026.5.1"
     }
     tls = {
       source  = "hashicorp/tls"
@@ -76,8 +76,12 @@ data "authentik_property_mapping_provider_scope" "offline_access" {
 }
 
 locals {
-  entitlement_scope_ids   = length(var.entitlements) > 0 ? [data.authentik_property_mapping_provider_scope.entitlements[0].id] : []
+  entitlement_scope_ids    = length(var.entitlements) > 0 ? [data.authentik_property_mapping_provider_scope.entitlements[0].id] : []
   offline_access_scope_ids = var.offline_access ? [data.authentik_property_mapping_provider_scope.offline_access[0].id] : []
+
+  access_group_bindings = {
+    for index, group in var.allowed_groups : tostring(index) => group
+  }
 
   entitlement_group_bindings = {
     for b in flatten([
@@ -138,11 +142,32 @@ resource "authentik_application" "this" {
   open_in_new_tab   = true
 }
 
+moved {
+  from = authentik_policy_binding.access["superusers"]
+  to   = authentik_policy_binding.access["0"]
+}
+
+
+moved {
+  from = authentik_policy_binding.entitlement_group["Grafana Admins/group/superusers"]
+  to   = authentik_policy_binding.entitlement_group["Grafana Admins/group/admins"]
+}
+
+moved {
+  from = authentik_policy_binding.entitlement_group["opencloudAdmin/group/superusers"]
+  to   = authentik_policy_binding.entitlement_group["opencloudAdmin/group/admins"]
+}
+
+moved {
+  from = authentik_policy_binding.entitlement_group["opencloudUser/group/users"]
+  to   = authentik_policy_binding.entitlement_group["opencloudUser/group/access:opencloud"]
+}
+
 resource "authentik_policy_binding" "access" {
-  for_each = toset(var.allowed_groups)
+  for_each = local.access_group_bindings
   target   = authentik_application.this.uuid
   group    = var.groups[each.value]
-  order    = index(var.allowed_groups, each.value)
+  order    = tonumber(each.key)
 }
 
 # ── Entitlements ────────────────────────────────────────

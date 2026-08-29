@@ -3,4 +3,5 @@ ui_group: Comms
 redirect_uris:
   - https://mas.nahsi.dev/upstream/callback/01KSWKABKK3Y4YV91MY6P8FCA9
 allowed_groups:
-  - superusers
+  - operators
+  - access:matrix

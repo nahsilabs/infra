@@ -1,8 +1,13 @@
 output "groups" {
-  description = "Map of group name to group ID"
+  description = "Map of structural and application access group names to group IDs"
   value = merge(
-    { superusers = authentik_group.superusers.id },
-    { for g in authentik_group.extra : g.name => g.id },
+    {
+      users        = authentik_group.users.id
+      applications = authentik_group.applications.id
+      operators    = authentik_group.operators.id
+      admins       = authentik_group.admins.id
+    },
+    { for name, group in authentik_group.application : name => group.id },
   )
 }
 

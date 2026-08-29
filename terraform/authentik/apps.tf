@@ -1,3 +1,18 @@
+moved {
+  from = module.oidc_apps["actual"].authentik_policy_binding.access["household"]
+  to   = module.oidc_apps["actual"].authentik_policy_binding.access["1"]
+}
+
+moved {
+  from = module.oidc_apps["opencloud"].authentik_policy_binding.access["users"]
+  to   = module.oidc_apps["opencloud"].authentik_policy_binding.access["1"]
+}
+
+moved {
+  from = module.oidc_apps["trek"].authentik_policy_binding.access["users"]
+  to   = module.oidc_apps["trek"].authentik_policy_binding.access["1"]
+}
+
 locals {
   oidc_apps = {
     for f in fileset("${path.module}/oidc", "*.yml") :

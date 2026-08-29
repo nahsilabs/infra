@@ -1,6 +1,7 @@
 launch_url: https://actual.nahsi.dev
 ui_group: Productivity
 allowed_groups:
-  - superusers
+  - operators
+  - access:actual
 redirect_uris:
   - https://actual.nahsi.dev/openid/callback

@@ -3,4 +3,4 @@ ui_group: Platform
 redirect_uris:
   - https://rustfs.nahsi.dev/rustfs/admin/v3/oidc/callback/default
 allowed_groups:
-  - superusers
+  - operators

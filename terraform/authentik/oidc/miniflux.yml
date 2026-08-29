@@ -3,4 +3,5 @@ ui_group: Knowledge
 redirect_uris:
   - https://rss.nahsi.dev/oauth2/oidc/callback
 allowed_groups:
-  - superusers
+  - operators
+  - access:miniflux
