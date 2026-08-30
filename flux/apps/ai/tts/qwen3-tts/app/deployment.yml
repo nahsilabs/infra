@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qwen3-tts
+  labels:
+    app.kubernetes.io/name: qwen3-tts
+    app.kubernetes.io/part-of: vllm
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: qwen3-tts
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: qwen3-tts
+        app.kubernetes.io/part-of: vllm
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: pergamon
+      runtimeClassName: nvidia
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: qwen3-tts
+          image: docker.io/vllm/vllm-omni:v0.26.0@sha256:5cba1538c6f8ee81e8bea6708c24e68d7b2640f466a9fbf2ef15e68f2168b48b
+          command:
+            - vllm
+            - serve
+            - Qwen/Qwen3-TTS-12Hz-1.7B-Base
+            - --deploy-config
+            - /usr/local/lib/python3.12/dist-packages/vllm_omni/deploy/qwen3_tts.yaml
+            - --omni
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8091"
+            - --trust-remote-code
+            - --enforce-eager
+          env:
+            - name: HF_HOME
+              value: /cache/huggingface
+            - name: SPEAKER_SAMPLES_DIR
+              value: /voices
+          ports:
+            - name: http
+              containerPort: 8091
+          resources:
+            requests:
+              cpu: "2"
+              memory: 12Gi
+              nvidia.com/gpu: "1"
+            limits:
+              cpu: "4"
+              memory: 16Gi
+              nvidia.com/gpu: "1"
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 120
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: cache
+              mountPath: /cache
+            - name: voices
+              mountPath: /voices
+            - name: shm
+              mountPath: /dev/shm
+      volumes:
+        - name: cache
+          persistentVolumeClaim:
+            claimName: qwen3-tts-cache
+        - name: voices
+          persistentVolumeClaim:
+            claimName: qwen3-tts-voices
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qwen3-tts
+  labels:
+    app.kubernetes.io/name: qwen3-tts
+    app.kubernetes.io/part-of: vllm
+spec:
+  selector:
+    app.kubernetes.io/name: qwen3-tts
+  ports:
+    - name: http
+      port: 8091
+      targetPort: http

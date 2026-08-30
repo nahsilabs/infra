@@ -12,3 +12,15 @@ spec:
       mode: Strict
       secretRef:
         name: llm-apikeys
+    transformation:
+      conditional:
+        - condition: >-
+            request.path.startsWith("/v1/chat/completions") &&
+            !("reasoning_effort" in json(request.body)) &&
+            !("enable_thinking" in json(request.body))
+          policy:
+            request:
+              body: >-
+                toJson(json(request.body).merge({
+                  "reasoning_effort": "medium"
+                }))
