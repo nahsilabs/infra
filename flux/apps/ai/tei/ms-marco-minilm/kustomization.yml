@@ -4,3 +4,5 @@ resources:
   - pvc.yml
   - release.yml
   - networkpolicy.yml
+  - route.yml
+  - policies.yml
