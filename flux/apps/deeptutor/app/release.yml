@@ -65,6 +65,12 @@ spec:
 
     route:
       private:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Knowledge
+          gethomepage.dev/name: DeepTutor
+          gethomepage.dev/icon: https://raw.githubusercontent.com/HKUDS/DeepTutor/ce7c2dc2dc6b7ae3063e81be29608bdba4723a25/web/public/apple-touch-icon.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=deeptutor"
         parentRefs:
           - name: private-gateway
             namespace: envoy-gateway
