@@ -17,41 +17,6 @@ spec:
       main:
         replicas: 1
         strategy: Recreate
-        initContainers:
-          auth:
-            image:
-              repository: busybox
-              tag: 1.38.0@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616
-            command:
-              - /bin/sh
-              - -c
-              - |
-                set -eu
-                umask 077
-                target=/app/data/user/settings/auth.json
-                mkdir -p "$(dirname "$target")"
-                if [ -e "$target" ] || [ -L "$target" ]; then
-                  exit 0
-                fi
-                tmp="$(mktemp "${target}.XXXXXX")"
-                trap 'rm -f "$tmp"' EXIT
-                cat > "$tmp" <<'EOF'
-                {
-                  "version": 1,
-                  "enabled": true,
-                  "username": "admin",
-                  "password_hash": "",
-                  "token_expire_hours": 24,
-                  "cookie_secure": true
-                }
-                EOF
-                if ln "$tmp" "$target"; then
-                  exit 0
-                fi
-                if [ -e "$target" ] || [ -L "$target" ]; then
-                  exit 0
-                fi
-                exit 1
         containers:
           main:
             image:
