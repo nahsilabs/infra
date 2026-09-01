@@ -4,9 +4,10 @@ metadata:
   name: app-ai-tei-bge-small
   namespace: flux-system
 spec:
+  suspend: true
   path: ./flux/apps/ai/tei/bge-small
   targetNamespace: ai
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: infra
@@ -21,11 +22,12 @@ metadata:
   name: app-ai-tei-ms-marco-minilm
   namespace: flux-system
 spec:
+  suspend: true
   dependsOn:
     - name: app-ai-llm-gateway
   path: ./flux/apps/ai/tei/ms-marco-minilm
   targetNamespace: ai
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: infra
@@ -40,11 +42,12 @@ metadata:
   name: app-ai-tei-bge-m3
   namespace: flux-system
 spec:
+  suspend: true
   dependsOn:
     - name: app-ai-llm-gateway
   path: ./flux/apps/ai/tei/bge-m3
   targetNamespace: ai
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: infra
@@ -59,11 +62,12 @@ metadata:
   name: app-ai-tei-obs
   namespace: flux-system
 spec:
+  suspend: true
   dependsOn:
     - name: infra-prometheus-operator-crds
   path: ./flux/apps/ai/tei/obs
   targetNamespace: ai
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: infra

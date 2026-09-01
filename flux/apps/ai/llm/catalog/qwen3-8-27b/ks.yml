@@ -4,9 +4,10 @@ metadata:
   name: app-ai-llm-qwen3-8-27b-model
   namespace: flux-system
 spec:
+  suspend: true
   path: ./flux/apps/ai/llm/catalog/qwen3-8-27b/model
   targetNamespace: ai
-  prune: true
+  prune: false
   wait: true
   sourceRef:
     kind: GitRepository
@@ -50,12 +51,13 @@ metadata:
   name: obs-ai-llm-qwen3-8-27b
   namespace: flux-system
 spec:
+  suspend: true
   dependsOn:
     - name: app-ai-llm-qwen3-8-27b
     - name: infra-prometheus-operator-crds
   path: ./flux/apps/ai/llm/catalog/qwen3-8-27b/obs
   targetNamespace: ai
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: infra

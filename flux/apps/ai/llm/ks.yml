@@ -23,11 +23,12 @@ metadata:
   name: app-ai-llm-obs
   namespace: flux-system
 spec:
+  suspend: true
   dependsOn:
     - name: infra-prometheus-operator-crds
   path: ./flux/apps/ai/llm/obs
   targetNamespace: ai
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: infra
@@ -42,10 +43,11 @@ metadata:
   name: app-ai-llm-gateway
   namespace: flux-system
 spec:
+  suspend: true
   dependsOn:
     - name: app-ai-llm
   path: ./flux/apps/ai/llm/gateway
-  prune: true
+  prune: false
   decryption:
     provider: sops
     secretRef:
@@ -64,11 +66,12 @@ metadata:
   name: app-ai-llm-providers
   namespace: flux-system
 spec:
+  suspend: true
   dependsOn:
     - name: infra-agenticgateway-config
   path: ./flux/apps/ai/llm/providers
   targetNamespace: ai
-  prune: true
+  prune: false
   decryption:
     provider: sops
     secretRef:
