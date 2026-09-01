@@ -44,6 +44,7 @@ spec:
         endpoints:
           - port: http
             path: /api/prometheus/metrics
+            interval: 15s
             relabelings:
               - action: replace
                 regex: .*

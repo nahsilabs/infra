@@ -56,6 +56,7 @@ spec:
         endpoints:
           - port: http
             path: /metrics
+            interval: 15s
             relabelings:
               - action: replace
                 regex: .*
