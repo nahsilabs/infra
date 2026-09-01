@@ -19,7 +19,7 @@ spec:
           main:
             image:
               repository: wardpearce/materialious
-              tag: 1.17.11@sha256:72180efe64c6a940bfbaa8b9f15b6de1dfb94808abc6e307487ed6ca9c28b04a
+              tag: 1.17.12@sha256:d2d72223dd5068340fadcde993d5741543ebed3908e4188d954c8e34145086ab
             env:
               VITE_DEFAULT_INVIDIOUS_INSTANCE: "https://iv.nahsi.dev"
               VITE_DEFAULT_RETURNYTDISLIKES_INSTANCE: "https://returnyoutubedislikeapi.com"
