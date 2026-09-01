@@ -7,7 +7,6 @@ spec:
   dependsOn:
     - name: infra-agenticgateway-config
   path: ./flux/apps/ai/gateway/app
-  targetNamespace: ai
   prune: true
   wait: true
   decryption:
