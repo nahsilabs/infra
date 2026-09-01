@@ -8,10 +8,11 @@ variable "talos_version" {
 
 variable "nodes" {
   type = list(object({
-    name           = string
-    server_ip      = string
-    role           = string
-    config_patches = list(string)
-    extensions     = list(string)
+    name              = string
+    server_ip         = string
+    role              = string
+    config_patches    = list(string)
+    extensions        = list(string)
+    extra_kernel_args = optional(list(string), [])
   }))
 }
