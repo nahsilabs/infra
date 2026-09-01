@@ -1,0 +1,18 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-ai-retrieval-bge-m3
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-ai-gateway
+  path: ./flux/apps/ai/retrieval/catalog/bge-m3/app
+  targetNamespace: ai
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 30m

@@ -1,0 +1,14 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: bge-small-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: bge-small-ai
+  traffic:
+    apiKeyAuthentication:
+      mode: Strict
+      secretRef:
+        name: ai-apikeys
