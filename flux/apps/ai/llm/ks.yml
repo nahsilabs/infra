@@ -4,11 +4,12 @@ metadata:
   name: app-ai-llm
   namespace: flux-system
 spec:
+  suspend: true
   dependsOn:
     - name: infra-agenticgateway-config
   path: ./flux/apps/ai/llm/catalog
   targetNamespace: ai
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: infra
