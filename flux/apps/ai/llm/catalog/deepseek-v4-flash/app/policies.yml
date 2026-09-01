@@ -1,0 +1,29 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: deepseek-v4-flash-auth
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: deepseek-v4-flash-ai
+  traffic:
+    apiKeyAuthentication:
+      mode: Strict
+      secretRef:
+        name: ai-apikeys
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: deepseek-v4-flash-retry
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: deepseek-v4-flash-ai
+  traffic:
+    retry:
+      attempts: 2
+      backoff: 2s
+      codes: [429, 500, 502, 503, 504]

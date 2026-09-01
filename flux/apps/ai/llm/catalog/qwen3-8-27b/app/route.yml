@@ -24,7 +24,7 @@ spec:
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend
-          name: qwen3-8-27b-llm
+          name: qwen3-8-27b
     - matches:
         - path:
             type: PathPrefix

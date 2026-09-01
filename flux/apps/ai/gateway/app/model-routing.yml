@@ -1,0 +1,25 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: ai-model-routing
+  namespace: agenticgateway
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: agenticgateway-internal
+  traffic:
+    phase: PreRouting
+    transformation:
+      conditional:
+        - condition: >-
+            request.path.startsWith("/v1/chat/completions") ||
+            request.path.startsWith("/v1/responses") ||
+            request.path.startsWith("/v1/embeddings") ||
+            request.path.startsWith("/rerank") ||
+            request.path.startsWith("/v1/audio")
+          policy:
+            request:
+              set:
+                - name: X-Gateway-Base-Model-Name
+                  value: string(json(request.body).model)
