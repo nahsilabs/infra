@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ninfer
+  labels:
+    obs.nahsilabs/metrics: "true"
+spec:
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app.kubernetes.io/part-of: ninfer
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 5s

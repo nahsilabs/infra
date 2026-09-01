@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: ms-marco-minilm-ai
+spec:
+  parentRefs:
+    - name: agenticgateway-internal
+      namespace: agenticgateway
+      sectionName: https
+  hostnames:
+    - ai.nahsi.dev
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /rerank
+          headers:
+            - type: Exact
+              name: X-Gateway-Base-Model-Name
+              value: cross-encoder/ms-marco-MiniLM-L-6-v2
+      timeouts:
+        request: 300s
+        backendRequest: 300s
+      backendRefs:
+        - kind: Service
+          name: ms-marco-minilm
+          port: 8080

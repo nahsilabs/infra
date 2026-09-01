@@ -11,7 +11,18 @@ spec:
     apiKeyAuthentication:
       mode: Strict
       secretRef:
-        name: llm-apikeys
+        name: ai-apikeys
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: qwen3-8-27b-defaults
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: qwen3-8-27b-ai
+  traffic:
     transformation:
       conditional:
         - condition: >-
