@@ -26,7 +26,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: qwen3-tts
-          image: docker.io/vllm/vllm-omni:v0.26.0@sha256:5cba1538c6f8ee81e8bea6708c24e68d7b2640f466a9fbf2ef15e68f2168b48b
+          image: docker.io/vllm/vllm-omni:v0.28.0@sha256:6f8be103eaf0055448cf7578cfd621405fd669079d4361bd58896326b2bf722a
           command:
             - vllm
             - serve
