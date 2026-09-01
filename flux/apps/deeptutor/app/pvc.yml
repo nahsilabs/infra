@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: deeptutor-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-retain
+  volumeName: pvc-5815d887-34ea-4577-bae4-42bbfccd7f67
+  resources:
+    requests:
+      storage: 20Gi
