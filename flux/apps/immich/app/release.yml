@@ -86,6 +86,19 @@ spec:
           existingClaim: immich-photos
     
     server:
+      defaultPodOptions:
+        labels:
+          scheduling.nahsilabs/accelerated-workload: "true"
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      scheduling.nahsilabs/accelerated-workload: "true"
+                  namespaces: [immich, jellyfin]
+                  topologyKey: kubernetes.io/hostname
       serviceMonitor:
         main:
           labels:
@@ -104,6 +117,19 @@ spec:
                   gpu.intel.com/i915: "1"
     
     machine-learning:
+      defaultPodOptions:
+        labels:
+          scheduling.nahsilabs/accelerated-workload: "true"
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      scheduling.nahsilabs/accelerated-workload: "true"
+                  namespaces: [immich, jellyfin]
+                  topologyKey: kubernetes.io/hostname
       controllers:
         main:
           containers:

@@ -16,7 +16,7 @@ spec:
     matchLabels:
       obs.nahsilabs/metrics: "true"
   replicaCount: 1
-  scrapeInterval: 30s
+  scrapeInterval: 15s
   externalLabels:
     cluster: nahsilabs
   remoteWrite:

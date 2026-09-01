@@ -7,4 +7,5 @@ resources:
   - node-exporter
   - kube-state-metrics
   - cluster
-  - intel-gpu-exporter
+  - intel-igpu-exporter
+  - intel-xpumd

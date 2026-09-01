@@ -1,7 +1,7 @@
 {
   "editable": true,
   "schemaVersion": 39,
-  "refresh": "30s",
+  "refresh": "5s",
   "time": {
     "from": "now-3h",
     "to": "now"
@@ -90,6 +90,7 @@
         "y": 0
       },
       "id": 1,
+      "interval": "5s",
       "options": {
         "alignValue": "center",
         "legend": {
@@ -110,6 +111,7 @@
             "uid": "${datasource}"
           },
           "expr": "max by (instance) (all_smi_gpu_utilization{instance=~\"$host\"})",
+          "interval": "5s",
           "legendFormat": "{{instance}}",
           "refId": "A"
         }
@@ -154,6 +156,7 @@
         "y": 6
       },
       "id": 2,
+      "interval": "5s",
       "maxPerRow": 3,
       "options": {
         "displayMode": "gradient",
@@ -178,6 +181,7 @@
             "uid": "${datasource}"
           },
           "expr": "max by (engine) (all_smi_gpu_engine_utilization{instance=~\"$host\"})",
+          "interval": "5s",
           "legendFormat": "{{engine}}",
           "refId": "A"
         }
@@ -222,6 +226,7 @@
         "y": 13
       },
       "id": 3,
+      "interval": "5s",
       "options": {
         "colorMode": "none",
         "graphMode": "area",
@@ -243,6 +248,7 @@
             "uid": "${datasource}"
           },
           "expr": "max by (instance) (all_smi_gpu_frequency_mhz{instance=~\"$host\"}) * 1000000",
+          "interval": "5s",
           "legendFormat": "{{instance}}",
           "refId": "A"
         }

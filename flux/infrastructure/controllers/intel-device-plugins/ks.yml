@@ -31,6 +31,7 @@ spec:
   timeout: 15m
   retryInterval: 2m
   prune: true
+  wait: true
   targetNamespace: inteldeviceplugins-system
   sourceRef:
     kind: GitRepository

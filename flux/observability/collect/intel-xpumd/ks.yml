@@ -1,41 +1,39 @@
----
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: app-immich-deps
+  name: obs-intel-xpumd
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: infra-cloudnative-pg
-  path: ./flux/apps/immich/deps
-  targetNamespace: immich
+  path: ./flux/observability/collect/intel-xpumd/app
+  targetNamespace: obs-collect
   prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: infra
-    namespace: flux-system
-  interval: 1h
-  retryInterval: 2m
-  timeout: 10m
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: app-immich
-  namespace: flux-system
-spec:
   dependsOn:
-    - name: app-immich-deps
-    - name: infra-gateway-api-crds
+    - name: infra-vm-operator
     - name: infra-intel-device-plugins-gpu
-  path: ./flux/apps/immich/app
-  targetNamespace: immich
-  prune: true
   sourceRef:
     kind: GitRepository
     name: infra
     namespace: flux-system
   interval: 1h
   retryInterval: 2m
-  timeout: 10m
+  timeout: 5m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: obs-intel-xpumd-dashboard
+  namespace: flux-system
+spec:
+  path: ./flux/observability/collect/intel-xpumd/obs
+  targetNamespace: obs-collect
+  prune: true
+  dependsOn:
+    - name: infra-grafana-operator
+    - name: obs-grafana
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m

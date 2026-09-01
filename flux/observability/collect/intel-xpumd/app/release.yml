@@ -1,0 +1,31 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: intel-xpumd
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: xpumd
+    namespace: flux-system
+  values:
+    service:
+      create: true
+    gpuAccess: plugin
+    prometheus:
+      monitor: false
+    grafana:
+      dashboards: false
+    nodeSelector:
+      gpu.intel.com/device-id.0300-e212.present: "true"
+    config:
+      receivers:
+        intel_xpu:
+          sampling_interval: 1s
+          collection_interval: 5s
+      service:
+        pipelines:
+          metrics:
+            receivers: [intel_xpu]
+            processors: [intel_xpu_status]
+            exporters: [intel_xpu_info, prometheus]

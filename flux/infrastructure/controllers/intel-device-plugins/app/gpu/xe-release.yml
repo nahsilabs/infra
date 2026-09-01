@@ -1,19 +1,19 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: intel-device-plugins-gpu
+  name: intel-device-plugins-gpu-xe
 spec:
   interval: 1h
   values:
-    name: intel-gpu-i915
-    sharedDevNum: 2
+    name: intel-gpu-xe
+    sharedDevNum: 4
     allocationPolicy: balanced
-    allowIDs: "0x46d0"
-    nodeFeatureRule: true
+    allowIDs: "0xe212"
+    nodeFeatureRule: false
     enableMonitoring: true
     monitoringMode: single
     nodeSelector:
-      gpu.intel.com/device-id.0300-46d0.present: "true"
+      gpu.intel.com/device-id.0300-e212.present: "true"
     tolerations: []
   chart:
     spec:
