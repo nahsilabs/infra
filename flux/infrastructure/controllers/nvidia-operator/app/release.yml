@@ -129,7 +129,6 @@ spec:
       enabled: true
       serviceMonitor:
         enabled: true
-        interval: 15s
         additionalLabels:
           obs.nahsilabs/metrics: "true"
         relabelings:
