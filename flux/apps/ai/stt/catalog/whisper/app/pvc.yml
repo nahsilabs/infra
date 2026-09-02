@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: whisper-cache
+  labels:
+    app.kubernetes.io/name: whisper
+    app.kubernetes.io/part-of: speaches
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-delete
+  resources:
+    requests:
+      storage: 10Gi

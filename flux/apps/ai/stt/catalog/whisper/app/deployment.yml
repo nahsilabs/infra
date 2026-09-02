@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whisper
+  labels:
+    app.kubernetes.io/name: whisper
+    app.kubernetes.io/part-of: speaches
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: whisper
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: whisper
+        app.kubernetes.io/part-of: speaches
+    spec:
+      terminationGracePeriodSeconds: 120
+      nodeSelector:
+        kubernetes.io/hostname: heliopolis
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: whisper
+          image: ghcr.io/speaches-ai/speaches:0.9.0-rc.3-cpu@sha256:2163775b6df5e451a71200e8f675fed68dbd8ab184fc604453d549e486f22fd2
+          env:
+            - name: ENABLE_UI
+              value: "false"
+            - name: LOG_LEVEL
+              value: info
+            - name: STT_MODEL_TTL
+              value: "-1"
+            - name: PRELOAD_MODELS
+              value: '["Systran/faster-whisper-large-v3"]'
+            - name: WHISPER__INFERENCE_DEVICE
+              value: cpu
+            - name: WHISPER__COMPUTE_TYPE
+              value: int8
+            - name: WHISPER__CPU_THREADS
+              value: "6"
+            - name: WHISPER__NUM_WORKERS
+              value: "2"
+            - name: UNSTABLE_ORT_OPTS__EXCLUDE_PROVIDERS
+              value: '["TensorrtExecutionProvider","CUDAExecutionProvider"]'
+          ports:
+            - name: http
+              containerPort: 8000
+          resources:
+            requests:
+              cpu: "4"
+              memory: 4Gi
+              ephemeral-storage: 512Mi
+            limits:
+              cpu: "12"
+              memory: 8Gi
+              ephemeral-storage: 2Gi
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 180
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: whisper-cache
+              mountPath: /home/ubuntu/.cache/huggingface
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: whisper-cache
+          persistentVolumeClaim:
+            claimName: whisper-cache
+        - name: tmp
+          emptyDir:
+            medium: Memory
+            sizeLimit: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whisper
+  labels:
+    app.kubernetes.io/name: whisper
+    app.kubernetes.io/part-of: speaches
+spec:
+  selector:
+    app.kubernetes.io/name: whisper
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
