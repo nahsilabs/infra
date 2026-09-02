@@ -1,11 +1,11 @@
 apiVersion: agentgateway.dev/v1alpha1
 kind: AgentgatewayBackend
 metadata:
-  name: qwen3-5-2b
+  name: lfm2-5-8b-a1b
 spec:
   ai:
     provider:
       openai:
-        model: Qwen/Qwen3.5-2B
-      host: qwen3-5-2b.ai.svc.cluster.local
+        model: LiquidAI/LFM2.5-8B-A1B
+      host: lfm2-5-8b-a1b.ai.svc.cluster.local
       port: 8080

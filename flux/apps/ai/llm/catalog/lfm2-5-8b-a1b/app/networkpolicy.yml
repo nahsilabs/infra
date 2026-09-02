@@ -1,12 +1,12 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: qwen3-5-2b-lockdown
+  name: lfm2-5-8b-a1b-lockdown
   namespace: ai
 spec:
   endpointSelector:
     matchLabels:
-      app.kubernetes.io/name: qwen3-5-2b
+      app.kubernetes.io/name: lfm2-5-8b-a1b
   ingress:
     - fromEntities:
         - host
