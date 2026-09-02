@@ -17,7 +17,7 @@ spec:
             request.path.startsWith("/v1/responses") ||
             request.path.startsWith("/v1/embeddings") ||
             request.path.startsWith("/rerank") ||
-            request.path.startsWith("/v1/audio")
+            request.path.startsWith("/v1/audio/speech")
           policy:
             request:
               set:
