@@ -16,7 +16,7 @@ spec:
             value: /rerank
           headers:
             - type: Exact
-              name: X-Gateway-Base-Model-Name
+              name: X-Gateway-Model-Name
               value: cross-encoder/ms-marco-MiniLM-L-6-v2
       timeouts:
         request: 300s

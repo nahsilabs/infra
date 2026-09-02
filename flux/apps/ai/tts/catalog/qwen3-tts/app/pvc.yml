@@ -4,7 +4,7 @@ metadata:
   name: qwen3-tts-cache
   labels:
     app.kubernetes.io/name: qwen3-tts
-    app.kubernetes.io/part-of: vllm
+    app.kubernetes.io/part-of: qwentts
 spec:
   accessModes:
     - ReadWriteOnce
@@ -19,7 +19,7 @@ metadata:
   name: qwen3-tts-voices
   labels:
     app.kubernetes.io/name: qwen3-tts
-    app.kubernetes.io/part-of: vllm
+    app.kubernetes.io/part-of: qwentts
 spec:
   accessModes:
     - ReadWriteOnce

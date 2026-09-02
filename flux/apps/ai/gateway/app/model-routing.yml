@@ -21,5 +21,5 @@ spec:
           policy:
             request:
               set:
-                - name: X-Gateway-Base-Model-Name
+                - name: X-Gateway-Model-Name
                   value: string(json(request.body).model)
