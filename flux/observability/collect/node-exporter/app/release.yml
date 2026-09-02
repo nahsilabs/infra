@@ -16,7 +16,6 @@ spec:
       - --no-collector.btrfs
       - --no-collector.dmi
       - --no-collector.fibrechannel
-      - --no-collector.hwmon
       - --no-collector.infiniband
       - --no-collector.powersupplyclass
       - --no-collector.thermal_zone

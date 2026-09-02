@@ -11,7 +11,7 @@ spec:
   endpoints:
     - port: metrics
       path: /metrics
-      interval: 5s
+      interval: 15s
       relabelConfigs:
         - sourceLabels: [__meta_kubernetes_pod_node_name]
           targetLabel: instance

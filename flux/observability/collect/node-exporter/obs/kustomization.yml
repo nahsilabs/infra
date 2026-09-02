@@ -2,3 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - dashboard.yml
+configMapGenerator:
+  - name: intel-b50-dashboard
+    files:
+      - intel-b50.json
+generatorOptions:
+  disableNameSuffixHash: true

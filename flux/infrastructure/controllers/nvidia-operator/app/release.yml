@@ -129,7 +129,7 @@ spec:
       enabled: true
       serviceMonitor:
         enabled: true
-        interval: 5s
+        interval: 15s
         additionalLabels:
           obs.nahsilabs/metrics: "true"
         relabelings:
@@ -141,7 +141,7 @@ spec:
             replacement: $1.talos
       env:
         - name: DCGM_EXPORTER_INTERVAL
-          value: "5000"
+          value: "15000"
       resources:
         requests:
           cpu: 100m
