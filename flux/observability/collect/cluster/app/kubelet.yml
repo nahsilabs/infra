@@ -7,7 +7,6 @@ metadata:
 spec:
   scheme: https
   honorLabels: true
-  interval: 30s
   tlsConfig:
     insecureSkipVerify: true
   bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
@@ -26,7 +25,6 @@ spec:
   path: /metrics/cadvisor
   honorLabels: true
   honorTimestamps: false
-  interval: 30s
   tlsConfig:
     insecureSkipVerify: true
   bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token

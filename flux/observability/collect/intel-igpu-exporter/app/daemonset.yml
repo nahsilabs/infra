@@ -1,20 +1,28 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: intel-gpu-exporter
+  name: intel-igpu-exporter
   labels:
-    app.kubernetes.io/name: intel-gpu-exporter
+    app.kubernetes.io/name: intel-igpu-exporter
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: intel-gpu-exporter
+      app.kubernetes.io/name: intel-igpu-exporter
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: intel-gpu-exporter
+        app.kubernetes.io/name: intel-igpu-exporter
     spec:
-      nodeSelector:
-        intel.feature.node.kubernetes.io/gpu: "true"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: gpu.intel.com/device-id.0300-46d0.present
+                    operator: In
+                    values: ["true"]
+                  - key: gpu.intel.com/device-id.0300-e212.present
+                    operator: DoesNotExist
       containers:
         - name: all-smi
           image: docker.io/nahsilabs/all-smi:latest@sha256:b958e97f1fb5c5bb1affbf73a9fe5545ea17786cfa74ab39cc13842d50db9398

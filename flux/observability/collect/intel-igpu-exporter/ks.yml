@@ -1,14 +1,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: obs-intel-gpu-exporter
+  name: obs-intel-igpu-exporter
   namespace: flux-system
 spec:
-  path: ./flux/observability/collect/intel-gpu-exporter/app
+  path: ./flux/observability/collect/intel-igpu-exporter/app
   targetNamespace: obs-collect
   prune: true
   dependsOn:
     - name: infra-vm-operator
+    - name: infra-intel-device-plugins-gpu
   sourceRef:
     kind: GitRepository
     name: infra
@@ -20,10 +21,10 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: obs-intel-gpu-dashboard
+  name: obs-intel-igpu-dashboard
   namespace: flux-system
 spec:
-  path: ./flux/observability/collect/intel-gpu-exporter/obs
+  path: ./flux/observability/collect/intel-igpu-exporter/obs
   targetNamespace: obs-collect
   prune: true
   dependsOn:

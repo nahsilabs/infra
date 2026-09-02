@@ -9,6 +9,8 @@ spec:
   retryInterval: 2m
   prune: true
   targetNamespace: jellyfin
+  dependsOn:
+    - name: infra-intel-device-plugins-gpu
   sourceRef:
     kind: GitRepository
     name: infra

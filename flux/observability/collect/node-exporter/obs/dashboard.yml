@@ -12,3 +12,17 @@ spec:
     # renovate: depName="Node Exporter Full"
     id: 1860
     revision: 45
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: intel-b50-dashboard
+spec:
+  allowCrossNamespaceImport: true
+  folder: GPU
+  instanceSelector:
+    matchLabels:
+      dashboards: "grafana"
+  configMapRef:
+    name: intel-b50-dashboard
+    key: intel-b50.json

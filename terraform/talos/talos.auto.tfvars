@@ -54,8 +54,11 @@ nodes = [
     ]
     extensions = [
       "siderolabs/amd-ucode",
+      "siderolabs/i915",
+      "siderolabs/xe",
       "siderolabs/qemu-guest-agent",
     ]
+    extra_kernel_args = ["xe.probe_display=0"]
   },
   {
     name      = "pergamon"

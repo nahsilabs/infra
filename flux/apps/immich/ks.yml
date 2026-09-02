@@ -28,6 +28,7 @@ spec:
   dependsOn:
     - name: app-immich-deps
     - name: infra-gateway-api-crds
+    - name: infra-intel-device-plugins-gpu
   path: ./flux/apps/immich/app
   targetNamespace: immich
   prune: true

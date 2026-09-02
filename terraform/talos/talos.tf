@@ -21,6 +21,7 @@ resource "talos_image_factory_schematic" "node" {
   for_each = { for node in var.nodes : node.name => node }
   schematic = yamlencode({
     customization = {
+      extraKernelArgs = each.value.extra_kernel_args
       systemExtensions = {
         officialExtensions = each.value.extensions
       }

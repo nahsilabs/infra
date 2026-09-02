@@ -113,7 +113,6 @@ spec:
         endpoints:
           - port: metrics
             path: /metrics
-            interval: 15s
 
     persistence:
       state:
