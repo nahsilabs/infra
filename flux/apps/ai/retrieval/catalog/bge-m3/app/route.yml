@@ -16,7 +16,7 @@ spec:
             value: /v1/embeddings
           headers:
             - type: Exact
-              name: X-Gateway-Base-Model-Name
+              name: X-Gateway-Model-Name
               value: BAAI/bge-m3
       timeouts:
         request: 300s

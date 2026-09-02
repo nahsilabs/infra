@@ -16,7 +16,7 @@ spec:
             value: /v1/chat/completions
           headers:
             - type: Exact
-              name: X-Gateway-Base-Model-Name
+              name: X-Gateway-Model-Name
               value: openai/gpt-oss-20b
       backendRefs:
         - group: agentgateway.dev

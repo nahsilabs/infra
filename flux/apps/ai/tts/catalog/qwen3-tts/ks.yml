@@ -6,6 +6,7 @@ metadata:
 spec:
   dependsOn:
     - name: app-ai-gateway
+    - name: infra-intel-device-plugins-gpu
   path: ./flux/apps/ai/tts/catalog/qwen3-tts/app
   targetNamespace: ai
   prune: true
