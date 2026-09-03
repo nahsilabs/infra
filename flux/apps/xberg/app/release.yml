@@ -1,0 +1,42 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: xberg
+spec:
+  interval: 1h
+  timeout: 15m
+  chartRef:
+    kind: OCIRepository
+    name: xberg
+    namespace: flux-system
+  values:
+    replicaCount: 1
+    strategy:
+      type: Recreate
+    image:
+      tag: "1.0.14@sha256:d43f4246d42843eb99efb45c0df3f5f0b28bd597af686572253a8c3e9139260d"
+    ingress:
+      enabled: false
+    autoscaling:
+      enabled: false
+    podDisruptionBudget:
+      enabled: false
+    resources:
+      requests:
+        cpu: "1"
+        memory: 1Gi
+      limits:
+        cpu: "2"
+        memory: 4Gi
+    cache:
+      enabled: true
+      initChown: false
+      size: 10Gi
+      storageClass: ceph-rbd-retain
+      accessModes:
+        - ReadWriteOnce
+    extraEnv:
+      - name: XBERG_MAX_CONCURRENT_REQUESTS
+        value: "2"
+      - name: XBERG_CORS_ORIGINS
+        value: https://xberg.nahsi.dev

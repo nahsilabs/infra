@@ -10,3 +10,4 @@ resources:
   - agenticgateway.yml
   - kserve-llmisvc.yml
   - hindsight.yml
+  - xberg.yml
