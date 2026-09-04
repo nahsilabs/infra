@@ -6,8 +6,7 @@ spec:
   interval: 1h
   values:
     name: intel-gpu-xe
-    sharedDevNum: 4
-    allocationPolicy: balanced
+    sharedDevNum: 1
     allowIDs: "0xe212"
     nodeFeatureRule: false
     enableMonitoring: true
