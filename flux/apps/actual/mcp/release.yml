@@ -20,7 +20,7 @@ spec:
           main:
             image:
               repository: ghcr.io/agigante80/actual-mcp-server
-              tag: 0.16.15@sha256:c99824fdeca0835fa031f74e10479a66222d1a4107a1a03d5fde27d79ef23643
+              tag: 0.19.3@sha256:69e50c0b6131fbc0e1e264ad43f88a156798ce54367e1a9f821990677a8d9923
             env:
               ACTUAL_SERVER_URL: http://actualbudget.actual.svc.cluster.local:5006
               MCP_ALLOW_UNAUTHENTICATED: "true"
