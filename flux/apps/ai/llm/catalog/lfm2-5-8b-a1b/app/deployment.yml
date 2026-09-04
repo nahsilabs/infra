@@ -122,8 +122,8 @@ spec:
               mountPath: /models
       volumes:
         - name: models
-          emptyDir:
-            sizeLimit: 7Gi
+          persistentVolumeClaim:
+            claimName: lfm2-5-8b-a1b-cache
 ---
 apiVersion: v1
 kind: Service

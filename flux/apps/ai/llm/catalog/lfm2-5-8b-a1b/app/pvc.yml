@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: lfm2-5-8b-a1b-cache
+  labels:
+    app.kubernetes.io/name: lfm2-5-8b-a1b
+    app.kubernetes.io/part-of: llama-cpp
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-delete
+  resources:
+    requests:
+      storage: 10Gi
