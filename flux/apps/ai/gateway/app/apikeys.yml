@@ -9,6 +9,7 @@ stringData:
     digarr: ENC[AES256_GCM,data:GW9fFlBq+YBO1k2RwP1G2KdDMvkI8AK/0YhQ9JodLQaqmXjEYK+aL7BVVgdPi9s0GG6ItrGqC823jkHSBy3oOOIHiNyOP2i7d5N37kaz7YoSSHHORRjVulaASbCxzqGBUiVsfNWO11DBgDR2oP5IikR/M8Fu/Q==,iv:sG+be1LDYKxHI99qQx4SJeDmCQ8u7dnSD8L7DsV7GOI=,tag:MnGMVEN9ripVs8HUkQzi9Q==,type:str]
     open-notebook: ENC[AES256_GCM,data:gUPCiP0Xg1Vl8yMYBeUwCbEOvwISRzm0xNaGMcWM6mHPB0XD1n2/WlfGi5unaCyx39UhcG0ihwX2qQSVZYT8qYUj75LQRuNem8j618pLQcABi2C1UF3yZIA7f2jrIwNp3gxWlNMiu6G2H9X09xREVrdcdog0rPrg5gyG7Ho=,iv:4rsgdP1mBOh8w+KFKqP+6uImh8c2CijfFIc1Lpp2++8=,tag:6JnLDgYviq36WYqoyH/u1w==,type:str]
     deeptutor: ENC[AES256_GCM,data:7pPxlEhnrsgb/8zBVv2DlD8xhPff1L6s3YmQOhCQTjLDpReSe1u7ShR6KWAF7FTLhZE1yXSFjUNTV5WposhHzg==,iv:vbV1s8OO4xCTQicxftIv1b41aE8B2mUe2cr5dz35i1g=,tag:rro73/b41o1tGTGVbzWErw==,type:str]
+    home-assistant: ENC[AES256_GCM,data:5Tyzz74navMTwW8DAiaSlpB+qj5TK6YVL4jLNMW5qBj9DgVRg9hXYUTTiqEMhzKmyuNVW3STXaVb9gDU61J63g==,iv:w0cW5dwbuyXGZk8d9pPPkxiIHyM3YPmwTypPQRJ/lxs=,tag:xiitwNl4WOPVAbTUDoGAGQ==,type:str]
 sops:
     age:
         - enc: |
@@ -21,6 +22,6 @@ sops:
             -----END AGE ENCRYPTED FILE-----
           recipient: age17kf3tfnhtv36pjscj7mzuv5dc0xjcj388764258uwgad78mzzs2qtu05pw
     encrypted_regex: ^(data|stringData)$
-    lastmodified: "2026-08-31T10:40:09Z"
-    mac: ENC[AES256_GCM,data:gXirilWp4NmvzkLzCJps2LGXjSWPjmGvSD2zvurb+qt5DeYAGID43IqbKe1dF3HbPFKVgYmgBx3JhfRWN0XH2dulor3R7RWddTaxt0sOFlkxDP0RnWId+7ejngmUEsrXfZ9HcDULA+kF11oX3a02Q5dkuzBcr2J01PN8xw+38jg=,iv:ej4eBSTfvGgtoDnTZRje7x1nxJY9iW364YtdGpO5Gbs=,tag:ewplPL2vqXvaecYqLGcxBg==,type:str]
+    lastmodified: "2026-09-05T21:13:19Z"
+    mac: ENC[AES256_GCM,data:XSipAoLic0t9NJytR8q89thwhVRihAf1tEG+Nv5lZkejypUP+i4bSgOZTSV0n1DjG1B8fr95SUGXeRyJZ97De86ttGPcczPIAtEHs54dFOWoU61vbmTKDGXnsUHkuc3BRh+iCWIro/gNszZe5jrf/ojPQRiDodQEgt42yqqCN3w=,iv:0pydipagb2T/b0SZgXBHlsC+TC7o0SxFDx+p85D4CkY=,tag:o/6KXthkgdTzimlSOeuOOA==,type:str]
     version: 3.13.1
