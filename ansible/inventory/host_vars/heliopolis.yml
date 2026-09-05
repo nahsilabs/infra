@@ -3,13 +3,14 @@ proxmox_modules: |
   vfio
   vfio_iommu_type1
   vfio_pci
+  xe
 proxmox_modules_options: |
-  options vfio-pci ids=15b7:5006,1b21:1182,10ec:8125,1000:0087,8086:e212,8086:e2f7
+  options vfio-pci ids=15b7:5006,1b21:1182,10ec:8125,1000:0087
   softdep vfio-pci pre: pci_stub
+  options xe max_vfs=2 probe_display=0
   blacklist nvme
   blacklist r8169
   blacklist mpt3sas
-  blacklist xe
 
 proxmox_network: |
   auto lo

@@ -37,18 +37,14 @@ spec:
             - -a
             - LiquidAI/LFM2.5-8B-A1B
             - -c
-            - "32768"
+            - "163840"
             - -np
             - "4"
             - -kvu
-            - -ctk
-            - q8_0
-            - -ctv
-            - q8_0
             - -fit
             - "on"
             - -fitt
-            - "2048"
+            - "768"
             - -t
             - "4"
             - --temp
@@ -122,8 +118,8 @@ spec:
               mountPath: /models
       volumes:
         - name: models
-          emptyDir:
-            sizeLimit: 7Gi
+          persistentVolumeClaim:
+            claimName: lfm2-5-8b-a1b-cache
 ---
 apiVersion: v1
 kind: Service
