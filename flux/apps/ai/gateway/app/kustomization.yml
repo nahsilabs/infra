@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - apikeys.yml
   - model-routing.yml
+  - models.yml
