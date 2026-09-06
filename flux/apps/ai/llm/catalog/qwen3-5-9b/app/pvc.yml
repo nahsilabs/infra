@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qwen3-5-9b-cache
+  labels:
+    app.kubernetes.io/name: qwen3-5-9b
+    app.kubernetes.io/part-of: llama-cpp
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-delete
+  resources:
+    requests:
+      storage: 10Gi

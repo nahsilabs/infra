@@ -1,0 +1,11 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: gemma-4-12b-it
+spec:
+  ai:
+    provider:
+      openai:
+        model: google/gemma-4-12B-it
+      host: gemma-4-12b-it.ai.svc.cluster.local
+      port: 8080
