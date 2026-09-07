@@ -1,7 +1,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: whisper-ai
+  name: realtimestt-ai
 spec:
   parentRefs:
     - name: agenticgateway-internal
@@ -19,5 +19,16 @@ spec:
         backendRequest: 300s
       backendRefs:
         - kind: Service
-          name: whisper
+          name: realtimestt
+          port: 8000
+    - matches:
+        - path:
+            type: Exact
+            value: /v1/realtime
+      timeouts:
+        request: 0s
+        backendRequest: 0s
+      backendRefs:
+        - kind: Service
+          name: realtimestt
           port: 8000

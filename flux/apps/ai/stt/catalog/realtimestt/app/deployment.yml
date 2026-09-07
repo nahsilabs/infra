@@ -1,0 +1,264 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: realtimestt
+  labels:
+    app.kubernetes.io/name: realtimestt
+    app.kubernetes.io/part-of: realtimestt
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: realtimestt
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: realtimestt
+        app.kubernetes.io/part-of: realtimestt
+    spec:
+      terminationGracePeriodSeconds: 120
+      nodeSelector:
+        kubernetes.io/hostname: heliopolis
+      securityContext:
+        fsGroup: 65532
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 65532
+        runAsNonRoot: true
+        runAsUser: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: install-models
+          image: docker.io/nahsilabs/realtimestt:1.1.2-openai-3b52530@sha256:5ee7773ad43b15c5d9412bf389e8d9582ef186a7bca1b30c7df2a16238160254
+          command:
+            - /opt/venv/bin/stt-install-sherpa-models
+          args:
+            - --root
+            - /models
+            - --model
+            - all
+          resources:
+            requests:
+              cpu: "1"
+              memory: 512Mi
+            limits:
+              cpu: "4"
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: models
+              mountPath: /models
+            - name: init-home
+              mountPath: /home/realtimestt
+            - name: init-tmp
+              mountPath: /tmp
+      containers:
+        - name: server
+          image: docker.io/nahsilabs/realtimestt:1.1.2-openai-3b52530@sha256:5ee7773ad43b15c5d9412bf389e8d9582ef186a7bca1b30c7df2a16238160254
+          args:
+            - --host
+            - 127.0.0.1
+            - --port
+            - "8010"
+            - --engine
+            - sherpa_onnx_parakeet
+            - --model
+            - sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8
+            - --realtime-engine
+            - sherpa_onnx_nemotron
+            - --realtime-model
+            - sherpa-onnx-nemotron-3.5-asr-streaming-0.6b-560ms-int8-2026-06-11
+            - --download-root
+            - /models
+            - --engine-options
+            - '{"provider":"cpu","num_threads":6,"verify_model_files":true}'
+            - --realtime-engine-options
+            - '{"provider":"cpu","num_threads":6,"verify_model_files":true}'
+            - --device
+            - cpu
+            - --language
+            - en
+            - --beam-size
+            - "1"
+            - --beam-size-realtime
+            - "1"
+            - --batch-size
+            - "1"
+            - --realtime-batch-size
+            - "1"
+            - --max-sessions
+            - "2"
+            - --max-active-speakers
+            - "2"
+            - --log-level
+            - INFO
+          env:
+            - name: OMP_NUM_THREADS
+              value: "6"
+            - name: MKL_NUM_THREADS
+              value: "6"
+          ports:
+            - name: native
+              containerPort: 8010
+          startupProbe:
+            exec:
+              command:
+                - python
+                - -c
+                - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8010/api/v1/live', timeout=2)
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 180
+          readinessProbe:
+            exec:
+              command:
+                - python
+                - -c
+                - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8010/api/v1/ready', timeout=2)
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            exec:
+              command:
+                - python
+                - -c
+                - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8010/api/v1/live', timeout=2)
+            periodSeconds: 30
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "4"
+              memory: 3Gi
+              ephemeral-storage: 512Mi
+            limits:
+              cpu: "12"
+              memory: 8Gi
+              ephemeral-storage: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: models
+              mountPath: /models
+              readOnly: true
+            - name: server-home
+              mountPath: /home/realtimestt
+            - name: shm
+              mountPath: /dev/shm
+            - name: server-tmp
+              mountPath: /tmp
+        - name: adapter
+          image: docker.io/nahsilabs/realtimestt:1.1.2-openai-3b52530@sha256:5ee7773ad43b15c5d9412bf389e8d9582ef186a7bca1b30c7df2a16238160254
+          command:
+            - /opt/venv/bin/uvicorn
+          args:
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8000"
+            - --app-dir
+            - /app
+            - openai_adapter:app
+          env:
+            - name: NATIVE_SERVER_URL
+              value: http://127.0.0.1:8010
+            - name: MODEL_NAME
+              value: nvidia/nemotron-3.5-asr-streaming-0.6b
+            - name: DEFAULT_LANGUAGE
+              value: en
+          ports:
+            - name: http
+              containerPort: 8000
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 180
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+              ephemeral-storage: 128Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+              ephemeral-storage: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: adapter-home
+              mountPath: /home/realtimestt
+            - name: adapter-tmp
+              mountPath: /tmp
+      volumes:
+        - name: models
+          persistentVolumeClaim:
+            claimName: realtimestt-models
+        - name: init-home
+          emptyDir: {}
+        - name: init-tmp
+          emptyDir:
+            sizeLimit: 256Mi
+        - name: server-home
+          emptyDir: {}
+        - name: server-tmp
+          emptyDir:
+            medium: Memory
+            sizeLimit: 512Mi
+        - name: adapter-home
+          emptyDir: {}
+        - name: adapter-tmp
+          emptyDir:
+            medium: Memory
+            sizeLimit: 512Mi
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: realtimestt
+  labels:
+    app.kubernetes.io/name: realtimestt
+    app.kubernetes.io/part-of: realtimestt
+spec:
+  selector:
+    app.kubernetes.io/name: realtimestt
+  ports:
+    - name: http
+      port: 8000
+      targetPort: http
