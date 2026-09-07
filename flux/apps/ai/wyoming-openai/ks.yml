@@ -1,0 +1,20 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-ai-wyoming-openai
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-ai-gateway
+    - name: infra-gateway-private
+    - name: infra-external-dns
+  path: ./flux/apps/ai/wyoming-openai/app
+  targetNamespace: ai
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m

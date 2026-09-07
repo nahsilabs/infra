@@ -30,3 +30,14 @@ spec:
         certificateRefs:
           - name: nahsi-dev-tls
             kind: Secret
+    - name: wyoming
+      port: 10300
+      protocol: TCP
+      allowedRoutes:
+        kinds:
+          - kind: TCPRoute
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: ai

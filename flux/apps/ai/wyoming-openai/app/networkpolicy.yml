@@ -1,0 +1,26 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: wyoming-openai-lockdown
+  namespace: ai
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: wyoming-openai
+  ingress:
+    - fromEntities:
+        - host
+        - remote-node
+        - health
+      toPorts:
+        - ports:
+            - port: "10300"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: private-gateway
+      toPorts:
+        - ports:
+            - port: "10300"
+              protocol: TCP
