@@ -34,7 +34,7 @@ spec:
         name: ai-apikeys
     directResponse:
       status: 200
-      body: '{"object":"list","data":[{"id":"google/gemma-4-12B-it","object":"model","created":0,"owned_by":"nahsilabs"},{"id":"Qwen/Qwen3.8-27B","object":"model","created":0,"owned_by":"nahsilabs"}]}'
+      body: '{"object":"list","data":[{"id":"google/gemma-4-12B-it","object":"model","created":0,"owned_by":"nahsilabs"},{"id":"Qwen/Qwen3.8-27B","object":"model","created":0,"owned_by":"nahsilabs"},{"id":"nvidia/nemotron-3.5-asr-streaming-0.6b","object":"model","created":0,"owned_by":"nvidia"}]}'
       headers:
         - name: Content-Type
           value: '"application/json"'
