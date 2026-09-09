@@ -16,6 +16,7 @@ spec:
     domainFilters: ["nahsi.dev"]
     sources:
       - gateway-httproute
+      - crd
     provider:
       name: webhook
       webhook:

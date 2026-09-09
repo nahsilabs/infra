@@ -8,3 +8,4 @@ resources:
   - retrieval
   - tts
   - stt
+  - wyoming-openai

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: realtimestt-models
+  labels:
+    app.kubernetes.io/name: realtimestt
+    app.kubernetes.io/part-of: realtimestt
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ceph-rbd-delete
+  resources:
+    requests:
+      storage: 5Gi

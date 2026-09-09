@@ -1,0 +1,41 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: TCPRoute
+metadata:
+  name: wyoming-openai
+spec:
+  parentRefs:
+    - name: private-gateway
+      namespace: envoy-gateway
+      sectionName: wyoming
+  rules:
+    - backendRefs:
+        - name: wyoming-openai
+          port: 10300
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: wyoming-openai
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: TCPRoute
+      name: wyoming-openai
+  authorization:
+    defaultAction: Deny
+    rules:
+      - action: Allow
+        principal:
+          clientCIDRs:
+            - 10.2.10.51/32
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: wyoming-openai
+spec:
+  endpoints:
+    - dnsName: wyoming-openai.nahsi.dev
+      recordType: A
+      targets:
+        - 192.168.78.101
