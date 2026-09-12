@@ -62,7 +62,7 @@ spec:
             - --ctx-checkpoints
             - "0"
             - -cram
-            - "512"
+            - "2048"
             - --metrics
           env:
             - name: HOME
