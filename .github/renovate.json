@@ -80,6 +80,11 @@
       "ignoreTests": true,
       "minimumReleaseAge": "0 seconds",
       "prPriority": 10
+    },
+    {
+      "description": "Authentik provider 2026.8+ requires explicit token configuration",
+      "matchPackageNames": ["goauthentik/authentik"],
+      "enabled": false
     }
   ]
 }
