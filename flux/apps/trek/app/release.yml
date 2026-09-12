@@ -19,7 +19,7 @@ spec:
           main:
             image:
               repository: mauriceboe/trek
-              tag: 4.1.1@sha256:01d217fa047414b73e2132f7737703d7d39b1f468f670f804e801f5e327837f4
+              tag: 4.2.1@sha256:777f4d647e973fe7d87fecd957e854b86d57e8d977fd041763e0ca19b3c2e2c0
             envFrom:
               - secretRef:
                   name: trek-secret
