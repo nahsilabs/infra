@@ -2,20 +2,6 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: alertmanager
-  namespace: flux-system
-spec:
-  interval: 2h
-  layerSelector:
-    mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
-    operation: copy
-  url: oci://ghcr.io/prometheus-community/charts/alertmanager
-  ref:
-    tag: 1.42.0
----
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
-metadata:
   name: blackbox-exporter
   namespace: flux-system
 spec:
