@@ -88,7 +88,7 @@ spec:
               gpu.intel.com/xe: "1"
             limits:
               cpu: "4"
-              memory: 8Gi
+              memory: 12Gi
               ephemeral-storage: 8Gi
               gpu.intel.com/xe: "1"
           startupProbe:
