@@ -10,6 +10,7 @@ stringData:
     open-notebook: ENC[AES256_GCM,data:gUPCiP0Xg1Vl8yMYBeUwCbEOvwISRzm0xNaGMcWM6mHPB0XD1n2/WlfGi5unaCyx39UhcG0ihwX2qQSVZYT8qYUj75LQRuNem8j618pLQcABi2C1UF3yZIA7f2jrIwNp3gxWlNMiu6G2H9X09xREVrdcdog0rPrg5gyG7Ho=,iv:4rsgdP1mBOh8w+KFKqP+6uImh8c2CijfFIc1Lpp2++8=,tag:6JnLDgYviq36WYqoyH/u1w==,type:str]
     deeptutor: ENC[AES256_GCM,data:7pPxlEhnrsgb/8zBVv2DlD8xhPff1L6s3YmQOhCQTjLDpReSe1u7ShR6KWAF7FTLhZE1yXSFjUNTV5WposhHzg==,iv:vbV1s8OO4xCTQicxftIv1b41aE8B2mUe2cr5dz35i1g=,tag:rro73/b41o1tGTGVbzWErw==,type:str]
     home-assistant: ENC[AES256_GCM,data:5Tyzz74navMTwW8DAiaSlpB+qj5TK6YVL4jLNMW5qBj9DgVRg9hXYUTTiqEMhzKmyuNVW3STXaVb9gDU61J63g==,iv:w0cW5dwbuyXGZk8d9pPPkxiIHyM3YPmwTypPQRJ/lxs=,tag:xiitwNl4WOPVAbTUDoGAGQ==,type:str]
+    lightrag: ENC[AES256_GCM,data:LAGPfuzaAgKhbm3/dNxKb3ztWPsEFaFNdQxmArkE6VYK8oYKoGcV/GqNUKahCRbhNYYEPADO3mBx9zRs+69/2A==,iv:xZy9or/eUwPITN6iXOrpbNODOXoD4bK3zwGYLYG6fu8=,tag:wzd7MWsoOS8GPIppNR/m5g==,type:str]
 sops:
     age:
         - enc: |
@@ -22,6 +23,6 @@ sops:
             -----END AGE ENCRYPTED FILE-----
           recipient: age17kf3tfnhtv36pjscj7mzuv5dc0xjcj388764258uwgad78mzzs2qtu05pw
     encrypted_regex: ^(data|stringData)$
-    lastmodified: "2026-09-05T21:13:19Z"
-    mac: ENC[AES256_GCM,data:XSipAoLic0t9NJytR8q89thwhVRihAf1tEG+Nv5lZkejypUP+i4bSgOZTSV0n1DjG1B8fr95SUGXeRyJZ97De86ttGPcczPIAtEHs54dFOWoU61vbmTKDGXnsUHkuc3BRh+iCWIro/gNszZe5jrf/ojPQRiDodQEgt42yqqCN3w=,iv:0pydipagb2T/b0SZgXBHlsC+TC7o0SxFDx+p85D4CkY=,tag:o/6KXthkgdTzimlSOeuOOA==,type:str]
+    lastmodified: "2026-09-16T19:29:32Z"
+    mac: ENC[AES256_GCM,data:PczVRf0UvGumqoQJCYFPF4AbbhN9TMh+FAm+oNiPdbvlQHi8IJpcTyNuZMNc2CKGNyHrAX3TN7tetdDcVKnTfLXlq6JCN16lb+c/lpDXYl3riMRkp8kn4bfGvZ80ByYHjyEPCqsjSGQHhoLx8eMq3SaLjmC8tZBfseoAnmzHorI=,iv:0RhWonTYJH5BL+j3jlYZ/4bsA41x9Z2p5QL2z6LzAp0=,tag:z62tb+iHtcuM45THevRZqw==,type:str]
     version: 3.13.1
