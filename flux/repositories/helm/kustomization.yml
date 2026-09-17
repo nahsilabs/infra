@@ -24,3 +24,4 @@ resources:
   - authentik.yml
   - grafana-community.yml
   - surrealdb.yml
+  - browsertrix.yml
