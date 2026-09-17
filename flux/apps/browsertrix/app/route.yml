@@ -3,6 +3,13 @@ kind: HTTPRoute
 metadata:
   name: browsertrix
   namespace: browsertrix
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Knowledge
+    gethomepage.dev/name: Browsertrix
+    gethomepage.dev/href: https://browsertrix.nahsi.dev
+    gethomepage.dev/icon: https://docs.browsertrix.com/assets/brand/browsertrix-icon-color.png
+    gethomepage.dev/pod-selector: "app=browsertrix-cloud,role=backend"
 spec:
   parentRefs:
     - name: private-gateway
