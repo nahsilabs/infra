@@ -14,6 +14,7 @@ provider in `s3_compat_mode` for RustFS compatibility.
 | `minio_s3_bucket_versioning` | `<bucket>` | versioning (if enabled) |
 | `minio_s3_bucket_quota` | `<bucket>` | hard quota (if set) |
 | `minio_s3_bucket_lifecycle` | `<bucket>` | lifecycle rules (if any) |
+| `minio_s3_bucket_cors` | `<bucket>` | cross-origin access rules (if any) |
 | `minio_iam_user` | `<bucket>` | dedicated IAM user |
 | `minio_iam_policy` | `<bucket>` | RW policy scoped to bucket |
 | `minio_iam_user_policy_attachment` | — | binds policy to user |
@@ -34,6 +35,7 @@ provider in `s3_compat_mode` for RustFS compatibility.
 | `force_destroy` | `bool` | `false` | Allow destroying bucket with objects |
 | `quota_gib` | `number` | `0` | Hard quota in GiB (0 = no quota) |
 | `lifecycle_rules` | `list` | `[]` | Object expiration rules |
+| `cors_rules` | `list` | `[]` | Browser cross-origin access rules |
 
 ### lifecycle_rules fields
 
@@ -43,6 +45,16 @@ provider in `s3_compat_mode` for RustFS compatibility.
 | `prefix` | `string` | `""` | Object prefix filter (empty = all objects) |
 | `expiration_days` | `number` | `0` | Delete objects after N days |
 | `abort_incomplete_days` | `number` | `0` | Clean up incomplete multipart uploads after N days |
+
+### cors_rules fields
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `allowed_origins` | `list(string)` | Required | Origins allowed to access the bucket |
+| `allowed_methods` | `list(string)` | Required | Allowed HTTP methods |
+| `allowed_headers` | `list(string)` | `null` | Headers allowed in preflight requests |
+| `expose_headers` | `list(string)` | `null` | Response headers exposed to browser clients |
+| `max_age_seconds` | `number` | `null` | Preflight response cache duration |
 
 ## Outputs
 

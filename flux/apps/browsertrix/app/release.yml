@@ -1,0 +1,167 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: browsertrix
+  namespace: browsertrix
+spec:
+  interval: 1h
+  timeout: 15m
+  targetNamespace: browsertrix
+  chart:
+    spec:
+      chart: browsertrix
+      version: 1.25.3
+      sourceRef:
+        kind: HelmRepository
+        name: browsertrix
+        namespace: flux-system
+  valuesFrom:
+    - kind: Secret
+      name: browsertrix-values
+      valuesKey: values.yaml
+  values:
+    registration_enabled: "0"
+
+    backend_workers: 1
+    backend_max_replicas: 1
+    frontend_max_replicas: 1
+
+    crawler_namespace: browsertrix-crawlers
+    crawler_channels:
+      - id: default
+        image: docker.io/webrecorder/browsertrix-crawler:1.14.3
+        imagePullPolicy: IfNotPresent
+    crawler_pull_policy: IfNotPresent
+    crawler_browser_instances: 2
+    max_browser_windows: 4
+    crawler_storage: 25Gi
+
+    volume_storage_class: ceph-rbd-delete
+    redis_storage: 3Gi
+    dedupe:
+      backend_type: kvrocks
+      storage: 5Gi
+
+    mongo_local: true
+    mongo_storage: 5Gi
+
+    minio_local: false
+
+    ingress:
+      host: browsertrix.nahsi.dev
+      tls: true
+
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              version: v1
+              kind: ConfigMap
+              name: backend-env-config
+            patch: |
+              apiVersion: v1
+              kind: ConfigMap
+              metadata:
+                name: backend-env-config
+              data:
+                AWS_CONFIG_FILE: /ops-configs/aws-config
+          - target:
+              version: v1
+              kind: Secret
+              name: ops-configs
+            patch: |
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: ops-configs
+              stringData:
+                aws-config: |
+                  [default]
+                  s3 =
+                    signature_version = s3v4
+                    addressing_style = path
+          - target:
+              group: networking.k8s.io
+              version: v1
+              kind: Ingress
+              name: ingress-main
+            patch: |
+              apiVersion: networking.k8s.io/v1
+              kind: Ingress
+              metadata:
+                name: ingress-main
+              $patch: delete
+          - target:
+              group: cert-manager.io
+              version: v1
+              kind: ClusterIssuer
+              name: cert-main
+            patch: |
+              apiVersion: cert-manager.io/v1
+              kind: ClusterIssuer
+              metadata:
+                name: cert-main
+              $patch: delete
+          - target:
+              version: v1
+              kind: Service
+              name: browsertrix-cloud-frontend
+            patch: |
+              apiVersion: v1
+              kind: Service
+              metadata:
+                name: browsertrix-cloud-frontend
+              spec:
+                type: ClusterIP
+                ports:
+                  - name: frontend
+                    port: 80
+                    nodePort: null
+          - target:
+              version: v1
+              kind: Service
+              name: browsertrix-cloud-emails
+            patch: |
+              apiVersion: v1
+              kind: Service
+              metadata:
+                name: browsertrix-cloud-emails
+              spec:
+                type: ClusterIP
+                ports:
+                  - name: emails
+                    port: 3000
+                    nodePort: null
+          - target:
+              group: apps
+              version: v1
+              kind: StatefulSet
+              name: local-mongo
+            patch: |
+              - op: replace
+                path: /spec/volumeClaimTemplates/0/spec/storageClassName
+                value: ceph-rbd-retain
+          - target:
+              group: rbac.authorization.k8s.io
+              version: v1
+              kind: RoleBinding
+              name: crawler-role
+            patch: |
+              - op: replace
+                path: /subjects
+                value:
+                  - kind: ServiceAccount
+                    name: default
+                    namespace: browsertrix
+          - target:
+              group: rbac.authorization.k8s.io
+              version: v1
+              kind: RoleBinding
+              name: bg-job-role
+            patch: |
+              - op: replace
+                path: /subjects
+                value:
+                  - kind: ServiceAccount
+                    name: default
+                    namespace: browsertrix

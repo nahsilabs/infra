@@ -15,4 +15,5 @@ locals {
   quota_gib     = lookup(var.config, "quota_gib", 0)
 
   lifecycle_rules = lookup(var.config, "lifecycle_rules", [])
+  cors_rules      = lookup(var.config, "cors_rules", [])
 }
