@@ -52,7 +52,6 @@ spec:
               MAX_ASYNC_LLM: "1"
               MAX_PARALLEL_INSERT: "1"
               MAX_PARALLEL_ANALYZE: "1"
-              # Qwen's non-thinking preset; keep answer-role sampling separate.
               EXTRACT_OPENAI_LLM_TEMPERATURE: "0.7"
               EXTRACT_OPENAI_LLM_TOP_P: "0.8"
               EXTRACT_OPENAI_LLM_PRESENCE_PENALTY: "1.5"
