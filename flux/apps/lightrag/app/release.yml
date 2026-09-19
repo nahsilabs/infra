@@ -51,17 +51,20 @@ spec:
               LLM_TIMEOUT: "600"
               MAX_ASYNC_LLM: "1"
               MAX_PARALLEL_INSERT: "1"
-              EXTRACT_OPENAI_LLM_TEMPERATURE: "0.7"
+              EXTRACT_OPENAI_LLM_TEMPERATURE: "0.1"
               EXTRACT_OPENAI_LLM_TOP_P: "0.8"
-              EXTRACT_OPENAI_LLM_PRESENCE_PENALTY: "1.5"
+              EXTRACT_OPENAI_LLM_PRESENCE_PENALTY: "0"
+              EXTRACT_OPENAI_LLM_FREQUENCY_PENALTY: "0"
               EXTRACT_OPENAI_LLM_EXTRA_BODY: '{"enable_thinking":false,"top_k":20,"min_p":0}'
-              KEYWORD_OPENAI_LLM_TEMPERATURE: "0.7"
+              KEYWORD_OPENAI_LLM_TEMPERATURE: "0.2"
               KEYWORD_OPENAI_LLM_TOP_P: "0.8"
-              KEYWORD_OPENAI_LLM_PRESENCE_PENALTY: "1.5"
+              KEYWORD_OPENAI_LLM_PRESENCE_PENALTY: "0"
+              KEYWORD_OPENAI_LLM_FREQUENCY_PENALTY: "0"
               KEYWORD_OPENAI_LLM_EXTRA_BODY: '{"enable_thinking":false,"top_k":20,"min_p":0,"response_format":{"type":"text"}}'
-              QUERY_OPENAI_LLM_TEMPERATURE: "1"
+              QUERY_OPENAI_LLM_TEMPERATURE: "0.2"
               QUERY_OPENAI_LLM_TOP_P: "0.95"
               QUERY_OPENAI_LLM_PRESENCE_PENALTY: "0"
+              QUERY_OPENAI_LLM_FREQUENCY_PENALTY: "0"
               QUERY_OPENAI_LLM_REASONING_EFFORT: medium
               QUERY_OPENAI_LLM_EXTRA_BODY: '{"enable_thinking":true,"top_k":20,"min_p":0}'
 
