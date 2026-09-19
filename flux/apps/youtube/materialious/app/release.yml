@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 5.1.0
+      version: 5.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -19,7 +19,7 @@ spec:
           main:
             image:
               repository: wardpearce/materialious
-              tag: 1.18.4@sha256:578125f6560776fd9a03ec76415ca94b29f079d63d406041bedb587017133fef
+              tag: 1.18.7@sha256:5421db0e7bb44c8c37c41a5cfbf0ac6cc31ef86d2e9353cf67c8212d7ff0ced3
             env:
               VITE_DEFAULT_INVIDIOUS_INSTANCE: "https://iv.nahsi.dev"
               VITE_DEFAULT_RETURNYTDISLIKES_INSTANCE: "https://returnyoutubedislikeapi.com"

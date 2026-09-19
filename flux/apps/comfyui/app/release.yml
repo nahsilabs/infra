@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 5.1.0
+      version: 5.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -22,7 +22,7 @@ spec:
           main:
             image:
               repository: yanwk/comfyui-boot
-              tag: cu130-megapak-pt211@sha256:31772283fcd0adf49bfeaa847eea7362404a51384afbab6164b96f450b9d012c
+              tag: cu130-megapak-pt211@sha256:f0200532103ed46b089104012ca467461f6fa5ba43ee7992dcaed6d8026f5f27
             env:
               CLI_ARGS: --disable-mmap
             command:

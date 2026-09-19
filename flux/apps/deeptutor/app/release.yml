@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 5.1.0
+      version: 5.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -21,7 +21,7 @@ spec:
           main:
             image:
               repository: ghcr.io/hkuds/deeptutor
-              tag: 1.6.7@sha256:5bdc883bb3e92463ab4948d80798ce453d031fed86b072737249b9b8efe176b9
+              tag: 1.6.8@sha256:1fe16f48e090da11c1c16e3e9c4b08b12801fa9f153249d36dc9d50ee60d0ede
             env:
               TZ: Europe/Athens
             resources:

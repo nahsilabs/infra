@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 5.1.0
+      version: 5.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -19,7 +19,7 @@ spec:
           main:
             image:
               repository: quay.io/invidious/invidious
-              tag: master@sha256:609551858b135d6c38f916aacdb2987d284a0e6084c9f6cb727352e9b21ca5e0
+              tag: master@sha256:b14c9e19272f32dc87b2bdc82c3269d38f76fd103cf6dd468b95879d273a5a4e
             env:
               INVIDIOUS_CONFIG: |
                 domain: iv.nahsi.dev

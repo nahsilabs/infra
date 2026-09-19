@@ -7,7 +7,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 5.1.0
+      version: 5.2.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -20,7 +20,7 @@ spec:
           main:
             image:
               repository: ghcr.io/agigante80/actual-mcp-server
-              tag: 0.22.1@sha256:a8a83e7e645ea14dc1cca1544d22b1ac42080bbb2cd7b43612b753f0b25211de
+              tag: 0.22.4@sha256:1274e7acdc2f673a1703d45bb3284b254c0ee69f91bfb539812f6d91d1638795
             env:
               ACTUAL_SERVER_URL: http://actualbudget.actual.svc.cluster.local:5006
               MCP_ALLOW_UNAUTHENTICATED: "true"
