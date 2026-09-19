@@ -27,7 +27,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: ninfer
-          image: docker.io/nahsilabs/ninfer-4090@sha256:ede1d9dc61c08625de3636417ac71c39bd11f3102a8a15967df924bc56a9188e
+          image: docker.io/nahsilabs/ninfer-4090@sha256:f02ea6e32dd2ff11860ac194919e1bc98f081d614cf2a2d840e17c776dee44c1
           command:
             - ninfer-serve
           args:
