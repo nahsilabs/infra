@@ -19,7 +19,7 @@ spec:
           main:
             image:
               repository: ghcr.io/iuliandita/digarr
-              tag: 1.15.1@sha256:28d72da6c40fa58b4baf1c8e3ce8c3e6534602324380e5a2bbb59c11e05dcb99
+              tag: 1.18.0@sha256:66066cc96d06651e5b0c59003fa44e47216bc14dfc369c85e2e95e60e9e2a00f
             env:
               PORT: "3000"
               ALLOWED_ORIGIN: https://digarr.nahsi.dev
