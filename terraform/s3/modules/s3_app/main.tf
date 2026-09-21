@@ -32,6 +32,22 @@ resource "minio_s3_bucket_quota" "this" {
   type   = "hard"
 }
 
+resource "minio_s3_bucket_cors" "this" {
+  count  = length(local.cors_rules) > 0 ? 1 : 0
+  bucket = minio_s3_bucket.this.bucket
+
+  dynamic "cors_rule" {
+    for_each = local.cors_rules
+    content {
+      allowed_origins = cors_rule.value.allowed_origins
+      allowed_methods = cors_rule.value.allowed_methods
+      allowed_headers = lookup(cors_rule.value, "allowed_headers", null)
+      expose_headers  = lookup(cors_rule.value, "expose_headers", null)
+      max_age_seconds = lookup(cors_rule.value, "max_age_seconds", null)
+    }
+  }
+}
+
 resource "minio_s3_bucket_lifecycle" "this" {
   count  = length(local.lifecycle_rules) > 0 ? 1 : 0
   bucket = minio_s3_bucket.this.bucket

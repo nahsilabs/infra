@@ -1,0 +1,9 @@
+acl: private
+force_destroy: false
+cors_rules:
+  - allowed_origins:
+      - https://browsertrix.nahsi.dev
+    allowed_methods: [GET, HEAD]
+    allowed_headers: ["*"]
+    expose_headers: [Accept-Ranges, Content-Range, Content-Encoding, Content-Length, ETag]
+    max_age_seconds: 3600

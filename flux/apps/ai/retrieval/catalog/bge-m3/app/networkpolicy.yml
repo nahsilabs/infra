@@ -22,13 +22,6 @@ spec:
               protocol: TCP
     - fromEndpoints:
         - matchLabels:
-            io.kubernetes.pod.namespace: open-notebook
-      toPorts:
-        - ports:
-            - port: "8080"
-              protocol: TCP
-    - fromEndpoints:
-        - matchLabels:
             io.kubernetes.pod.namespace: obs-collect
       toPorts:
         - ports:
