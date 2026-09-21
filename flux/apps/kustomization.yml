@@ -31,7 +31,6 @@ resources:
   - authentik
   - ntfy
   - hindsight
-  - open-notebook
   - opencloud
   - comfyui
   - xberg

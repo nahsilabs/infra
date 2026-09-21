@@ -1,8 +1,0 @@
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: surrealdb
-  namespace: flux-system
-spec:
-  interval: 1h
-  url: https://helm.surrealdb.com
