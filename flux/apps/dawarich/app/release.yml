@@ -88,6 +88,15 @@ spec:
                     path: /api/v1/health
                     port: &httpPort 3000
               readiness: *probe
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/health
+                    port: *httpPort
+                  failureThreshold: 30
+                  periodSeconds: 10
             resources:
               requests:
                 cpu: 10m
