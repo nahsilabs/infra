@@ -57,6 +57,8 @@ spec:
             - --lm-head-draft
             - --preserve-thinking
             - --vision
+            - --vision-max-tokens
+            - "16384"
           ports:
             - name: http
               containerPort: 8080
