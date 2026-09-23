@@ -1,14 +1,17 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: ninfer
+  name: llama-cpp
   labels:
     obs.nahsilabs/metrics: "true"
 spec:
-  jobLabel: app.kubernetes.io/name
   selector:
-    matchLabels:
-      app.kubernetes.io/part-of: ninfer
+    matchExpressions:
+      - key: app.kubernetes.io/part-of
+        operator: In
+        values:
+          - llama-cpp
+          - ninfer
   endpoints:
     - port: http
       path: /metrics

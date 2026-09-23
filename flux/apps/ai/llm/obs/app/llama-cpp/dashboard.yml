@@ -1,14 +1,13 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: agentgateway
+  name: llama-cpp
 spec:
   allowCrossNamespaceImport: true
   folder: AI
   instanceSelector:
     matchLabels:
       dashboards: "grafana"
-  grafanaCom:
-    # renovate: depName="AgentGateway Overview"
-    id: 24590
-    revision: 1
+  configMapRef:
+    name: llama-cpp-dashboard
+    key: llama-cpp.json
