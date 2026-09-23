@@ -25,7 +25,7 @@ spec:
           main:
             image:
               repository: docker.io/grafana/grafana-image-renderer
-              tag: v5.12.1
+              tag: v5.12.4
               digest: sha256:e925ba95a07372527cd79827381f83f3fe7895511ee46508e35fd9400b56a369
             securityContext:
               allowPrivilegeEscalation: false
