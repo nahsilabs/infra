@@ -22,6 +22,11 @@ spec:
                     secretKeyRef:
                       name: grafana-oidc
                       key: client_secret
+                - name: GF_RENDERING_RENDERER_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-renderer
+                      key: token
                 - name: GF_DATABASE_TYPE
                   value: postgres
                 - name: GF_DATABASE_HOST
@@ -75,6 +80,10 @@ spec:
   config:
     server:
       root_url: https://grafana.nahsi.dev
+    rendering:
+      server_url: http://grafana-image-renderer.obs-stack.svc:8081/render
+      callback_url: http://grafana-service.obs-stack.svc:3000/
+      concurrent_render_request_limit: "1"
     analytics:
       reporting_enabled: "false"
       check_for_updates: "false"

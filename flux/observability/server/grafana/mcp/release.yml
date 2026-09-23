@@ -28,9 +28,9 @@ spec:
       - --address
       - 0.0.0.0:8000
       - --allowed-hosts
-      - ai.nahsi.dev
+      - ai.nahsi.dev,grafana-mcp.obs-stack.svc.cluster.local:8000
       - --enabled-tools
-      - dashboard,search,datasource,navigation
+      - dashboard,search,datasource,navigation,rendering
     grafana:
       url: http://grafana-service.obs-stack:3000
       apiKeySecret:

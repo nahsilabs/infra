@@ -1,0 +1,82 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grafana-image-renderer
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 5.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        replicas: 1
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+        containers:
+          main:
+            image:
+              repository: docker.io/grafana/grafana-image-renderer
+              tag: v5.12.1
+              digest: sha256:e925ba95a07372527cd79827381f83f3fe7895511ee46508e35fd9400b56a369
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: [ALL]
+            env:
+              AUTH_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: grafana-renderer
+                    key: token
+              RATE_LIMIT_MIN_LIMIT: "1"
+              RATE_LIMIT_MAX_LIMIT: "1"
+              BROWSER_READINESS_TIMEOUT: 60s
+              GOMEMLIMIT: 2GiB
+              LOG_FORMAT: json
+              LOG_LEVEL: info
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8081
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8081
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8081
+            resources:
+              requests:
+                cpu: 800m
+                memory: 1Gi
+              limits:
+                cpu: 4
+                memory: 16Gi
+    service:
+      main:
+        controller: main
+        forceRename: grafana-image-renderer
+        type: ClusterIP
+        ports:
+          http:
+            port: 8081
