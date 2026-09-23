@@ -2126,7 +2126,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "LLM inference",
+  "title": "llama.cpp",
   "uid": "llama-cpp",
   "weekStart": ""
 }

@@ -4,7 +4,7 @@ metadata:
   name: agentgateway
 spec:
   allowCrossNamespaceImport: true
-  folder: General
+  folder: AI
   instanceSelector:
     matchLabels:
       dashboards: "grafana"
