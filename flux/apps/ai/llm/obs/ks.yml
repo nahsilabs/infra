@@ -6,6 +6,8 @@ metadata:
 spec:
   dependsOn:
     - name: infra-prometheus-operator-crds
+    - name: infra-grafana-operator
+    - name: obs-grafana
   path: ./flux/apps/ai/llm/obs/app
   targetNamespace: ai
   prune: true

@@ -1,0 +1,13 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: llama-cpp
+spec:
+  allowCrossNamespaceImport: true
+  folder: General
+  instanceSelector:
+    matchLabels:
+      dashboards: "grafana"
+  configMapRef:
+    name: llama-cpp-dashboard
+    key: llama-cpp.json
