@@ -31,6 +31,13 @@ spec:
               MEMOS_PASSWORD_AUTH: "false"
               MEMOS_INSTANCE_URL: "https://memos.nahsi.dev"
 
+    persistence:
+      idp:
+        type: secret
+        name: memos-oidc
+        globalMounts:
+          - path: /etc/secrets
+
     service:
       main:
         controller: main

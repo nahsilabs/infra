@@ -9,6 +9,7 @@ module "core" {
     "access:audiobookshelf",
     "access:dawarich",
     "access:matrix",
+    "access:memos",
     "access:miniflux",
     "access:opencloud",
     "access:trek",
