@@ -20,7 +20,7 @@ spec:
           main:
             image:
               repository: dock.mau.dev/mautrix/telegram
-              tag: v0.2608.0@sha256:c073961f95aafca58392affcb57ea74364a2d17f018a36d29a208828db8a11e8
+              tag: v0.2609.0@sha256:03e79bcf076da566a9984b0bc06151acbf71e3df9cd2e291142713ad9ebff980
 
             command: [/usr/bin/mautrix-telegram]
             args:
