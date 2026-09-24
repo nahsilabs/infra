@@ -24,4 +24,4 @@ spec:
     operation: copy
   url: oci://cr.agentgateway.dev/charts/agentgateway-crds
   ref:
-    tag: v1.4.0-alpha.1
+    tag: v1.6.0-alpha.1
