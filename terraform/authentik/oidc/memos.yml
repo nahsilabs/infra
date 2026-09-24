@@ -1,0 +1,7 @@
+launch_url: https://memos.nahsi.dev
+ui_group: Productivity
+redirect_uris:
+  - https://memos.nahsi.dev/auth/callback
+allowed_groups:
+  - operators
+  - access:memos
