@@ -85,6 +85,10 @@ spec:
         existingClaim: evebox-data
         globalMounts:
           - path: /var/lib/evebox
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
       config:
         type: configMap
         name: evebox-config
