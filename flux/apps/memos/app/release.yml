@@ -27,8 +27,6 @@ spec:
                   secretKeyRef:
                     name: pg-memos-app
                     key: uri
-              MEMOS_PUBLIC: "false"
-              MEMOS_PASSWORD_AUTH: "false"
               MEMOS_INSTANCE_URL: "https://memos.nahsi.dev"
 
     persistence:
