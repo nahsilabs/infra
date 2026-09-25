@@ -44,6 +44,11 @@ proxmox_network: |
   auto vmbr0.13
   iface vmbr0.13 inet static
       address 10.2.13.10/24
+      post-up ip -4 route replace table 113 10.2.13.0/24 dev vmbr0.13 src 10.2.13.10
+      post-up ip -4 route replace table 113 default via 10.2.13.1 dev vmbr0.13
+      post-up test -n "$(ip -4 rule show priority 100 from 10.2.13.10/32 table 113)" || ip -4 rule add priority 100 from 10.2.13.10/32 table 113
+      pre-down test -z "$(ip -4 rule show priority 100 from 10.2.13.10/32 table 113)" || ip -4 rule del priority 100 from 10.2.13.10/32 table 113
+      post-down ip -4 route flush table 113
   #Storage
 
   source /etc/network/interfaces.d/*

@@ -1,0 +1,122 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: evebox
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 5.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        replicas: 1
+        strategy: Recreate
+        containers:
+          main:
+            image:
+              repository: jasonish/evebox
+              tag: 0.29.0@sha256:93c4369179d47e2d1ecb208e52a14c09c8a68a12e7035329b1221d766335b975
+            command:
+              - /bin/evebox
+            args:
+              - --data-directory
+              - /var/lib/evebox
+              - server
+              - --config
+              - /etc/evebox/evebox.yaml
+              - --sqlite
+              - --host
+              - 0.0.0.0
+              - --no-tls
+              - --disable-geoip
+            probes:
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/version
+                    port: 5636
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/version
+                    port: 5636
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10000
+        runAsGroup: 10000
+        fsGroup: 10000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 5636
+
+    persistence:
+      data:
+        existingClaim: evebox-data
+        globalMounts:
+          - path: /var/lib/evebox
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+      config:
+        type: configMap
+        name: evebox-config
+        globalMounts:
+          - path: /etc/evebox/evebox.yaml
+            subPath: evebox.yaml
+            readOnly: true
+
+    route:
+      main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Observability"
+          gethomepage.dev/name: EveBox
+          gethomepage.dev/icon: evebox.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=evebox"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - evebox.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
