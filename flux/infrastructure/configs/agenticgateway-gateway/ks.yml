@@ -19,4 +19,3 @@ spec:
     - name: infra-agenticgateway-crds
     - name: infra-agenticgateway
     - name: infra-prometheus-operator-crds
-    - name: infra-gateway-private
