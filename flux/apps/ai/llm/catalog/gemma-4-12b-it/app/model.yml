@@ -1,0 +1,20 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayModel
+metadata:
+  name: gemma-4-12b-it
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: ai-llm
+  match:
+    model: google/gemma-4-12B-it
+  provider: Custom
+  custom:
+    backendRef:
+      kind: Service
+      name: gemma-4-12b-it
+      port: 8080
+    formats:
+      - type: Completions
+        path: /v1/chat/completions

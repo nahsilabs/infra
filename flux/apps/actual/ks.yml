@@ -29,6 +29,8 @@ metadata:
 spec:
   dependsOn:
     - name: app-actual
+    - name: infra-gateway-api-crds
+    - name: infra-agenticgateway
   interval: 1h
   timeout: 5m
   retryInterval: 2m

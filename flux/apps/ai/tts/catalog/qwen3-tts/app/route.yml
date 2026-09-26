@@ -14,13 +14,6 @@ spec:
         - path:
             type: PathPrefix
             value: /v1/audio
-          headers:
-            - type: Exact
-              name: X-Gateway-Model-Name
-              value: Qwen/Qwen3-TTS
-      timeouts:
-        request: 240s
-        backendRequest: 240s
       backendRefs:
         - kind: Service
           name: qwen3-tts

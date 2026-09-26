@@ -10,13 +10,11 @@ spec:
   hostnames:
     - ai.nahsi.dev
   rules:
-    - matches:
+    - name: transcription
+      matches:
         - path:
             type: Exact
             value: /v1/audio/transcriptions
-      timeouts:
-        request: 300s
-        backendRequest: 300s
       backendRefs:
         - kind: Service
           name: realtimestt

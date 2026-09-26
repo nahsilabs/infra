@@ -11,8 +11,13 @@ spec:
   values:
     inferenceExtension:
       enabled: true
+    agentgatewayModels:
+      enabled: true
     monitoring:
       enabled: true
+      proxy:
+        podMonitor:
+          enabled: false
       serviceMonitor:
         extraLabels:
           obs.nahsilabs/metrics: "true"

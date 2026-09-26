@@ -1,0 +1,20 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayModel
+metadata:
+  name: bge-m3
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: ai-llm
+  match:
+    model: BAAI/bge-m3
+  provider: Custom
+  custom:
+    backendRef:
+      kind: Service
+      name: bge-m3
+      port: 8080
+    formats:
+      - type: Embeddings
+        path: /v1/embeddings

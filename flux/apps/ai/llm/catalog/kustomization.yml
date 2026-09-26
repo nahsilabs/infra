@@ -3,10 +3,4 @@ kind: Kustomization
 resources:
   - bonsai-2-27b
   - gemma-4-12b-it
-  - lfm2-5-8b-a1b
-  - qwen3-5-9b
   - qwen3-8-27b
-  - gpt-oss-20b
-  - gpt-oss-120b
-  - deepseek-v4-flash
-  - deepseek-v4-pro

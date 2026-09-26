@@ -3,6 +3,11 @@ kind: AgentgatewayParameters
 metadata:
   name: agenticgateway-private
 spec:
+  rawConfig:
+    config:
+      adminAddr: 0.0.0.0:15000
+      storage:
+        mode: readOnly
   service:
     metadata:
       labels:

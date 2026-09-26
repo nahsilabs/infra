@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: agenticgateway-ui
+spec:
+  selector:
+    gateway.networking.k8s.io/gateway-name: agenticgateway-internal
+  ports:
+    - name: http
+      port: 15000
+      targetPort: 15000
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: agenticgateway-ui
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Observability
+    gethomepage.dev/name: Agentgateway
+    gethomepage.dev/description: AI gateway configuration and diagnostics
+    gethomepage.dev/icon: mdi-transit-connection-variant
+    gethomepage.dev/pod-selector: gateway.networking.k8s.io/gateway-name=agenticgateway-internal
+spec:
+  parentRefs:
+    - name: private-gateway
+      namespace: envoy-gateway
+      sectionName: https
+  hostnames:
+    - agentgateway.nahsi.dev
+  rules:
+    - matches:
+        - method: GET
+          path:
+            type: Exact
+            value: /
+        - method: GET
+          path:
+            type: PathPrefix
+            value: /ui
+        - path:
+            type: PathPrefix
+            value: /api
+        - method: GET
+          path:
+            type: Exact
+            value: /config_dump
+        - method: POST
+          path:
+            type: Exact
+            value: /debug/trace
+      backendRefs:
+        - name: agenticgateway-ui
+          port: 15000

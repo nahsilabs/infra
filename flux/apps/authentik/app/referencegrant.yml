@@ -1,0 +1,19 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: agentgateway-mcp-jwks
+spec:
+  from:
+    - group: agentgateway.dev
+      kind: AgentgatewayPolicy
+      namespace: actual
+    - group: agentgateway.dev
+      kind: AgentgatewayPolicy
+      namespace: flux-system
+    - group: agentgateway.dev
+      kind: AgentgatewayPolicy
+      namespace: obs-stack
+  to:
+    - group: ""
+      kind: Service
+      name: authentik-server

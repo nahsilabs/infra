@@ -5,3 +5,4 @@ resources:
   - gateway.yml
   - certificate.yml
   - podmonitor.yml
+  - ui.yml
