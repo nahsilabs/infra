@@ -31,6 +31,7 @@ metadata:
 spec:
   dependsOn:
     - name: app-authentik-deps
+    - name: infra-gateway-api-crds
   path: ./flux/apps/authentik/app
   targetNamespace: authentik
   prune: true

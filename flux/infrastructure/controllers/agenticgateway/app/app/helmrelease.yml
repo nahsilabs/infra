@@ -10,9 +10,14 @@ spec:
     namespace: flux-system
   values:
     inferenceExtension:
+      enabled: false
+    agentgatewayModels:
       enabled: true
     monitoring:
       enabled: true
+      proxy:
+        podMonitor:
+          enabled: false
       serviceMonitor:
         extraLabels:
           obs.nahsilabs/metrics: "true"

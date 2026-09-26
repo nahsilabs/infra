@@ -1,0 +1,20 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayModel
+metadata:
+  name: bonsai-2-27b
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: ai-llm
+  match:
+    model: dealignai/Bonsai-2-27B
+  provider: Custom
+  custom:
+    backendRef:
+      kind: Service
+      name: bonsai-2-27b
+      port: 8080
+    formats:
+      - type: Completions
+        path: /v1/chat/completions

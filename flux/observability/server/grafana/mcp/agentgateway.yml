@@ -32,6 +32,9 @@ spec:
         - path:
             type: PathPrefix
             value: /.well-known/oauth-protected-resource/mcp/grafana
+        - path:
+            type: PathPrefix
+            value: /.well-known/oauth-authorization-server/mcp/grafana
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend
@@ -63,6 +66,8 @@ spec:
                 port: 80
               jwksPath: /application/o/grafana-mcp/jwks/
       mcp:
+        provider: Authentik
+        clientId: "9c9f8850dc579f51"
         resourceMetadata:
           resource: https://ai.nahsi.dev/mcp/grafana
           scopesSupported:

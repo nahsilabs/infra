@@ -32,6 +32,9 @@ spec:
         - path:
             type: PathPrefix
             value: /.well-known/oauth-protected-resource/mcp/victoriametrics
+        - path:
+            type: PathPrefix
+            value: /.well-known/oauth-authorization-server/mcp/victoriametrics
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend
@@ -63,6 +66,8 @@ spec:
                 port: 80
               jwksPath: /application/o/victoriametrics-mcp/jwks/
       mcp:
+        provider: Authentik
+        clientId: "e2e576888a416c0e"
         resourceMetadata:
           resource: https://ai.nahsi.dev/mcp/victoriametrics
           scopesSupported:
