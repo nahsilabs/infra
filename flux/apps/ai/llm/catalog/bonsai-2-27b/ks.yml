@@ -1,0 +1,26 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-ai-llm-bonsai-2-27b
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-ai-gateway
+  path: ./flux/apps/ai/llm/catalog/bonsai-2-27b/app
+  targetNamespace: ai
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 15m
+  ignore:
+    - paths:
+        - /spec/replicas
+      target:
+        group: apps
+        kind: Deployment
+        name: bonsai-2-27b
+        namespace: ai

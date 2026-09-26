@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bonsai-2-27b-ai
+spec:
+  parentRefs:
+    - name: agenticgateway-internal
+      namespace: agenticgateway
+      sectionName: https
+  hostnames:
+    - ai.nahsi.dev
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /v1/chat/completions
+          headers:
+            - type: Exact
+              name: X-Gateway-Model-Name
+              value: dealignai/Bonsai-2-27B
+      timeouts:
+        request: 900s
+        backendRequest: 900s
+      backendRefs:
+        - group: agentgateway.dev
+          kind: AgentgatewayBackend
+          name: bonsai-2-27b

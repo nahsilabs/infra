@@ -1,0 +1,139 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bonsai-2-27b
+  labels:
+    app.kubernetes.io/name: bonsai-2-27b
+    app.kubernetes.io/part-of: prism-llama-cpp
+spec:
+  replicas: 0
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bonsai-2-27b
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bonsai-2-27b
+        app.kubernetes.io/part-of: prism-llama-cpp
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: pergamon
+      runtimeClassName: nvidia
+      terminationGracePeriodSeconds: 60
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: llama-server
+          image: docker.io/nahsilabs/prism-llama-cpp:prism-b10743-adfffbe-cuda12.8@sha256:042bc3801036116768c3f0b9c50f9f479fe8bc0ab46b5c0f0aebb8af68a7b5f7
+          args:
+            - --model
+            - /models/Bonsai-2-27B-PQ2_0-CRACK.gguf
+            - --model-url
+            - https://huggingface.co/dealignai/Bonsai-2-27B-Ternary-CRACK-GGUF/resolve/3d36486a5fb2a3868116b8f6e768179e2391d28d/Bonsai-2-27B-PQ2_0-CRACK.gguf
+            - --mmproj
+            - /models/Ternary-Bonsai-2-27B-mmproj-BF16.gguf
+            - --mmproj-url
+            - https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf/resolve/b072e1d3b35a0a630cece372c2127528e0994386/Ternary-Bonsai-2-27B-mmproj-BF16.gguf
+            - --alias
+            - dealignai/Bonsai-2-27B
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8080"
+            - --n-gpu-layers
+            - "99"
+            - --ctx-size
+            - "262144"
+            - --parallel
+            - "2"
+            - --kv-unified
+            - --flash-attn
+            - "on"
+            - --cache-type-k
+            - q8_0
+            - --cache-type-v
+            - q8_0
+            - --jinja
+            - --temp
+            - "1.0"
+            - --top-p
+            - "0.95"
+            - --top-k
+            - "20"
+            - --min-p
+            - "0.05"
+            - --presence-penalty
+            - "0"
+            - --repeat-penalty
+            - "1.0"
+          env:
+            - name: LLAMA_CACHE
+              value: /models
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: "4"
+              memory: 12Gi
+              nvidia.com/gpu: "1"
+            limits:
+              cpu: "8"
+              memory: 24Gi
+              nvidia.com/gpu: "1"
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 360
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: models
+              mountPath: /models
+      volumes:
+        - name: models
+          persistentVolumeClaim:
+            claimName: bonsai-2-27b
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bonsai-2-27b
+  labels:
+    app.kubernetes.io/name: bonsai-2-27b
+    app.kubernetes.io/part-of: prism-llama-cpp
+spec:
+  selector:
+    app.kubernetes.io/name: bonsai-2-27b
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
