@@ -1,6 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - bonsai-2-27b
   - gemma-4-12b-it
   - lfm2-5-8b-a1b
   - qwen3-5-9b
