@@ -8,6 +8,5 @@ resources:
   - envoy-gateway.yml
   - prometheus.yml
   - agenticgateway.yml
-  - kserve-llmisvc.yml
   - hindsight.yml
   - xberg.yml

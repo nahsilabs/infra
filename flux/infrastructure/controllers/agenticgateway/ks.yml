@@ -36,7 +36,6 @@ spec:
   path: ./flux/infrastructure/controllers/agenticgateway/app/app
   dependsOn:
     - name: infra-agenticgateway-crds
-    - name: infra-kserve
     - name: infra-prometheus-operator-crds
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
