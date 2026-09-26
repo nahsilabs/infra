@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.27
-FROM nvidia/cuda:12.8.1-runtime-ubuntu24.04@sha256:ebef3c171eeef0298e4eb2e4be843105edf3b8b0ac45e0b43acee358e8046867
+FROM nvidia/cuda:13.4.1-runtime-ubuntu24.04@sha256:cdfca8f2adfd99287ebbd4a86b3ad6470425c731aea023ca1d4c653a0d7fec7b
 
 ARG PRISM_VERSION=prism-b10743-adfffbe
 ARG PRISM_SHA256=43b73a24d5cd83c4482750ee52e59afac497c669c008a319e44e43a0033757e2

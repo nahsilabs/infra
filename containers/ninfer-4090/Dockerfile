@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.27
-ARG CUDA_DEVEL_IMAGE=nvidia/cuda:13.1.2-devel-ubuntu24.04@sha256:b9f64abf7226fdb3463ca202bc99878ec847171e6c5f77bd34c8d1403fbf1eca
-ARG CUDA_RUNTIME_IMAGE=nvidia/cuda:13.1.2-runtime-ubuntu24.04@sha256:bff001d3257971cc4752e15ac2d354befa70995ded8e141741ade50569fc192e
+ARG CUDA_DEVEL_IMAGE=nvidia/cuda:13.4.1-devel-ubuntu24.04@sha256:a3f014424ccc86cf66c84d700d2896491424205dd9457e3116ed4f0e96381311
+ARG CUDA_RUNTIME_IMAGE=nvidia/cuda:13.4.1-runtime-ubuntu24.04@sha256:cdfca8f2adfd99287ebbd4a86b3ad6470425c731aea023ca1d4c653a0d7fec7b
 ARG NINFER_REPO=https://github.com/sergiuszm/ninfer-4090.git
 ARG NINFER_REV=1bd56c9a1bdf457c6188391a9385d44d86e953aa
 ARG BUILD_JOBS=4
