@@ -1,0 +1,250 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: open-webui
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 5.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        replicas: 1
+        strategy: Recreate
+        containers:
+          main:
+            image:
+              repository: ghcr.io/open-webui/open-webui
+              tag: v0.11.4@sha256:9591b13f13843c7721c2b8eaf7382846c81b3ffe126526d1888d1fed50c6a33f
+            env:
+              HOST: 0.0.0.0
+              PORT: "8080"
+              WEBUI_URL: https://chat.nahsi.dev
+              CORS_ALLOW_ORIGIN: https://chat.nahsi.dev
+              WEBUI_SECRET_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: open-webui-secret
+                    key: WEBUI_SECRET_KEY
+              WEBUI_SESSION_COOKIE_SECURE: "true"
+              WEBUI_AUTH_COOKIE_SECURE: "true"
+              WEBUI_SESSION_COOKIE_SAME_SITE: lax
+              WEBUI_AUTH_COOKIE_SAME_SITE: lax
+
+              WEBUI_AUTH: "true"
+              ENABLE_LOGIN_FORM: "false"
+              ENABLE_PASSWORD_AUTH: "false"
+              ENABLE_SIGNUP: "false"
+              ENABLE_INITIAL_ADMIN_SIGNUP: "false"
+              ENABLE_OAUTH: "true"
+              ENABLE_OAUTH_SIGNUP: "true"
+              DEFAULT_USER_ROLE: user
+              OAUTH_AUTO_REDIRECT: "true"
+              OAUTH_MERGE_ACCOUNTS_BY_EMAIL: "false"
+              ENABLE_OAUTH_PERSISTENT_CONFIG: "true"
+              OAUTH_PROVIDER_NAME: Authentik
+              OPENID_PROVIDER_URL: https://auth.nahsi.dev/application/o/open-webui/.well-known/openid-configuration
+              OPENID_REDIRECT_URI: https://chat.nahsi.dev/oauth/oidc/callback
+              OAUTH_SCOPES: openid email profile
+              OAUTH_CLIENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: open-webui-secret
+                    key: OAUTH_CLIENT_ID
+              OAUTH_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: open-webui-secret
+                    key: OAUTH_CLIENT_SECRET
+
+              ENABLE_PERSISTENT_CONFIG: "true"
+              ENABLE_OLLAMA_API: "false"
+              ENABLE_OPENAI_API: "true"
+              ENABLE_DIRECT_CONNECTIONS: "false"
+              ENABLE_DIRECT_INTEGRATIONS: "false"
+              ENABLE_IMAGE_GENERATION: "false"
+              ENABLE_CODE_EXECUTION: "false"
+              ENABLE_CODE_INTERPRETER: "false"
+              OFFLINE_MODE: "true"
+              DEFAULT_MODELS: Qwen/Qwen3.8-27B
+              DEFAULT_MODEL_METADATA: '{"capabilities":{"web_search":true},"defaultFeatureIds":["web_search"]}'
+              OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
+              OPENAI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: ai-apikeys
+                    key: open-webui
+
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-open-webui-app
+                    key: uri
+              VECTOR_DB: pgvector
+              PGVECTOR_DB_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-open-webui-app
+                    key: uri
+              PGVECTOR_INITIALIZE_MAX_VECTOR_LENGTH: "1024"
+              PGVECTOR_CREATE_EXTENSION: "false"
+
+              REDIS_URL: redis://open-webui-valkey.ai.svc.cluster.local:6379/0
+              WEBSOCKET_REDIS_URL: redis://open-webui-valkey.ai.svc.cluster.local:6379/0
+              WEBSOCKET_MANAGER: redis
+
+              STORAGE_PROVIDER: s3
+              STORAGE_LOCAL_CACHE: "true"
+              S3_ENDPOINT_URL: https://s3.nahsi.dev:9000
+              S3_BUCKET_NAME: open-webui
+              S3_ADDRESSING_STYLE: path
+              S3_ACCESS_KEY_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: open-webui-secret
+                    key: S3_ACCESS_KEY_ID
+              S3_SECRET_ACCESS_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: open-webui-secret
+                    key: S3_SECRET_ACCESS_KEY
+
+              RAG_EMBEDDING_ENGINE: openai
+              RAG_EMBEDDING_MODEL: BAAI/bge-m3
+              RAG_EMBEDDING_MODEL_AUTO_UPDATE: "false"
+              RAG_EMBEDDING_MODEL_TRUST_REMOTE_CODE: "false"
+              RAG_OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
+              RAG_OPENAI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: ai-apikeys
+                    key: open-webui
+              PDF_EXTRACT_IMAGES: "false"
+
+              ENABLE_WEB_SEARCH: "true"
+              WEB_SEARCH_ENGINE: searxng
+              SEARXNG_QUERY_URL: http://searxng.searxng.svc.cluster.local:8080/search
+              SEARXNG_LANGUAGE: all
+              WEB_SEARCH_RESULT_COUNT: "5"
+
+              USER_PERMISSIONS_CHAT_STT: "true"
+              USER_PERMISSIONS_CHAT_TTS: "true"
+              USER_PERMISSIONS_CHAT_CALL: "true"
+              # Use the gateway rather than the default local Whisper engine.
+              AUDIO_STT_ENGINE: openai
+              AUDIO_TTS_ENGINE: openai
+              AUDIO_STT_OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
+              AUDIO_TTS_OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
+              AUDIO_STT_OPENAI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: ai-apikeys
+                    key: open-webui
+              AUDIO_TTS_OPENAI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: ai-apikeys
+                    key: open-webui
+              AUDIO_STT_MODEL: nvidia/nemotron-3.5-asr-streaming-0.6b
+              AUDIO_TTS_MODEL: Qwen/Qwen3-TTS
+              AUDIO_TTS_VOICE: polemist_v1
+
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+                path: /health
+                port: 8080
+                spec:
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                type: HTTP
+                path: /health
+                port: 8080
+                spec:
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              startup:
+                enabled: true
+                type: HTTP
+                path: /health
+                port: 8080
+                spec:
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 60
+            resources:
+              requests:
+                cpu: 250m
+                memory: 1Gi
+              limits:
+                memory: 4Gi
+            securityContext:
+              runAsUser: 0
+              runAsGroup: 0
+              runAsNonRoot: false
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+              seccompProfile:
+                type: RuntimeDefault
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8080
+
+    persistence:
+      data:
+        type: emptyDir
+        globalMounts:
+          - path: /app/backend/data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+
+    route:
+      main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Productivity
+          gethomepage.dev/name: Open WebUI
+          gethomepage.dev/icon: open-webui.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=open-webui"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - chat.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            timeouts:
+              request: 900s
+              backendRequest: 900s
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1

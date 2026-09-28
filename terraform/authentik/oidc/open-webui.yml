@@ -1,0 +1,7 @@
+launch_url: https://chat.nahsi.dev
+ui_group: Productivity
+redirect_uris:
+  - https://chat.nahsi.dev/oauth/oidc/callback
+allowed_groups:
+  - operators
+  - access:open-webui

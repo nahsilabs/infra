@@ -33,5 +33,6 @@ resources:
   - ntfy
   - hindsight
   - opencloud
+  - open-webui
   - comfyui
   - xberg

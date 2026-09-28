@@ -10,6 +10,7 @@ stringData:
     deeptutor: ENC[AES256_GCM,data:7pPxlEhnrsgb/8zBVv2DlD8xhPff1L6s3YmQOhCQTjLDpReSe1u7ShR6KWAF7FTLhZE1yXSFjUNTV5WposhHzg==,iv:vbV1s8OO4xCTQicxftIv1b41aE8B2mUe2cr5dz35i1g=,tag:rro73/b41o1tGTGVbzWErw==,type:str]
     home-assistant: ENC[AES256_GCM,data:5Tyzz74navMTwW8DAiaSlpB+qj5TK6YVL4jLNMW5qBj9DgVRg9hXYUTTiqEMhzKmyuNVW3STXaVb9gDU61J63g==,iv:w0cW5dwbuyXGZk8d9pPPkxiIHyM3YPmwTypPQRJ/lxs=,tag:xiitwNl4WOPVAbTUDoGAGQ==,type:str]
     lightrag: ENC[AES256_GCM,data:LAGPfuzaAgKhbm3/dNxKb3ztWPsEFaFNdQxmArkE6VYK8oYKoGcV/GqNUKahCRbhNYYEPADO3mBx9zRs+69/2A==,iv:xZy9or/eUwPITN6iXOrpbNODOXoD4bK3zwGYLYG6fu8=,tag:wzd7MWsoOS8GPIppNR/m5g==,type:str]
+    open-webui: ENC[AES256_GCM,data:3sb9osLJQj5yorg5so6cQuVDsR5RmoPhof47mHG+BD7nbLpxfdkT9TX39Tfd8Q7c8F2Ea/Ak7r/x3V5+33atmw==,iv:RLPaRN4C+W5Soo37iQYyCvI/wmF8tEwAg1ZqEKXb/Mg=,tag:z1gh6nw6PZw9AOux+n9fCw==,type:str]
 sops:
     age:
         - enc: |
@@ -22,6 +23,6 @@ sops:
             -----END AGE ENCRYPTED FILE-----
           recipient: age17kf3tfnhtv36pjscj7mzuv5dc0xjcj388764258uwgad78mzzs2qtu05pw
     encrypted_regex: ^(data|stringData)$
-    lastmodified: "2026-09-21T09:04:06Z"
-    mac: ENC[AES256_GCM,data:bX5lqazyYHo4GniPJQjq4pZzhMcZ3B7s/0nQ/uduSNfNgo66GncpeEENvw0BnsDQZj8VcZlTzHAEnTuybi+1Qg8Pj0/zpifpQ3EV9ShQu+RMkrg5Wi5gkHDmZSXFLPiH9Gu2SFc4AQRgrGhvlAxqmnJYO670iZznnHvqNc3v684=,iv:16T+mv0jcX6YFEPnNi6dSJ5+wly+/G70B0YT7XE3kt4=,tag:hV9oMy4lRGgkhDPj1Q07ZA==,type:str]
+    lastmodified: "2026-09-28T20:08:19Z"
+    mac: ENC[AES256_GCM,data:eqMDgytr8jrbdASj/a7GIsQBfV2LqyJ5UFIs37iFeyrsmVgVu16ZiFVZfdHwNgB3soIJtp8cwYHPPZBHGLCdYROo6PV9k1tfLF0zB1hi2s9uIZq223My8mKDugd5hdETVync584lF4W3+3XlrGOf++8D5qzq142KrDK8tW/sjU0=,iv:vbBCl6/ZJYGX/Rbc4c6J8kc9P57fOvZ7EvicchdmZVA=,tag:n1vLkH+RNP+UMUHAxJkpNQ==,type:str]
     version: 3.13.1
