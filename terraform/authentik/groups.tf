@@ -12,6 +12,7 @@ module "core" {
     "access:memos",
     "access:miniflux",
     "access:opencloud",
+    "access:open-webui",
     "access:trek",
   ])
 }

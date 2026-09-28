@@ -1,0 +1,52 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-open-webui-deps
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-cloudnative-pg
+  path: ./flux/apps/open-webui/deps
+  targetNamespace: ai
+  prune: true
+  wait: true
+  healthCheckExprs:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Database
+      current: >-
+        has(status.applied) && status.applied &&
+        has(status.observedGeneration) &&
+        status.observedGeneration == metadata.generation
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-open-webui
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-open-webui-deps
+    - name: app-ai-gateway
+    - name: infra-gateway-api-crds
+  path: ./flux/apps/open-webui/app
+  targetNamespace: ai
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age

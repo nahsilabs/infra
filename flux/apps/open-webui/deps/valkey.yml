@@ -1,0 +1,36 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: open-webui-valkey
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: valkey
+      version: 0.12.0
+      sourceRef:
+        kind: HelmRepository
+        name: valkey
+        namespace: flux-system
+  values:
+    fullnameOverride: open-webui-valkey
+    deploymentStrategy: Recreate
+
+    dataStorage:
+      enabled: true
+      requestedSize: 1Gi
+      className: ceph-rbd-retain
+      keepPvc: true
+
+    valkeyConfig: |
+      appendonly yes
+      appendfsync everysec
+      maxclients 10000
+      timeout 1800
+
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        memory: 128Mi
