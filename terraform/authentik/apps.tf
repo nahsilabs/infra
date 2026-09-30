@@ -1,18 +1,3 @@
-moved {
-  from = module.oidc_apps["actual"].authentik_policy_binding.access["household"]
-  to   = module.oidc_apps["actual"].authentik_policy_binding.access["1"]
-}
-
-moved {
-  from = module.oidc_apps["opencloud"].authentik_policy_binding.access["users"]
-  to   = module.oidc_apps["opencloud"].authentik_policy_binding.access["1"]
-}
-
-moved {
-  from = module.oidc_apps["trek"].authentik_policy_binding.access["users"]
-  to   = module.oidc_apps["trek"].authentik_policy_binding.access["1"]
-}
-
 locals {
   oidc_apps = {
     for f in fileset("${path.module}/oidc", "*.yml") :
@@ -24,17 +9,19 @@ module "oidc_apps" {
   for_each = local.oidc_apps
   source   = "./modules/oidc_app"
 
-  app_name            = each.key
-  authentik_domain    = "auth.nahsi.dev"
-  launch_url          = each.value.launch_url
-  ui_group            = lookup(each.value, "ui_group", "")
-  allowed_groups      = each.value.allowed_groups
-  redirect_uris       = each.value.redirect_uris
-  redirect_uris_regex = lookup(each.value, "redirect_uris_regex", [])
-  client_type         = lookup(each.value, "client_type", "confidential")
-  offline_access      = lookup(each.value, "offline_access", false)
-  entitlements        = lookup(each.value, "entitlements", {})
-  groups              = module.core.groups
+  app_name                     = each.key
+  authentik_domain             = "auth.nahsi.dev"
+  oidc_defaults                = local.oidc_defaults
+  launch_url                   = each.value.launch_url
+  ui_group                     = lookup(each.value, "ui_group", "")
+  allowed_groups               = each.value.allowed_groups
+  redirect_uris                = lookup(each.value, "redirect_uris", [])
+  redirect_uris_regex          = lookup(each.value, "redirect_uris_regex", [])
+  client_type                  = lookup(each.value, "client_type", "confidential")
+  offline_access               = lookup(each.value, "offline_access", false)
+  additional_scope_mapping_ids = lookup(each.value, "additional_scope_mapping_ids", [])
+  entitlements                 = lookup(each.value, "entitlements", {})
+  groups                       = local.groups
 }
 
 output "oidc_apps" {
