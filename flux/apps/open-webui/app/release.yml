@@ -72,6 +72,8 @@ spec:
               ENABLE_CODE_EXECUTION: "false"
               ENABLE_CODE_INTERPRETER: "false"
               OFFLINE_MODE: "true"
+              FILE_IMAGE_COMPRESSION_WIDTH: "1568"
+              FILE_IMAGE_COMPRESSION_HEIGHT: "1568"
               DEFAULT_MODELS: Qwen/Qwen3.8-27B
               DEFAULT_MODEL_METADATA: '{"capabilities":{"web_search":true},"defaultFeatureIds":["web_search"]}'
               OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
