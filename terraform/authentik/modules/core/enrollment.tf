@@ -53,32 +53,13 @@ resource "authentik_stage_prompt_field" "enrollment_name" {
 resource "authentik_stage_prompt_field" "enrollment_email" {
   count = var.enrollment.capture_identity ? 1 : 0
 
-  name      = "enrollment-email-field"
-  field_key = "email"
-  label     = "Invited email address"
-  type      = "text_read_only"
-  order     = 2
-}
-
-resource "authentik_policy_expression" "enrollment_email" {
-  count = var.enrollment.capture_identity ? 1 : 0
-
-  name       = "enrollment-invited-email"
-  expression = <<-EOT
-    from django.core.exceptions import ValidationError
-    from django.core.validators import validate_email
-
-    email = request.context.get("prompt_data", {}).get("email")
-    if not isinstance(email, str) or not email:
-        ak_message("The invitation must include an email address. Ask the administrator for a new invitation.")
-        return False
-    try:
-        validate_email(email)
-    except ValidationError:
-        ak_message("The invitation email address is invalid. Ask the administrator for a new invitation.")
-        return False
-    return True
-  EOT
+  name        = "enrollment-email-field"
+  field_key   = "email"
+  label       = "Email"
+  type        = "email"
+  required    = true
+  placeholder = "Email"
+  order       = 2
 }
 
 resource "authentik_stage_prompt" "enrollment_identity" {
@@ -90,15 +71,24 @@ resource "authentik_stage_prompt" "enrollment_identity" {
     authentik_stage_prompt_field.enrollment_name[0].id,
     authentik_stage_prompt_field.enrollment_email[0].id,
   ]
-  validation_policies = [authentik_policy_expression.enrollment_email[0].id]
 }
 
 resource "authentik_stage_user_write" "enrollment" {
   name                     = "enrollment-write"
   user_creation_mode       = "always_create"
   user_type                = "internal"
-  create_users_as_inactive = false
+  create_users_as_inactive = true
   create_users_group       = var.enrollment_group_id
+}
+
+resource "authentik_stage_email" "enrollment_email" {
+  name                     = "enrollment-email-verification"
+  use_global_settings      = true
+  activate_user_on_success = true
+  timeout                  = 30
+  token_expiry             = "hours=24"
+  subject                  = "Verify your ${var.organization_name} email"
+  template                 = "email/account_confirmation.html"
 }
 
 resource "authentik_flow_stage_binding" "invitation_confirmation" {
@@ -133,10 +123,16 @@ resource "authentik_flow_stage_binding" "enrollment_write" {
   order  = var.enrollment.capture_identity ? 40 : 30
 }
 
+resource "authentik_flow_stage_binding" "enrollment_email" {
+  target = authentik_flow.enrollment.uuid
+  stage  = authentik_stage_email.enrollment_email.id
+  order  = var.enrollment.capture_identity ? 50 : 40
+}
+
 resource "authentik_flow_stage_binding" "enrollment_totp" {
   target = authentik_flow.enrollment.uuid
   stage  = authentik_stage_authenticator_totp.totp_setup.id
-  order  = var.enrollment.capture_identity ? 50 : 40
+  order  = var.enrollment.capture_identity ? 60 : 50
 }
 
 resource "authentik_flow_stage_binding" "enrollment_login" {
