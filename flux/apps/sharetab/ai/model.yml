@@ -1,0 +1,31 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayModel
+metadata:
+  name: sharetab-receipts
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: ai-llm
+  match:
+    model: sharetab-receipts
+  provider: Custom
+  custom:
+    backendRef:
+      kind: Service
+      name: qwen3-8-27b
+      port: 8080
+    formats:
+      - type: Completions
+        path: /v1/chat/completions
+  policies:
+    transformations:
+      - field: model
+        expression: '"qwen3.8-27b"'
+      - field: response_format
+        expression: '{"type": "text"}'
+      - field: enable_thinking
+        expression: 'false'
+      - field: messages
+        expression: >-
+          [{"role": "system", "content": "Return only valid JSON matching the requested receipt structure, without markdown. Omit date and merchantName when unknown; never use null for these fields. All monetary values must be non-negative integers in cents."}] + llmRequest.messages
