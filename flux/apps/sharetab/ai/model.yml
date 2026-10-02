@@ -26,6 +26,16 @@ spec:
         expression: '{"type": "text"}'
       - field: enable_thinking
         expression: 'false'
+      - field: temperature
+        expression: '0'
       - field: messages
         expression: >-
-          [{"role": "system", "content": "Return only valid JSON matching the requested receipt structure, without markdown. Omit date and merchantName when unknown; never use null for these fields. All monetary values must be non-negative integers in cents."}] + llmRequest.messages
+          [{"role": "system", "content":
+            "Return only valid JSON matching the requested receipt structure, without markdown. "
+            + "Omit date and merchantName when unknown; never use null for these fields or invent a date. "
+            + "All monetary values must be non-negative integers in cents. All quantities must be integers of at least 1. "
+            + "For countable products, preserve the printed quantity and per-unit price; do not collapse multiple units into quantity 1. "
+            + "For products sold by weight, use quantity 1 and unitPrice equal to totalPrice, retaining the weight and per-weight price in the name. "
+            + "Associate quantity and unit-price lines with the product whose line total they explain. "
+            + "Translate product names into English while preserving brand names, weights, and per-weight prices. Do not add VAT again when the receipt total already includes VAT."
+          }] + llmRequest.messages
