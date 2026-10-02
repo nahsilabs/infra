@@ -1,0 +1,7 @@
+launch_url: https://sharetab.nahsi.dev
+ui_group: Productivity
+redirect_uris:
+  - https://sharetab.nahsi.dev/api/auth/callback/oidc
+allowed_groups:
+  - operators
+  - access:sharetab

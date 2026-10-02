@@ -1,0 +1,127 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: sharetab
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 5.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        replicas: 1
+        containers:
+          main:
+            image:
+              repository: ghcr.io/sw-carlos-cristobal/sharetab
+              # Stable build bbf33eed (ghcr tag "stable"); pinned by digest.
+              tag: stable@sha256:2e9eb21516c1f8b4a0f1f60dfb996c7cd45beaa79e40409c283731108545f712
+            envFrom:
+              # sharetab-app (deps/secret-app.yml, SOPS-encrypted): AUTH_SECRET,
+              # NEXTAUTH_SECRET, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET,
+              # OPENAI_API_KEY, ADMIN_EMAIL.
+              - secretRef:
+                  name: sharetab-app
+            env:
+              NEXTAUTH_URL: "https://sharetab.nahsi.dev"
+              AUTH_TRUST_HOST: "true"
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-sharetab-app
+                    key: uri
+              OIDC_ISSUER: "https://auth.nahsi.dev/application/o/sharetab/"
+              OIDC_DISPLAY_NAME: Authentik
+              OIDC_AUTO_REGISTER: "true"
+              OIDC_ALLOW_EMAIL_LINKING: "false"
+              OIDC_TOKEN_AUTH_METHOD: client_secret_basic
+              DISABLE_PASSWORD_LOGIN: "true"
+              AI_PROVIDER_PRIORITY: openai
+              OPENAI_BASE_URL: https://ai.nahsi.dev/v1
+              OPENAI_MODEL: Qwen/Qwen3.8-27B
+              # Anonymous (no-account) receipt uploads and AI scans are
+              # currently allowed. To lock off guest receipt uploads and
+              # scans while signed-in users keep working, uncomment:
+              # DISABLE_GUEST_UPLOADS: "true"
+            probes:
+              startup:
+                enabled: true
+                type: HTTP
+                path: /api/health
+                port: 3000
+                spec:
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 90
+              liveness:
+                enabled: true
+                type: HTTP
+                path: /api/health
+                port: 3000
+                spec:
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                type: HTTP
+                path: /api/health
+                port: 3000
+                spec:
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+        # The image entrypoint needs root (initdb, chown, signal handling) and
+        # drops the Next.js process to the nextjs user itself; it cannot run
+        # as non-root, so no runAsNonRoot is set.
+        strategy: Recreate
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 3000
+    persistence:
+      uploads:
+        existingClaim: sharetab-uploads
+        globalMounts:
+          - path: /app/uploads
+      # The image always starts its bundled PostgreSQL, even when DATABASE_URL
+      # points at the external CNPG cluster; the bundled instance is unused
+      # and stays on a writable ephemeral volume rather than a redundant PVC.
+      pgdata:
+        type: emptyDir
+        globalMounts:
+          - path: /var/lib/postgresql/data
+    route:
+      main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Productivity"
+          gethomepage.dev/name: ShareTab
+          gethomepage.dev/icon: https://raw.githubusercontent.com/sw-carlos-cristobal/sharetab/bbf33eed84accfa028ea6d4f5b41f5d69b8ae5c6/public/icons/icon-512.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=sharetab"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - sharetab.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
