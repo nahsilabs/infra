@@ -28,4 +28,11 @@ spec:
         expression: 'false'
       - field: messages
         expression: >-
-          [{"role": "system", "content": "Return only valid JSON matching the requested receipt structure, without markdown. Omit date and merchantName when unknown; never use null for these fields. All monetary values must be non-negative integers in cents."}] + llmRequest.messages
+          [{"role": "system", "content": "Return only valid JSON matching the requested receipt structure, without markdown. Omit date and merchantName when unknown; never use null for these fields. All monetary values must be non-negative integers in cents."}] +
+          llmRequest.messages.map(m, m.role == "user" ? {
+            "role": m.role,
+            "content": m.content.map(p, p.type == "text" ? {
+              "type": "text",
+              "text": p.text.replace("store name or null", "store name; omit this field if unknown").replace("YYYY-MM-DD or null", "YYYY-MM-DD; omit this field if unknown")
+            } : p)
+          } : m)
