@@ -44,7 +44,7 @@ spec:
               DISABLE_PASSWORD_LOGIN: "true"
               AI_PROVIDER_PRIORITY: openai
               OPENAI_BASE_URL: https://ai.nahsi.dev/v1
-              OPENAI_MODEL: sharetab-receipts
+              OPENAI_MODEL: Qwen/Qwen3.8-27B
               # Anonymous (no-account) receipt uploads and AI scans are
               # currently allowed. To lock off guest receipt uploads and
               # scans while signed-in users keep working, uncomment:

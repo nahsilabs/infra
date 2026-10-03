@@ -29,9 +29,6 @@ spec:
       mode: Strict
       secretRef:
         name: ai-apikeys
-    buffer:
-      request:
-        maxBytes: 16Mi
 ---
 apiVersion: agentgateway.dev/v1alpha1
 kind: AgentgatewayPolicy
