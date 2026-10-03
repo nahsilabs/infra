@@ -29,7 +29,7 @@ spec:
     crawler_namespace: browsertrix-crawlers
     crawler_channels:
       - id: default
-        image: docker.io/webrecorder/browsertrix-crawler:1.14.3
+        image: docker.io/webrecorder/browsertrix-crawler:1.15.0
         imagePullPolicy: IfNotPresent
     crawler_pull_policy: IfNotPresent
     crawler_browser_instances: 2
