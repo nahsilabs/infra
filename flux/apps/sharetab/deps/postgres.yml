@@ -1,0 +1,21 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-sharetab
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.6@sha256:899d3ed526b659d77935dde0e6bf2d69dbbf17d3d8c6486ca8cfd04bd3c18533
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 5Gi
+    storageClass: ceph-rbd-retain
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: pg-sharetab-app
+spec:
+  cluster:
+    name: pg-sharetab
+  name: app
+  owner: app

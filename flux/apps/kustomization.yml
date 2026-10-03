@@ -27,6 +27,7 @@ resources:
   - navidrome
   - matrix
   - searxng
+  - sharetab
   - lemmy
   - youtube
   - authentik
