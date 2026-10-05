@@ -34,6 +34,8 @@ spec:
         - name: halogen
           image: ghcr.io/peonist-ai/halogen-flash-server:0.16.2@sha256:0c61bf84ac22308a53f5d1ca6b86806702d7039e5ebc51cae4c66621b92fe04a
           env:
+            - name: HALOGEN_DOWNLOAD
+              value: peonist-ai/halogen-qwen3.8-flash-next
             - name: HALOGEN_MODEL_ID
               value: Qwen/Qwen3.8-Flash-Next
             - name: HALOGEN_API_PORT
@@ -124,13 +126,11 @@ spec:
             - name: models
               mountPath: /models
               subPath: weights
-              readOnly: true
             - name: models
               mountPath: /cache
               subPath: prompt-cache
             - name: ngram
               mountPath: /ngram
-              readOnly: true
       volumes:
         - name: models
           persistentVolumeClaim:
