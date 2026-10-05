@@ -43,7 +43,7 @@ spec:
           blacklist: false
         devicePlugin:
           enableDevicePlugin: true
-          devicePluginImage: docker.io/rocm/k8s-device-plugin:1.31.0.9
+          devicePluginImage: docker.io/rocm/k8s-device-plugin:1.31.0.11
           devicePluginTolerations:
             - key: scheduling.nahsilabs/dedicated
               operator: Equal
