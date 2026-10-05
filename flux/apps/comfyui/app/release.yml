@@ -17,21 +17,15 @@ spec:
     controllers:
       main:
         strategy: Recreate
-        replicas: 0
+        replicas: 1
         containers:
           main:
             image:
-              repository: yanwk/comfyui-boot
-              tag: cu130-megapak-pt211@sha256:a9e9adbc745a44916eb0c416ce5901c47f37b98ce63ec34c52c74213f39abaa2
-            env:
-              CLI_ARGS: --disable-mmap
-            command:
-              - bash
-              - -c
+              repository: ghcr.io/radiatingreverberations/comfyui-extensions
+              tag: v0.38.0@sha256:e30f258995addfabd2313da34b1ed63e39ec42273ac1a956f3fcfce0aae1320b
             args:
-              - |
-                sed -i 's/export PIP_USER=true/export PIP_USER=false/' /runner-scripts/entrypoint.sh
-                exec bash /runner-scripts/entrypoint.sh
+              - --multi-user
+              - --disable-metadata
             probes:
               startup:
                 enabled: true
@@ -56,12 +50,6 @@ spec:
               capabilities:
                 drop:
                   - ALL
-                add:
-                  - CHOWN
-                  - SETUID
-                  - SETGID
-                  - DAC_OVERRIDE
-                  - FOWNER
 
     defaultPodOptions:
       nodeSelector:
@@ -99,18 +87,24 @@ spec:
                 weight: 1
 
     persistence:
-      root:
+      data:
         existingClaim: comfyui-root
         globalMounts:
-          - path: /root/ComfyUI/
+          - path: /comfyui/user
+            subPath: user
+          - path: /comfyui/custom_nodes
+            subPath: custom_nodes
       models:
         existingClaim: comfyui-models
         globalMounts:
-          - path: /root/ComfyUI/models
-      data:
-        existingClaim: comfyui-data
+          - path: /comfyui/models
+      images:
+        type: emptyDir
+        sizeLimit: 10Gi
         globalMounts:
-          - path: /root/ComfyUI/output
+          - path: /comfyui/output
             subPath: output
-          - path: /root/ComfyUI/input
+          - path: /comfyui/input
             subPath: input
+          - path: /comfyui/temp
+            subPath: temp
