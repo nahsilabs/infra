@@ -1,0 +1,155 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qwen3-8-flash-next
+  labels:
+    app.kubernetes.io/name: qwen3-8-flash-next
+    app.kubernetes.io/part-of: halogen
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: qwen3-8-flash-next
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: qwen3-8-flash-next
+        app.kubernetes.io/part-of: halogen
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ephesus
+      tolerations:
+        - key: scheduling.nahsilabs/dedicated
+          operator: Equal
+          value: halogen
+          effect: NoSchedule
+      hostIPC: true
+      terminationGracePeriodSeconds: 120
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: halogen
+          image: ghcr.io/peonist-ai/halogen-flash-server:0.16.2@sha256:0c61bf84ac22308a53f5d1ca6b86806702d7039e5ebc51cae4c66621b92fe04a
+          env:
+            - name: HALOGEN_DOWNLOAD
+              value: peonist-ai/halogen-qwen3.8-flash-next
+            - name: HALOGEN_MODEL_ID
+              value: Qwen/Qwen3.8-Flash-Next
+            - name: HALOGEN_API_PORT
+              value: "8080"
+            - name: HALOGEN_CHECKPOINT
+              value: /models/qwen38-flash-next-v2.hgn
+            - name: HALOGEN_TOKENIZER
+              value: /models/tokenizer
+            - name: HALOGEN_NGRAM_TABLE
+              value: /ngram/qwen38-flash-next-ngram.hgn
+            - name: HALOGEN_VISION_TOWER
+              value: /models/qwen38-flash-next-vision.hgn
+            - name: HALOGEN_VISION_MAX_PIXELS
+              value: "3686400"
+            - name: HALOGEN_CTX
+              value: "262144"
+            - name: HALOGEN_KV_SLOTS
+              value: "4"
+            - name: HALOGEN_KV_POOL_POSITIONS
+              value: "1048576"
+            - name: HALOGEN_KV_POOL_FIT
+              value: "1"
+            - name: HALOGEN_MAX_TOK
+              value: "16384"
+            - name: HALOGEN_PREFILL_CHUNK
+              value: "16384"
+            - name: HALOGEN_HOST_RESERVE_GIB
+              value: "20"
+            - name: HALOGEN_INDEXER_BUDGET
+              value: "2048"
+            - name: HALOGEN_REASONING_EFFORT
+              value: medium
+            - name: HALOGEN_TEMPERATURE
+              value: "1.0"
+            - name: HALOGEN_TOP_P
+              value: "0.95"
+            - name: HALOGEN_TOP_K
+              value: "20"
+            - name: HALOGEN_MAX_TOKENS_DEFAULT
+              value: "16384"
+            - name: HALOGEN_MAX_TOKENS_CAP
+              value: "65536"
+            - name: HALOGEN_QUEUE_TIMEOUT
+              value: "600"
+            - name: HALOGEN_PROMPT_CACHE
+              value: "2"
+            - name: HALOGEN_CACHE_BRANCHES
+              value: "4"
+            - name: HALOGEN_CACHE_DIR
+              value: /cache
+            - name: HALOGEN_CACHE_DISK_GIB
+              value: "64"
+            - name: HALOGEN_CACHE_PRUNE_OLD
+              value: "1"
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: "16"
+              memory: 110Gi
+              amd.com/gpu: "1"
+            limits:
+              memory: 120Gi
+              amd.com/gpu: "1"
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 180
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - IPC_LOCK
+          volumeMounts:
+            - name: models
+              mountPath: /models
+              subPath: weights
+            - name: models
+              mountPath: /cache
+              subPath: prompt-cache
+            - name: ngram
+              mountPath: /ngram
+      volumes:
+        - name: models
+          persistentVolumeClaim:
+            claimName: qwen3-8-flash-next-models
+        - name: ngram
+          persistentVolumeClaim:
+            claimName: qwen3-8-flash-next-ngram
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qwen3-8-flash-next
+  labels:
+    app.kubernetes.io/name: qwen3-8-flash-next
+    app.kubernetes.io/part-of: halogen
+spec:
+  selector:
+    app.kubernetes.io/name: qwen3-8-flash-next
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http

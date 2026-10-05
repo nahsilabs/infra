@@ -1,0 +1,93 @@
+machine:
+  install:
+    diskSelector:
+      serial: "50026B7384501098"
+  nodeLabels:
+    scheduling.nahsilabs/dedicated: halogen
+  kubelet:
+    extraArgs:
+      register-with-taints: scheduling.nahsilabs/dedicated=halogen:NoSchedule
+    nodeIP:
+      validSubnets:
+        - 10.2.15.0/24
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: ephesus
+auto: off
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: uplink0
+selector:
+  match: mac(link.permanent_addr) == "38:05:25:31:d5:89"
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: uplink1
+selector:
+  match: mac(link.permanent_addr) == "38:05:25:31:d5:8a"
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: bond0
+hardwareAddr: "38:05:25:31:d5:89"
+links:
+  - uplink0
+  - uplink1
+bondMode: 802.3ad
+miimon: 100
+updelay: 200
+downdelay: 200
+xmitHashPolicy: layer3+4
+lacpRate: fast
+---
+apiVersion: v1alpha1
+kind: VLANConfig
+name: bond0.15
+parent: bond0
+vlanID: 15
+addresses:
+  - address: 10.2.15.80/24
+routes:
+  - gateway: 10.2.15.1
+---
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  diskSelector:
+    match: system_disk
+  minSize: 200GiB
+  maxSize: 200GiB
+  grow: false
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: models
+volumeType: partition
+provisioning:
+  diskSelector:
+    match: system_disk && disk.serial == "50026B7384501098" && disk.transport == "nvme"
+  minSize: 200GiB
+  maxSize: 200GiB
+  grow: false
+filesystem:
+  type: xfs
+mount:
+  disableAccessTime: true
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: ngram
+volumeType: partition
+provisioning:
+  diskSelector:
+    match: system_disk && disk.serial == "50026B7384501098" && disk.transport == "nvme"
+  minSize: 100GiB
+  maxSize: 100GiB
+  grow: false
+filesystem:
+  type: xfs
+mount:
+  disableAccessTime: true

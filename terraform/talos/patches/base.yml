@@ -14,9 +14,6 @@ machine:
   time:
     servers:
       - time.cloudflare.com
-  network:
-    nameservers:
-      - 10.2.15.2
 
   kubelet:
     extraArgs:
@@ -37,3 +34,8 @@ cluster:
   scheduler:
     extraArgs:
       bind-address: 0.0.0.0
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+  - address: 10.2.15.2

@@ -33,6 +33,11 @@ spec:
         limits:
           memory: 128Mi
     worker:
+      tolerations:
+        - key: scheduling.nahsilabs/dedicated
+          operator: Equal
+          value: halogen
+          effect: NoSchedule
       config:
         core:
           sources:

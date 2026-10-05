@@ -75,4 +75,20 @@ nodes = [
       "siderolabs/nvidia-container-toolkit-production",
     ]
   },
+  {
+    name      = "ephesus"
+    server_ip = "10.2.15.80"
+    role      = "worker"
+    platform  = "metal"
+    config_patches = [
+      "./patches/base.yml",
+      "./patches/ephesus.yml",
+    ]
+    extensions = [
+      "siderolabs/amd-ucode",
+      "siderolabs/amdgpu",
+      "siderolabs/realtek-firmware",
+    ]
+    extra_kernel_args = ["amd_iommu=off"]
+  },
 ]

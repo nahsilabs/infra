@@ -16,6 +16,7 @@ resources:
   - node-feature-discovery
   - intel-device-plugins
   - nvidia-operator
+  - amd-gpu-operator
   - vm-operator
   - grafana-operator
   - snapshot-controller

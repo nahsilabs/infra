@@ -11,6 +11,7 @@ variable "nodes" {
     name              = string
     server_ip         = string
     role              = string
+    platform          = optional(string, "nocloud")
     config_patches    = list(string)
     extensions        = list(string)
     extra_kernel_args = optional(list(string), [])

@@ -16,6 +16,10 @@ spec:
     # pergamon) and they drop out of the DaemonSet's desired count, so the
     # rollout can reach all-ready instead of waiting forever on a dead node.
     tolerations: &cilium-tolerations
+      - key: scheduling.nahsilabs/dedicated
+        operator: Equal
+        value: halogen
+        effect: NoSchedule
       - key: node-role.kubernetes.io/control-plane
         operator: Exists
       - key: node.cilium.io/agent-not-ready

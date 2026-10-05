@@ -12,6 +12,7 @@ spec:
     fullnameOverride: node-exporter
 
     extraArgs:
+      - --collector.drm
       - --no-collector.wifi
       - --no-collector.btrfs
       - --no-collector.dmi

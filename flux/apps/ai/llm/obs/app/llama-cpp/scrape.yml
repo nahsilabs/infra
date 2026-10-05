@@ -12,6 +12,7 @@ spec:
         values:
           - llama-cpp
           - ninfer
+          - halogen
   endpoints:
     - port: http
       path: /metrics
