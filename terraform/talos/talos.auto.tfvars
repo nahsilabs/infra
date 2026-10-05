@@ -87,6 +87,7 @@ nodes = [
     extensions = [
       "siderolabs/amd-ucode",
       "siderolabs/amdgpu",
+      "siderolabs/realtek-firmware",
     ]
     extra_kernel_args = ["amd_iommu=off"]
   },
