@@ -15,6 +15,7 @@ resources:
   - jameswynn.yml
   - intel.yml
   - nvidia.yml
+  - amd.yml
   - victoriametrics.yml
   - immich.yml
   - cowboysysop.yml

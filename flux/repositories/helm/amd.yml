@@ -1,0 +1,9 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: amd
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://rocm.github.io/gpu-operator
+  timeout: 3m
