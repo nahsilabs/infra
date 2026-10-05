@@ -1,0 +1,18 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: comfyui-lockdown
+  namespace: comfyui
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: comfyui
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: private-gateway
+      toPorts:
+        - ports:
+            - port: "8188"
+              protocol: TCP
