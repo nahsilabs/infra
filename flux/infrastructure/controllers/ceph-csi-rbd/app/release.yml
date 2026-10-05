@@ -13,6 +13,12 @@ spec:
         namespace: flux-system
   interval: 1h
   values:
+    nodeplugin:
+      tolerations:
+        - key: scheduling.nahsilabs/dedicated
+          operator: Equal
+          value: halogen
+          effect: NoSchedule
     csiConfig:
       - clusterID: "0f97afb5-e33d-48cb-b27a-4a7ea168b1b7"
         monitors:

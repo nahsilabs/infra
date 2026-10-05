@@ -33,7 +33,7 @@ data "talos_image_factory_urls" "node" {
   for_each      = { for node in var.nodes : node.name => node }
   talos_version = var.talos_version
   schematic_id  = talos_image_factory_schematic.node[each.key].id
-  platform      = "nocloud"
+  platform      = each.value.platform
   architecture  = "amd64"
 }
 

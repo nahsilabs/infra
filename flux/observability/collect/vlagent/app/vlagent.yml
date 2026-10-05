@@ -3,6 +3,11 @@ kind: VLAgent
 metadata:
   name: stack
 spec:
+  tolerations:
+    - key: scheduling.nahsilabs/dedicated
+      operator: Equal
+      value: halogen
+      effect: NoSchedule
   k8sCollector:
     enabled: true
     extraFields: '{"job":"kubernetes","cluster":"nahsilabs"}'
