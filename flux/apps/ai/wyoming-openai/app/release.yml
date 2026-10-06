@@ -32,7 +32,7 @@ spec:
               TTS_OPENAI_URL: https://ai.nahsi.dev/v1
               TTS_MODELS: Qwen/Qwen3-TTS
               TTS_STREAMING_MODELS: Qwen/Qwen3-TTS
-              TTS_VOICES: polemist_v1
+              TTS_VOICES: 'neil kai katerina cherry'
               TTS_EXTRA_BODY: '{"response_format":"pcm"}'
               STT_OPENAI_KEY:
                 valueFrom:

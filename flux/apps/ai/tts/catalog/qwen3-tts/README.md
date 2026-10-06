@@ -51,4 +51,3 @@ kubectl -n ai rollout restart deployment/qwen3-tts
 kubectl -n ai rollout status deployment/qwen3-tts --timeout=10m
 ```
 
-The Polemis voice uses `polemist_v1.wav` and `polemist_v1.txt`.
