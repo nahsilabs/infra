@@ -20,13 +20,13 @@ spec:
             image:
               repository: ghcr.io/searxng/searxng
               # renovate: datasource=docker depName=ghcr.io/searxng/searxng
-              tag: 2026.5.22-fc90c5b09@sha256:4f0db332041c372dfe238ec0540f53ac055ad15cff2e179235e7fe07f1a5271f
+              tag: 2026.10.4-d48c4b555@sha256:76b0bf285aca014c7191fc4d9234c4bfb358624ac33d8883833d496c059ec072
             env:
               SEARXNG_BASE_URL: https://search.nahsi.dev
               SEARXNG_PORT: &port 8080
-              SEARXNG_VALKEY_URL: redis://searxng-valkey.searxng.svc.cluster.local:6379
-              UWSGI_WORKERS: 2
-              UWSGI_THREADS: 4
+              SEARXNG_VALKEY_URL: redis://searxng-valkey.search.svc.cluster.local:6379
+              GRANIAN_WORKERS: 2
+              GRANIAN_BLOCKING_THREADS: 4
             envFrom:
               - secretRef:
                   name: searxng-secret
