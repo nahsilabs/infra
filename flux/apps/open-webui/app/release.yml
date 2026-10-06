@@ -25,6 +25,8 @@ spec:
             envFrom:
               - secretRef:
                   name: open-webui-secret
+              - secretRef:
+                  name: open-webui-fastcrw
             env:
               WEBUI_URL: https://chat.nahsi.dev
               CORS_ALLOW_ORIGIN: https://chat.nahsi.dev

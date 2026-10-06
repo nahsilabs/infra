@@ -1,0 +1,17 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: fastcrw
+  labels:
+    obs.nahsilabs/metrics: "true"
+spec:
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fastcrw
+  endpoints:
+    - port: http
+      path: /metrics
+      bearerTokenSecret:
+        name: fastcrw-auth
+        key: CRW_AUTH__API_KEYS

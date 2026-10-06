@@ -36,6 +36,7 @@ spec:
   retryInterval: 2m
   timeout: 10m
   prune: true
+  wait: true
   targetNamespace: search
   sourceRef:
     kind: GitRepository

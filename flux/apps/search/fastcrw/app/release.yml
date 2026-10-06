@@ -1,0 +1,138 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: fastcrw
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 5.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        replicas: 1
+        strategy: Recreate
+        containers:
+          main:
+            image:
+              repository: ghcr.io/fastcrw/crw
+              tag: 0.37.2@sha256:a063ca83e7362c587435df8f91adeee72f3189a3d36d97506400350be2b08dca
+            env:
+              HOME: /tmp
+            envFrom:
+              - secretRef:
+                  name: fastcrw-auth
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+                path: /health
+                port: 3000
+              readiness:
+                enabled: true
+                type: HTTP
+                path: /ready
+                port: 3000
+            securityContext: &security
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+          chrome:
+            image:
+              repository: docker.io/chromedp/headless-shell
+              tag: stable@sha256:47e3a0c0cbef29e321d16c893cd804996243f710ca7855770dd4f9c4cd2b8627
+            command: ["/headless-shell/headless-shell"]
+            args:
+              - --no-sandbox
+              - --disable-gpu
+              - --remote-debugging-address=0.0.0.0
+              - --remote-debugging-port=9222
+              - --user-data-dir=/tmp/chrome
+            env:
+              HOME: /tmp
+            securityContext: *security
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
+              limits:
+                memory: 2Gi
+    defaultPodOptions:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 977
+        runAsGroup: 977
+        fsGroup: 977
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 3000
+    persistence:
+      config:
+        type: configMap
+        name: fastcrw-config
+        advancedMounts:
+          main:
+            main:
+              - path: /app/config.default.toml
+                subPath: config.toml
+                readOnly: true
+      tmp:
+        type: emptyDir
+        advancedMounts:
+          main:
+            main:
+              - path: /tmp
+                subPath: api
+            chrome:
+              - path: /tmp
+                subPath: chrome
+      shm:
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 1Gi
+        advancedMounts:
+          main:
+            chrome:
+              - path: /dev/shm
+    route:
+      main:
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - fastcrw.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /v1
+              - path:
+                  type: PathPrefix
+                  value: /firecrawl/v2
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1
+            timeouts:
+              request: 120s
+              backendRequest: 120s
