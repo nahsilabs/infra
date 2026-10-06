@@ -51,8 +51,18 @@ spec:
 
               ENABLE_OLLAMA_API: "false"
               OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
-              RAG_EMBEDDING_ENGINE: openai
-              RAG_EMBEDDING_MODEL: BAAI/bge-m3
+              RAG_OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
+              RAG_OPENAI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: open-webui-secret
+                    key: OPENAI_API_KEY
+              RAG_EXTERNAL_RERANKER_URL: https://ai.nahsi.dev/v1/rerank
+              RAG_EXTERNAL_RERANKER_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: open-webui-secret
+                    key: OPENAI_API_KEY
               RAG_EMBEDDING_MODEL_TRUST_REMOTE_CODE: "false"
               AUDIO_STT_ENGINE: openai
               AUDIO_STT_OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
