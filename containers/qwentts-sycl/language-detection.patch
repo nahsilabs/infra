@@ -1,0 +1,101 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 30c3375..27ea9d8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -187,7 +187,7 @@ link_ggml_backends(qwen-tts)
+ # tts-server : OpenAI-compatible HTTP server over the TTS pipeline.
+ # Always built : it is part of the project, not an optional add-on.
+ add_executable(tts-server tools/tts-server.cpp)
+-target_link_libraries(tts-server PRIVATE qwen-core httplib yyjson)
++target_link_libraries(tts-server PRIVATE qwen-core httplib yyjson fasttext)
+ link_ggml_backends(tts-server)
+ 
+ # test-abi-c : pure C99 smoke test that locks in the public ABI contract.
+diff --git a/src/tts-language.h b/src/tts-language.h
+new file mode 100644
+index 0000000..8aba12d
+--- /dev/null
++++ b/src/tts-language.h
+@@ -0,0 +1,41 @@
++#pragma once
++
++#include <fasttext/fasttext.h>
++
++#include <algorithm>
++#include <cctype>
++#include <sstream>
++#include <string>
++#include <vector>
++
++static const char * tts_language(const fasttext::FastText & detector, const std::string & text,
++                                 const std::string & requested) {
++    if (requested.size() != 4 || !std::equal(requested.begin(), requested.end(), "auto",
++            [](unsigned char a, char b) { return std::tolower(a) == b; })) {
++        return requested.c_str();
++    }
++
++    std::stringstream input;
++    for (char c : text) {
++        input.put(c == '\n' || c == '\r' ? ' ' : c);
++    }
++    std::vector<std::pair<fasttext::real, std::string>> predictions;
++    detector.predictLine(input, predictions, 1, 0.5f);
++    if (predictions.empty()) {
++        return "auto";
++    }
++
++    static const struct { const char * label; const char * language; } languages[] = {
++        {"__label__zh", "Chinese"}, {"__label__en", "English"},
++        {"__label__ja", "Japanese"}, {"__label__ko", "Korean"},
++        {"__label__de", "German"}, {"__label__fr", "French"},
++        {"__label__ru", "Russian"}, {"__label__pt", "Portuguese"},
++        {"__label__es", "Spanish"}, {"__label__it", "Italian"},
++    };
++    for (const auto & language : languages) {
++        if (predictions.front().second == language.label) {
++            return language.language;
++        }
++    }
++    return "auto";
++}
+diff --git a/tools/tts-server.cpp b/tools/tts-server.cpp
+index 58c014a..18fe270 100644
+--- a/tools/tts-server.cpp
++++ b/tools/tts-server.cpp
+@@ -4,6 +4,7 @@
+ // file only wires the qt_* ABI into the generic adapter.
+ 
+ #include "tts-server.h"
++#include "tts-language.h"
+ 
+ #include "qwen.h"
+ #include "rvq-file.h"
+@@ -110,6 +111,14 @@ int main(int argc, char ** argv) {
+         return 1;
+     }
+ 
++    fasttext::FastText language_detector;
++    try {
++        language_detector.loadModel("/app/lid.176.ftz");
++    } catch (const std::exception & e) {
++        fprintf(stderr, "[Server] language model: %s\n", e.what());
++        return 1;
++    }
++
+     struct qt_init_params iparams;
+     qt_init_default_params(&iparams);
+     iparams.talker_path     = talker_path;
+@@ -223,11 +232,11 @@ int main(int argc, char ** argv) {
+     // the same name and injects the pre-extracted reference latents. A
+     // name matching neither is rejected instead of silently generating
+     // voiceless.
+-    be.synthesize = [q, &lang](const tts_request & req, const tts_sink & sink, std::string & err) -> int {
++    be.synthesize = [q, &lang, &language_detector](const tts_request & req, const tts_sink & sink, std::string & err) -> int {
+         struct qt_tts_params p;
+         qt_tts_default_params(&p);
+         p.text = req.input.c_str();
+-        p.lang = req.lang.empty() ? lang.c_str() : req.lang.c_str();
++        p.lang = tts_language(language_detector, req.input, req.lang.empty() ? lang : req.lang);
+ 
+         // Copy the registered voice latents out under the lock: the
+         // synthesis may run for seconds while another connection

@@ -29,7 +29,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: qwen3-tts
-          image: docker.io/nahsilabs/qwentts-sycl:6fae9291-voices-oneapi2026.1.4@sha256:b966e2ee399aafee2a0c3d7b20bcb924d1bcd80fff215d36d6d71faad3c26bbc
+          image: docker.io/nahsilabs/qwentts-sycl:latest@sha256:e55be3148c4afaef2f6e91076b4b3168ab30b4aef9ef85dac4da3f9596eab1d9
           env:
             - name: MODEL_PATH
               value: /models/qwen-talker-1.7b-base-Q8_0.gguf

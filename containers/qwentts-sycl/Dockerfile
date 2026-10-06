@@ -6,41 +6,36 @@ ARG GGML_REV=40e16e4a814f7fe851a0c486fb9e8c722e957830
 ARG ONEDNN_PACKAGE_VERSION=2026.0.2-40
 ARG JQ_PACKAGE_VERSION=1.8.1-4ubuntu2
 ARG TINI_PACKAGE_VERSION=0.19.0-6
+ARG FASTTEXT_PACKAGE_VERSION=0.9.2+ds-9build1
 ARG DNNL_DIR=/opt/intel/oneapi/dnnl/2026.0/lib/cmake/dnnl
 ARG GGML_NATIVE=OFF
-ARG BUILD_DATE=unknown
-ARG VCS_REF=unknown
 
 FROM ${DLE_IMAGE} AS build
 ARG QWENTTS_REPO
 ARG QWENTTS_REV
 ARG GGML_REV
 ARG ONEDNN_PACKAGE_VERSION
+ARG FASTTEXT_PACKAGE_VERSION
 ARG DNNL_DIR
 ARG GGML_NATIVE
 
 RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends intel-oneapi-dnnl-devel-2026.0=${ONEDNN_PACKAGE_VERSION} \
- && rm -rf /var/lib/apt/lists/* \
- && command -v git \
- && command -v cmake \
- && command -v icx \
- && command -v icpx \
- && test -f "${DNNL_DIR}/dnnl-config.cmake"
-
-WORKDIR /src
-RUN git init qwentts.cpp \
- && git -C qwentts.cpp remote add origin "${QWENTTS_REPO}" \
- && git -C qwentts.cpp fetch --depth=1 origin "${QWENTTS_REV}" \
- && git -C qwentts.cpp checkout --detach FETCH_HEAD \
- && git -C qwentts.cpp submodule update --init --recursive \
- && test "$(git -C qwentts.cpp rev-parse HEAD)" = "${QWENTTS_REV}" \
- && test "$(git -C qwentts.cpp/ggml rev-parse HEAD)" = "${GGML_REV}"
+ && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
+      intel-oneapi-dnnl-devel-2026.0=${ONEDNN_PACKAGE_VERSION} \
+      libfasttext-dev=${FASTTEXT_PACKAGE_VERSION} \
+ && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src/qwentts.cpp
-COPY voice-discovery.patch /tmp/voice-discovery.patch
-RUN git apply --check /tmp/voice-discovery.patch \
- && git apply /tmp/voice-discovery.patch
+RUN git init . \
+ && git remote add origin "${QWENTTS_REPO}" \
+ && git fetch --depth=1 origin "${QWENTTS_REV}" \
+ && git checkout --detach FETCH_HEAD \
+ && git submodule update --init --recursive \
+ && test "$(git rev-parse HEAD)" = "${QWENTTS_REV}" \
+ && test "$(git -C ggml rev-parse HEAD)" = "${GGML_REV}"
+
+RUN --mount=type=bind,source=.,target=/patches \
+    git apply /patches/*.patch
 
 RUN cmake -S . -B /build \
       -DCMAKE_BUILD_TYPE=Release \
@@ -52,27 +47,41 @@ RUN cmake -S . -B /build \
       -DDNNL_DIR=${DNNL_DIR} \
       -DQWEN_SHARED=ON \
  && cmake --build /build --parallel "$(nproc)" \
- && /build/test-abi-c \
- && test -x /build/tts-server \
- && test -x /build/qwen-tts \
- && test -x /build/qwen-codec \
- && test -n "$(find /build -maxdepth 1 -type f -name '*.so*' -print -quit)"
+ && /build/test-abi-c
 
 FROM ${DLE_IMAGE} AS runtime
+ARG ONEDNN_PACKAGE_VERSION
+ARG JQ_PACKAGE_VERSION
+ARG TINI_PACKAGE_VERSION
+ARG FASTTEXT_PACKAGE_VERSION
+
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
+      intel-oneapi-dnnl-2026.0=${ONEDNN_PACKAGE_VERSION} \
+      jq=${JQ_PACKAGE_VERSION} \
+      tini=${TINI_PACKAGE_VERSION} \
+      libfasttext0=${FASTTEXT_PACKAGE_VERSION} \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /build/tts-server /build/qwen-tts /build/qwen-codec /build/*.so* /app/
+COPY --from=build --chmod=0555 /src/qwentts.cpp/docker/entrypoint.sh /app/entrypoint.sh
+ADD --checksum=sha256:8f3472cfe8738a7b6099e8e999c3cbfae0dcd15696aac7d7738a8039db603e83 --chmod=0444 \
+    https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.ftz /app/lid.176.ftz
+
+RUN mkdir -p /models /voices \
+ && chown 65532:65532 /models /voices
+
+ENV MAX_BATCH=2 \
+    LD_LIBRARY_PATH=/app:/opt/intel/oneapi/dnnl/2026.0/lib:${LD_LIBRARY_PATH}
+
 ARG DLE_IMAGE
 ARG QWENTTS_REPO
 ARG QWENTTS_REV
 ARG GGML_REV
-ARG ONEDNN_PACKAGE_VERSION
-ARG JQ_PACKAGE_VERSION
-ARG TINI_PACKAGE_VERSION
-ARG DNNL_DIR
-ARG GGML_NATIVE
-ARG BUILD_DATE
-ARG VCS_REF
-
+ARG BUILD_DATE=unknown
+ARG VCS_REF=unknown
 LABEL org.opencontainers.image.title="qwentts.cpp Intel SYCL" \
-      org.opencontainers.image.description="Pinned qwentts.cpp server built for Intel SYCL" \
+      org.opencontainers.image.description="Qwen3-TTS with automatic text-language detection" \
       org.opencontainers.image.source="https://github.com/nahsilabs/infra" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.created="${BUILD_DATE}" \
@@ -80,34 +89,8 @@ LABEL org.opencontainers.image.title="qwentts.cpp Intel SYCL" \
       io.nahsilabs.qwentts.repository="${QWENTTS_REPO}" \
       io.nahsilabs.qwentts.revision="${QWENTTS_REV}" \
       io.nahsilabs.ggml.revision="${GGML_REV}" \
-      io.nahsilabs.dle.image="${DLE_IMAGE}" \
-      io.nahsilabs.onednn.package="${ONEDNN_PACKAGE_VERSION}" \
-      io.nahsilabs.jq.package="${JQ_PACKAGE_VERSION}" \
-      io.nahsilabs.tini.package="${TINI_PACKAGE_VERSION}" \
-      io.nahsilabs.dnnl.cmake-dir="${DNNL_DIR}" \
-      io.nahsilabs.compiler.c="icx" \
-      io.nahsilabs.compiler.cxx="icpx" \
-      io.nahsilabs.ggml.sycl="ON" \
-      io.nahsilabs.ggml.sycl-target="INTEL" \
-      io.nahsilabs.ggml.native="${GGML_NATIVE}"
-
-RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
-      intel-oneapi-dnnl-2026.0=${ONEDNN_PACKAGE_VERSION} \
-      jq=${JQ_PACKAGE_VERSION} \
-      tini=${TINI_PACKAGE_VERSION} \
- && rm -rf /var/lib/apt/lists/* \
- && command -v curl
-
-COPY --from=build --chown=65532:65532 /build/tts-server /build/qwen-tts /build/qwen-codec /app/
-COPY --from=build --chown=65532:65532 /build/*.so* /app/
-COPY --from=build --chown=65532:65532 --chmod=0555 /src/qwentts.cpp/docker/entrypoint.sh /app/entrypoint.sh
-
-RUN mkdir -p /models /voices \
- && chown 65532:65532 /app /models /voices
-
-ENV MAX_BATCH=2 \
-    LD_LIBRARY_PATH=/app:/opt/intel/oneapi/dnnl/2026.0/lib:${LD_LIBRARY_PATH}
+      io.nahsilabs.fasttext.model="https://fasttext.cc/docs/en/language-identification.html#content" \
+      io.nahsilabs.fasttext.model.license="CC-BY-SA-3.0"
 
 WORKDIR /app
 USER 65532:65532
