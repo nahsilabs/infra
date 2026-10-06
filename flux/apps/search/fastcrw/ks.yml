@@ -1,0 +1,25 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-fastcrw
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-searxng
+    - name: infra-gateway-api-crds
+    - name: infra-vm-operator
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  prune: true
+  wait: true
+  targetNamespace: search
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  path: ./flux/apps/search/fastcrw/app
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age

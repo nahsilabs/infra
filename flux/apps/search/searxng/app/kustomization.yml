@@ -4,6 +4,7 @@ resources:
   - secret.yml
   - release.yml
   - externalsecret.yml
+  - networkpolicy.yml
 configMapGenerator:
   - name: searxng-configmap
     files:

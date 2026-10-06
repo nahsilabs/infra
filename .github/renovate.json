@@ -82,6 +82,14 @@
       "prPriority": 10
     },
     {
+      "description": "SearXNG calendar releases: commit suffixes are not compatibility variants",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/searxng/searxng"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-[a-f0-9]+$",
+      "automerge": true,
+      "ignoreTests": true
+    },
+    {
       "description": "Authentik provider 2026.8+ requires explicit token configuration",
       "matchPackageNames": ["goauthentik/authentik"],
       "enabled": false

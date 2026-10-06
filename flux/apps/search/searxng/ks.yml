@@ -12,12 +12,12 @@ spec:
   timeout: 10m
   prune: true
   wait: true
-  targetNamespace: searxng
+  targetNamespace: search
   sourceRef:
     kind: GitRepository
     name: infra
     namespace: flux-system
-  path: ./flux/apps/searxng/deps
+  path: ./flux/apps/search/searxng/deps
   decryption:
     provider: sops
     secretRef:
@@ -36,12 +36,13 @@ spec:
   retryInterval: 2m
   timeout: 10m
   prune: true
-  targetNamespace: searxng
+  wait: true
+  targetNamespace: search
   sourceRef:
     kind: GitRepository
     name: infra
     namespace: flux-system
-  path: ./flux/apps/searxng/app
+  path: ./flux/apps/search/searxng/app
   decryption:
     provider: sops
     secretRef:
