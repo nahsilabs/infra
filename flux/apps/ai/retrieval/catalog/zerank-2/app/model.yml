@@ -1,0 +1,20 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayModel
+metadata:
+  name: zerank-2
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: ai-llm
+  match:
+    model: zeroentropy/zerank-2
+  provider: Custom
+  custom:
+    backendRef:
+      kind: Service
+      name: zerank-2
+      port: 8080
+    formats:
+      - type: Rerank
+        path: /v1/rerank

@@ -86,8 +86,15 @@ spec:
               EMBEDDING_TOKEN_LIMIT: "4096"
               EMBEDDING_ASYMMETRIC: "false"
 
-              RERANK_BINDING: "null"
-              RERANK_BY_DEFAULT: "false"
+              RERANK_BINDING: cohere
+              RERANK_MODEL: zeroentropy/zerank-2
+              RERANK_BINDING_HOST: https://ai.nahsi.dev/v1/rerank
+              RERANK_BINDING_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: lightrag-secret
+                    key: EMBEDDING_BINDING_API_KEY
+              RERANK_BY_DEFAULT: "true"
 
               POSTGRES_HOST:
                 valueFrom:
