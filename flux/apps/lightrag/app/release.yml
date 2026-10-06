@@ -35,12 +35,11 @@ spec:
               WHITELIST_PATHS: /health
 
               SUMMARY_LANGUAGE: Russian
-              # Analyze tables and equations, but never pictures.
               LIGHTRAG_PARSER: "md:native-etP;docx:native-etP;textpack:native-etP"
               CHUNK_P_SIZE: "2000"
               CHUNK_P_OVERLAP_SIZE: "100"
               CHUNK_P_DROP_REFERENCES: "false"
-              ENTITY_EXTRACTION_USE_JSON: "false"
+              ENTITY_EXTRACTION_USE_JSON: "true"
               VLM_PROCESS_ENABLE: "false"
               NATIVE_MD_IMAGE_DOWNLOAD_ENABLED: "false"
               ENABLE_CONTENT_HEADINGS: "true"
@@ -50,47 +49,35 @@ spec:
               LLM_BINDING_HOST: https://ai.nahsi.dev/v1
               LLM_MODEL: Qwen/Qwen3.8-Flash-Next
               LLM_TIMEOUT: "600"
-              # Flash has four inference slots; limit extraction to two.
-              # Each LLM role has its own request limit, not a shared cap.
               MAX_ASYNC_LLM: "2"
               EXTRACT_MAX_ASYNC_LLM: "2"
               KEYWORD_MAX_ASYNC_LLM: "1"
               QUERY_MAX_ASYNC_LLM: "1"
               VLM_MAX_ASYNC_LLM: "1"
-              MAX_ASYNC_RERANK: "1"
-              MAX_PARALLEL_INSERT: "1"
-              MAX_PARALLEL_ANALYZE: "1"
-              EXTRACT_OPENAI_LLM_TEMPERATURE: "0.7"
-              EXTRACT_OPENAI_LLM_TOP_P: "0.8"
-              EXTRACT_OPENAI_LLM_PRESENCE_PENALTY: "1.5"
-              EXTRACT_OPENAI_LLM_FREQUENCY_PENALTY: "0"
-              # Ninfer accepts text transport; LightRAG validates multimodal JSON.
-              EXTRACT_OPENAI_LLM_EXTRA_BODY: '{"enable_thinking":false,"top_k":20,"min_p":0,"response_format":{"type":"text"}}'
-              KEYWORD_OPENAI_LLM_TEMPERATURE: "0.2"
-              KEYWORD_OPENAI_LLM_TOP_P: "0.8"
-              KEYWORD_OPENAI_LLM_PRESENCE_PENALTY: "0"
-              KEYWORD_OPENAI_LLM_FREQUENCY_PENALTY: "0"
-              KEYWORD_OPENAI_LLM_EXTRA_BODY: '{"enable_thinking":false,"top_k":20,"min_p":0,"response_format":{"type":"text"}}'
+              MAX_ASYNC_RERANK: "2"
+              MAX_PARALLEL_INSERT: "2"
+              MAX_PARALLEL_ANALYZE: "2"
+              EXTRACT_OPENAI_LLM_TEMPERATURE: "0"
+              EXTRACT_OPENAI_LLM_EXTRA_BODY: '{"enable_thinking":false}'
+              KEYWORD_OPENAI_LLM_TEMPERATURE: "0"
+              KEYWORD_OPENAI_LLM_EXTRA_BODY: '{"enable_thinking":false}'
               QUERY_OPENAI_LLM_TEMPERATURE: "0.2"
               QUERY_OPENAI_LLM_TOP_P: "0.95"
               QUERY_OPENAI_LLM_PRESENCE_PENALTY: "0"
               QUERY_OPENAI_LLM_FREQUENCY_PENALTY: "0"
               QUERY_OPENAI_LLM_REASONING_EFFORT: medium
               QUERY_OPENAI_LLM_EXTRA_BODY: '{"enable_thinking":true,"top_k":20,"min_p":0}'
-              VLM_OPENAI_LLM_TEMPERATURE: "0.1"
-              VLM_OPENAI_LLM_TOP_P: "0.8"
-              VLM_OPENAI_LLM_PRESENCE_PENALTY: "0"
-              VLM_OPENAI_LLM_FREQUENCY_PENALTY: "0"
+              VLM_OPENAI_LLM_TEMPERATURE: "0"
               VLM_OPENAI_LLM_REASONING_EFFORT: none
               VLM_OPENAI_LLM_MAX_TOKENS: "8192"
-              VLM_OPENAI_LLM_EXTRA_BODY: '{"enable_thinking":false,"top_k":20,"min_p":0,"response_format":{"type":"text"}}'
+              VLM_OPENAI_LLM_EXTRA_BODY: '{"enable_thinking":false}'
 
               EMBEDDING_BINDING: openai
               EMBEDDING_BINDING_HOST: https://ai.nahsi.dev/v1
               EMBEDDING_MODEL: BAAI/bge-m3
               EMBEDDING_DIM: "1024"
               EMBEDDING_BATCH_NUM: "8"
-              EMBEDDING_FUNC_MAX_ASYNC: "1"
+              EMBEDDING_FUNC_MAX_ASYNC: "2"
               EMBEDDING_TOKEN_LIMIT: "4096"
               EMBEDDING_ASYMMETRIC: "false"
 
