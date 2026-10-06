@@ -8,7 +8,7 @@ spec:
   dependsOn:
     - name: infra-cloudnative-pg
   path: ./flux/apps/open-webui/deps
-  targetNamespace: ai
+  targetNamespace: open-webui
   prune: true
   wait: true
   healthCheckExprs:
@@ -37,7 +37,7 @@ spec:
     - name: app-ai-gateway
     - name: infra-gateway-api-crds
   path: ./flux/apps/open-webui/app
-  targetNamespace: ai
+  targetNamespace: open-webui
   prune: true
   sourceRef:
     kind: GitRepository
