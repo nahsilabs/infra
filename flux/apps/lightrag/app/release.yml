@@ -47,9 +47,16 @@ spec:
 
               LLM_BINDING: openai
               LLM_BINDING_HOST: https://ai.nahsi.dev/v1
-              LLM_MODEL: Qwen/Qwen3.8-27B
+              LLM_MODEL: Qwen/Qwen3.8-Flash-Next
               LLM_TIMEOUT: "600"
-              MAX_ASYNC_LLM: "1"
+              # Flash has four inference slots; limit extraction to two.
+              # Each LLM role has its own request limit, not a shared cap.
+              MAX_ASYNC_LLM: "2"
+              EXTRACT_MAX_ASYNC_LLM: "2"
+              KEYWORD_MAX_ASYNC_LLM: "1"
+              QUERY_MAX_ASYNC_LLM: "1"
+              VLM_MAX_ASYNC_LLM: "1"
+              MAX_ASYNC_RERANK: "1"
               MAX_PARALLEL_INSERT: "1"
               MAX_PARALLEL_ANALYZE: "1"
               EXTRACT_OPENAI_LLM_TEMPERATURE: "0.7"
