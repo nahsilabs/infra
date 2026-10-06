@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1.27
 ARG DLE_IMAGE=intel/deep-learning-essentials:2026.1.4-devel-ubuntu26.04@sha256:7eac4fcd7be2205713d2464267dff117b78e1707f93c42826b1da53e427ed9fa
 ARG QWENTTS_REPO=https://github.com/ServeurpersoCom/qwentts.cpp.git
-ARG QWENTTS_REV=a69194fc87226874ea0c20256a4dbac2269380d3
-ARG GGML_REV=c044c6f03892f9d5e98213b05f8afea1f8b0d3c9
+ARG QWENTTS_REV=6fae92914045cd83364d2845ceaa0f7969727319
+ARG GGML_REV=40e16e4a814f7fe851a0c486fb9e8c722e957830
 ARG ONEDNN_PACKAGE_VERSION=2026.0.2-40
 ARG JQ_PACKAGE_VERSION=1.8.1-4ubuntu2
 ARG TINI_PACKAGE_VERSION=0.19.0-6
@@ -38,6 +38,10 @@ RUN git init qwentts.cpp \
  && test "$(git -C qwentts.cpp/ggml rev-parse HEAD)" = "${GGML_REV}"
 
 WORKDIR /src/qwentts.cpp
+COPY voice-discovery.patch /tmp/voice-discovery.patch
+RUN git apply --check /tmp/voice-discovery.patch \
+ && git apply /tmp/voice-discovery.patch
+
 RUN cmake -S . -B /build \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_C_COMPILER=icx \

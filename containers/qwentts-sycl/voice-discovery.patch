@@ -1,0 +1,19 @@
+diff --git a/src/tts-server.h b/src/tts-server.h
+--- a/src/tts-server.h
++++ b/src/tts-server.h
+@@ -555,6 +555,7 @@ static void tts_handle_voices(const tts_backend & be, const httplib::Request &, httpl
+     yyjson_mut_val * arr = yyjson_mut_arr(doc);
+     for (const std::string & v : be.voices) {
+         yyjson_mut_val * one = yyjson_mut_obj(doc);
++        yyjson_mut_obj_add_str(doc, one, "id", v.c_str());
+         yyjson_mut_obj_add_str(doc, one, "name", v.c_str());
+         yyjson_mut_obj_add_str(doc, one, "kind", "speaker");
+         yyjson_mut_arr_add_val(arr, one);
+@@ -562,6 +563,7 @@ static void tts_handle_voices(const tts_backend & be, const httplib::Request &, httpl
+     if (be.registered_voices) {
+         for (const std::string & v : be.registered_voices()) {
+             yyjson_mut_val * one = yyjson_mut_obj(doc);
++            yyjson_mut_obj_add_val(doc, one, "id", yyjson_mut_strcpy(doc, v.c_str()));
+             yyjson_mut_obj_add_val(doc, one, "name", yyjson_mut_strcpy(doc, v.c_str()));
+             yyjson_mut_obj_add_str(doc, one, "kind", "registered");
+             yyjson_mut_arr_add_val(arr, one);
