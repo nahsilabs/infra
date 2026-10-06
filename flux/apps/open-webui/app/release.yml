@@ -41,14 +41,12 @@ spec:
               OPENID_PROVIDER_URL: https://auth.nahsi.dev/application/o/open-webui/.well-known/openid-configuration
               OPENID_REDIRECT_URI: https://chat.nahsi.dev/oauth/oidc/callback
 
-              # Analytics remains enabled, including its admin message-query API.
               ENABLE_ADMIN_CHAT_ACCESS: "false"
               ENABLE_ADMIN_EXPORT: "false"
               ENABLE_ADMIN_WORKSPACE_CONTENT_ACCESS: "false"
               BYPASS_ADMIN_ACCESS_CONTROL: "false"
               OFFLINE_MODE: "true"
 
-              # Seed provider connections; subsequent application settings live in the UI.
               ENABLE_OLLAMA_API: "false"
               OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
               RAG_EMBEDDING_ENGINE: openai
