@@ -35,13 +35,14 @@ spec:
               WHITELIST_PATHS: /health
 
               SUMMARY_LANGUAGE: Russian
-              LIGHTRAG_PARSER: "md:native-ietP;docx:native-ietP;textpack:native-ietP"
+              # Analyze tables and equations, but never pictures.
+              LIGHTRAG_PARSER: "md:native-etP;docx:native-etP;textpack:native-etP"
               CHUNK_P_SIZE: "2000"
               CHUNK_P_OVERLAP_SIZE: "100"
               CHUNK_P_DROP_REFERENCES: "false"
               ENTITY_EXTRACTION_USE_JSON: "false"
-              VLM_PROCESS_ENABLE: "true"
-              NATIVE_MD_IMAGE_DOWNLOAD_ENABLED: "true"
+              VLM_PROCESS_ENABLE: "false"
+              NATIVE_MD_IMAGE_DOWNLOAD_ENABLED: "false"
               ENABLE_CONTENT_HEADINGS: "true"
               ENABLE_LLM_CACHE: "false"
 
