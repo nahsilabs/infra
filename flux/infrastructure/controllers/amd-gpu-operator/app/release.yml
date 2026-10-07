@@ -58,7 +58,7 @@ spec:
               effect: NoSchedule
         metricsExporter:
           enable: true
-          image: docker.io/rocm/device-metrics-exporter:v1.5.2
+          image: docker.io/rocm/device-metrics-exporter:v1.5.3
           tolerations:
             - key: scheduling.nahsilabs/dedicated
               operator: Equal
