@@ -59,3 +59,40 @@ spec:
   traffic:
     timeouts:
       request: 1800s
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: ai-embedding-priority
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: ai-llm
+  traffic:
+    transformation:
+      conditional:
+        - condition: >-
+            request.method == "POST" &&
+            request.path == "/v1/embeddings" &&
+            json(request.body).model == "Qwen/Qwen3-Embedding-0.6B"
+          policy:
+            request:
+              # Let EPP prioritize searches over ingestion without custom client headers.
+              # Infer the objective from Qwen's query prefix; leave the embedding input unchanged.
+              set:
+                - name: x-llm-d-inference-objective
+                  value: >-
+                    json(request.body).input.with(inputs,
+                      (
+                        type(inputs) == string
+                          ? inputs.startsWith("Instruct: ")
+                          : inputs.size() > 0 &&
+                            inputs.all(text,
+                              type(text) == string &&
+                              text.startsWith("Instruct: ")
+                            )
+                      )
+                        ? "embedding-query"
+                        : "embedding-ingestion"
+                    )

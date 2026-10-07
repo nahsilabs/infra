@@ -17,7 +17,7 @@ spec:
 apiVersion: llm-d.ai/v1alpha2
 kind: InferenceObjective
 metadata:
-  name: qwen3-embedding-query
+  name: embedding-query
 spec:
   priority: 100
   poolRef:
@@ -27,7 +27,7 @@ spec:
 apiVersion: llm-d.ai/v1alpha2
 kind: InferenceObjective
 metadata:
-  name: qwen3-embedding-ingestion
+  name: embedding-ingestion
 spec:
   priority: 0
   poolRef:
