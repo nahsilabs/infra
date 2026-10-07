@@ -12,9 +12,9 @@ spec:
   provider: Custom
   custom:
     backendRef:
-      kind: Service
+      group: inference.networking.k8s.io
+      kind: InferencePool
       name: qwen3-embedding-0-6b
-      port: 8080
     formats:
       - type: Embeddings
         path: /v1/embeddings

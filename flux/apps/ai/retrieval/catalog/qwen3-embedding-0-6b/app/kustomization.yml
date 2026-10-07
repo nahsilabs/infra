@@ -5,3 +5,5 @@ resources:
   - hpa.yml
   - networkpolicy.yml
   - model.yml
+  - epp.yml
+  - pool.yml

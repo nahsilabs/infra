@@ -10,7 +10,7 @@ spec:
     namespace: flux-system
   values:
     inferenceExtension:
-      enabled: false
+      enabled: true
     agentgatewayModels:
       enabled: true
     monitoring:

@@ -1,0 +1,35 @@
+apiVersion: inference.networking.k8s.io/v1
+kind: InferencePool
+metadata:
+  name: qwen3-embedding-0-6b
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: qwen3-embedding-0-6b
+  targetPorts:
+    - number: 8080
+  endpointPickerRef:
+    name: qwen3-embedding-0-6b-epp
+    port:
+      number: 9002
+    failureMode: FailClose
+---
+apiVersion: llm-d.ai/v1alpha2
+kind: InferenceObjective
+metadata:
+  name: qwen3-embedding-query
+spec:
+  priority: 100
+  poolRef:
+    group: inference.networking.k8s.io
+    name: qwen3-embedding-0-6b
+---
+apiVersion: llm-d.ai/v1alpha2
+kind: InferenceObjective
+metadata:
+  name: qwen3-embedding-ingestion
+spec:
+  priority: 0
+  poolRef:
+    group: inference.networking.k8s.io
+    name: qwen3-embedding-0-6b
