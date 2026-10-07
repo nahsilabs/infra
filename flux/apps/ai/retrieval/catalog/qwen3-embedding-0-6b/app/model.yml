@@ -1,0 +1,20 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayModel
+metadata:
+  name: qwen3-embedding-0-6b
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: ai-llm
+  match:
+    model: Qwen/Qwen3-Embedding-0.6B
+  provider: Custom
+  custom:
+    backendRef:
+      kind: Service
+      name: qwen3-embedding-0-6b
+      port: 8080
+    formats:
+      - type: Embeddings
+        path: /v1/embeddings

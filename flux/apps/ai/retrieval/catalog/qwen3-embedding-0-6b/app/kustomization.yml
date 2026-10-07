@@ -1,6 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - bge-m3
-  - qwen3-embedding-0-6b
-  - zerank-2
+  - release.yml
+  - hpa.yml
+  - networkpolicy.yml
+  - model.yml
