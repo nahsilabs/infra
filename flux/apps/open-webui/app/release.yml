@@ -66,7 +66,7 @@ spec:
               RAG_OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
               RAG_EMBEDDING_ENGINE: openai
               RAG_EMBEDDING_MODEL: Qwen/Qwen3-Embedding-0.6B
-              RAG_EMBEDDING_BATCH_SIZE: "1"
+              RAG_EMBEDDING_BATCH_SIZE: "4"
               RAG_EMBEDDING_CONCURRENT_REQUESTS: "2"
               RAG_EMBEDDING_QUERY_PREFIX: "Instruct: Retrieve text based on user query.\nQuery: "
               RAG_EMBEDDING_CONTENT_PREFIX: ""
