@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.27
+# syntax=docker/dockerfile:1.28
 ARG DLE_IMAGE=intel/deep-learning-essentials:2026.1.4-devel-ubuntu26.04@sha256:7eac4fcd7be2205713d2464267dff117b78e1707f93c42826b1da53e427ed9fa
 ARG QWENTTS_REPO=https://github.com/ServeurpersoCom/qwentts.cpp.git
 ARG QWENTTS_REV=6fae92914045cd83364d2845ceaa0f7969727319
