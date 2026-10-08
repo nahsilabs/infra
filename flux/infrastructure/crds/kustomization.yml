@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
   - namespace.yml
   - gateway-api-crds
+  - inference-extension-crds
   - prometheus-operator-crds

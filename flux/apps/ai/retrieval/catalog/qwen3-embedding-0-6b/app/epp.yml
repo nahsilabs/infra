@@ -1,0 +1,166 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata: 
+  name: qwen3-embedding-0-6b-epp
+spec: 
+  interval: 1h
+  chart: 
+    spec: 
+      chart: app-template
+      version: 5.2.1
+      sourceRef: 
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values: 
+    controllers: 
+      main: 
+        replicas: 1
+        strategy: Recreate
+        serviceAccount:
+          name: qwen3-embedding-0-6b-epp
+        containers: 
+          main: 
+            image: 
+              repository: ghcr.io/llm-d/llm-d-router-endpoint-picker
+              # Temporary development image; replace with a release containing llm-d/llm-d-router#3065.
+              tag: main@sha256:89971a56dc94b8a0bd27efc3ff26a1005a37362c6d54a1db681ca5d534a02e2d
+            args: 
+              - "--pool-name=qwen3-embedding-0-6b"
+              - "--pool-namespace=ai"
+              - "--pool-group=inference.networking.k8s.io"
+              - "--config-file=/config/epp-config.yml"
+              - "--grpc-health-port=9003"
+              - "--allow-experimental-plugins=true"
+              - "--zap-encoder=json"
+              - "--tracing=false"
+              - "--metrics-endpoint-auth=false"
+            probes: 
+              readiness: 
+                enabled: true
+                custom: true
+                spec: 
+                  grpc: 
+                    port: 9003
+                    service: inference-extension
+                  periodSeconds: 2
+              liveness: 
+                enabled: true
+                custom: true
+                spec: 
+                  grpc: 
+                    port: 9003
+                    service: inference-extension
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+            resources: 
+              requests: 
+                cpu: 100m
+                memory: 128Mi
+              limits: 
+                memory: 512Mi
+    defaultPodOptions: 
+      automountServiceAccountToken: true
+      terminationGracePeriodSeconds: 130
+    service: 
+      main: 
+        controller: main
+        ports: 
+          grpc: 
+            port: 9002
+            appProtocol: kubernetes.io/h2c
+    configMaps: 
+      config: 
+        data: 
+          epp-config.yml: |
+            apiVersion: llm-d.ai/v1alpha1
+            kind: EndpointPickerConfig
+            featureGates:
+              - flowControl
+            plugins:
+              - type: openai-parser
+              - type: active-request-scorer
+              - type: concurrency-detector
+                parameters:
+                  maxConcurrency: 1
+                  concurrencyMode: requests
+                  headroom: 0
+              - type: priority-holdback-policy
+                parameters:
+                  minCeiling: 0.75
+                  maxCeiling: 1
+            requestHandler:
+              parsers:
+                - pluginRef: openai-parser
+            schedulingProfiles:
+              - name: default
+                plugins:
+                  - pluginRef: concurrency-detector
+                  - pluginRef: active-request-scorer
+                    weight: 1
+            flowControl:
+              saturationDetector:
+                pluginRef: concurrency-detector
+              usageLimitPolicyPluginRef: priority-holdback-policy
+              maxRequests: 100
+              maxBytes: 8Mi
+              defaultRequestTTL: 120s
+              priorityBands:
+                - priority: 100
+                - priority: 0
+    persistence: 
+      config: 
+        type: configMap
+        identifier: config
+        globalMounts: 
+          - path: /config
+            readOnly: true
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata: 
+  name: qwen3-embedding-0-6b-epp
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: 
+  name: qwen3-embedding-0-6b-epp
+rules: 
+  - apiGroups: 
+      - ""
+    resources: 
+      - pods
+    verbs: 
+      - get
+      - list
+      - watch
+  - apiGroups: 
+      - inference.networking.k8s.io
+    resources: 
+      - inferencepools
+    verbs: 
+      - get
+      - list
+      - watch
+  - apiGroups: 
+      - llm-d.ai
+    resources: 
+      - inferenceobjectives
+      - inferencemodelrewrites
+    verbs: 
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: 
+  name: qwen3-embedding-0-6b-epp
+roleRef: 
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: qwen3-embedding-0-6b-epp
+subjects: 
+  - kind: ServiceAccount
+    name: qwen3-embedding-0-6b-epp
+    namespace: ai

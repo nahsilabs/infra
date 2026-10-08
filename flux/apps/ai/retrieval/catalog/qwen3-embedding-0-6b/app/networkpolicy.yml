@@ -1,0 +1,60 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: qwen3-embedding-0-6b-lockdown
+  namespace: ai
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: qwen3-embedding-0-6b
+  ingress:
+    - fromEntities:
+        - host
+        - remote-node
+        - health
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: agenticgateway
+            gateway.networking.k8s.io/gateway-name: agenticgateway-internal
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: obs-collect
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: ai
+            app.kubernetes.io/name: qwen3-embedding-0-6b-epp
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: qwen3-embedding-0-6b-epp-lockdown
+  namespace: ai
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: qwen3-embedding-0-6b-epp
+  ingress:
+    - fromEntities:
+        - host
+        - remote-node
+        - health
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: agenticgateway
+            gateway.networking.k8s.io/gateway-name: agenticgateway-internal
+      toPorts:
+        - ports:
+            - port: "9002"
+              protocol: TCP

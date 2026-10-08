@@ -37,6 +37,7 @@ spec:
   dependsOn:
     - name: infra-agenticgateway-crds
     - name: infra-prometheus-operator-crds
+    - name: infra-inference-extension-crds
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization

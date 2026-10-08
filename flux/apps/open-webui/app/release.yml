@@ -49,9 +49,30 @@ spec:
               BYPASS_ADMIN_ACCESS_CONTROL: "false"
               OFFLINE_MODE: "true"
 
+              ENABLE_PERSISTENT_CONFIG: "false"
+              SHOW_ADMIN_DETAILS: "false"
+              ENABLE_AUTOMATIONS: "false"
+              ENABLE_CALENDAR: "false"
+              ENABLE_EVALUATION_ARENA_MODELS: "false"
+              ENABLE_COMMUNITY_SHARING: "false"
+              DEFAULT_MODELS: Qwen/Qwen3.8-Flash-Next
+              DEFAULT_MODEL_METADATA: >-
+                {"builtinTools":{"subagents":false,"notifications":false},"capabilities":{"usage":true,"memory":true,"vision":false,"terminal":true,"citations":true,"web_search":true,"file_upload":true,"file_context":true,"builtin_tools":true,"status_updates":true,"code_interpreter":true,"image_generation":false},"defaultFeatureIds":["web_search"]}
+              DEFAULT_INTERFACE_SETTINGS: >-
+                {"hapticFeedback":true,"copyFormatted":true,"showChangelog":false,"autoFollowUps":false,"autoTags":false,"insertSuggestionPrompt":true,"largeTextAsFile":true,"iframeSandboxAllowForms":false,"imageCompression":true,"imageCompressionSize":{"width":2048,"height":2048},"webSearch":"always","voiceInterruption":true}
+
               ENABLE_OLLAMA_API: "false"
               OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
               RAG_OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
+              RAG_EMBEDDING_ENGINE: openai
+              RAG_EMBEDDING_MODEL: Qwen/Qwen3-Embedding-0.6B
+              RAG_EMBEDDING_BATCH_SIZE: "4"
+              RAG_EMBEDDING_CONCURRENT_REQUESTS: "2"
+              RAG_EMBEDDING_QUERY_PREFIX: "Instruct: Retrieve text based on user query.\nQuery: "
+              RAG_EMBEDDING_CONTENT_PREFIX: ""
+              ENABLE_RAG_HYBRID_SEARCH: "true"
+              RAG_RERANKING_ENGINE: external
+              RAG_RERANKING_MODEL: zeroentropy/zerank-2
               RAG_OPENAI_API_KEY:
                 valueFrom:
                   secretKeyRef:
@@ -64,7 +85,18 @@ spec:
                     name: open-webui-secret
                     key: OPENAI_API_KEY
               RAG_EMBEDDING_MODEL_TRUST_REMOTE_CODE: "false"
+
+              ENABLE_WEB_SEARCH: "true"
+              WEB_SEARCH_ENGINE: firecrawl
+              WEB_SEARCH_RESULT_COUNT: "10"
+              WEB_LOADER_ENGINE: firecrawl
+              WEB_LOADER_CONCURRENT_REQUESTS: "2"
+              FIRECRAWL_API_BASE_URL: https://fastcrw.nahsi.dev/firecrawl
+              FIRECRAWL_TIMEOUT: "60"
+              SEARXNG_QUERY_URL: http://searxng.searxng.svc.cluster.local:8080/search
+
               AUDIO_STT_ENGINE: openai
+              AUDIO_STT_MODEL: nvidia/nemotron-3.5-asr-streaming-0.6b
               AUDIO_STT_OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
               AUDIO_STT_OPENAI_API_KEY:
                 valueFrom:
@@ -72,6 +104,8 @@ spec:
                     name: open-webui-secret
                     key: OPENAI_API_KEY
               AUDIO_TTS_ENGINE: openai
+              AUDIO_TTS_MODEL: Qwen/Qwen3-TTS
+              AUDIO_TTS_VOICE: neil
               AUDIO_TTS_OPENAI_API_BASE_URL: https://ai.nahsi.dev/v1
               AUDIO_TTS_OPENAI_API_KEY:
                 valueFrom:

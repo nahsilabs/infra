@@ -39,11 +39,11 @@ spec:
             resources:
               requests:
                 cpu: "4"
-                memory: 22Gi
+                memory: 4Gi
                 nvidia.com/gpu: "1"
               limits:
                 cpu: "4"
-                memory: 22Gi
+                memory: 18Gi
                 nvidia.com/gpu: "1"
             securityContext:
               allowPrivilegeEscalation: false
