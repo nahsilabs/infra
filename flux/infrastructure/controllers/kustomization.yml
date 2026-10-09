@@ -12,6 +12,7 @@ resources:
   - agenticgateway
   - cloudnative-pg
   - mariadb-operator
+  - clickhouse-operator
   - external-dns
   - node-feature-discovery
   - intel-device-plugins
