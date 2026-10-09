@@ -10,6 +10,7 @@ spec:
   prune: true
   wait: true
   dependsOn:
+    - name: infra-node-feature-discovery
     - name: infra-prometheus-operator-crds
   targetNamespace: gpu-operator
   sourceRef:
