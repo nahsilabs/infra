@@ -1,0 +1,25 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: clickhouse-operator
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: clickhouse-operator
+    namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    manager:
+      replicas: 1
+      envOverrides:
+        DISABLE_VERSION_UPDATE_CHECKS: "true"
+    metrics:
+      secure: false
