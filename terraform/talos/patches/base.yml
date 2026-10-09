@@ -1,39 +1,40 @@
 machine:
-  nodeLabels:
-    cilium-bgp: true
-
   certSANs:
     - talos.nahsi.dev
-
-  install:
-    diskSelector:
-      size: '>= 50GB'
-    bootloader: true
-    wipe: true
-
-  time:
-    servers:
-      - time.cloudflare.com
-
-  kubelet:
-    extraArgs:
-      rotate-server-certificates: true
-
-cluster:
-  allowSchedulingOnControlPlanes: true
-  network:
-    cni:
-      name: none
-  proxy:
-    disabled: true
-
-  controllerManager:
-    extraArgs:
-      bind-address: 0.0.0.0
-      
-  scheduler:
-    extraArgs:
-      bind-address: 0.0.0.0
+---
+apiVersion: v1alpha1
+kind: TimeSyncConfig
+ntp:
+  servers:
+    - time.cloudflare.com
+  useNTS: true
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  cilium-bgp: true
+---
+apiVersion: v1alpha1
+kind: KubeletConfig
+extraArgs:
+  rotate-server-certificates: "true"
+---
+apiVersion: v1alpha1
+kind: SecurityProfileConfig
+workloadIsolation: true
+---
+apiVersion: v1alpha1
+kind: FilesystemTrimConfig
+interval: 168h
+---
+apiVersion: v1alpha1
+kind: FilesystemScrubConfig
+interval: 168h
+---
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+provisioning:
+  wipe: false
 ---
 apiVersion: v1alpha1
 kind: ResolverConfig

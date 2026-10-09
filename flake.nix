@@ -1,6 +1,6 @@
 {
   description = "NahsiLabs infra";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   inputs.systems.url = "github:nix-systems/default";
   inputs.flake-utils = {
     url = "github:numtide/flake-utils";
@@ -30,6 +30,15 @@
           system = "${system}";
           config.allowUnfree = true;
         };
+        terraform = pkgs.terraform.overrideAttrs (_: {
+          version = "1.16.5";
+          src = pkgs.fetchFromGitHub {
+            owner = "hashicorp";
+            repo = "terraform";
+            rev = "v1.16.5";
+            hash = "sha256-lGgwneshh+edUl2taJWTAIkst84FTn07Df9tRKNQi/s=";
+          };
+        });
 
         mcpConfig = mcp-servers-nix.lib.mkConfig pkgs {
           flavor = "claude-code";
@@ -74,7 +83,7 @@
             pkgs.kubernetes-helm
             pkgs.cilium-cli
             pkgs.fluxcd
-            pkgs.terraform
+            terraform
             pkgs.google-cloud-sdk
 
             pkgs.age

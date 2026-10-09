@@ -1,20 +1,23 @@
-machine:
-  install:
-    diskSelector:
-      serial: "50026B7384501098"
-  nodeLabels:
-    scheduling.nahsilabs/dedicated: halogen
-  kubelet:
-    extraArgs:
-      register-with-taints: scheduling.nahsilabs/dedicated=halogen:NoSchedule
-    nodeIP:
-      validSubnets:
-        - 10.2.15.0/24
----
 apiVersion: v1alpha1
 kind: HostnameConfig
 hostname: ephesus
 auto: off
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  scheduling.nahsilabs/dedicated: halogen
+nodeIP:
+  validSubnets:
+    - 10.2.15.0/24
+taints:
+  scheduling.nahsilabs/dedicated: halogen:NoSchedule
+---
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+provisioning:
+  diskSelector:
+    match: disk.serial == "50026B7384501098"
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig
