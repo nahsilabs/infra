@@ -3,4 +3,3 @@ kind: Kustomization
 resources:
   - release.yml
   - secret.yml
-  - networkpolicy.yml

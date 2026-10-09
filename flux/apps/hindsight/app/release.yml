@@ -30,15 +30,29 @@ spec:
               HINDSIGHT_API_PORT: "8888"
               HINDSIGHT_API_WORKER_ID: hindsight-api
               HINDSIGHT_API_WORKER_MAX_SLOTS: "4"
-              HINDSIGHT_API_FILE_STORAGE_TYPE: native
               HINDSIGHT_API_MCP_ENABLED: "false"
               HINDSIGHT_API_LLM_TRACE_ENABLED: "false"
 
-              HINDSIGHT_API_DATABASE_URL: postgresql://app@pg-hindsight-memory-rw:5432/app?sslmode=require
+              HINDSIGHT_API_FILE_STORAGE_TYPE: s3
+              HINDSIGHT_API_FILE_STORAGE_S3_BUCKET: hindsight
+              HINDSIGHT_API_FILE_STORAGE_S3_REGION: us-east-1
+              HINDSIGHT_API_FILE_STORAGE_S3_ENDPOINT: https://s3.nahsi.dev:9000
+              HINDSIGHT_API_FILE_STORAGE_S3_ACCESS_KEY_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: hindsight-s3-auth
+                    key: access_key
+              HINDSIGHT_API_FILE_STORAGE_S3_SECRET_ACCESS_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hindsight-s3-auth
+                    key: secret_key
+
+              HINDSIGHT_API_DATABASE_URL: postgresql://app@pg-hindsight-rw:5432/app?sslmode=require
               PGPASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: pg-hindsight-memory-app
+                    name: pg-hindsight-app
                     key: password
               HINDSIGHT_API_DB_POOL_MIN_SIZE: "2"
               HINDSIGHT_API_DB_POOL_MAX_SIZE: "16"

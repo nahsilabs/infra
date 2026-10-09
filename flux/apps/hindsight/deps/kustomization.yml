@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
   - externalsecret.yml
   - postgres.yml
+  - s3-secret.yml
   - networkpolicy.yml

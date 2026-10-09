@@ -12,6 +12,10 @@ spec:
   targetNamespace: hindsight
   prune: true
   wait: true
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   healthCheckExprs:
     - apiVersion: postgresql.cnpg.io/v1
       kind: Database

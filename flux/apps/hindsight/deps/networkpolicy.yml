@@ -1,75 +1,27 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: hindsight-postgres
+  name: hindsight-lockdown
 spec:
-  endpointSelector:
-    matchLabels:
-      cnpg.io/cluster: pg-hindsight-memory
+  endpointSelector: {}
   ingress:
     - fromEndpoints:
         - matchLabels:
             io.kubernetes.pod.namespace: hindsight
-            app.kubernetes.io/name: hindsight
-            app.kubernetes.io/component: api
-      toPorts:
-        - ports:
-            - port: "5432"
-              protocol: TCP
-    - fromEndpoints:
-        - matchLabels:
-            io.kubernetes.pod.namespace: hindsight
-            cnpg.io/cluster: pg-hindsight-memory
-      toPorts:
-        - ports:
-            - port: "5432"
-              protocol: TCP
-    - fromEndpoints:
         - matchLabels:
             io.kubernetes.pod.namespace: cnpg-system
+        - matchLabels:
+            io.kubernetes.pod.namespace: obs-collect
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: private-gateway
       toPorts:
         - ports:
-            - port: "8000"
+            - port: "3000"
+              protocol: TCP
+            - port: "8888"
               protocol: TCP
     - fromEntities:
         - host
         - remote-node
-      toPorts:
-        - ports:
-            - port: "8000"
-              protocol: TCP
-    - fromEndpoints:
-        - matchLabels:
-            io.kubernetes.pod.namespace: obs-collect
-      toPorts:
-        - ports:
-            - port: "9187"
-              protocol: TCP
-  egress:
-    - toEntities:
-        - kube-apiserver
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP
-            - port: "6443"
-              protocol: TCP
-    - toEndpoints:
-        - matchLabels:
-            io.kubernetes.pod.namespace: kube-system
-            k8s-app: kube-dns
-      toPorts:
-        - ports:
-            - port: "53"
-              protocol: ANY
-          rules:
-            dns:
-              - matchPattern: "*"
-    - toEndpoints:
-        - matchLabels:
-            io.kubernetes.pod.namespace: hindsight
-            cnpg.io/cluster: pg-hindsight-memory
-      toPorts:
-        - ports:
-            - port: "5432"
-              protocol: TCP
