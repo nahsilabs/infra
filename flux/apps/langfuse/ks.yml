@@ -1,0 +1,46 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-langfuse-deps
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-cloudnative-pg
+    - name: infra-clickhouse-operator
+  path: ./flux/apps/langfuse/deps
+  targetNamespace: langfuse
+  prune: true
+  deletionPolicy: Orphan
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 15m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-langfuse
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: app-langfuse-deps
+    - name: infra-gateway-api-crds
+  path: ./flux/apps/langfuse/app
+  targetNamespace: langfuse
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 15m

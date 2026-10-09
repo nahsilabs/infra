@@ -1,0 +1,165 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: langfuse
+spec:
+  interval: 1h
+  timeout: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 5.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      web:
+        replicas: 1
+        containers:
+          app:
+            image:
+              repository: docker.langfuse.com/langfuse/langfuse
+              tag: &imageTag 4.56.0
+            envFrom: &envFrom
+              - secretRef:
+                  name: langfuse-runtime
+
+            env: &env
+              NODE_ENV: production
+              HOSTNAME: 0.0.0.0
+              NODE_OPTIONS: --max-old-space-size=1536
+              TELEMETRY_ENABLED: "false"
+
+              NEXTAUTH_URL: https://langfuse.nahsi.dev
+              AUTH_AUTHENTIK_ISSUER: https://auth.nahsi.dev/application/o/langfuse/
+              AUTH_DISABLE_USERNAME_PASSWORD: "true"
+              AUTH_DISABLE_SIGNUP: "false"
+
+              DATABASE_URL_BASE:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-langfuse-app
+                    key: uri
+              DATABASE_URL:
+                value: $(DATABASE_URL_BASE)?sslmode=require
+                dependsOn: DATABASE_URL_BASE
+
+              REDIS_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: langfuse-valkey-auth
+                    key: default
+              REDIS_CONNECTION_STRING:
+                value: redis://default:$(REDIS_PASSWORD)@langfuse-valkey:6379/0
+                dependsOn: REDIS_PASSWORD
+
+              CLICKHOUSE_URL: http://langfuse-clickhouse-headless:8123
+              CLICKHOUSE_MIGRATION_URL: clickhouse://langfuse-clickhouse-headless:9000
+              CLICKHOUSE_MIGRATION_SSL: "false"
+              CLICKHOUSE_DB: default
+              CLICKHOUSE_USER: default
+              CLICKHOUSE_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: langfuse-clickhouse-auth
+                    key: password
+              CLICKHOUSE_CLUSTER_ENABLED: "true"
+              CLICKHOUSE_CLUSTER_NAME: default
+
+              LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse
+              LANGFUSE_S3_EVENT_UPLOAD_PREFIX: events/
+              LANGFUSE_S3_EVENT_UPLOAD_REGION: us-east-1
+              LANGFUSE_S3_EVENT_UPLOAD_ENDPOINT: https://s3.nahsi.dev:9000
+              LANGFUSE_S3_EVENT_UPLOAD_FORCE_PATH_STYLE: "true"
+              LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: langfuse-s3-auth
+                    key: access_key
+              LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: langfuse-s3-auth
+                    key: secret_key
+              LANGFUSE_S3_BATCH_EXPORT_ENABLED: "false"
+
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+                path: /api/public/health
+                port: 3000
+                spec:
+                  initialDelaySeconds: 300
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                type: HTTP
+                path: /api/public/ready
+                port: 3000
+                spec:
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+            resources: &resources
+              requests:
+                cpu: 250m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
+      worker:
+        replicas: 1
+        containers:
+          app:
+            image:
+              repository: docker.langfuse.com/langfuse/langfuse-worker
+              tag: *imageTag
+            envFrom: *envFrom
+            env: *env
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+                path: /api/health
+                port: 3030
+                spec:
+                  initialDelaySeconds: 300
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: false
+            resources: *resources
+    service:
+      web:
+        controller: web
+        ports:
+          http:
+            port: 3000
+    route:
+      web:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Observability
+          gethomepage.dev/name: Langfuse
+          gethomepage.dev/icon: sh-langfuse.svg
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=langfuse,app.kubernetes.io/controller=web"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - langfuse.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: web
+                port: http
+                weight: 1

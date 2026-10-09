@@ -19,6 +19,11 @@ spec:
   values:
     manager:
       replicas: 1
+      resources:
+        requests:
+          memory: 128Mi
+        limits:
+          memory: 512Mi
       envOverrides:
         DISABLE_VERSION_UPDATE_CHECKS: "true"
     metrics:

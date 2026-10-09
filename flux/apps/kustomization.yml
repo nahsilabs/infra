@@ -13,6 +13,7 @@ resources:
   - immich
   - jellyfin
   - kroki
+  - langfuse
   - lightrag
   - memos
   - miniflux

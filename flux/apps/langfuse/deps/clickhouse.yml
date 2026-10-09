@@ -1,0 +1,39 @@
+apiVersion: clickhouse.com/v1alpha1
+kind: ClickHouseCluster
+metadata:
+  name: langfuse
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+spec:
+  shards: 1
+  replicas: 1
+  clusterDomain: cluster.local
+  keeperClusterRef:
+    name: langfuse
+  dataVolumeClaimSpec:
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: ceph-rbd-retain
+    resources:
+      requests:
+        storage: 50Gi
+  containerTemplate:
+    image:
+      repository: clickhouse/clickhouse-server
+      tag: "26.4"
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        memory: 4Gi
+  settings:
+    defaultUserPassword:
+      secret:
+        name: langfuse-clickhouse-auth
+        key: password
+    logger:
+      level: information
+    extraConfig:
+      timezone: UTC
+      max_server_memory_usage: 3221225472

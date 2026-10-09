@@ -1,0 +1,29 @@
+apiVersion: clickhouse.com/v1alpha1
+kind: KeeperCluster
+metadata:
+  name: langfuse
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+spec:
+  replicas: 1
+  clusterDomain: cluster.local
+  dataVolumeClaimSpec:
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: ceph-rbd-retain
+    resources:
+      requests:
+        storage: 1Gi
+  containerTemplate:
+    image:
+      repository: clickhouse/clickhouse-keeper
+      tag: "26.4"
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        memory: 1Gi
+  settings:
+    logger:
+      level: information
