@@ -1,0 +1,115 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: langfuse
+spec:
+  interval: 1h
+  timeout: 15m
+  chart:
+    spec:
+      chart: langfuse
+      version: 2.1.4
+      sourceRef:
+        kind: HelmRepository
+        name: langfuse
+        namespace: flux-system
+  values:
+    langfuse:
+      replicas: 1
+      nextauth:
+        url: https://langfuse.nahsi.dev
+        secret:
+          secretKeyRef:
+            name: langfuse-runtime
+            key: NEXTAUTH_SECRET
+      salt:
+        secretKeyRef:
+          name: langfuse-runtime
+          key: SALT
+      encryptionKey:
+        secretKeyRef:
+          name: langfuse-runtime
+          key: ENCRYPTION_KEY
+      auth:
+        disableUsernamePassword: true
+      features:
+        signUpDisabled: false
+        telemetryEnabled: false
+      additionalEnv:
+        - name: AUTH_AUTHENTIK_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: langfuse-runtime
+              key: AUTH_AUTHENTIK_CLIENT_ID
+        - name: AUTH_AUTHENTIK_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: langfuse-runtime
+              key: AUTH_AUTHENTIK_CLIENT_SECRET
+        - name: AUTH_AUTHENTIK_ISSUER
+          value: https://auth.nahsi.dev/application/o/langfuse/
+        - name: NODE_OPTIONS
+          value: --max-old-space-size=1536
+        - name: CLICKHOUSE_CLUSTER_NAME
+          value: default
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          memory: 2Gi
+      web:
+        livenessProbe:
+          initialDelaySeconds: 300
+      worker:
+        livenessProbe:
+          initialDelaySeconds: 300
+    postgresql:
+      deploy: false
+      host: pg-langfuse-rw
+      port: 5432
+      args: sslmode=require
+      auth:
+        username: app
+        database: app
+        existingSecret: pg-langfuse-app
+        secretKeys:
+          userPasswordKey: password
+    redis:
+      deploy: false
+      host: langfuse-valkey
+      port: 6379
+      auth:
+        username: default
+        existingSecret: langfuse-valkey-auth
+        existingSecretPasswordKey: default
+    clickhouse:
+      deploy: false
+      host: langfuse-clickhouse-headless
+      auth:
+        username: default
+        existingSecret: langfuse-clickhouse-auth
+        existingSecretKey: password
+      migration:
+        url: clickhouse://langfuse-clickhouse-headless:9000
+        ssl: false
+    s3:
+      deploy: false
+      bucket: langfuse
+      region: us-east-1
+      endpoint: https://s3.nahsi.dev:9000
+      forcePathStyle: true
+      accessKeyId:
+        secretKeyRef:
+          name: langfuse-s3-auth
+          key: access_key
+      secretAccessKey:
+        secretKeyRef:
+          name: langfuse-s3-auth
+          key: secret_key
+      eventUpload:
+        prefix: events/
+      batchExport:
+        enabled: false
+      mediaUpload:
+        enabled: false

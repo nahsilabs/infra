@@ -25,3 +25,4 @@ resources:
   - authentik.yml
   - grafana-community.yml
   - browsertrix.yml
+  - langfuse.yml
