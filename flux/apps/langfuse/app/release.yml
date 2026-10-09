@@ -25,15 +25,18 @@ spec:
             envFrom: &envFrom
               - secretRef:
                   name: langfuse-runtime
+
             env: &env
               NODE_ENV: production
               HOSTNAME: 0.0.0.0
               NODE_OPTIONS: --max-old-space-size=1536
+              TELEMETRY_ENABLED: "false"
+
               NEXTAUTH_URL: https://langfuse.nahsi.dev
               AUTH_AUTHENTIK_ISSUER: https://auth.nahsi.dev/application/o/langfuse/
               AUTH_DISABLE_USERNAME_PASSWORD: "true"
               AUTH_DISABLE_SIGNUP: "false"
-              TELEMETRY_ENABLED: "false"
+
               DATABASE_URL_BASE:
                 valueFrom:
                   secretKeyRef:
@@ -42,6 +45,7 @@ spec:
               DATABASE_URL:
                 value: $(DATABASE_URL_BASE)?sslmode=require
                 dependsOn: DATABASE_URL_BASE
+
               REDIS_PASSWORD:
                 valueFrom:
                   secretKeyRef:
@@ -50,6 +54,7 @@ spec:
               REDIS_CONNECTION_STRING:
                 value: redis://default:$(REDIS_PASSWORD)@langfuse-valkey:6379/0
                 dependsOn: REDIS_PASSWORD
+
               CLICKHOUSE_URL: http://langfuse-clickhouse-headless:8123
               CLICKHOUSE_MIGRATION_URL: clickhouse://langfuse-clickhouse-headless:9000
               CLICKHOUSE_MIGRATION_SSL: "false"
@@ -62,6 +67,7 @@ spec:
                     key: password
               CLICKHOUSE_CLUSTER_ENABLED: "true"
               CLICKHOUSE_CLUSTER_NAME: default
+
               LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse
               LANGFUSE_S3_EVENT_UPLOAD_PREFIX: events/
               LANGFUSE_S3_EVENT_UPLOAD_REGION: us-east-1
@@ -78,6 +84,7 @@ spec:
                     name: langfuse-s3-auth
                     key: secret_key
               LANGFUSE_S3_BATCH_EXPORT_ENABLED: "false"
+
             probes:
               liveness:
                 enabled: true
