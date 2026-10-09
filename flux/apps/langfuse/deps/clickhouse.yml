@@ -20,7 +20,7 @@ spec:
   containerTemplate:
     image:
       repository: clickhouse/clickhouse-server
-      tag: "26.4"
+      tag: "26.9"
     resources:
       requests:
         cpu: 1000m
