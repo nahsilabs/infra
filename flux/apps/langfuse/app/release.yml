@@ -21,7 +21,7 @@ spec:
           app:
             image:
               repository: docker.langfuse.com/langfuse/langfuse
-              tag: &imageTag 4.50.0
+              tag: &imageTag 4.56.0
             envFrom: &envFrom
               - secretRef:
                   name: langfuse-runtime
