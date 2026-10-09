@@ -1,11 +1,15 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: pg-hindsight
+  name: pg-hindsight-memory
 spec:
   instances: 2
   imageName: ghcr.io/cloudnative-pg/postgresql:18.6@sha256:899d3ed526b659d77935dde0e6bf2d69dbbf17d3d8c6486ca8cfd04bd3c18533
   primaryUpdateStrategy: unsupervised
+  affinity:
+    enablePodAntiAffinity: true
+    podAntiAffinityType: required
+    topologyKey: kubernetes.io/hostname
   postgresql:
     extensions:
       - name: pgvector
@@ -18,12 +22,14 @@ spec:
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
-  name: app
+  name: hindsight-memory
 spec:
   cluster:
-    name: pg-hindsight
+    name: pg-hindsight-memory
   name: app
   owner: app
   extensions:
     - name: vector
+      ensure: present
+    - name: pg_trgm
       ensure: present
