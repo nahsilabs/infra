@@ -1,15 +1,18 @@
-machine:
-  network:
-    interfaces:
-      - interface: enp6s18
-        dhcp: false
-        addresses:
-          - 10.2.15.40/24
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 10.2.15.1
----
 apiVersion: v1alpha1
 kind: HostnameConfig
 hostname: heliopolis
 auto: off
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: enp6s18
+addresses:
+  - address: 10.2.15.40/24
+routes:
+  - gateway: 10.2.15.1
+---
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+provisioning:
+  diskSelector:
+    match: disk.dev_path == "/dev/sda" && disk.model == "QEMU HARDDISK" && disk.size == 200u * GiB

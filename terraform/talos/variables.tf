@@ -6,6 +6,22 @@ variable "talos_version" {
   type = string
 }
 
+variable "talos_config_version" {
+  type = string
+}
+
+variable "kubernetes_version" {
+  type = string
+}
+
+variable "etcd_image" {
+  type = string
+}
+
+variable "coredns_image" {
+  type = string
+}
+
 variable "nodes" {
   type = list(object({
     name              = string

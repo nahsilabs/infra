@@ -1,5 +1,9 @@
-talos_version = "v1.13.9"
-cluster_name  = "nahsilabs"
+talos_version        = "v1.14.2"
+talos_config_version = "v1.14.2"
+kubernetes_version   = "1.37.1"
+etcd_image           = "registry.k8s.io/etcd:v3.7.2"
+coredns_image        = "registry.k8s.io/coredns/coredns:v1.14.7"
+cluster_name         = "nahsilabs"
 
 nodes = [
   {
@@ -8,6 +12,7 @@ nodes = [
     role      = "controlplane"
     config_patches = [
       "./patches/base.yml",
+      "./patches/controlplane.yml",
       "./patches/odroid-1.yml",
     ]
     extensions = [
@@ -22,6 +27,7 @@ nodes = [
     role      = "controlplane"
     config_patches = [
       "./patches/base.yml",
+      "./patches/controlplane.yml",
       "./patches/odroid-2.yml",
     ]
     extensions = [
@@ -36,6 +42,7 @@ nodes = [
     role      = "controlplane"
     config_patches = [
       "./patches/base.yml",
+      "./patches/controlplane.yml",
       "./patches/odroid-3.yml",
     ]
     extensions = [
