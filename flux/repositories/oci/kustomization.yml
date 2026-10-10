@@ -9,5 +9,4 @@ resources:
   - envoy-gateway.yml
   - prometheus.yml
   - agenticgateway.yml
-  - hindsight.yml
   - xberg.yml

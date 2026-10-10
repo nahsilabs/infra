@@ -81,7 +81,7 @@ spec:
               EMBEDDING_TOKEN_LIMIT: "4096"
               EMBEDDING_TIMEOUT: "120"
               EMBEDDING_ASYMMETRIC: "true"
-              EMBEDDING_QUERY_PREFIX: "Instruct: Retrieve text based on user query.\nQuery: "
+              EMBEDDING_QUERY_PREFIX: "Instruct: Given a query, retrieve relevant passages that answer the query.\nQuery: "
               EMBEDDING_DOCUMENT_PREFIX: NO_PREFIX
 
               RERANK_BINDING: cohere

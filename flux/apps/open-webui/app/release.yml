@@ -68,7 +68,7 @@ spec:
               RAG_EMBEDDING_MODEL: Qwen/Qwen3-Embedding-0.6B
               RAG_EMBEDDING_BATCH_SIZE: "1"
               RAG_EMBEDDING_CONCURRENT_REQUESTS: "2"
-              RAG_EMBEDDING_QUERY_PREFIX: "Instruct: Retrieve text based on user query.\nQuery: "
+              RAG_EMBEDDING_QUERY_PREFIX: "Instruct: Given a query, retrieve relevant passages that answer the query.\nQuery: "
               RAG_EMBEDDING_CONTENT_PREFIX: ""
               ENABLE_RAG_HYBRID_SEARCH: "true"
               RAG_RERANKING_ENGINE: external

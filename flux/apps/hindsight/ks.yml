@@ -7,10 +7,22 @@ metadata:
 spec:
   dependsOn:
     - name: infra-cloudnative-pg
+    - name: infra-external-secrets
   path: ./flux/apps/hindsight/deps
   targetNamespace: hindsight
   prune: true
   wait: true
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  healthCheckExprs:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Database
+      current: >-
+        has(status.applied) && status.applied &&
+        has(status.observedGeneration) &&
+        status.observedGeneration == metadata.generation
   sourceRef:
     kind: GitRepository
     name: infra
@@ -31,6 +43,11 @@ spec:
   path: ./flux/apps/hindsight/app
   targetNamespace: hindsight
   prune: true
+  wait: true
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   sourceRef:
     kind: GitRepository
     name: infra
@@ -38,10 +55,6 @@ spec:
   interval: 1h
   retryInterval: 2m
   timeout: 10m
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -51,6 +64,7 @@ metadata:
 spec:
   dependsOn:
     - name: infra-prometheus-operator-crds
+    - name: app-hindsight
   path: ./flux/apps/hindsight/obs
   targetNamespace: hindsight
   prune: true

@@ -4,74 +4,230 @@ metadata:
   name: hindsight
 spec:
   interval: 1h
-  chartRef:
-    kind: OCIRepository
-    name: hindsight
-    namespace: flux-system
+  chart:
+    spec:
+      chart: app-template
+      version: 5.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
   values:
-    worker:
-      enabled: false
-    tei:
-      reranker:
-        enabled: false
-      embedding:
-        enabled: false
-    ingress:
-      enabled: false
+    controllers:
+      api:
+        replicas: 1
+        strategy: Recreate
+        pod:
+          labels:
+            app.kubernetes.io/component: api
+        containers:
+          main:
+            image:
+              repository: ghcr.io/vectorize-io/hindsight-api
+              tag: 0.10.3-slim@sha256:38943574207e379e0a5a87f4018ac806d3acf26f2c516d46a34788cefd9d13a2
 
-    existingSecret: hindsight-secret
+            env:
+              HINDSIGHT_API_PORT: "8888"
+              HINDSIGHT_API_WORKER_ID: hindsight-api
+              HINDSIGHT_API_WORKER_MAX_SLOTS: "4"
+              HINDSIGHT_API_MCP_ENABLED: "false"
+              HINDSIGHT_API_LLM_TRACE_ENABLED: "false"
 
-    postgresql:
-      enabled: false
+              HINDSIGHT_API_FILE_STORAGE_TYPE: s3
+              HINDSIGHT_API_FILE_STORAGE_S3_BUCKET: hindsight
+              HINDSIGHT_API_FILE_STORAGE_S3_REGION: us-east-1
+              HINDSIGHT_API_FILE_STORAGE_S3_ENDPOINT: https://s3.nahsi.dev:9000
+              HINDSIGHT_API_FILE_STORAGE_S3_ACCESS_KEY_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: hindsight-s3-auth
+                    key: access_key
+              HINDSIGHT_API_FILE_STORAGE_S3_SECRET_ACCESS_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hindsight-s3-auth
+                    key: secret_key
 
-    api:
-      resources:
-        requests:
-          cpu: 250m
-          memory: 512Mi
-        limits:
-          cpu: "2"
-          memory: 4Gi
-      env:
-        HINDSIGHT_API_WORKER_ID: hindsight-api
-        HINDSIGHT_API_LLM_PROVIDER: openai
-        HINDSIGHT_API_LLM_BASE_URL: https://ai.nahsi.dev/v1
-        HINDSIGHT_API_LLM_MODEL: deepseek-ai/DeepSeek-V4-Flash
-        HINDSIGHT_API_REFLECT_LLM_MODEL: openai/gpt-oss-120b
-        HINDSIGHT_API_EMBEDDINGS_PROVIDER: tei
-        HINDSIGHT_API_EMBEDDINGS_TEI_URL: http://bge-small.ai.svc.cluster.local:8080
-        HINDSIGHT_API_RERANKER_PROVIDER: tei
-        HINDSIGHT_API_RERANKER_TEI_URL: http://ms-marco-minilm.ai.svc.cluster.local:8080
-        HINDSIGHT_API_RERANKER_TEI_MAX_CONCURRENT: "4"
+              HINDSIGHT_API_DATABASE_URL: postgresql://app@pg-hindsight-rw:5432/app?sslmode=require
+              PGPASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-hindsight-app
+                    key: password
+              HINDSIGHT_API_DB_POOL_MIN_SIZE: "2"
+              HINDSIGHT_API_DB_POOL_MAX_SIZE: "16"
 
-    controlPlane:
-      resources:
-        requests:
-          cpu: 100m
-          memory: 256Mi
-        limits:
-          cpu: "1"
-          memory: 1Gi
+              HINDSIGHT_API_TENANT_EXTENSION: "hindsight_api.extensions.builtin.tenant:ApiKeyTenantExtension"
+              HINDSIGHT_API_TENANT_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hindsight-api-auth
+                    key: token
 
-  postRenderers:
-    - kustomize:
-        patches:
-          - patch: |
-              apiVersion: apps/v1
-              kind: Deployment
-              metadata:
-                name: hindsight-api
-              spec:
-                template:
-                  spec:
-                    containers:
-                      - name: api
-                        env:
-                          - name: POSTGRES_PASSWORD
-                            $patch: delete
-                          - name: HINDSIGHT_API_DATABASE_URL
-                            value: null
-                            valueFrom:
-                              secretKeyRef:
-                                name: pg-hindsight-app
-                                key: uri
+              HINDSIGHT_API_LLM_PROVIDER: openai
+              HINDSIGHT_API_LLM_BASE_URL: https://ai.nahsi.dev/v1
+              HINDSIGHT_API_LLM_MODEL: Qwen/Qwen3.8-Flash-Next
+              HINDSIGHT_API_LLM_API_KEY: &inferenceApiKey
+                valueFrom:
+                  secretKeyRef:
+                    name: hindsight-inference-auth
+                    key: token
+              HINDSIGHT_API_LLM_MAX_CONCURRENT: "2"
+              HINDSIGHT_API_LLM_TEMPERATURE_RETAIN: "0"
+
+              HINDSIGHT_API_EMBEDDINGS_PROVIDER: openai
+              HINDSIGHT_API_EMBEDDINGS_OPENAI_BASE_URL: https://ai.nahsi.dev/v1
+              HINDSIGHT_API_EMBEDDINGS_OPENAI_MODEL: Qwen/Qwen3-Embedding-0.6B
+              HINDSIGHT_API_EMBEDDINGS_OPENAI_API_KEY: *inferenceApiKey
+              HINDSIGHT_API_EMBEDDINGS_OPENAI_BATCH_SIZE: "1"
+              HINDSIGHT_API_EMBEDDINGS_MAX_INPUT_TOKENS: "4096"
+              HINDSIGHT_API_EMBEDDINGS_QUERY_PREFIX: "Instruct: Given a query, retrieve relevant passages that answer the query.\nQuery: "
+              HINDSIGHT_API_EMBEDDINGS_PASSAGE_PREFIX: ""
+              HINDSIGHT_API_EMBEDDINGS_MAX_CONCURRENT_REQUESTS: "2"
+
+              HINDSIGHT_API_RERANKER_PROVIDER: cohere
+              HINDSIGHT_API_RERANKER_COHERE_BASE_URL: https://ai.nahsi.dev/v1/rerank
+              HINDSIGHT_API_RERANKER_COHERE_MODEL: zeroentropy/zerank-2
+              HINDSIGHT_API_RERANKER_COHERE_API_KEY: *inferenceApiKey
+              HINDSIGHT_API_RERANKER_MAX_TOKENS_PER_CANDIDATE: "2048"
+
+            probes:
+              liveness:
+                enabled: true
+                type: HTTP
+                path: /health/live
+                port: 8888
+                spec:
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                type: HTTP
+                path: /health
+                port: 8888
+                spec:
+                  initialDelaySeconds: 10
+                  periodSeconds: 5
+                  timeoutSeconds: 3
+            resources:
+              requests:
+                cpu: 250m
+                memory: 512Mi
+              limits:
+                cpu: "2"
+                memory: 2Gi
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              seccompProfile:
+                type: RuntimeDefault
+              capabilities:
+                drop:
+                  - ALL
+
+      control-plane:
+        replicas: 1
+        pod:
+          labels:
+            app.kubernetes.io/component: control-plane
+        containers:
+          main:
+            image:
+              repository: ghcr.io/vectorize-io/hindsight-control-plane
+              tag: 0.10.3@sha256:bf436b78e85b0438afda8d2e4b1fce01b9d12f135a742d1cc276b741766f212d
+
+            env:
+              NODE_ENV: production
+              HINDSIGHT_CP_HOSTNAME: 0.0.0.0
+              HINDSIGHT_CP_PORT: "3000"
+              NEXT_TELEMETRY_DISABLED: "1"
+
+              HINDSIGHT_CP_DATAPLANE_API_URL: http://hindsight-api:8888
+              HINDSIGHT_CP_DATAPLANE_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hindsight-api-auth
+                    key: token
+
+            probes:
+              liveness:
+                enabled: true
+                type: TCP
+                port: 3000
+                spec:
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                type: TCP
+                port: 3000
+                spec:
+                  initialDelaySeconds: 10
+                  periodSeconds: 5
+                  timeoutSeconds: 3
+            resources:
+              requests:
+                cpu: 250m
+                memory: 512Mi
+              limits:
+                cpu: "1"
+                memory: 2Gi
+            securityContext: *securityContext
+
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+
+    service:
+      api:
+        controller: api
+        labels:
+          app.kubernetes.io/component: api
+        ports:
+          http:
+            port: 8888
+      control-plane:
+        controller: control-plane
+        ports:
+          http:
+            port: 3000
+
+    route:
+      private:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: Platform
+          gethomepage.dev/name: Hindsight
+          gethomepage.dev/icon: hindsight.png
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=hindsight"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - hindsight.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: control-plane
+                port: http
+                weight: 1
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /v1
+            timeouts:
+              request: 360s
+              backendRequest: 360s
+            backendRefs:
+              - identifier: api
+                port: http
+                weight: 1
