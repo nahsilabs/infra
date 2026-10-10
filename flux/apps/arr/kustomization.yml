@@ -4,6 +4,7 @@ resources:
   - namespace.yml
   - sonarr
   - radarr
+  - bazarr
   - prowlarr
   - lidarr
   - soularr
