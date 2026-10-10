@@ -15,11 +15,14 @@ spec:
   values:
     controllers:
       main:
+        replicas: 1
+        strategy: Recreate
         containers:
           main:
             image:
               repository: ghcr.io/home-operations/radarr
               tag: 6.4.4.10685@sha256:be53998a2d39cfa3c3315b70c7509a6a1f2a10c3aee9337653efc9f4c970430e
+
             env:
               TZ: Europe/Athens
               RADARR__INSTANCE_NAME: Radarr
@@ -27,11 +30,49 @@ spec:
               RADARR__APPLICATION_URL: https://radarr.nahsi.dev
               RADARR__LOG_LEVEL: info
 
+            probes:
+              startup:
+                enabled: true
+                spec:
+                  periodSeconds: 10
+                  failureThreshold: 30
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: 7878
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: 7878
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
     defaultPodOptions:
       securityContext:
+        runAsNonRoot: true
         runAsUser: 65534
         runAsGroup: 65534
         fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
 
     service:
       main:
@@ -49,6 +90,10 @@ spec:
         existingClaim: radarr-video
         globalMounts:
           - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
 
     route:
       main:
