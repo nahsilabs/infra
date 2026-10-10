@@ -4,8 +4,6 @@ resources:
   - namespace.yml
   - sonarr
   - radarr
-  - recommendarr
   - prowlarr
   - lidarr
   - soularr
-  - digarr
