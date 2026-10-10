@@ -120,6 +120,8 @@ spec:
                 memory: 2Gi
             securityContext: &securityContext
               allowPrivilegeEscalation: false
+              seccompProfile:
+                type: RuntimeDefault
               capabilities:
                 drop:
                   - ALL
