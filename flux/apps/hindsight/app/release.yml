@@ -73,6 +73,7 @@ spec:
                     name: hindsight-inference-auth
                     key: token
               HINDSIGHT_API_LLM_MAX_CONCURRENT: "2"
+              HINDSIGHT_API_LLM_TEMPERATURE_RETAIN: "0"
 
               HINDSIGHT_API_EMBEDDINGS_PROVIDER: openai
               HINDSIGHT_API_EMBEDDINGS_OPENAI_BASE_URL: https://ai.nahsi.dev/v1
