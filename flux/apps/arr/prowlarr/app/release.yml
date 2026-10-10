@@ -15,11 +15,14 @@ spec:
   values:
     controllers:
       main:
+        replicas: 1
+        strategy: Recreate
         containers:
           main:
             image:
               repository: ghcr.io/home-operations/prowlarr
               tag: 2.6.5.5623@sha256:6152751c3ea2e7751564f5952173d5e83eed0e09f3fabd2cb6bdb58690c39e2f
+
             env:
               TZ: Europe/Athens
               COMPlus_EnableDiagnostics: "0"
@@ -49,7 +52,13 @@ spec:
                   secretKeyRef:
                     name: pg-prowlarr-app
                     key: dbname
+
             probes:
+              startup:
+                enabled: true
+                spec:
+                  periodSeconds: 10
+                  failureThreshold: 30
               liveness:
                 enabled: true
                 custom: true
@@ -57,10 +66,9 @@ spec:
                   httpGet:
                     path: /ping
                     port: 9696
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
               readiness:
                 enabled: true
                 custom: true
@@ -68,19 +76,26 @@ spec:
                   httpGet:
                     path: /ping
                     port: 9696
-                  initialDelaySeconds: 0
                   periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              startup:
-                enabled: false
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
 
     defaultPodOptions:
       securityContext:
+        runAsNonRoot: true
         runAsUser: 65534
         runAsGroup: 65534
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
 
     service:
       main:
@@ -94,6 +109,10 @@ spec:
         existingClaim: prowlarr-config
         globalMounts:
           - path: /config
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
 
     route:
       main:

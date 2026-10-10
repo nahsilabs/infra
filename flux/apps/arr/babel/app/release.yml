@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: radarr
+  name: babel
 spec:
   interval: 1h
   chart:
@@ -20,15 +20,16 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/home-operations/radarr
-              tag: 6.4.4.10685@sha256:be53998a2d39cfa3c3315b70c7509a6a1f2a10c3aee9337653efc9f4c970430e
+              repository: ghcr.io/hugomossberg/babel
+              tag: v2.5.5-beta@sha256:ba0e1f60545f2070ce604386cbe130e9fd260028a213038c61f9fdc407654ebb
 
             env:
               TZ: Europe/Athens
-              RADARR__INSTANCE_NAME: Radarr
-              RADARR__PORT: 7878
-              RADARR__APPLICATION_URL: https://radarr.nahsi.dev
-              RADARR__LOG_LEVEL: info
+              PYTHONDONTWRITEBYTECODE: "1"
+              HOME: /tmp
+            envFrom:
+              - secretRef:
+                  name: babel-auth
 
             probes:
               startup:
@@ -41,8 +42,8 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    path: /ping
-                    port: 7878
+                    path: /health
+                    port: 8765
                   periodSeconds: 30
                   timeoutSeconds: 5
                   failureThreshold: 5
@@ -51,8 +52,8 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    path: /ping
-                    port: 7878
+                    path: /health
+                    port: 8765
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 5
@@ -63,6 +64,13 @@ spec:
               capabilities:
                 drop:
                   - ALL
+
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
 
     defaultPodOptions:
       securityContext:
@@ -79,15 +87,15 @@ spec:
         controller: main
         ports:
           http:
-            port: 7878
+            port: 8765
 
     persistence:
       config:
-        existingClaim: radarr-config
+        existingClaim: babel-config
         globalMounts:
-          - path: /config
+          - path: /app/data
       data:
-        existingClaim: radarr-video
+        existingClaim: babel-video
         globalMounts:
           - path: /data
       tmp:
@@ -100,15 +108,15 @@ spec:
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/group: "Arr"
-          gethomepage.dev/name: Radarr
-          gethomepage.dev/icon: radarr.png
-          gethomepage.dev/pod-selector: "app.kubernetes.io/name=radarr"
+          gethomepage.dev/name: Babel
+          gethomepage.dev/icon: mdi-translate
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=babel"
         parentRefs:
           - name: private-gateway
             namespace: envoy-gateway
             sectionName: https
         hostnames:
-          - radarr.nahsi.dev
+          - babel.nahsi.dev
         rules:
           - matches:
               - path:

@@ -15,23 +15,63 @@ spec:
   values:
     controllers:
       main:
+        replicas: 1
+        strategy: Recreate
         containers:
           main:
             image:
               repository: ghcr.io/home-operations/lidarr
               tag: 3.1.6.5078@sha256:b4c60ae24ff264bcdfd8d5562982d99105c17b82c28a6986498f6fb215b7f42e
+
             env:
               TZ: Europe/Athens
               LIDARR__APP__INSTANCENAME: Lidarr
               LIDARR__LOG__LEVEL: info
               LIDARR__SERVER__PORT: "8686"
 
+            probes:
+              startup:
+                enabled: true
+                spec:
+                  periodSeconds: 10
+                  failureThreshold: 30
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: 8686
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: 8686
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
     defaultPodOptions:
       securityContext:
+        runAsNonRoot: true
         runAsUser: 65534
         runAsGroup: 65534
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
 
     service:
       main:
@@ -49,6 +89,10 @@ spec:
         existingClaim: lidarr-music
         globalMounts:
           - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
 
     route:
       main:
