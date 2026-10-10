@@ -1,0 +1,128 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: babel
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 5.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        replicas: 1
+        strategy: Recreate
+        containers:
+          main:
+            image:
+              repository: ghcr.io/hugomossberg/babel
+              tag: v2.5.5-beta@sha256:ba0e1f60545f2070ce604386cbe130e9fd260028a213038c61f9fdc407654ebb
+
+            env:
+              TZ: Europe/Athens
+              PYTHONDONTWRITEBYTECODE: "1"
+              HOME: /tmp
+            envFrom:
+              - secretRef:
+                  name: babel-auth
+
+            probes:
+              startup:
+                enabled: true
+                spec:
+                  periodSeconds: 10
+                  failureThreshold: 30
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8765
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8765
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8765
+
+    persistence:
+      config:
+        existingClaim: babel-config
+        globalMounts:
+          - path: /app/data
+      data:
+        existingClaim: babel-video
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+
+    route:
+      main:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/group: "Arr"
+          gethomepage.dev/name: Babel
+          gethomepage.dev/icon: mdi-translate
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=babel"
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - babel.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+                weight: 1

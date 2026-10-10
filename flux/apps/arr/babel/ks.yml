@@ -1,0 +1,27 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-babel
+  namespace: flux-system
+spec:
+  path: ./flux/apps/arr/babel/app
+  targetNamespace: arr
+  prune: true
+  wait: true
+  dependsOn:
+    - name: infra-gateway-private
+    - name: infra-ceph-csi-rbd
+    - name: infra-csi-driver-nfs
+    - name: app-ai-gateway
+    - name: app-bazarr
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age

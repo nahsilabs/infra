@@ -5,6 +5,7 @@ resources:
   - sonarr
   - radarr
   - bazarr
+  - babel
   - prowlarr
   - lidarr
   - soularr
