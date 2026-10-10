@@ -12,7 +12,7 @@ spec:
   bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
   relabelConfigs:
     - action: labelmap
-      regex: __meta_kubernetes_node_label_(.+)
+      regex: __meta_kubernetes_node_label_(kubernetes_io_(arch|hostname|os))
 ---
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMNodeScrape
@@ -30,4 +30,4 @@ spec:
   bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
   relabelConfigs:
     - action: labelmap
-      regex: __meta_kubernetes_node_label_(.+)
+      regex: __meta_kubernetes_node_label_(kubernetes_io_(arch|hostname|os))
