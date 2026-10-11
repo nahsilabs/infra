@@ -97,6 +97,7 @@ spec:
     
     server:
       defaultPodOptions:
+        priorityClassName: high-priority
         labels:
           scheduling.nahsilabs/accelerated-workload: "true"
         affinity:
@@ -128,6 +129,7 @@ spec:
     
     machine-learning:
       defaultPodOptions:
+        priorityClassName: high-priority
         labels:
           scheduling.nahsilabs/accelerated-workload: "true"
         affinity:

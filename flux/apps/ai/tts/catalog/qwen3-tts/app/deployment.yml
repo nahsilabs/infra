@@ -18,6 +18,7 @@ spec:
         app.kubernetes.io/name: qwen3-tts
         app.kubernetes.io/part-of: qwentts
     spec:
+      priorityClassName: high-priority
       terminationGracePeriodSeconds: 120
       securityContext:
         fsGroup: 65532

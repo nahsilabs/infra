@@ -7,6 +7,7 @@ metadata:
 spec:
   dependsOn:
     - name: infra-gateway-api-crds
+    - name: infra-priority-classes
   path: ./flux/apps/comfyui/app
   targetNamespace: comfyui
   prune: true

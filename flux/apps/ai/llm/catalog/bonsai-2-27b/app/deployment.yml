@@ -18,6 +18,7 @@ spec:
         app.kubernetes.io/name: bonsai-2-27b
         app.kubernetes.io/part-of: prism-llama-cpp
     spec:
+      priorityClassName: high-priority
       nodeSelector:
         kubernetes.io/hostname: pergamon
       runtimeClassName: nvidia

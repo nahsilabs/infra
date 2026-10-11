@@ -4,6 +4,10 @@ metadata:
   name: pg-immich
 spec:
   instances: 2
+  affinity:
+    enablePodAntiAffinity: true
+    podAntiAffinityType: preferred
+    topologyKey: kubernetes.io/hostname
   resources:
     requests:
       cpu: 25m

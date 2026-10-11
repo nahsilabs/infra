@@ -7,6 +7,7 @@ spec:
   dependsOn:
     - name: app-ai-gateway
     - name: infra-intel-device-plugins-gpu
+    - name: infra-priority-classes
   path: ./flux/apps/ai/retrieval/catalog/zerank-2/app
   targetNamespace: ai
   prune: true

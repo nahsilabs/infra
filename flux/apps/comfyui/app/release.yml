@@ -52,6 +52,7 @@ spec:
                   - ALL
 
     defaultPodOptions:
+      priorityClassName: high-priority
       nodeSelector:
         kubernetes.io/hostname: pergamon
 

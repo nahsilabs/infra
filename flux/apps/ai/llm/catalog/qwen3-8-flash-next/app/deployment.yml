@@ -18,6 +18,7 @@ spec:
         app.kubernetes.io/name: qwen3-8-flash-next
         app.kubernetes.io/part-of: halogen
     spec:
+      priorityClassName: high-priority
       nodeSelector:
         kubernetes.io/hostname: ephesus
       tolerations:

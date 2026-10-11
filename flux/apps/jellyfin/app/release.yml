@@ -59,6 +59,7 @@ spec:
                 memory: 8Gi
 
     defaultPodOptions:
+      priorityClassName: high-priority
       labels:
         scheduling.nahsilabs/accelerated-workload: "true"
       affinity:
