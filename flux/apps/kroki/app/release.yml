@@ -51,7 +51,7 @@ spec:
           cpu: 10m
           memory: 96Mi
         limits:
-          memory: 192Mi
+          memory: 256Mi
 
     excalidraw:
       enabled: true

@@ -49,10 +49,10 @@ spec:
         size: 1Gi
     resources:
       requests:
-        cpu: 50m
+        cpu: 100m
         memory: 256Mi
       limits:
-        memory: 320Mi
+        memory: 512Mi
     database:
       type: postgresql
       existingSecret: pg-vaultwarden-app

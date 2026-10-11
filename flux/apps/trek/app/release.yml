@@ -41,10 +41,10 @@ spec:
                 port: 3000
             resources:
               requests:
-                cpu: 25m
+                cpu: 100m
                 memory: 384Mi
               limits:
-                memory: 768Mi
+                memory: 1Gi
     service:
       main:
         controller: main

@@ -15,7 +15,7 @@ spec:
         cpu: 250m
         memory: 768Mi
       limits:
-        memory: 1536Mi
+        memory: 1.5Gi
 
     # Run everywhere operationally needed, but respect the nahsilabs/offline
     # taint: by NOT tolerating it, cilium is evicted from offline nodes (e.g.
@@ -133,7 +133,7 @@ spec:
               cpu: 10m
               memory: 32Mi
             limits:
-              memory: 48Mi
+              memory: 64Mi
       tls:
         enabled: true
         auto:

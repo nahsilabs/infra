@@ -32,7 +32,7 @@ spec:
                           requests:
                             memory: 64Mi
                           limits:
-                            memory: 96Mi
+                            memory: 128Mi
           - target:
               kind: Deployment
               name: ceph-csi-rbd-provisioner
@@ -56,13 +56,13 @@ spec:
                           requests:
                             memory: 512Mi
                           limits:
-                            memory: 768Mi
+                            memory: 1Gi
                       - name: liveness-prometheus
                         resources:
                           requests:
                             memory: 64Mi
                           limits:
-                            memory: 96Mi
+                            memory: 128Mi
   values:
     nodeplugin:
       plugin:
@@ -91,21 +91,21 @@ spec:
             cpu: 25m
             memory: 48Mi
           limits:
-            memory: 96Mi
+            memory: 128Mi
       attacher:
         resources:
           requests:
             cpu: 25m
             memory: 64Mi
           limits:
-            memory: 96Mi
+            memory: 128Mi
       resizer:
         resources:
           requests:
             cpu: 25m
             memory: 64Mi
           limits:
-            memory: 96Mi
+            memory: 128Mi
       snapshotter:
         resources:
           requests:

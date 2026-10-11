@@ -41,10 +41,10 @@ spec:
 
             resources:
               requests:
-                cpu: 10m
+                cpu: 100m
                 memory: 64Mi
               limits:
-                memory: 96Mi
+                memory: 128Mi
 
             securityContext:
               allowPrivilegeEscalation: false

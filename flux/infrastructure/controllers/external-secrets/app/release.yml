@@ -28,14 +28,14 @@ spec:
         cpu: 10m
         memory: 192Mi
       limits:
-        memory: 320Mi
+        memory: 512Mi
     certController:
       resources:
         requests:
           cpu: 10m
           memory: 192Mi
         limits:
-          memory: 384Mi
+          memory: 512Mi
     webhook:
       resources:
         requests:

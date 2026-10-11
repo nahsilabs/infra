@@ -41,7 +41,7 @@ spec:
                 cpu: 50m
                 memory: 256Mi
               limits:
-                memory: 320Mi
+                memory: 512Mi
             probes:
               liveness:
                 type: HTTP

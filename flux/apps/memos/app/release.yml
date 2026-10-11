@@ -30,7 +30,7 @@ spec:
               MEMOS_INSTANCE_URL: "https://memos.nahsi.dev"
             resources:
               requests:
-                cpu: 10m
+                cpu: 100m
                 memory: 96Mi
               limits:
                 memory: 128Mi

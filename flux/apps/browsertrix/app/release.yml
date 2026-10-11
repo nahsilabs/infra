@@ -40,7 +40,7 @@ spec:
           cpu: 50m
           memory: 192Mi
         limits:
-          memory: 384Mi
+          memory: 512Mi
 
     crawler_namespace: browsertrix-crawlers
     crawler_channels:
