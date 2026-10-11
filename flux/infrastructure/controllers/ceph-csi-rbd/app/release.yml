@@ -12,13 +12,107 @@ spec:
         name: ceph-csi
         namespace: flux-system
   interval: 1h
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: DaemonSet
+              name: ceph-csi-rbd-nodeplugin
+            patch: |
+              apiVersion: apps/v1
+              kind: DaemonSet
+              metadata:
+                name: ceph-csi-rbd-nodeplugin
+              spec:
+                template:
+                  spec:
+                    containers:
+                      - name: liveness-prometheus
+                        resources:
+                          requests:
+                            memory: 64Mi
+                          limits:
+                            memory: 128Mi
+          - target:
+              kind: Deployment
+              name: ceph-csi-rbd-provisioner
+            patch: |
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: ceph-csi-rbd-provisioner
+              spec:
+                template:
+                  spec:
+                    containers:
+                      - name: csi-rbdplugin
+                        resources:
+                          requests:
+                            memory: 160Mi
+                          limits:
+                            memory: 256Mi
+                      - name: csi-rbdplugin-controller
+                        resources:
+                          requests:
+                            memory: 512Mi
+                          limits:
+                            memory: 1Gi
+                      - name: liveness-prometheus
+                        resources:
+                          requests:
+                            memory: 64Mi
+                          limits:
+                            memory: 128Mi
   values:
     nodeplugin:
+      plugin:
+        resources:
+          requests:
+            cpu: 25m
+            memory: 192Mi
+          limits:
+            memory: 256Mi
+      registrar:
+        resources:
+          requests:
+            cpu: 25m
+            memory: 48Mi
+          limits:
+            memory: 64Mi
       tolerations:
         - key: scheduling.nahsilabs/dedicated
           operator: Equal
           value: halogen
           effect: NoSchedule
+    provisioner:
+      provisioner:
+        resources:
+          requests:
+            cpu: 25m
+            memory: 48Mi
+          limits:
+            memory: 128Mi
+      attacher:
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            memory: 128Mi
+      resizer:
+        resources:
+          requests:
+            cpu: 25m
+            memory: 64Mi
+          limits:
+            memory: 128Mi
+      snapshotter:
+        resources:
+          requests:
+            cpu: 25m
+            memory: 96Mi
+          limits:
+            memory: 128Mi
     csiConfig:
       - clusterID: "0f97afb5-e33d-48cb-b27a-4a7ea168b1b7"
         monitors:

@@ -10,6 +10,12 @@ spec:
     namespace: flux-system
   values:
     upgradeCompatibility: "1.19"
+    resources:
+      requests:
+        cpu: 250m
+        memory: 768Mi
+      limits:
+        memory: 1.5Gi
 
     # Run everywhere operationally needed, but respect the nahsilabs/offline
     # taint: by NOT tolerating it, cilium is evicted from offline nodes (e.g.
@@ -42,9 +48,21 @@ spec:
     envoy:
       rollOutPods: true
       tolerations: *cilium-tolerations
+      resources:
+        requests:
+          cpu: 50m
+          memory: 96Mi
+        limits:
+          memory: 256Mi
 
     operator:
       rollOutPods: true
+      resources:
+        requests:
+          cpu: 50m
+          memory: 256Mi
+        limits:
+          memory: 512Mi
 
     rollOutCiliumPods: true
 
@@ -94,8 +112,28 @@ spec:
       enabled: true
       relay:
         enabled: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            memory: 128Mi
       ui:
         enabled: true
+        backend:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              memory: 128Mi
+        frontend:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 64Mi
       tls:
         enabled: true
         auto:

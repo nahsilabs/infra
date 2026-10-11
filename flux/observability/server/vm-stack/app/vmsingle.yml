@@ -11,3 +11,10 @@ spec:
       requests:
         storage: 50Gi
     storageClassName: ceph-rbd-retain
+  resources:
+    requests:
+      cpu: 150m
+      memory: 1.5Gi
+    limits:
+      cpu: 1200m
+      memory: 2Gi

@@ -7,6 +7,7 @@ apiVersion: v1alpha1
 kind: KubeNodeConfig
 labels:
   scheduling.nahsilabs/dedicated: halogen
+  node.nahsilabs/cpu: fast
 nodeIP:
   validSubnets:
     - 10.2.15.0/24

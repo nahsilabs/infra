@@ -33,3 +33,16 @@ spec:
         certificateRefs:
           - name: nahsi-dev-tls
             kind: Secret
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: agenticgateway-buffer-limit
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: agenticgateway-internal
+  frontend:
+    http:
+      maxBufferSize: 16777216

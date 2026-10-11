@@ -39,6 +39,13 @@ spec:
               - secretRef:
                   name: miniflux-oidc
 
+            resources:
+              requests:
+                cpu: 100m
+                memory: 64Mi
+              limits:
+                memory: 128Mi
+
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

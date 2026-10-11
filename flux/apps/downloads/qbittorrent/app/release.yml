@@ -34,6 +34,13 @@ spec:
               runAsUser: 65534
               runAsGroup: 65534
               runAsNonRoot: true
+            resources:
+              requests:
+                cpu: 250m
+                memory: 1Gi
+              limits:
+                cpu: "2"
+                memory: 4Gi
 
           gluetun:
             image:
@@ -56,6 +63,12 @@ spec:
               postStart:
                 exec:
                   command: ["/bin/sh", "-c", "(ip rule del table 51828; ip -6 rule del table 51828) || true"]
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
 
     defaultPodOptions:
       securityContext:

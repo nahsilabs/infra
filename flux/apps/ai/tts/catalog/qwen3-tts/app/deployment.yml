@@ -18,6 +18,7 @@ spec:
         app.kubernetes.io/name: qwen3-tts
         app.kubernetes.io/part-of: qwentts
     spec:
+      priorityClassName: high-priority
       terminationGracePeriodSeconds: 120
       securityContext:
         fsGroup: 65532
@@ -50,13 +51,13 @@ spec:
               containerPort: 8080
           resources:
             requests:
-              cpu: "2"
+              cpu: "1"
               memory: 4Gi
               ephemeral-storage: 512Mi
               gpu.intel.com/xe: "1"
             limits:
-              cpu: "4"
-              memory: 8Gi
+              cpu: "2"
+              memory: 4Gi
               ephemeral-storage: 2Gi
               gpu.intel.com/xe: "1"
           startupProbe:

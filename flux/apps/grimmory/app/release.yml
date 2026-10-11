@@ -26,6 +26,12 @@ spec:
             image:
               repository: ghcr.io/grimmory-tools/grimmory
               tag: v3.5.0@sha256:bf6fe21c6e247597f7869664a440b5a34242e2d2940575cae39c17bfaa66dc0b
+            resources:
+              requests:
+                cpu: 750m
+                memory: 2Gi
+              limits:
+                memory: 3Gi
             env:
               TZ: Europe/Athens
               USER_ID: "1000"

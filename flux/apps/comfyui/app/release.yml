@@ -38,8 +38,8 @@ spec:
                   failureThreshold: 60
             resources:
               requests:
-                cpu: "4"
-                memory: 4Gi
+                cpu: "2"
+                memory: 8Gi
                 nvidia.com/gpu: "1"
               limits:
                 cpu: "4"
@@ -52,6 +52,7 @@ spec:
                   - ALL
 
     defaultPodOptions:
+      priorityClassName: high-priority
       nodeSelector:
         kubernetes.io/hostname: pergamon
 

@@ -20,7 +20,7 @@ spec:
           main:
             image:
               repository: ghcr.io/agigante80/actual-mcp-server
-              tag: 0.22.22@sha256:b92f4967fcffe124e2155b700d630c220bc3e21abfb71c3d59046edb2ea1e417
+              tag: 0.22.31@sha256:55592e3b53a9036e92254a565d6c1108ded55f9f13cb12a49f5510dc916f2069
             env:
               ACTUAL_SERVER_URL: http://actualbudget.actual.svc.cluster.local:5006
               MCP_ALLOW_UNAUTHENTICATED: "true"
@@ -36,6 +36,12 @@ spec:
             envFrom:
               - secretRef:
                   name: actual-mcp
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
             probes:
               liveness:
                 type: HTTP

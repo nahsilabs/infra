@@ -4,6 +4,16 @@ metadata:
   name: pg-immich
 spec:
   instances: 2
+  affinity:
+    enablePodAntiAffinity: true
+    podAntiAffinityType: preferred
+    topologyKey: kubernetes.io/hostname
+  resources:
+    requests:
+      cpu: 25m
+      memory: 768Mi
+    limits:
+      memory: 2Gi
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17-0.4.3@sha256:acebb38ca309938bc05ce268b019c98aa718cb554dd54e4443654d9d00a0d498
   primaryUpdateStrategy: unsupervised
   enableSuperuserAccess: true

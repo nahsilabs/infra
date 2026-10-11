@@ -36,6 +36,13 @@ spec:
               runAsUser: 65534
               runAsGroup: 65534
               runAsNonRoot: true
+            resources:
+              requests:
+                cpu: 300m
+                memory: 768Mi
+              limits:
+                cpu: "2"
+                memory: 2Gi
 
           gluetun:
             image:
@@ -54,6 +61,12 @@ spec:
             securityContext:
               capabilities:
                 add: [NET_ADMIN]
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
             lifecycle:
               postStart:
                 exec:

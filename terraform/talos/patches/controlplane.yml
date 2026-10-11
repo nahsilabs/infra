@@ -3,11 +3,32 @@ apiVersion: v1alpha1
 kind: KubeControllerManagerConfig
 extraArgs:
   bind-address: 0.0.0.0
+resources:
+  requests:
+    cpu: 75m
+    memory: 512Mi
+  limits:
+    memory: 768Mi
 ---
 apiVersion: v1alpha1
 kind: KubeSchedulerConfig
 extraArgs:
   bind-address: 0.0.0.0
+resources:
+  requests:
+    cpu: 25m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+---
+apiVersion: v1alpha1
+kind: KubeAPIServerConfig
+resources:
+  requests:
+    cpu: 250m
+    memory: 4Gi
+  limits:
+    memory: 6Gi
 ---
 apiVersion: v1alpha1
 kind: KubeProxyConfig
