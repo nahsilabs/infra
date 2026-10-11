@@ -59,6 +59,13 @@ spec:
         metricsExporter:
           enable: true
           image: docker.io/rocm/device-metrics-exporter:v1.5.3
+          resource:
+            requests:
+              cpu: 50m
+              memory: 512M
+            limits:
+              cpu: "2"
+              memory: 4G
           tolerations:
             - key: scheduling.nahsilabs/dedicated
               operator: Equal

@@ -96,7 +96,7 @@ spec:
               containerPort: 8080
           resources:
             requests:
-              cpu: "16"
+              cpu: "8"
               memory: 110Gi
               amd.com/gpu: "1"
             limits:
