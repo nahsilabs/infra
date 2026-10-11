@@ -4,6 +4,7 @@ metadata:
   name: jellyfin
 spec:
   interval: 1h
+  timeout: 35m
   chart:
     spec:
       chart: app-template
@@ -19,7 +20,7 @@ spec:
           main:
             image:
               repository: docker.io/jellyfin/jellyfin
-              tag: "10.11.11@sha256:aefb67e6a7ff1debdd154a78a7bbb780fd0c873d8639210a7f6a2016ad2b35db"
+              tag: "12.2@sha256:357724bf0ae27a672c7cbaa899db2d9abeb13dbd8657ccce750258a4c059d037"
             env:
               DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
               JELLYFIN_PublishedServerUrl: https://jellyfin.nahsi.dev
@@ -47,7 +48,15 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               startup:
-                enabled: false
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8096
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 180
             resources:
               requests:
                 cpu: 100m
