@@ -19,6 +19,9 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
+    crds:
+      defaultCR:
+        upgrade: true
     node-feature-discovery:
       enabled: false
     # Talos owns the kernel driver; do not install or watch KMM resources.
