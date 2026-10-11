@@ -20,7 +20,7 @@ spec:
     spec:
       terminationGracePeriodSeconds: 120
       nodeSelector:
-        kubernetes.io/hostname: heliopolis
+        node.nahsilabs/cpu: fast
       securityContext:
         fsGroup: 65532
         fsGroupChangePolicy: OnRootMismatch
@@ -70,10 +70,11 @@ spec:
             - sherpa-onnx-nemotron-3.5-asr-streaming-0.6b-560ms-int8-2026-06-11
             - --download-root
             - /models
+            # ONNX threads: four for final inference, one for the shared live recognizer.
             - --engine-options
-            - '{"provider":"cpu","num_threads":6,"verify_model_files":true}'
+            - '{"provider":"cpu","num_threads":4,"verify_model_files":true}'
             - --realtime-engine-options
-            - '{"provider":"cpu","num_threads":6,"verify_model_files":true}'
+            - '{"provider":"cpu","num_threads":1,"verify_model_files":true}'
             - --device
             - cpu
             - --language
@@ -129,11 +130,11 @@ spec:
             failureThreshold: 3
           resources:
             requests:
-              cpu: "4"
+              cpu: 1900m
               memory: 3Gi
               ephemeral-storage: 512Mi
             limits:
-              cpu: "8"
+              cpu: 3900m
               memory: 8Gi
               ephemeral-storage: 2Gi
           securityContext:
@@ -201,7 +202,7 @@ spec:
               memory: 128Mi
               ephemeral-storage: 128Mi
             limits:
-              cpu: "1"
+              cpu: 100m
               memory: 512Mi
               ephemeral-storage: 1Gi
           securityContext:

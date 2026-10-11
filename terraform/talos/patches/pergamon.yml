@@ -4,6 +4,11 @@ hostname: pergamon
 auto: off
 ---
 apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  node.nahsilabs/cpu: fast
+---
+apiVersion: v1alpha1
 kind: LinkConfig
 name: enp6s18
 addresses:
