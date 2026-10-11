@@ -39,13 +39,6 @@ spec:
             - /models
             - --model
             - all
-          resources:
-            requests:
-              cpu: "1"
-              memory: 512Mi
-            limits:
-              cpu: "4"
-              memory: 2Gi
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -140,7 +133,7 @@ spec:
               memory: 3Gi
               ephemeral-storage: 512Mi
             limits:
-              cpu: "12"
+              cpu: "8"
               memory: 8Gi
               ephemeral-storage: 2Gi
           securityContext:

@@ -17,10 +17,10 @@ spec:
       owner: app
   resources:
     requests:
-      cpu: 100m
+      cpu: 25m
       memory: 256Mi
     limits:
-      memory: 1Gi
+      memory: 512Mi
   storage:
     size: 5Gi
     storageClass: ceph-rbd-retain

@@ -21,3 +21,23 @@ spec:
         enabled: true
         labels:
           scrape: "true"
+    resources:
+      requests:
+        cpu: 25m
+        memory: 128Mi
+      limits:
+        memory: 160Mi
+    cainjector:
+      resources:
+        requests:
+          cpu: 25m
+          memory: 192Mi
+        limits:
+          memory: 256Mi
+    webhook:
+      resources:
+        requests:
+          cpu: 25m
+          memory: 80Mi
+        limits:
+          memory: 128Mi

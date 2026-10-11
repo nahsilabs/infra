@@ -9,4 +9,10 @@ spec:
   storage:
     size: 1Gi
     storageClass: ceph-rbd-retain
+  resources:
+    requests:
+      cpu: 25m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
 

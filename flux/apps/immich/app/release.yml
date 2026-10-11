@@ -73,6 +73,16 @@ spec:
     
     valkey:
       enabled: true
+      controllers:
+        main:
+          containers:
+            main:
+              resources:
+                requests:
+                  cpu: 25m
+                  memory: 64Mi
+                limits:
+                  memory: 96Mi
       persistence:
         data:
           type: persistentVolumeClaim
@@ -109,8 +119,8 @@ spec:
             main:
               resources:
                 requests:
-                  cpu: 500m
-                  memory: 1Gi
+                  cpu: "1.25"
+                  memory: 1.5Gi
                 limits:
                   cpu: "2"
                   memory: 3Gi
@@ -145,7 +155,7 @@ spec:
               resources:
                 requests:
                   cpu: 200m
-                  memory: 5Gi
+                  memory: 8Gi
                 limits:
                   cpu: "2"
                   memory: 10Gi

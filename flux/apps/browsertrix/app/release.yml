@@ -26,6 +26,22 @@ spec:
     backend_max_replicas: 1
     frontend_max_replicas: 1
 
+    emails_cpu: "25m"
+    emails_memory: "192Mi"
+
+    frontend_memory: "128Mi"
+
+    mongo_cpu: "100m"
+    mongo_memory: "768Mi"
+
+    metacontroller-helm:
+      resources:
+        requests:
+          cpu: 50m
+          memory: 192Mi
+        limits:
+          memory: 384Mi
+
     crawler_namespace: browsertrix-crawlers
     crawler_channels:
       - id: default

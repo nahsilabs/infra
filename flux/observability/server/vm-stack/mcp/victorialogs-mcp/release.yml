@@ -25,3 +25,9 @@ spec:
       mode: http
     vl:
       entrypoint: http://vlsingle-stack.obs-stack.svc:9428
+    resources:
+      requests:
+        cpu: 25m
+        memory: 128Mi
+      limits:
+        memory: 256Mi

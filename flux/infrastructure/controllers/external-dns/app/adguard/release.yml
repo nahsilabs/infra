@@ -41,6 +41,12 @@ spec:
             value: 0.0.0.0
         securityContext:
           readOnlyRootFilesystem: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 48Mi
+          limits:
+            memory: 64Mi
     interval: 1h
     triggerLoopOnEvent: true
     policy: sync
@@ -52,3 +58,9 @@ spec:
       enabled: true
       additionalLabels:
         scrape: "true"
+    resources:
+      requests:
+        cpu: 10m
+        memory: 160Mi
+      limits:
+        memory: 256Mi

@@ -26,3 +26,9 @@ spec:
     vm:
       type: single
       entrypoint: http://vmsingle-stack.obs-stack.svc:8429
+    resources:
+      requests:
+        cpu: 50m
+        memory: 640Mi
+      limits:
+        memory: 896Mi

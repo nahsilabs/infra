@@ -36,6 +36,12 @@ spec:
             envFrom:
               - secretRef:
                   name: actual-mcp
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 320Mi
             probes:
               liveness:
                 type: HTTP

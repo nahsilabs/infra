@@ -23,6 +23,12 @@ spec:
             env:
               TZ: Europe/Athens
               QBT_HOST: http://qbittorrent.downloads.svc.cluster.local:8080
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 384Mi
 
     service:
       main:

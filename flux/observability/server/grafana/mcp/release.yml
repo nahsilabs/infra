@@ -21,6 +21,12 @@ spec:
       retries: 3
   values:
     fullnameOverride: grafana-mcp
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+      limits:
+        memory: 128Mi
     command:
       - /app/mcp-grafana
       - --transport

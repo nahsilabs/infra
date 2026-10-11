@@ -82,6 +82,7 @@
             pkgs.kubelogin-oidc
             pkgs.kubernetes-helm
             pkgs.cilium-cli
+            pkgs.krr
             pkgs.fluxcd
             terraform
             pkgs.google-cloud-sdk

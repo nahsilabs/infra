@@ -25,6 +25,12 @@ spec:
               PORT: 8080
               CONFIG_PATH: /config
               METADATA_PATH: /config/metadata
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 256Mi
 
     service:
       main:

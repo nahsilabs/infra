@@ -57,6 +57,12 @@ spec:
                     name: pg-readeck-app
                     key: dbname
               READECK_DATABASE_SOURCE: "postgres://$(DB_USER):$(DB_PASS)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)"
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 96Mi
 
     service:
       main:

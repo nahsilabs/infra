@@ -25,3 +25,23 @@ spec:
       repository: docker-registry3.mariadb.com/mariadb-operator/mariadb-operator
     crds:
       enabled: true
+    resources:
+      requests:
+        cpu: 50m
+        memory: 320Mi
+      limits:
+        memory: 512Mi
+    webhook:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 80Mi
+        limits:
+          memory: 128Mi
+    certController:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 192Mi
+        limits:
+          memory: 384Mi

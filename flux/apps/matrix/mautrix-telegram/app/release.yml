@@ -28,6 +28,13 @@ spec:
               - /data/config.yaml
               - -n
 
+            resources:
+              requests:
+                cpu: 50m
+                memory: 192Mi
+              limits:
+                memory: 640Mi
+
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

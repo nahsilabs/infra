@@ -28,6 +28,12 @@ spec:
                     name: pg-memos-app
                     key: uri
               MEMOS_INSTANCE_URL: "https://memos.nahsi.dev"
+            resources:
+              requests:
+                cpu: 10m
+                memory: 96Mi
+              limits:
+                memory: 128Mi
 
     persistence:
       idp:

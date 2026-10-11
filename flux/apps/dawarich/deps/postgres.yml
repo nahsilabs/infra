@@ -13,6 +13,12 @@ spec:
           reference: ghcr.io/cloudnative-pg/postgis-extension:3.6.2-18-trixie@sha256:93584892e25a57e47e988b0f80ad9988035d1396d4a87824307eddf2242348c8
         ld_library_path:
           - system
+  resources:
+    requests:
+      cpu: 25m
+      memory: 384Mi
+    limits:
+      memory: 1Gi
   storage:
     size: 10Gi
     storageClass: ceph-rbd-retain

@@ -99,7 +99,7 @@ spec:
                   periodSeconds: 10
             resources:
               requests:
-                cpu: 10m
+                cpu: 500m
                 memory: 512Mi
               limits:
                 memory: 2Gi
@@ -125,7 +125,7 @@ spec:
             envFrom: *envFrom
             resources:
               requests:
-                cpu: 10m
+                cpu: 75m
                 memory: 512Mi
               limits:
                 memory: 4Gi

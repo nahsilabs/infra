@@ -26,6 +26,13 @@ spec:
               PGID: "65534"
               SCRIPT_INTERVAL: "300"
 
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 320Mi
+
     defaultPodOptions:
       securityContext:
         fsGroup: 65534
