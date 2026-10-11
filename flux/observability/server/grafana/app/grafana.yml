@@ -51,6 +51,12 @@ spec:
                       key: password
                 - name: GF_DATABASE_SSL_MODE
                   value: require
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 384Mi
+                limits:
+                  memory: 1Gi
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:

@@ -1,4 +1,4 @@
-proxmox_grub_cmdline: "quiet amd_pstate=active iommu=pt kvm_amd.nested=1 kvm_amd.avic=1 kvm_amd.vapic=1 amd_iommu=on hugepagesz=1G hugepages=84"
+proxmox_grub_cmdline: "quiet amd_pstate=active iommu=pt kvm_amd.nested=1 kvm_amd.avic=1 kvm_amd.vapic=1 amd_iommu=on hugepagesz=1G hugepages=104"
 proxmox_modules: |
   vfio
   vfio_iommu_type1

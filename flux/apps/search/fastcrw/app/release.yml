@@ -45,7 +45,7 @@ spec:
                 drop: ["ALL"]
             resources:
               requests:
-                cpu: 10m
+                cpu: 100m
                 memory: 128Mi
               limits:
                 memory: 512Mi
@@ -65,7 +65,7 @@ spec:
             securityContext: *security
             resources:
               requests:
-                cpu: 10m
+                cpu: 100m
                 memory: 256Mi
               limits:
                 memory: 2Gi

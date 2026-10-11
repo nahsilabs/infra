@@ -18,6 +18,7 @@ spec:
         app.kubernetes.io/name: zerank-2
         app.kubernetes.io/part-of: llama-cpp
     spec:
+      priorityClassName: high-priority
       terminationGracePeriodSeconds: 60
       securityContext:
         runAsNonRoot: true
@@ -88,8 +89,8 @@ spec:
               ephemeral-storage: 512Mi
               gpu.intel.com/xe: "1"
             limits:
-              cpu: "4"
-              memory: 8Gi
+              cpu: "2"
+              memory: 6Gi
               ephemeral-storage: 2Gi
               gpu.intel.com/xe: "1"
           startupProbe:

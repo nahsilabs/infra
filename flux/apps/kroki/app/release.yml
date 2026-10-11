@@ -29,7 +29,15 @@ spec:
         memory: 512Mi
       requests:
         cpu: 100m
-        memory: 128Mi
+        memory: 192Mi
+
+    bpmn:
+      resources:
+        requests:
+          cpu: 50m
+          memory: 768Mi
+        limits:
+          memory: 1.5Gi
 
     diagramsnet:
       enabled: true
@@ -38,6 +46,12 @@ spec:
         repository: yuzutech/kroki-diagramsnet
         # renovate: datasource=github-releases depName=yuzutech/kroki
         tag: 0.32.1@sha256:71e7082f736ec003fb33b5cd1c5c40af54c9bfb6351d50fbe73b56fe8f1bd5eb
+      resources:
+        requests:
+          cpu: 10m
+          memory: 96Mi
+        limits:
+          memory: 256Mi
 
     excalidraw:
       enabled: true
@@ -46,6 +60,12 @@ spec:
         repository: yuzutech/kroki-excalidraw
         # renovate: datasource=github-releases depName=yuzutech/kroki
         tag: 0.32.1@sha256:214f13c1cd3c3f79a18a83631a900fedbed71b2f39d3a0c5630ac5fa5ad40046
+      resources:
+        requests:
+          cpu: 50m
+          memory: 512Mi
+        limits:
+          memory: 1Gi
 
     mermaid:
       enabled: true
@@ -54,3 +74,9 @@ spec:
         repository: yuzutech/kroki-mermaid
         # renovate: datasource=github-releases depName=yuzutech/kroki
         tag: 0.32.1@sha256:ad6721646aabfb8b5f5005db2daa6e37189c25e18aab19a8ef8590b6171cd192
+      resources:
+        requests:
+          cpu: 10m
+          memory: 96Mi
+        limits:
+          memory: 128Mi

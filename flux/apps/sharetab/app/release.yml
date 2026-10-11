@@ -77,6 +77,12 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 3
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
         # The image entrypoint needs root (initdb, chown, signal handling) and
         # drops the Next.js process to the nextjs user itself; it cannot run
         # as non-root, so no runAsNonRoot is set.

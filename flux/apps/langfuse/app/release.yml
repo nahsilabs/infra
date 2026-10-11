@@ -105,7 +105,7 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 3
-            resources: &resources
+            resources:
               requests:
                 cpu: 250m
                 memory: 512Mi
@@ -133,7 +133,12 @@ spec:
                   failureThreshold: 3
               readiness:
                 enabled: false
-            resources: *resources
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
     service:
       web:
         controller: web

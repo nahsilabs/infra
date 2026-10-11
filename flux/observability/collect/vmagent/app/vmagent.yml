@@ -23,7 +23,13 @@ spec:
     - url: http://vmsingle-stack.obs-stack.svc:8429/api/v1/write
   resources:
     requests:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 200m
+      memory: 384Mi
     limits:
-      memory: 512Mi
+      memory: 1Gi
+  configReloaderResources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      memory: 64Mi

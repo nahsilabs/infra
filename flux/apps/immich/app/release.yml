@@ -73,6 +73,16 @@ spec:
     
     valkey:
       enabled: true
+      controllers:
+        main:
+          containers:
+            main:
+              resources:
+                requests:
+                  cpu: 25m
+                  memory: 64Mi
+                limits:
+                  memory: 128Mi
       persistence:
         data:
           type: persistentVolumeClaim
@@ -87,6 +97,7 @@ spec:
     
     server:
       defaultPodOptions:
+        priorityClassName: high-priority
         labels:
           scheduling.nahsilabs/accelerated-workload: "true"
         affinity:
@@ -109,8 +120,8 @@ spec:
             main:
               resources:
                 requests:
-                  cpu: 500m
-                  memory: 1Gi
+                  cpu: "1.25"
+                  memory: 1.5Gi
                 limits:
                   cpu: "2"
                   memory: 3Gi
@@ -118,6 +129,7 @@ spec:
     
     machine-learning:
       defaultPodOptions:
+        priorityClassName: high-priority
         labels:
           scheduling.nahsilabs/accelerated-workload: "true"
         affinity:
@@ -145,7 +157,7 @@ spec:
               resources:
                 requests:
                   cpu: 200m
-                  memory: 5Gi
+                  memory: 8Gi
                 limits:
                   cpu: "2"
                   memory: 10Gi

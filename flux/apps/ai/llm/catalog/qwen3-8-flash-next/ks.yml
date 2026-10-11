@@ -7,6 +7,7 @@ spec:
   dependsOn:
     - name: app-ai-gateway
     - name: infra-amd-gpu-operator
+    - name: infra-priority-classes
   path: ./flux/apps/ai/llm/catalog/qwen3-8-flash-next/app
   targetNamespace: ai
   prune: true

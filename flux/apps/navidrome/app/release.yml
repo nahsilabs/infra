@@ -30,6 +30,13 @@ spec:
             envFrom:
               - secretRef:
                   name: navidrome-lastfm
+            resources:
+              requests:
+                cpu: 150m
+                memory: 256Mi
+              limits:
+                cpu: "2"
+                memory: 1Gi
 
     defaultPodOptions:
       securityContext:
