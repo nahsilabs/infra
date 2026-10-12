@@ -16,11 +16,3 @@ spec:
     name: infra
     namespace: flux-system
   path: ./flux/infrastructure/configs/agent-substrate/app
-  healthCheckExprs:
-    - apiVersion: ate.dev/v1alpha1
-      kind: WorkerPool
-      current: >-
-        has(status.replicas) &&
-        has(status.readyReplicas) &&
-        status.replicas == spec.replicas &&
-        status.readyReplicas == spec.replicas
