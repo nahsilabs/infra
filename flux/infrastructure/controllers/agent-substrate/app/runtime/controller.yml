@@ -115,24 +115,11 @@ spec:
             - name: metrics
               containerPort: 8080
               protocol: TCP
-            - name: healthz
-              containerPort: 8081
-              protocol: TCP
           volumeMounts:
             - name: podidentity
               mountPath: /run/podidentity.podcert.ate.dev
             - name: servicedns-ca
               mountPath: /run/servicedns-ca
-          readinessProbe:
-            httpGet:
-              path: /readyz
-              port: healthz
-            periodSeconds: 2
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: healthz
-            periodSeconds: 10
       volumes:
         - name: podidentity
           projected:
