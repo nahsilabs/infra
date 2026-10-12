@@ -1,0 +1,298 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: atelet
+  namespace: ate-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: atelet
+rules:
+  - apiGroups:
+      - ''
+    resources:
+      - pods
+    verbs:
+      - get
+      - watch
+      - list
+  - apiGroups:
+      - ate.dev
+    resources:
+      - csidriverconfigs
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ate.dev
+    resources:
+      - sandboxconfigs
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - certificates.k8s.io
+    resources:
+      - clustertrustbundles
+    verbs:
+      - get
+      - watch
+      - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: atelet
+subjects:
+  - kind: ServiceAccount
+    name: atelet
+    namespace: ate-system
+roleRef:
+  kind: ClusterRole
+  name: atelet
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: atelet-endpointslices
+  namespace: ate-system
+rules:
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: atelet-endpointslices
+  namespace: ate-system
+subjects:
+  - kind: ServiceAccount
+    name: atelet
+    namespace: ate-system
+roleRef:
+  kind: Role
+  name: atelet-endpointslices
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: ate-node-critical
+value: 1000000000
+globalDefault: false
+description: Node-local ate components that every actor activation depends on.
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: atelet-b73ee7f
+  namespace: ate-system
+  labels:
+    app: atelet
+    ate.dev/substrate-version: b73ee7f
+spec:
+  selector:
+    matchLabels:
+      app: atelet
+      ate.dev/substrate-version: b73ee7f
+  template:
+    metadata:
+      labels:
+        app: atelet
+        ate.dev/substrate-version: b73ee7f
+    spec:
+      serviceAccountName: atelet
+      priorityClassName: ate-node-critical
+      terminationGracePeriodSeconds: 330
+      initContainers:
+        - name: snapshot-plugin
+          image: docker.io/nahsilabs/ate-snapshot:b73ee7f@sha256:2b6071184c4714032d7aa409c357bc17a47b75f1caf9243d30f6e19d01759262
+          restartPolicy: Always
+          args:
+            - node
+            - --socket=/run/snapshot-plugin/node.sock
+            - --root=/var/lib/ate
+          startupProbe:
+            exec:
+              command:
+                - /ko-app/snapshot-plugin
+                - healthcheck
+                - --socket=/run/snapshot-plugin/node.sock
+            periodSeconds: 2
+            failureThreshold: 30
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          env:
+            - name: ATE_STORAGE_BACKEND
+              value: s3
+            - name: AWS_REGION
+              value: us-east-1
+            - name: AWS_ENDPOINT_URL
+              value: https://s3.nahsi.dev:9000
+            - name: AWS_S3_USE_PATH_STYLE
+              value: 'true'
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: agent-substrate-s3
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: agent-substrate-s3
+                  key: AWS_SECRET_ACCESS_KEY
+          envFrom:
+            - configMapRef:
+                name: ate-otel-config
+          volumeMounts:
+            - name: run-ateom
+              mountPath: /var/lib/ate
+            - name: snapshot-plugin
+              mountPath: /run/snapshot-plugin
+      containers:
+        - name: atelet
+          image: docker.io/nahsilabs/ate-node:b73ee7f@sha256:6e59988c9b94c2862c1b21d78226e795c7e4c9f60a5f25f87636b20031a10b5b
+          args:
+            - --grpc-server-cred-bundle=/run/podidentity.podcert.ate.dev/credential-bundle.pem
+            - --client-ca-certs=/run/podidentity.podcert.ate.dev/trust-bundle.pem
+            - --ateapi-ca-file=/run/servicedns.podcert.ate.dev/trust-bundle.pem
+            - --drain-delay=0s
+            - --drain-timeout=5m
+            - --snapshot-plugin-socket=/run/snapshot-plugin/node.sock
+            - --image-cache-max-bytes=21474836480
+            - --otlp-relay-socket=
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - DAC_OVERRIDE
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_UID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.uid
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: k8s.namespace.name=$(POD_NAMESPACE),k8s.pod.name=$(POD_NAME),k8s.pod.uid=$(POD_UID),k8s.node.name=$(NODE_NAME),service.instance.id=$(POD_UID)
+            - name: ATE_STORAGE_BACKEND
+              value: s3
+            - name: AWS_REGION
+              value: us-east-1
+            - name: AWS_ENDPOINT_URL
+              value: https://s3.nahsi.dev:9000
+            - name: AWS_S3_USE_PATH_STYLE
+              value: 'true'
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: agent-substrate-s3
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: agent-substrate-s3
+                  key: AWS_SECRET_ACCESS_KEY
+          envFrom:
+            - configMapRef:
+                name: ate-otel-config
+          ports:
+            - name: grpc
+              containerPort: 8085
+              hostPort: 8085
+            - name: prometheus
+              containerPort: 9090
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 9090
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          volumeMounts:
+            - name: run-ateom
+              mountPath: /var/lib/ate
+            - name: snapshot-plugin
+              mountPath: /run/snapshot-plugin
+            - name: podidentity
+              mountPath: /run/podidentity.podcert.ate.dev
+            - name: servicedns-ca
+              mountPath: /run/servicedns.podcert.ate.dev
+              readOnly: true
+            - name: kubelet-plugins
+              mountPath: /var/lib/kubelet/plugins
+      volumes:
+        - name: snapshot-plugin
+          emptyDir: {}
+        - name: run-ateom
+          hostPath:
+            path: /var/lib/ate
+            type: DirectoryOrCreate
+        - name: kubelet-plugins
+          hostPath:
+            path: /var/lib/kubelet/plugins
+            type: DirectoryOrCreate
+        - name: podidentity
+          projected:
+            sources:
+              - podCertificate:
+                  signerName: podidentity.podcert.ate.dev/identity
+                  keyType: ECDSAP256
+                  credentialBundlePath: credential-bundle.pem
+              - clusterTrustBundle:
+                  signerName: podidentity.podcert.ate.dev/identity
+                  labelSelector:
+                    matchLabels:
+                      podcert.ate.dev/canarying: live
+                  path: trust-bundle.pem
+        - name: servicedns-ca
+          projected:
+            sources:
+              - clusterTrustBundle:
+                  signerName: servicedns.podcert.ate.dev/identity
+                  labelSelector:
+                    matchLabels:
+                      podcert.ate.dev/canarying: live
+                  path: trust-bundle.pem

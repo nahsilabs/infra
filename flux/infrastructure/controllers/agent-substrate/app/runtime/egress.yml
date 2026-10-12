@@ -1,0 +1,232 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: atenet-egress
+  namespace: ate-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: atenet-egress-agentgateway-substrate-config
+  namespace: ate-system
+data:
+  config.yaml: |
+    frontendPolicies:
+      connect:
+        mode: tunnel
+      accessLog:
+        add:
+          substrate.connect.authority: source.connectHeaders["host"]
+      substrateEgressActorResolution:
+        host: api.ate-system.svc:443
+        policies:
+          backendTLS:
+            cert: /run/podidentity.podcert.ate.dev/credential-bundle.pem
+            key: /run/podidentity.podcert.ate.dev/credential-bundle.pem
+            root: /run/servicedns-ca/trust-bundle.pem
+    gateways:
+      egress:
+        port: 8443
+        bindAddress: $POD_IP
+        protocol: HTTPS
+        tls:
+          cert: /run/servicedns.podcert.ate.dev/credential-bundle.pem
+          key: /run/servicedns.podcert.ate.dev/credential-bundle.pem
+          root: /run/actor-id-ca-certs/ca.crt
+    binds:
+      - mode: internal
+        protocol: AUTO
+        listeners:
+          - protocol: HTTPS
+            tls:
+              mode: dynamicCa
+              cert: /run/egress-mitm/tls.crt
+              key: /run/egress-mitm/tls.key
+            routes:
+              - name: reject-websocket-upgrade
+                matches:
+                  - headers:
+                      - name: Connection
+                        value:
+                          regex: (?i)(^|,)\s*upgrade\s*(,|$)
+                      - name: Upgrade
+                        value:
+                          regex: (?i)(^|,)\s*websocket\s*(,|$)
+                policies:
+                  directResponse:
+                    status: 403
+                    body: WebSocket egress is not supported
+              - backends:
+                  - dynamic: {}
+                    policies:
+                      backendTLS:
+                        root: /etc/ssl/certs/ca-certificates.crt
+                policies:
+                  substrateEgress: &id001
+                    host: api.ate-system.svc:443
+                    policies:
+                      backendTLS:
+                        cert: /run/podidentity.podcert.ate.dev/credential-bundle.pem
+                        key: /run/podidentity.podcert.ate.dev/credential-bundle.pem
+                        root: /run/servicedns-ca/trust-bundle.pem
+                    credentialProviders: []
+          - protocol: HTTP
+            routes:
+              - name: reject-websocket-upgrade
+                matches:
+                  - headers:
+                      - name: Connection
+                        value:
+                          regex: (?i)(^|,)\s*upgrade\s*(,|$)
+                      - name: Upgrade
+                        value:
+                          regex: (?i)(^|,)\s*websocket\s*(,|$)
+                policies:
+                  directResponse:
+                    status: 403
+                    body: WebSocket egress is not supported
+              - backends:
+                  - dynamic:
+                      target: source.connectHeaders["host"]
+                policies:
+                  substrateEgress: *id001
+          - protocol: TLS
+            tcpRoutes:
+              - backends:
+                  - dynamic: {}
+    config:
+      statsAddr: 0.0.0.0:15020
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atenet-egress
+  namespace: ate-system
+  labels:
+    app: atenet-egress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: atenet-egress
+  template:
+    metadata:
+      labels:
+        app: atenet-egress
+    spec:
+      serviceAccountName: atenet-egress
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: agentgateway
+          image: cr.agentgateway.dev/agentgateway:v0.0.0-alpha.168b05d6@sha256:5e8384d1fcfdc443a3ad5155ea6a64dc7953bde162df7f5f8e131a5c19ae08a3
+          args:
+            - -f
+            - /etc/agentgateway/config.yaml
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          ports:
+            - name: https
+              containerPort: 8443
+            - name: readiness
+              containerPort: 15021
+            - name: stats
+              containerPort: 15020
+          readinessProbe:
+            httpGet:
+              path: /healthz/ready
+              port: readiness
+            periodSeconds: 10
+          startupProbe:
+            failureThreshold: 60
+            httpGet:
+              path: /healthz/ready
+              port: readiness
+            periodSeconds: 1
+          volumeMounts:
+            - name: config
+              mountPath: /etc/agentgateway
+              readOnly: true
+            - name: servicedns
+              mountPath: /run/servicedns.podcert.ate.dev
+              readOnly: true
+            - name: actor-id-ca-certs
+              mountPath: /run/actor-id-ca-certs
+              readOnly: true
+            - name: podidentity
+              mountPath: /run/podidentity.podcert.ate.dev
+              readOnly: true
+            - name: servicedns-ca
+              mountPath: /run/servicedns-ca
+              readOnly: true
+            - name: egress-mitm
+              mountPath: /run/egress-mitm
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: atenet-egress-agentgateway-substrate-config
+        - name: servicedns
+          projected:
+            sources:
+              - podCertificate:
+                  signerName: servicedns.podcert.ate.dev/identity
+                  keyType: ECDSAP256
+                  credentialBundlePath: credential-bundle.pem
+              - clusterTrustBundle:
+                  signerName: servicedns.podcert.ate.dev/identity
+                  labelSelector:
+                    matchLabels:
+                      podcert.ate.dev/canarying: live
+                  path: trust-bundle.pem
+        - name: podidentity
+          projected:
+            sources:
+              - podCertificate:
+                  signerName: podidentity.podcert.ate.dev/identity
+                  keyType: ECDSAP256
+                  credentialBundlePath: credential-bundle.pem
+              - clusterTrustBundle:
+                  signerName: podidentity.podcert.ate.dev/identity
+                  labelSelector:
+                    matchLabels:
+                      podcert.ate.dev/canarying: live
+                  path: trust-bundle.pem
+        - name: actor-id-ca-certs
+          secret:
+            secretName: actor-id-ca-certs
+        - name: servicedns-ca
+          projected:
+            sources:
+              - clusterTrustBundle:
+                  signerName: servicedns.podcert.ate.dev/identity
+                  labelSelector:
+                    matchLabels:
+                      podcert.ate.dev/canarying: live
+                  path: trust-bundle.pem
+        - name: egress-mitm
+          secret:
+            secretName: egress-mitm-ca-pool
+            items:
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: atenet-egress
+  namespace: ate-system
+spec:
+  type: ClusterIP
+  ipFamilyPolicy: PreferDualStack
+  selector:
+    app: atenet-egress
+  ports:
+    - name: https
+      port: 443
+      targetPort: https
+      protocol: TCP

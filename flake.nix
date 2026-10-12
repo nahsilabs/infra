@@ -74,6 +74,10 @@
             pkgs.bashInteractive
             pkgs.nixfmt
 
+            pkgs.go_1_27
+            pkgs.ko
+            pkgs.crane
+
             pkgs.ansible
             pkgs.sshpass
             pkgs.talosctl

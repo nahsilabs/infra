@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ate.dev_csidriverconfigs.yml
+  - ate.dev_sandboxconfigs.yml
+  - ate.dev_workerpools.yml
+  - sandboxconfig-validation.yml

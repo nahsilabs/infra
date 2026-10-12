@@ -1,0 +1,110 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: ate-api-server
+  namespace: ate-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app: ate-api-server
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: ate-system
+            io.cilium.k8s.policy.serviceaccount: ate-controller
+            app: ate-controller
+        - matchLabels:
+            io.kubernetes.pod.namespace: ate-system
+            io.cilium.k8s.policy.serviceaccount: atelet
+            app: atelet
+        - matchLabels:
+            io.kubernetes.pod.namespace: ate-system
+            io.cilium.k8s.policy.serviceaccount: atenet-router
+            app: atenet-router
+        - matchLabels:
+            io.kubernetes.pod.namespace: ate-system
+            io.cilium.k8s.policy.serviceaccount: atenet-egress
+            app: atenet-egress
+        - matchLabels:
+            io.kubernetes.pod.namespace: ate-workers
+            io.cilium.k8s.policy.serviceaccount: default
+            ate.dev/worker-pool: gvisor-workers
+      toPorts:
+        - ports:
+            - port: '443'
+              protocol: TCP
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: '9090'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: atenet-router
+  namespace: ate-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app: atenet-router
+  ingress:
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: '15021'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: atenet-egress
+  namespace: ate-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app: atenet-egress
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: ate-workers
+            io.cilium.k8s.policy.serviceaccount: default
+            ate.dev/worker-pool: gvisor-workers
+      toPorts:
+        - ports:
+            - port: '8443'
+              protocol: TCP
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: '15021'
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: atelet
+  namespace: ate-system
+spec:
+  endpointSelector:
+    matchLabels:
+      app: atelet
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: ate-system
+            io.cilium.k8s.policy.serviceaccount: ate-api-server
+            app: ate-api-server
+      toPorts:
+        - ports:
+            - port: '8085'
+              protocol: TCP
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: '9090'
+              protocol: TCP

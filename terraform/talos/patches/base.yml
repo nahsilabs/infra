@@ -20,6 +20,11 @@ extraArgs:
   rotate-server-certificates: "true"
 ---
 apiVersion: v1alpha1
+kind: SysctlConfig
+params:
+  user.max_user_namespaces: "4096"
+---
+apiVersion: v1alpha1
 kind: SecurityProfileConfig
 workloadIsolation: true
 ---
