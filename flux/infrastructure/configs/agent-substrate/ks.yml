@@ -20,7 +20,6 @@ spec:
     - apiVersion: ate.dev/v1alpha1
       kind: WorkerPool
       current: >-
-        has(status) &&
         has(status.replicas) &&
         has(status.readyReplicas) &&
         status.replicas == spec.replicas &&
