@@ -74,6 +74,9 @@ spec:
 
     kubeProxyReplacement: true
 
+    socketLB:
+      hostNamespaceOnly: true
+
     bpf:
       masquerade: true
 

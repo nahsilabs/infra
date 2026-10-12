@@ -18,6 +18,7 @@ nodes = [
     extensions = [
       "siderolabs/i915",
       "siderolabs/intel-ucode",
+      "siderolabs/kata-containers",
       "siderolabs/qemu-guest-agent",
     ]
   },
@@ -33,6 +34,7 @@ nodes = [
     extensions = [
       "siderolabs/i915",
       "siderolabs/intel-ucode",
+      "siderolabs/kata-containers",
       "siderolabs/qemu-guest-agent",
     ]
   },
@@ -48,6 +50,7 @@ nodes = [
     extensions = [
       "siderolabs/i915",
       "siderolabs/intel-ucode",
+      "siderolabs/kata-containers",
       "siderolabs/qemu-guest-agent",
     ]
   },
@@ -63,6 +66,7 @@ nodes = [
       "siderolabs/amd-ucode",
       "siderolabs/i915",
       "siderolabs/xe",
+      "siderolabs/kata-containers",
       "siderolabs/qemu-guest-agent",
     ]
     extra_kernel_args = ["xe.probe_display=0"]
@@ -77,6 +81,7 @@ nodes = [
     ]
     extensions = [
       "siderolabs/amd-ucode",
+      "siderolabs/kata-containers",
       "siderolabs/qemu-guest-agent",
       "siderolabs/nonfree-kmod-nvidia-production",
       "siderolabs/nvidia-container-toolkit-production",
@@ -94,6 +99,7 @@ nodes = [
     extensions = [
       "siderolabs/amd-ucode",
       "siderolabs/amdgpu",
+      "siderolabs/kata-containers",
       "siderolabs/realtek-firmware",
     ]
     extra_kernel_args = ["amd_iommu=off"]

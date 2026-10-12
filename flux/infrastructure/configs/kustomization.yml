@@ -8,3 +8,4 @@ resources:
   - agent-substrate
   - snapshot-class
   - priority-classes
+  - kata
