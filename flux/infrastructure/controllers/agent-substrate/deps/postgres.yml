@@ -1,0 +1,39 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-agent-substrate
+  namespace: ate-system
+spec:
+  instances: 2
+  affinity:
+    enablePodAntiAffinity: true
+    podAntiAffinityType: preferred
+    topologyKey: kubernetes.io/hostname
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.6@sha256:899d3ed526b659d77935dde0e6bf2d69dbbf17d3d8c6486ca8cfd04bd3c18533
+  primaryUpdateStrategy: unsupervised
+  bootstrap:
+    initdb:
+      database: app
+      owner: app
+      postInitApplicationSQL:
+        - CREATE ROLE substrate_owner NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION;
+        - CREATE ROLE substrate_readwrite NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION;
+        - ALTER ROLE app NOINHERIT;
+        - GRANT substrate_owner, substrate_readwrite TO app;
+        - CREATE SCHEMA substrate AUTHORIZATION substrate_owner;
+        - REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+        - REVOKE ALL ON SCHEMA substrate FROM PUBLIC;
+        - GRANT USAGE ON SCHEMA substrate TO substrate_readwrite;
+        - ALTER DEFAULT PRIVILEGES FOR ROLE substrate_owner IN SCHEMA substrate GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO substrate_readwrite;
+        - ALTER DEFAULT PRIVILEGES FOR ROLE substrate_owner IN SCHEMA substrate GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO substrate_readwrite;
+        - ALTER DEFAULT PRIVILEGES FOR ROLE substrate_owner IN SCHEMA substrate GRANT EXECUTE ON ROUTINES TO substrate_readwrite;
+        - ALTER DEFAULT PRIVILEGES FOR ROLE substrate_owner IN SCHEMA substrate GRANT USAGE ON TYPES TO substrate_readwrite;
+  storage:
+    size: 10Gi
+    storageClass: ceph-rbd-retain
+  resources:
+    requests:
+      cpu: 25m
+      memory: 256Mi
+    limits:
+      memory: 1Gi

@@ -1,0 +1,20 @@
+apiVersion: ate.dev/v1alpha1
+kind: WorkerPool
+metadata:
+  name: gvisor-workers
+  namespace: ate-workers
+spec:
+  replicas: 2
+  workerImage: docker.io/nahsilabs/ate-worker-gvisor:b73ee7f@sha256:d1f015b0703669da384deeee46484a434de3364faf11b7cb4ec9cd8879862b69
+  sandboxClasses:
+    - name: gvisor
+      configRef:
+        name: gvisor-default
+  template:
+    resources:
+      requests:
+        cpu: 250m
+        memory: 2Gi
+      limits:
+        cpu: "2"
+        memory: 2Gi

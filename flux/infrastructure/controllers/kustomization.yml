@@ -11,6 +11,7 @@ resources:
   - envoy-gateway
   - agenticgateway
   - cloudnative-pg
+  - agent-substrate
   - mariadb-operator
   - clickhouse-operator
   - external-dns
