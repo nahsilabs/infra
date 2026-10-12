@@ -11,15 +11,10 @@ spec:
       configRef:
         name: gvisor-default
   template:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-              - key: kubernetes.io/hostname
-                operator: In
-                values:
-                  - pergamon
-                  - heliopolis
+    nodeSelector:
+      feature.node.kubernetes.io/cpu-model.vendor_id: AMD
+      feature.node.kubernetes.io/cpu-model.family: "25"
+      feature.node.kubernetes.io/cpu-model.id: "33"
     resources:
       requests:
         cpu: 250m
