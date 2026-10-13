@@ -21,7 +21,7 @@ spec:
           main:
             image:
               repository: jasonish/evebox
-              tag: 0.29.0@sha256:93c4369179d47e2d1ecb208e52a14c09c8a68a12e7035329b1221d766335b975
+              tag: 0.31.0@sha256:265d41b5a81f78ecc9262727234be1d249f4e6b00a920656685b915ca8ad9bcb
             command:
               - /bin/evebox
             args:
