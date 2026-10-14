@@ -1,4 +1,5 @@
 launch_url: https://heron.agents.nahsi.dev
+ui_group: Agents
 client_type: public
 offline_access: true
 allowed_groups:

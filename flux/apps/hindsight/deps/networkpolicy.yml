@@ -22,6 +22,13 @@ spec:
               protocol: TCP
             - port: "8888"
               protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: agenticgateway
+      toPorts:
+        - ports:
+            - port: "8888"
+              protocol: TCP
     - fromEntities:
         - host
         - remote-node

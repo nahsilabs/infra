@@ -5,7 +5,6 @@ resources:
   - ../../../base
   - credentials.yml
   - env.yml
-  - hindsight-secret.yml
   - pvc.yml
   - route.yml
 patches:
@@ -18,24 +17,6 @@ patches:
       kind: HermesAgent
       name: hermes
   - target:
-      group: agents.hermeum.app
-      version: v1alpha1
-      kind: HermesAgent
-    patch: |-
-      - op: add
-        path: /spec/hermes/initScripts/-
-        value:
-          name: init-hindsight
-          script: |
-            set -eu
-            # Hermes v0.22.0 catalogs Hindsight 1.2.2 at this reviewed commit.
-            hermes plugins install --force --enable --yes-deps \
-              --ref f843f173bb41f001e322cc83c917371639e47fbf \
-              vectorize-io/hindsight/hindsight-integrations/hermes
-      - op: add
-        path: /spec/hermes/config/raw/platform_toolsets/cli/-
-        value: memory
-  - target:
       group: cilium.io
       version: v2
       kind: CiliumNetworkPolicy
@@ -44,6 +25,3 @@ patches:
       - op: add
         path: /spec/egress/3/toPorts/0/serverNames/-
         value: matrix.nahsi.dev
-      - op: add
-        path: /spec/egress/3/toPorts/0/serverNames/-
-        value: hindsight.nahsi.dev

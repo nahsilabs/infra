@@ -39,6 +39,7 @@ spec:
   dependsOn:
     - name: app-hindsight-deps
     - name: infra-gateway-api-crds
+    - name: infra-agenticgateway
   path: ./flux/apps/hindsight/app
   targetNamespace: hindsight
   prune: true

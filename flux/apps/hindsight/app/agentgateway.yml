@@ -1,0 +1,108 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: hindsight-mcp
+spec:
+  policies:
+    auth:
+      secretRef:
+        name: hindsight-auth
+        key: api-key
+  mcp:
+    sessionRouting: Stateful
+    targets:
+      - name: hindsight
+        static:
+          host: hindsight-api.hindsight.svc.cluster.local
+          port: 8888
+          path: /mcp/
+          protocol: StreamableHTTP
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: hindsight-mcp
+spec:
+  parentRefs:
+    - name: agenticgateway-internal
+      namespace: agenticgateway
+      sectionName: https
+  hostnames:
+    - ai.nahsi.dev
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mcp/hindsight
+        - path:
+            type: PathPrefix
+            value: /.well-known/oauth-protected-resource/mcp/hindsight
+        - path:
+            type: PathPrefix
+            value: /.well-known/oauth-authorization-server/mcp/hindsight
+      backendRefs:
+        - group: agentgateway.dev
+          kind: AgentgatewayBackend
+          name: hindsight-mcp
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: hindsight-mcp
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: hindsight-mcp
+  traffic:
+    jwtAuthentication:
+      mode: Strict
+      providers:
+        - issuer: https://auth.nahsi.dev/application/o/hindsight-mcp/
+          audiences:
+            - https://ai.nahsi.dev/mcp/hindsight
+            - "0200efd507dd1e99"
+          jwks:
+            remote:
+              backendRef:
+                kind: Service
+                name: authentik-server
+                namespace: authentik
+                port: 80
+              jwksPath: /application/o/hindsight-mcp/jwks/
+      mcp:
+        provider: Authentik
+        clientId: "0200efd507dd1e99"
+        resourceMetadata:
+          resource: https://ai.nahsi.dev/mcp/hindsight
+          scopesSupported:
+            - openid
+            - profile
+            - email
+            - offline_access
+          bearerMethodsSupported:
+            - header
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: hindsight-mcp-oidc-discovery
+spec:
+  parentRefs:
+    - name: private-gateway
+      namespace: envoy-gateway
+      sectionName: https
+  hostnames:
+    - auth.nahsi.dev
+  rules:
+    - matches:
+        - path:
+            type: Exact
+            value: /.well-known/openid-configuration/application/o/hindsight-mcp
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /application/o/hindsight-mcp/.well-known/openid-configuration
+            statusCode: 302

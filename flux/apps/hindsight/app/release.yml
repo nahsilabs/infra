@@ -30,8 +30,18 @@ spec:
               HINDSIGHT_API_PORT: "8888"
               HINDSIGHT_API_WORKER_ID: hindsight-api
               HINDSIGHT_API_WORKER_MAX_SLOTS: "4"
-              HINDSIGHT_API_MCP_ENABLED: "false"
-              HINDSIGHT_API_LLM_TRACE_ENABLED: "false"
+              HINDSIGHT_API_MCP_ENABLED: "true"
+              HINDSIGHT_API_MCP_ENABLED_TOOLS: list_banks,create_bank,get_bank,get_bank_stats,update_bank,list_directives,create_directive,delete_directive,list_operations,get_operation,cancel_operation
+              HINDSIGHT_API_LLM_TRACE_ENABLED: "true"
+              HINDSIGHT_API_OTEL_TRACES_ENABLED: "true"
+              HINDSIGHT_API_OTEL_EXPORTER_OTLP_ENDPOINT: https://langfuse.nahsi.dev/api/public/otel
+              HINDSIGHT_API_OTEL_EXPORTER_OTLP_HEADERS:
+                valueFrom:
+                  secretKeyRef:
+                    name: hindsight-langfuse-auth
+                    key: headers
+              HINDSIGHT_API_OTEL_SERVICE_NAME: hindsight
+              HINDSIGHT_API_OTEL_DEPLOYMENT_ENVIRONMENT: production
 
               HINDSIGHT_API_FILE_STORAGE_TYPE: s3
               HINDSIGHT_API_FILE_STORAGE_S3_BUCKET: hindsight
@@ -153,7 +163,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: hindsight-auth
-                    key: ui-api-key
+                    key: api-key
 
             probes:
               liveness:

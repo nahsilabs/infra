@@ -62,6 +62,11 @@
             url = "https://ai.nahsi.dev/mcp/victoriametrics";
             oauth.clientId = "e2e576888a416c0e";
           };
+          settings.servers.hindsight = {
+            type = "http";
+            url = "https://ai.nahsi.dev/mcp/hindsight";
+            oauth.clientId = "0200efd507dd1e99";
+          };
           settings.servers.terraform.command = pkgs.lib.getExe pkgs.terraform-mcp-server;
         };
       in
