@@ -21,7 +21,7 @@ spec:
             image:
               repository: ghcr.io/sw-carlos-cristobal/sharetab
               # Stable build bbf33eed (ghcr tag "stable"); pinned by digest.
-              tag: stable@sha256:9043b0daeafb107929cf2ececdded308f537d524068eb971b1410695511e2797
+              tag: stable@sha256:43801b258d0ae21e939882d09ab9a6efbc58d31ff5239e043cef5a9f164f0e37
             envFrom:
               # sharetab-app (deps/secret-app.yml, SOPS-encrypted): AUTH_SECRET,
               # NEXTAUTH_SECRET, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET,
