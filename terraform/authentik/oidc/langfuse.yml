@@ -1,4 +1,5 @@
 launch_url: https://langfuse.nahsi.dev
+ui_group: Observability
 redirect_uris:
   - https://langfuse.nahsi.dev/api/auth/callback/authentik
 allowed_groups:

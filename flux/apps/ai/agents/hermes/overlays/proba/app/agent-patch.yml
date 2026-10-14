@@ -4,18 +4,8 @@ metadata:
   name: proba
 spec:
   hermes:
-    workspace:
-      files:
-        hindsight/config.json: |
-          {
-            "mode": "local_external",
-            "api_url": "https://hindsight.nahsi.dev",
-            "bank_id": "hermes-proba"
-          }
     config:
       raw:
-        memory:
-          provider: hindsight
         platform_toolsets:
           matrix:
             - terminal
@@ -27,7 +17,6 @@ spec:
             - todo
             - kanban
             - session_search
-            - memory
             - clarify
             - code_execution
             - delegation
@@ -57,8 +46,6 @@ spec:
           name: proba-env
       - secretRef:
           name: proba-credentials
-      - secretRef:
-          name: proba-hindsight-auth
     storage:
       persistence:
         existingClaim: proba-home
