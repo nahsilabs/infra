@@ -57,6 +57,7 @@ spec:
           enabled:
             - langfuse
         skills:
+          write_approval: true
           external_dirs:
             - /opt/managed-skills
             - /opt/hermes/skills
