@@ -68,8 +68,8 @@ index 58c014a..18fe270 100644
  #include "tts-server.h"
 +#include "tts-language.h"
  
+ #include "backend.h"
  #include "qwen.h"
- #include "rvq-file.h"
 @@ -110,6 +111,14 @@ int main(int argc, char ** argv) {
          return 1;
      }

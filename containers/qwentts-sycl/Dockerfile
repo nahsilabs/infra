@@ -1,12 +1,13 @@
 # syntax=docker/dockerfile:1.27
 ARG DLE_IMAGE=intel/deep-learning-essentials:2026.1.4-devel-ubuntu26.04@sha256:7eac4fcd7be2205713d2464267dff117b78e1707f93c42826b1da53e427ed9fa
 ARG QWENTTS_REPO=https://github.com/ServeurpersoCom/qwentts.cpp.git
-ARG QWENTTS_REV=6fae92914045cd83364d2845ceaa0f7969727319
-ARG GGML_REV=40e16e4a814f7fe851a0c486fb9e8c722e957830
+ARG QWENTTS_REV=177925ecc54fed51c868985efd7dd01a8ae4fa29
+ARG GGML_REV=2be5947ac234d277714e824a5c7eb23880557543
 ARG ONEDNN_PACKAGE_VERSION=2026.0.2-40
 ARG JQ_PACKAGE_VERSION=1.8.1-4ubuntu2
 ARG TINI_PACKAGE_VERSION=0.19.0-6
 ARG FASTTEXT_PACKAGE_VERSION=0.9.2+ds-9build1
+ARG LAME_PACKAGE_VERSION=3.101~svn6525+dfsg-2ubuntu0.1
 ARG DNNL_DIR=/opt/intel/oneapi/dnnl/2026.0/lib/cmake/dnnl
 ARG GGML_NATIVE=OFF
 
@@ -16,6 +17,7 @@ ARG QWENTTS_REV
 ARG GGML_REV
 ARG ONEDNN_PACKAGE_VERSION
 ARG FASTTEXT_PACKAGE_VERSION
+ARG LAME_PACKAGE_VERSION
 ARG DNNL_DIR
 ARG GGML_NATIVE
 
@@ -23,6 +25,7 @@ RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
       intel-oneapi-dnnl-devel-2026.0=${ONEDNN_PACKAGE_VERSION} \
       libfasttext-dev=${FASTTEXT_PACKAGE_VERSION} \
+      libmp3lame-dev=${LAME_PACKAGE_VERSION} \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src/qwentts.cpp
@@ -54,6 +57,7 @@ ARG ONEDNN_PACKAGE_VERSION
 ARG JQ_PACKAGE_VERSION
 ARG TINI_PACKAGE_VERSION
 ARG FASTTEXT_PACKAGE_VERSION
+ARG LAME_PACKAGE_VERSION
 
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
@@ -61,6 +65,7 @@ RUN apt-get update \
       jq=${JQ_PACKAGE_VERSION} \
       tini=${TINI_PACKAGE_VERSION} \
       libfasttext0=${FASTTEXT_PACKAGE_VERSION} \
+      libmp3lame0=${LAME_PACKAGE_VERSION} \
  && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /build/tts-server /build/qwen-tts /build/qwen-codec /build/*.so* /app/
@@ -81,7 +86,7 @@ ARG GGML_REV
 ARG BUILD_DATE=unknown
 ARG VCS_REF=unknown
 LABEL org.opencontainers.image.title="qwentts.cpp Intel SYCL" \
-      org.opencontainers.image.description="Qwen3-TTS with automatic text-language detection" \
+      org.opencontainers.image.description="Qwen3-TTS with automatic text-language detection and MP3 output" \
       org.opencontainers.image.source="https://github.com/nahsilabs/infra" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.created="${BUILD_DATE}" \
