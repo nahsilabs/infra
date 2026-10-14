@@ -23,6 +23,12 @@ spec:
         agent:
           max_turns: null
           image_input_mode: native
+          environment_hint: >-
+            You run in a Kubernetes container, not on the user's personal computer.
+            /opt/data is your persistent home; changes elsewhere in the container
+            may be lost when it is replaced. Your deployment and managed
+            configuration are maintained through GitOps, so local edits alone
+            do not update the deployment source.
         terminal:
           backend: local
         browser:
