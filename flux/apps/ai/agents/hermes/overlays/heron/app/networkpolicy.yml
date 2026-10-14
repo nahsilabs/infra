@@ -1,0 +1,19 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: heron-private-services
+spec:
+  endpointSelector: {}
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: envoy-gateway
+            app.kubernetes.io/name: envoy
+            gateway.envoyproxy.io/owning-gateway-name: private-gateway
+      toPorts:
+        - ports:
+            - port: "10443"
+              protocol: TCP
+          serverNames:
+            - matrix.nahsi.dev
+            - hindsight.nahsi.dev

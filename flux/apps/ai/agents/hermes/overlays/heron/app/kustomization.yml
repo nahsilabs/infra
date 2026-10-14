@@ -3,8 +3,9 @@ kind: Kustomization
 namespace: ai-agents-heron
 resources:
   - ../../../base
-  - credentials.yml
+  - secrets.yml
   - env.yml
+  - networkpolicy.yml
   - pvc.yml
   - route.yml
 patches:
@@ -16,12 +17,3 @@ patches:
       version: v1alpha1
       kind: HermesAgent
       name: hermes
-  - target:
-      group: cilium.io
-      version: v2
-      kind: CiliumNetworkPolicy
-      name: hermes-lockdown
-    patch: |-
-      - op: add
-        path: /spec/egress/3/toPorts/0/serverNames/-
-        value: matrix.nahsi.dev

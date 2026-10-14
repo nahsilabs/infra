@@ -7,7 +7,7 @@ spec:
     config:
       raw:
         platform_toolsets:
-          matrix:
+          cli: &toolsets
             - terminal
             - file
             - web
@@ -22,6 +22,7 @@ spec:
             - delegation
             - cronjob
             - tts
+          matrix: *toolsets
         matrix:
           allowed_users:
             - "@me:nahsi.dev"
@@ -30,6 +31,7 @@ spec:
           auto_thread: true
           dm_mention_threads: false
           process_notices: false
+          gateway_restart_notification: false
         display:
           platforms:
             matrix:
@@ -45,7 +47,7 @@ spec:
       - configMapRef:
           name: proba-env
       - secretRef:
-          name: proba-credentials
+          name: proba-secrets
     storage:
       persistence:
         existingClaim: proba-home
