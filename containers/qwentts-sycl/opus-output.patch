@@ -1,0 +1,154 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1e363f5..77352c7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -196,6 +196,13 @@ target_link_libraries(tts-server PRIVATE qwen-core httplib yyjson fasttext)
+ link_ggml_backends(tts-server)
+ target_include_directories(tts-server PRIVATE ${MP3LAME_INCLUDE_DIR})
+ target_link_libraries(tts-server PRIVATE ${MP3LAME_LIBRARY})
++find_path(OPUSENC_INCLUDE_DIR NAMES opusenc.h PATH_SUFFIXES opus)
++find_library(OPUSENC_LIBRARY NAMES opusenc)
++if(NOT OPUSENC_INCLUDE_DIR OR NOT OPUSENC_LIBRARY)
++    message(FATAL_ERROR "tts-server requires the libopusenc development headers and library")
++endif()
++target_include_directories(tts-server PRIVATE ${OPUSENC_INCLUDE_DIR})
++target_link_libraries(tts-server PRIVATE ${OPUSENC_LIBRARY})
+ 
+ # test-abi-c : pure C99 smoke test that locks in the public ABI contract.
+ # Compiles qwen.h with a C compiler under -Wall -Werror -pedantic and
+diff --git a/src/tts-server.h b/src/tts-server.h
+index 658e1ab..368102c 100644
+--- a/src/tts-server.h
++++ b/src/tts-server.h
+@@ -19,8 +19,8 @@
+ //   GET    /health                  liveness probe
+ //
+ // Audio out: response_format "pcm" streams s16le 24 kHz mono chunked as it
+-// is generated (real time), "wav" returns a one-shot RIFF file, and "mp3"
+-// returns a buffered 64 kbps CBR file. pcm remains the streaming default.
++// is generated (real time); "wav", "mp3" and "opus" return buffered files.
++// Opus uses an Ogg container. pcm remains the streaming default.
+ 
+ #include "../vendor/cpp-httplib/httplib.h"
+ #include "audio-io.h"
+@@ -28,6 +28,7 @@
+ #include "yyjson.h"
+ 
+ #include <lame/lame.h>
++#include <opusenc.h>
+ 
+ #include <array>
+ #include <atomic>
+@@ -51,7 +52,7 @@ struct tts_request {
+     std::string lang;          // language label, empty keeps the server default
+     std::string voice;         // OAI voice, mapped to a speaker by the adapter
+     std::string instructions;  // OAI instructions, mapped to the ABI instruct field
+-    std::string format;        // "pcm" (stream), "wav" or "mp3" (one-shot)
++    std::string format;        // "pcm" (stream), "wav", "mp3" or "opus" (one-shot)
+     float       speed;         // OAI speed, parsed then ignored (no time stretch in the ABI)
+ 
+     // Optional sampling overrides, one set per stack. -1 (ints) and NaN
+@@ -260,8 +261,8 @@ static bool tts_parse_request(const std::string & body, tts_request & req, std::
+     if (!ok) {
+         return false;
+     }
+-    if (req.format != "pcm" && req.format != "wav" && req.format != "mp3") {
+-        err = "response_format must be 'pcm', 'wav' or 'mp3'";
++    if (req.format != "pcm" && req.format != "wav" && req.format != "mp3" && req.format != "opus") {
++        err = "response_format must be 'pcm', 'wav', 'mp3' or 'opus'";
+         return false;
+     }
+     return true;
+@@ -288,6 +289,66 @@ static void tts_handle_speech(const tts_backend & be, const httplib::Request & h
+         return;
+     }
+ 
++    if (req.format == "opus") {
++        std::unique_ptr<OggOpusComments, decltype(&ope_comments_destroy)> comments(
++            ope_comments_create(), &ope_comments_destroy);
++        if (!comments) {
++            tts_json_error(res, 500, "server_error", "Opus comments allocation failed");
++            return;
++        }
++        std::string ogg;
++        const OpusEncCallbacks callbacks = {
++            [](void * data, const unsigned char * bytes, opus_int32 size) -> int {
++                try {
++                    static_cast<std::string *>(data)->append((const char *) bytes, (size_t) size);
++                    return 0;
++                } catch (...) {
++                    return 1; // Never propagate a C++ exception through the C encoder.
++                }
++            },
++            [](void *) -> int { return 0; },
++        };
++        int encode_rc = OPE_OK;
++        std::unique_ptr<OggOpusEnc, decltype(&ope_encoder_destroy)> encoder(
++            ope_encoder_create_callbacks(&callbacks, &ogg, comments.get(), 24000, 1, 0, &encode_rc),
++            &ope_encoder_destroy);
++        if (!encoder || ope_encoder_ctl(encoder.get(), OPUS_SET_BITRATE(64000)) != OPE_OK) {
++            tts_json_error(res, 500, "server_error", "Opus encoder initialization failed");
++            return;
++        }
++        bool have_samples = false;
++        tts_sink sink = [&](const float * samples, int count) {
++            if (encode_rc != OPE_OK) {
++                return false;
++            }
++            have_samples = have_samples || count > 0;
++            encode_rc = ope_encoder_write_float(encoder.get(), samples, count);
++            return encode_rc == OPE_OK;
++        };
++        std::string synth_err;
++        const int rc = be.synthesize(req, sink, synth_err);
++        if (encode_rc != OPE_OK) {
++            tts_json_error(res, 500, "server_error", ope_strerror(encode_rc));
++            return;
++        }
++        if (rc != 0) {
++            tts_json_error(res, tts_status_to_http(rc), "server_error",
++                           synth_err.empty() ? "synthesis failed" : synth_err.c_str());
++            return;
++        }
++        if (!have_samples) {
++            tts_json_error(res, 500, "server_error", "synthesis produced no audio");
++            return;
++        }
++        encode_rc = ope_encoder_drain(encoder.get());
++        if (encode_rc != OPE_OK) {
++            tts_json_error(res, 500, "server_error", ope_strerror(encode_rc));
++            return;
++        }
++        res.set_content(std::move(ogg), "audio/ogg");
++        return;
++    }
++
+     if (req.format == "mp3") {
+         std::unique_ptr<lame_global_flags, decltype(&lame_close)> encoder(lame_init(), &lame_close);
+         if (!encoder) {
+diff --git a/tools/tts-server.cpp b/tools/tts-server.cpp
+index d8d2a62..adb51d1 100644
+--- a/tools/tts-server.cpp
++++ b/tools/tts-server.cpp
+@@ -57,7 +57,7 @@ static void print_usage(const char * prog) {
+             "  --max-batch <n>         Concurrent requests batched on the GPU (default: 1)\n"
+             "  --no-fa                 Disable flash attention\n"
+             "  --clamp-fp16            Clamp hidden states to FP16 range\n"
+-            "  --codec-chunk-dur <f>   Codec decode chunk duration in seconds, wav/mp3 responses (default: 24.0)\n",
++            "  --codec-chunk-dur <f>   Codec decode chunk duration in seconds, buffered responses (default: 24.0)\n",
+             prog);
+ }
+ 
+@@ -236,10 +236,10 @@ int main(int argc, char ** argv) {
+     };
+ 
+     // pcm drives the streaming pipeline : on_chunk routes each decoded
+-    // frame to the shared sink for lowest latency. wav and mp3 leave
++    // frame to the shared sink for lowest latency. wav, mp3 and opus leave
+     // on_chunk unset, keeping the buffered chunked codec path (batch
+     // decode, talker uninterrupted). The sink receives the whole utterance
+-    // once; mp3 encodes it without another float copy. A registered voice
++    // once; mp3/opus encode it without another float copy. A registered voice
+     // wins over a model speaker of the same name and injects pre-extracted
+     // reference latents. An unknown name is rejected instead of generating
+     // voiceless.
