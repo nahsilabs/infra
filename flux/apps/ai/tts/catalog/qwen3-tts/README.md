@@ -50,4 +50,3 @@ kubectl -n ai exec "$POD" -- rm -f \
 kubectl -n ai rollout restart deployment/qwen3-tts
 kubectl -n ai rollout status deployment/qwen3-tts --timeout=10m
 ```
-

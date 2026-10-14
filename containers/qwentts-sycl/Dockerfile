@@ -8,6 +8,7 @@ ARG JQ_PACKAGE_VERSION=1.8.1-4ubuntu2
 ARG TINI_PACKAGE_VERSION=0.19.0-6
 ARG FASTTEXT_PACKAGE_VERSION=0.9.2+ds-9build1
 ARG LAME_PACKAGE_VERSION=3.101~svn6525+dfsg-2ubuntu0.1
+ARG OPUSENC_PACKAGE_VERSION=0.3-1
 ARG DNNL_DIR=/opt/intel/oneapi/dnnl/2026.0/lib/cmake/dnnl
 ARG GGML_NATIVE=OFF
 
@@ -18,6 +19,7 @@ ARG GGML_REV
 ARG ONEDNN_PACKAGE_VERSION
 ARG FASTTEXT_PACKAGE_VERSION
 ARG LAME_PACKAGE_VERSION
+ARG OPUSENC_PACKAGE_VERSION
 ARG DNNL_DIR
 ARG GGML_NATIVE
 
@@ -26,6 +28,7 @@ RUN apt-get update \
       intel-oneapi-dnnl-devel-2026.0=${ONEDNN_PACKAGE_VERSION} \
       libfasttext-dev=${FASTTEXT_PACKAGE_VERSION} \
       libmp3lame-dev=${LAME_PACKAGE_VERSION} \
+      libopusenc-dev=${OPUSENC_PACKAGE_VERSION} \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src/qwentts.cpp
@@ -58,6 +61,7 @@ ARG JQ_PACKAGE_VERSION
 ARG TINI_PACKAGE_VERSION
 ARG FASTTEXT_PACKAGE_VERSION
 ARG LAME_PACKAGE_VERSION
+ARG OPUSENC_PACKAGE_VERSION
 
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
@@ -66,6 +70,7 @@ RUN apt-get update \
       tini=${TINI_PACKAGE_VERSION} \
       libfasttext0=${FASTTEXT_PACKAGE_VERSION} \
       libmp3lame0=${LAME_PACKAGE_VERSION} \
+      libopusenc0=${OPUSENC_PACKAGE_VERSION} \
  && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /build/tts-server /build/qwen-tts /build/qwen-codec /build/*.so* /app/
@@ -86,7 +91,7 @@ ARG GGML_REV
 ARG BUILD_DATE=unknown
 ARG VCS_REF=unknown
 LABEL org.opencontainers.image.title="qwentts.cpp Intel SYCL" \
-      org.opencontainers.image.description="Qwen3-TTS with automatic text-language detection and MP3 output" \
+      org.opencontainers.image.description="Qwen3-TTS with automatic text-language detection, MP3 and Ogg Opus output" \
       org.opencontainers.image.source="https://github.com/nahsilabs/infra" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.created="${BUILD_DATE}" \
