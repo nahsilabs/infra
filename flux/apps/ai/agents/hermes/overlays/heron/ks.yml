@@ -1,0 +1,27 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-heron
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-cilium
+    - name: infra-hermes-agent-operator
+    - name: infra-kata
+    - name: infra-ceph-csi-rbd
+    - name: infra-gateway-api-crds
+    - name: infra-gateway-private
+  interval: 1h
+  retryInterval: 2m
+  timeout: 10m
+  prune: true
+  targetNamespace: ai-agents-heron
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  path: ./flux/apps/ai/agents/hermes/overlays/heron/app
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age

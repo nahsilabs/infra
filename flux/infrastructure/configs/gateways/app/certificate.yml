@@ -11,3 +11,4 @@ spec:
   dnsNames:
     - "*.nahsi.dev"
     - "nahsi.dev"
+    - "*.agents.nahsi.dev"

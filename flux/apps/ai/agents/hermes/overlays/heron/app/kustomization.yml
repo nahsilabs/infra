@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: ai-agents-heron
+resources:
+  - ../../../base
+  - credentials.yml
+  - env.yml
+  - pvc.yml
+  - route.yml
+patches:
+  - path: agent-patch.yml
+    options:
+      allowNameChange: true
+    target:
+      group: agents.hermeum.app
+      version: v1alpha1
+      kind: HermesAgent
+      name: hermes
+  - target:
+      group: cilium.io
+      version: v2
+      kind: CiliumNetworkPolicy
+      name: hermes-lockdown
+    patch: |-
+      - op: add
+        path: /spec/egress/3/toPorts/0/serverNames/-
+        value: matrix.nahsi.dev

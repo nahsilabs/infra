@@ -6,6 +6,7 @@ resources:
   - flux-operator.yml
   - flux-operator-mcp.yml
   - grafana-operator.yml
+  - hermes-agent-operator.yml
   - envoy-gateway.yml
   - prometheus.yml
   - agenticgateway.yml

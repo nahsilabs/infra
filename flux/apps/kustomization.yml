@@ -12,7 +12,6 @@ resources:
   - homepage
   - immich
   - jellyfin
-  - kroki
   - langfuse
   - lightrag
   - memos
