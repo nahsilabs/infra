@@ -20,7 +20,7 @@ spec:
           main:
             image:
               repository: ghcr.io/element-hq/matrix-authentication-service
-              tag: 1.25.1@sha256:54f03be8ef26b9a6f2ab594d2a4c6e8074c3c09fbe05890a00ea50939d3e152a
+              tag: 1.27.0@sha256:085e37263957b3b79be85de9cfda1980b97e9653f284fba0c902445e06c200b8
 
             env:
               MAS_CONFIG: /config/config.yaml
