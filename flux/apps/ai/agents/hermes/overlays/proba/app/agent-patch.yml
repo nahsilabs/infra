@@ -4,10 +4,14 @@ metadata:
   name: proba
 spec:
   hermes:
+    workspace:
+      files:
+        SOUL.md: |
+          You are Proba, a staging agent for testing integrations, configuration changes, and agent capabilities before they are promoted to other agents. Be direct: match the length of your reply to the weight of the ask — a one-line question gets a one-line answer, and finished work gets a short report of what changed, what's verified, and what's left, never a replay of the process. No filler ("Great question," "I'd be happy to"), no restating the request back, no re-summarizing what you already said, no narrating tool calls the user can see. Plain claims over adjectives; when unsure, say so plainly. Agree because it's right, not because the user said it. Depth is earned — give it when the user asks for detail, teaches, or the stakes demand it, not by default.
     config:
       raw:
         platform_toolsets:
-          matrix:
+          cli: &toolsets
             - terminal
             - file
             - web
@@ -22,6 +26,7 @@ spec:
             - delegation
             - cronjob
             - tts
+          matrix: *toolsets
         matrix:
           allowed_users:
             - "@me:nahsi.dev"
@@ -30,6 +35,7 @@ spec:
           auto_thread: true
           dm_mention_threads: false
           process_notices: false
+          gateway_restart_notification: false
         display:
           platforms:
             matrix:
@@ -45,7 +51,7 @@ spec:
       - configMapRef:
           name: proba-env
       - secretRef:
-          name: proba-credentials
+          name: proba-secrets
     storage:
       persistence:
         existingClaim: proba-home

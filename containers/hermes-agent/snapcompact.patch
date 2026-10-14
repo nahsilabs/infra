@@ -1,0 +1,11 @@
+diff --git a/plugins/context_engine/hermes-snapcompact/__init__.py b/plugins/context_engine/hermes-snapcompact/__init__.py
+--- a/plugins/context_engine/hermes-snapcompact/__init__.py
++++ b/plugins/context_engine/hermes-snapcompact/__init__.py
+@@ -44,5 +44,5 @@
+         current = context.get("engine", "compressor")
+-        if current != "snapcompact":
+-            context["engine"] = "snapcompact"
++        if current != "hermes-snapcompact":
++            context["engine"] = "hermes-snapcompact"
+             with open(config_path, "w") as f:
+                 yaml.safe_dump(config, f, default_flow_style=False)

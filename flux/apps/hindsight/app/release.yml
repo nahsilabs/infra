@@ -31,7 +31,13 @@ spec:
               HINDSIGHT_API_WORKER_ID: hindsight-api
               HINDSIGHT_API_WORKER_MAX_SLOTS: "4"
               HINDSIGHT_API_MCP_ENABLED: "true"
-              HINDSIGHT_API_MCP_ENABLED_TOOLS: list_banks,create_bank,get_bank,get_bank_stats,update_bank,list_directives,create_directive,delete_directive,list_operations,get_operation,cancel_operation
+              HINDSIGHT_API_MCP_ENABLED_TOOLS: >-
+                list_banks,create_bank,get_bank,get_bank_stats,update_bank,delete_bank,clear_memories,
+                list_memories,get_memory,update_memory,invalidate_memory,list_documents,get_document,delete_document,list_tags,
+                list_mental_models,get_mental_model,create_mental_model,update_mental_model,delete_mental_model,refresh_mental_model,clear_mental_model,
+                list_directives,create_directive,delete_directive,
+                get_knowledge_base_tree,get_knowledge_page,create_knowledge_page,create_knowledge_folder,update_knowledge_node,delete_knowledge_node,
+                list_operations,get_operation,cancel_operation
               HINDSIGHT_API_LLM_TRACE_ENABLED: "true"
               HINDSIGHT_API_OTEL_TRACES_ENABLED: "true"
               HINDSIGHT_API_OTEL_EXPORTER_OTLP_ENDPOINT: https://langfuse.nahsi.dev/api/public/otel
