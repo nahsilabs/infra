@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.27
+# syntax=docker/dockerfile:1.28
 # Build from the repository root:
 # docker build --platform linux/amd64 -t docker.io/nahsilabs/hindsight:1.0.0-hindclaw-0.5.0 containers/hindsight
 FROM ghcr.io/vectorize-io/hindsight-api:1.0.0-slim@sha256:1e889b5f44a3546a40765d084162cf0807c0b08c97fb29f64d0705597f1ef3b6
