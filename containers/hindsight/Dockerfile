@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.27
+# syntax=docker/dockerfile:1.28
 # Build from the repository root:
 # docker build --platform linux/amd64 -t docker.io/nahsilabs/hindsight:1.0.0-static-keys containers/hindsight
 FROM scratch AS extension-source
