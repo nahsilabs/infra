@@ -1,0 +1,64 @@
+{
+  "parameters": {
+    "prompt": {
+      "node_id": "903",
+      "field": "prompt",
+      "type": "string"
+    },
+    "reference_1": {
+      "node_id": "801",
+      "field": "image",
+      "type": "string"
+    },
+    "seed": {
+      "node_id": "908",
+      "field": "seed",
+      "type": "int"
+    },
+    "steps": {
+      "node_id": "908",
+      "field": "steps",
+      "type": "int"
+    },
+    "cfg": {
+      "node_id": "908",
+      "field": "cfg",
+      "type": "float"
+    },
+    "reference_resolution": {
+      "node_id": "903",
+      "field": "resolution",
+      "type": "int"
+    },
+    "custom_canvas": {
+      "node_id": "930",
+      "field": "switch",
+      "type": "bool"
+    },
+    "aspect_ratio": {
+      "node_id": "910",
+      "field": "aspect_ratio",
+      "type": "string"
+    },
+    "megapixels": {
+      "node_id": "910",
+      "field": "megapixels",
+      "type": "float"
+    },
+    "explicit_size": {
+      "node_id": "933",
+      "field": "value",
+      "type": "bool"
+    },
+    "width": {
+      "node_id": "934",
+      "field": "value",
+      "type": "int"
+    },
+    "height": {
+      "node_id": "935",
+      "field": "value",
+      "type": "int"
+    }
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "603": {
+    "inputs": {
+      "images": [
+        "907",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Final image"
+    }
+  },
+  "801": {
+    "inputs": {
+      "image": "portrait_model_denim.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Reference 1 <image1>"
+    }
+  },
+  "802": {
+    "inputs": {
+      "image": "clothing_light_blue_denim_shirt.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Reference 2 <image2>"
+    }
+  },
+  "803": {
+    "inputs": {
+      "image": "angry_broccoli.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Reference 3 <image3>"
+    }
+  },
+  "902": {
+    "inputs": {
+      "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "903": {
+    "inputs": {
+      "prompt": "In <image1>, replace only the shirt with the shirt shown in <image2>, matching its style and color, and add a small embroidered patch based on <image3> on the shirt's left chest. Preserve the person's face, pose, other clothing, background, lighting, and composition.",
+      "negative_prompt": "",
+      "resolution": 1024,
+      "clip": [
+        "904",
+        0
+      ],
+      "images.image_1": [
+        "801",
+        0
+      ],
+      "images.image_2": [
+        "802",
+        0
+      ],
+      "images.image_3": [
+        "803",
+        0
+      ],
+      "vae": [
+        "905",
+        0
+      ]
+    },
+    "class_type": "TextEncodeQwenImage21",
+    "_meta": {
+      "title": "Edit instruction / reference resolution"
+    }
+  },
+  "904": {
+    "inputs": {
+      "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "905": {
+    "inputs": {
+      "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "906": {
+    "inputs": {
+      "width": [
+        "931",
+        0
+      ],
+      "height": [
+        "932",
+        0
+      ],
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "907": {
+    "inputs": {
+      "samples": [
+        "908",
+        0
+      ],
+      "vae": [
+        "905",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "908": {
+    "inputs": {
+      "seed": 0,
+      "steps": 25,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "909",
+        0
+      ],
+      "positive": [
+        "903",
+        0
+      ],
+      "negative": [
+        "903",
+        1
+      ],
+      "latent_image": [
+        "930",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "909": {
+    "inputs": {
+      "device": "auto",
+      "dtype": "default",
+      "model": [
+        "902",
+        0
+      ]
+    },
+    "class_type": "QwenImage21Cache",
+    "_meta": {
+      "title": "Qwen Image 2.1 Cache"
+    }
+  },
+  "910": {
+    "inputs": {
+      "aspect_ratio": "1:1 (Square)",
+      "megapixels": 1,
+      "multiple": 32
+    },
+    "class_type": "ResolutionSelector",
+    "_meta": {
+      "title": "Custom output size"
+    }
+  },
+  "930": {
+    "inputs": {
+      "switch": false,
+      "on_false": [
+        "903",
+        2
+      ],
+      "on_true": [
+        "906",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "Custom canvas (off = reference size)"
+    }
+  },
+  "931": {
+    "inputs": {
+      "switch": [
+        "933",
+        0
+      ],
+      "on_false": [
+        "910",
+        0
+      ],
+      "on_true": [
+        "934",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "Explicit width override"
+    }
+  },
+  "932": {
+    "inputs": {
+      "switch": [
+        "933",
+        0
+      ],
+      "on_false": [
+        "910",
+        1
+      ],
+      "on_true": [
+        "935",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "Explicit height override"
+    }
+  },
+  "933": {
+    "inputs": {
+      "value": false
+    },
+    "class_type": "PrimitiveBoolean",
+    "_meta": {
+      "title": "Use explicit dimensions"
+    }
+  },
+  "934": {
+    "inputs": {
+      "value": 1024
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Explicit width"
+    }
+  },
+  "935": {
+    "inputs": {
+      "value": 1024
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Explicit height"
+    }
+  }
+}

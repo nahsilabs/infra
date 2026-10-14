@@ -1,0 +1,49 @@
+{
+  "parameters": {
+    "prompt": {
+      "node_id": "613",
+      "field": "prompt",
+      "type": "string"
+    },
+    "seed": {
+      "node_id": "618",
+      "field": "seed",
+      "type": "int"
+    },
+    "steps": {
+      "node_id": "618",
+      "field": "steps",
+      "type": "int"
+    },
+    "cfg": {
+      "node_id": "618",
+      "field": "cfg",
+      "type": "float"
+    },
+    "aspect_ratio": {
+      "node_id": "620",
+      "field": "aspect_ratio",
+      "type": "string"
+    },
+    "megapixels": {
+      "node_id": "620",
+      "field": "megapixels",
+      "type": "float"
+    },
+    "explicit_size": {
+      "node_id": "623",
+      "field": "value",
+      "type": "bool"
+    },
+    "width": {
+      "node_id": "624",
+      "field": "value",
+      "type": "int"
+    },
+    "height": {
+      "node_id": "625",
+      "field": "value",
+      "type": "int"
+    }
+  }
+}

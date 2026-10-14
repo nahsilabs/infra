@@ -1,0 +1,51 @@
+apiVersion: agents.hermeum.app/v1alpha1
+kind: HermesAgent
+metadata:
+  name: heron
+spec:
+  hermes:
+    config:
+      raw:
+        platform_toolsets:
+          matrix:
+            - terminal
+            - file
+            - web
+            - browser
+            - vision
+            - skills
+            - todo
+            - kanban
+            - session_search
+            - clarify
+            - code_execution
+            - delegation
+            - cronjob
+            - tts
+        matrix:
+          allowed_users:
+            - "@me:nahsi.dev"
+          require_mention: true
+          session_scope: auto
+          auto_thread: true
+          dm_mention_threads: false
+          process_notices: false
+        display:
+          platforms:
+            matrix:
+              show_reasoning: false
+              tool_progress: "off"
+              interim_assistant_messages: false
+              long_running_notifications: false
+              busy_ack_detail: false
+        tts:
+          openai:
+            voice: kai
+    envFrom:
+      - configMapRef:
+          name: heron-env
+      - secretRef:
+          name: heron-credentials
+    storage:
+      persistence:
+        existingClaim: heron-data

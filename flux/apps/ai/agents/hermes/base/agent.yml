@@ -1,0 +1,295 @@
+apiVersion: agents.hermeum.app/v1alpha1
+kind: HermesAgent
+metadata:
+  name: hermes
+spec:
+  runtimeClassName: kata
+  extraVolumes:
+    - name: qwen-image-skill
+      configMap:
+        name: hermes-qwen-image
+  extraVolumeMounts:
+    - name: hermes-data
+      mountPath: /opt/data/skills
+      subPath: skills
+      readOnly: true
+    - name: qwen-image-skill
+      mountPath: /opt/managed-skills/qwen-image
+      readOnly: true
+  hermes:
+    image: nousresearch/hermes-agent:v0.22.0@sha256:c69536a39e885b8943329bda68cdf44492458b96aa74a212239bde9d2aeb406a
+    packages:
+      pip:
+        install:
+          - PyYAML==6.0.3
+          - razdel==0.5.0
+          - pymorphy3==2.0.6
+          - dawg2-python==0.9.0
+          - pymorphy3-dicts-ru==2.4.417150.4580142
+          - setuptools==80.9.0
+      npm:
+        install:
+          - "@oven/bun-linux-x64-baseline@1.3.14"
+    workspace:
+      files:
+        plugin-data/hermes-snapcompact/mode.yaml: |
+          mode: snapcompact
+    initScripts:
+      - name: init-langfuse
+        script: |
+          hermes plugins install --force --enable --yes-deps \
+            --ref c2a95963c442f3f23e4bc6fe0da898e1dd1fb63d \
+            NousResearch/hermes-official-plugins/langfuse
+      - name: init-bundled-skills
+        script: |
+          # Seed the catalog before the agent mounts it read-only.
+          /opt/hermes/.venv/bin/python /opt/hermes/tools/skills_sync.py
+      - name: init-humanizer-ru
+        script: |
+          set -eu
+          source_dir="$(mktemp -d)"
+          trap 'rm -rf "$source_dir"' EXIT
+          git -C "$source_dir" init --quiet
+          git -C "$source_dir" fetch --quiet --depth 1 \
+            https://github.com/ilyautov/humanizer-ru.git \
+            ba8d50c1210b52f572c33b2b890805b68aeda33c
+          git -C "$source_dir" checkout --quiet --detach FETCH_HEAD
+          test -f "$source_dir/skills/humanizer-ru/SKILL.md"
+          mkdir -p "$HERMES_HOME/skills"
+          rm -rf "$HERMES_HOME/skills/humanizer-ru"
+          cp -a "$source_dir/skills/humanizer-ru" "$HERMES_HOME/skills/humanizer-ru"
+      - name: init-snapcompact
+        script: |
+          set -eu
+          hermes plugins install --force --enable --yes-deps \
+            --ref 83f6e2b0bedcaddf6e9c528825791ee688ecfdc9 \
+            vimona3ds/hermes-snapcompact
+          /opt/hermes/.venv/bin/python - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+
+          registration = Path(os.environ["HERMES_HOME"]) / "plugins/hermes-snapcompact/__init__.py"
+          source = registration.read_bytes()
+          digest = hashlib.sha256(source).hexdigest()
+          upstream = "2837ee0d8908438e4833f2610b8f518f1a47b0b141e072c916dbdd739ee7496f"
+          patched = "da8b500d19e416d776f136da72cd81a953943a2bd73d1929b9311053c5a027b2"
+          # Upstream selects its internal name, but Hermes resolves directory names.
+          if digest == upstream:
+              source = source.replace(b'current != "snapcompact"', b'current != "hermes-snapcompact"')
+              source = source.replace(b'context["engine"] = "snapcompact"', b'context["engine"] = "hermes-snapcompact"')
+              if hashlib.sha256(source).hexdigest() != patched:
+                  raise SystemExit(f"Snapcompact compatibility patch failed: {registration}")
+              registration.write_bytes(source)
+          elif digest != patched:
+              raise SystemExit(f"Unexpected Snapcompact registration source: {registration} (sha256={digest})")
+          PY
+          cd "$HERMES_HOME/plugins/hermes-snapcompact/bridge"
+          bun add --exact @oh-my-pi/snapcompact@18.0.0
+    config:
+      raw:
+        model:
+          provider: custom
+          default: Qwen/Qwen3.8-Flash-Next
+          base_url: https://ai.nahsi.dev/v1
+          key_env: AI_GATEWAY_API_KEY
+          context_length: 262144
+          streaming: true
+        timezone: Europe/Athens
+        agent:
+          max_turns: null
+          image_input_mode: native
+        platform_toolsets:
+          cli:
+            - terminal
+            - file
+            - web
+            - browser
+            - vision
+            - skills
+            - todo
+            - kanban
+            - session_search
+            - clarify
+            - code_execution
+            - delegation
+            - cronjob
+            - tts
+        terminal:
+          backend: local
+        browser:
+          cloud_provider: local
+          headed: false
+          use_real_profile: false
+        approvals:
+          mode: smart
+        security:
+          redact_secrets: true
+        telemetry:
+          shared_metrics:
+            enabled: true
+            send: false
+        nous:
+          guest: false
+        tools:
+          connectors:
+            enabled: false
+        memory:
+          memory_enabled: false
+          user_profile_enabled: false
+        context:
+          engine: hermes-snapcompact
+        plugins:
+          enabled:
+            - hermes-snapcompact
+            - langfuse
+        skills:
+          external_dirs:
+            - /opt/managed-skills
+          creation_nudge_interval: 0
+          disabled:
+            - airtable
+            - apple-notes
+            - apple-reminders
+            - architecture-diagram
+            - baoyu-infographic
+            - box
+            - claude-code
+            - claude-design
+            - codebase-inspection
+            - codex
+            - competitor-news-monitor
+            - computer-use
+            - design-md
+            - dogfood
+            - findmy
+            - github
+            - hermes-agent-skill-authoring
+            - himalaya
+            - imessage
+            - inspecting-hermes-desktop-dom
+            - llm-wiki
+            - manim-video
+            - node-inspect-debugger
+            - notion
+            - obsidian
+            - opencode
+            - p5js
+            - popular-web-designs
+            - python-debugpy
+            - requesting-code-review
+            - sdlc-review
+            - simplify-code
+            - songwriting-and-ai-music
+            - teams-meeting-pipeline
+            - test-driven-development
+            - xurl
+        curator:
+          enabled: false
+        delegation:
+          max_concurrent_children: 2
+        kanban:
+          dispatch_in_gateway: false
+          auto_decompose: false
+          auto_subscribe_on_create: false
+          review_dispatch: false
+        moa:
+          presets:
+            default:
+              enabled: false
+        auxiliary:
+          background_review:
+            enabled: false
+        stt:
+          enabled: true
+          echo_transcripts: false
+          streaming: true
+          provider: openai
+          language: auto
+          openai:
+            base_url: https://ai.nahsi.dev/v1
+            api_key: ${AI_GATEWAY_API_KEY}
+            model: nvidia/nemotron-3.5-asr-streaming-0.6b
+            streaming_model: nvidia/nemotron-3.5-asr-streaming-0.6b
+        tts:
+          provider: openai
+          openai:
+            base_url: https://ai.nahsi.dev/v1
+            api_key: ${AI_GATEWAY_API_KEY}
+            model: Qwen/Qwen3-TTS
+            language: auto
+        voice:
+          auto_tts: false
+          client_direct: false
+        display:
+          message_reactions: true
+          show_reasoning: true
+        updates:
+          check: false
+        dashboard:
+          trusted_proxies:
+            - 10.244.0.0/16
+      apiServer:
+        enabled: false
+      webhook:
+        enabled: false
+    env:
+      - name: HERMES_LANGFUSE_BASE_URL
+        value: https://langfuse.nahsi.dev
+      - name: HERMES_LANGFUSE_CAPTURE
+        value: sanitized
+      - name: COMFYUI_URL
+        value: https://comfyui.nahsi.dev
+      - name: HERMES_DASHBOARD
+        value: "1"
+      - name: HERMES_DASHBOARD_HOST
+        value: "0.0.0.0"
+      - name: HERMES_DASHBOARD_PORT
+        value: "9119"
+      - name: HERMES_DASHBOARD_OIDC_SCOPES
+        value: openid profile email offline_access
+      - name: API_SERVER_ENABLED
+        value: "false"
+      - name: WEBHOOK_ENABLED
+        value: "false"
+      - name: PATH
+        value: /opt/data/.npm-packages/lib/node_modules/@oven/bun-linux-x64-baseline/bin:/opt/hermes/tools/uv-0.12.3-linux-x64:/opt/hermes/bin:/opt/hermes/.venv/bin:/opt/data/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    ports:
+      - name: dashboard
+        containerPort: 9119
+        protocol: TCP
+    probes:
+      liveness:
+        enabled: true
+        periodSeconds: 60
+        timeoutSeconds: 45
+      readiness:
+        enabled: true
+        periodSeconds: 60
+        timeoutSeconds: 45
+      startup:
+        enabled: true
+        periodSeconds: 60
+        timeoutSeconds: 45
+    resources:
+      requests:
+        cpu: "2"
+        memory: 2Gi
+      limits:
+        cpu: "4"
+        memory: 4Gi
+    storage:
+      snapshot:
+        enabled: false
+    initChownData: true
+  security:
+    rbac:
+      createServiceAccount: true
+  networking:
+    service:
+      type: ClusterIP
+      ports:
+        - name: dashboard
+          port: 9119
+          targetPort: 9119
+          protocol: TCP

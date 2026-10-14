@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - networkpolicy.yml
+  - agent.yml
+configMapGenerator:
+  - name: hermes-qwen-image
+    files:
+      - comfyui/SKILL.md
+      - comfyui/prompt-reference.md
+      - comfyui/prompt-reference.LICENSE
+      - comfyui/generation.api.json
+      - comfyui/generation.schema.json
+      - comfyui/editing-1.api.json
+      - comfyui/editing-1.schema.json
+      - comfyui/editing-2.api.json
+      - comfyui/editing-2.schema.json
+      - comfyui/editing-3.api.json
+      - comfyui/editing-3.schema.json
+    options:
+      disableNameSuffixHash: true

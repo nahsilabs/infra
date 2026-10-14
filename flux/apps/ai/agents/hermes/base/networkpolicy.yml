@@ -1,0 +1,68 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: hermes-lockdown
+spec:
+  endpointSelector: {}
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: envoy-gateway
+            app.kubernetes.io/name: envoy
+            gateway.envoyproxy.io/owning-gateway-name: private-gateway
+      toPorts:
+        - ports:
+            - port: "9119"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: "*"
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: agenticgateway
+            gateway.networking.k8s.io/gateway-name: agenticgateway-internal
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: authentik
+            app.kubernetes.io/name: authentik
+            app.kubernetes.io/component: server
+      toPorts:
+        - ports:
+            - port: "9000"
+              protocol: TCP
+            - port: "9443"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: envoy-gateway
+            app.kubernetes.io/name: envoy
+            gateway.envoyproxy.io/owning-gateway-name: private-gateway
+      toPorts:
+        - ports:
+            - port: "10443"
+              protocol: TCP
+          serverNames:
+            - auth.nahsi.dev
+            - comfyui.nahsi.dev
+            - langfuse.nahsi.dev
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "443"
+              protocol: TCP
