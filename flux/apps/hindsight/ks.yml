@@ -7,7 +7,6 @@ metadata:
 spec:
   dependsOn:
     - name: infra-cloudnative-pg
-    - name: infra-external-secrets
   path: ./flux/apps/hindsight/deps
   targetNamespace: hindsight
   prune: true
