@@ -24,7 +24,7 @@ spec:
           main:
             image:
               repository: docker.io/nahsilabs/hindsight
-              tag: 1.0.0-hindclaw-0.5.0@sha256:20ee5663b1329faf9e53c71207d205f0174dd7bc2b8112c5cc45d895c47c05f0
+              tag: 1.0.0-static-keys@sha256:aeb61cd3ae11a95ba69a5c918d316687e72dbfa1211cf51d20645c8016ad080c
 
             env:
               HINDSIGHT_API_PORT: "8888"
@@ -57,15 +57,12 @@ spec:
               HINDSIGHT_API_DB_POOL_MIN_SIZE: "2"
               HINDSIGHT_API_DB_POOL_MAX_SIZE: "16"
 
-              HINDSIGHT_API_TENANT_EXTENSION: "hindclaw_ext.tenant:HindclawTenant"
-              HINDSIGHT_API_OPERATION_VALIDATOR_EXTENSION: "hindclaw_ext.validator:HindclawValidator"
-              HINDSIGHT_API_HTTP_EXTENSION: "hindclaw_ext.http:HindclawHttp"
-              HINDCLAW_ROOT_USER: nahsi
-              HINDCLAW_ROOT_API_KEY:
+              HINDSIGHT_API_TENANT_EXTENSION: "hindsight_ext_static_keys_tenant:StaticKeysTenantExtension"
+              HINDSIGHT_API_TENANT_USERS:
                 valueFrom:
                   secretKeyRef:
-                    name: hindclaw-auth
-                    key: token
+                    name: hindsight-auth
+                    key: tenant-users
 
               HINDSIGHT_API_LLM_PROVIDER: openai
               HINDSIGHT_API_LLM_BASE_URL: https://ai.nahsi.dev/v1
@@ -148,15 +145,15 @@ spec:
               HINDSIGHT_CP_ACCESS_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: hindclaw-auth
+                    name: hindsight-auth
                     key: ui-access-key
 
               HINDSIGHT_CP_DATAPLANE_API_URL: http://hindsight-api:8888
               HINDSIGHT_CP_DATAPLANE_API_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: hindclaw-auth
-                    key: token
+                    name: hindsight-auth
+                    key: ui-api-key
 
             probes:
               liveness:
@@ -232,9 +229,6 @@ spec:
               - path:
                   type: PathPrefix
                   value: /v1
-              - path:
-                  type: PathPrefix
-                  value: /ext/hindclaw
             timeouts:
               request: 360s
               backendRequest: 360s

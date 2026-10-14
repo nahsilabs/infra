@@ -1,93 +1,99 @@
-# Hindsight with HindClaw
+# Hindsight
 
-The Hindsight API image includes HindClaw's tenant, operation-validator, and HTTP
-extensions. HindClaw runs inside the API process, not as a separate Deployment.
-The upstream Hindsight control-plane image supplies the browser UI.
+Hindsight 1.0.0 uses the upstream static-key tenant extension. The custom API
+image copies the extension from the immutable v1.0.0 release commit. HindClaw
+and its management API are no longer used. The upstream control-plane image
+provides the browser UI.
 
-## Versions and image builds
+## Memory layout
 
-- Hindsight API and control plane: `1.0.0`.
-- HindClaw extension: `0.5.0`, unmodified.
-- Custom image: `docker.io/nahsilabs/hindsight:1.0.0-hindclaw-0.5.0`.
+Tenant `nahsi` uses PostgreSQL schema `user_nahsi` and initially has two banks:
 
-Build from the repository root, then publish explicitly:
+| Bank | Client |
+| --- | --- |
+| `oh-my-pi` | oh-my-pi |
+| `hermes-proba` | Hermes proba |
 
-```bash
-docker build --platform linux/amd64 \
-  -t docker.io/nahsilabs/hindsight:1.0.0-hindclaw-0.5.0 containers/hindsight
-docker push docker.io/nahsilabs/hindsight:1.0.0-hindclaw-0.5.0
-```
+The clients have separate API keys mapped to the same tenant. Both can access
+all banks in that tenant. Their configured bank IDs select normal destinations;
+they are not authorization boundaries. Adding another bank does not require a
+new tenant or API key.
 
-Pin the published digest in `app/release.yml`. When upgrading Hindsight, update
-both the API base image in `containers/hindsight/Dockerfile` and the control-plane
-image. The Dockerfile installs only HindClaw; its dependencies are already in the
-pinned upstream API image.
+The previous `public` schema is left untouched. Switching tenant authentication
+does not migrate memories from it. No memory migration was needed for this cutover.
 
 ## Authentication
 
-`deps/hindclaw-secret.yml` contains two SOPS-encrypted values in `hindclaw-auth`:
+`deps/auth-secret.yml` contains SOPS-encrypted `hindsight-auth` credentials:
 
 | Key | Purpose |
 | --- | --- |
-| `token` | Root API credential for administrator `nahsi`; also used by the UI server for backend requests |
-| `ui-access-key` | Separate shared browser-login key, configured as `HINDSIGHT_CP_ACCESS_KEY` |
+| `tenant-users` | Three `nahsi:key` entries consumed by the tenant extension |
+| `ui-api-key` | UI backend access to the `nahsi` tenant |
+| `oh-my-pi-api-key` | oh-my-pi client access |
+| `hermes-proba-api-key` | Hermes proba client access |
+| `ui-access-key` | Existing shared browser login key, preserved during cutover |
 
-Retrieve these locally for a password vault. These commands print secrets to your
-terminal; do not paste their output into chat or logs.
+Retrieve a key locally for your password vault. These commands print secrets;
+do not paste their output into chat or logs.
 
 ```bash
-# Browser login key
-kubectl -n hindsight get secret hindclaw-auth \
+kubectl -n hindsight get secret hindsight-auth \
   -o jsonpath='{.data.ui-access-key}' | base64 --decode; printf '\n'
-
-# Administrator API key
-kubectl -n hindsight get secret hindclaw-auth \
-  -o jsonpath='{.data.token}' | base64 --decode; printf '\n'
+kubectl -n hindsight get secret hindsight-auth \
+  -o jsonpath='{.data.oh-my-pi-api-key}' | base64 --decode; printf '\n'
+kubectl -n hindsight get secret hindsight-auth \
+  -o jsonpath='{.data.hermes-proba-api-key}' | base64 --decode; printf '\n'
 ```
 
-The browser key gates the UI; it does not create individual user identities or
-provide SSO. After login, UI backend requests use the `nahsi` administrator key.
-Direct API callers must supply a HindClaw credential independently of UI login.
+The proba key is also encrypted in its overlay's `hindsight-secret.yml` as
+`proba-hindsight-auth`, with the environment variable `HINDSIGHT_API_KEY`.
+Keep both encrypted copies consistent when rotating that key.
 
-HindClaw registers the root user/key when its database pool first initializes.
-Changing the root Secret and restarting does **not** rotate an existing database
-key record. Rotate registered keys through HindClaw before changing consumers.
-Future dedicated UI, automation, and agent credentials will be managed through
-the HindClaw Terraform provider. JWT authentication is not configured.
+Keys are configured at process startup, not registered in a users table. To
+rotate or revoke a key, update the SOPS values and restart the API. Update the
+client credential too. Restart the UI when changing its backend or login key.
+The API's embedded worker uses the same tenant configuration for background work.
 
-## Runtime dependencies and routes
+## Clients
 
-The deployment retains the existing CNPG PostgreSQL database, S3 file storage,
-remote inference/embedding/reranker providers, and private gateway. HindClaw uses
-`HINDSIGHT_API_DATABASE_URL` and the existing PostgreSQL credentials. It opens an
-additional connection pool with minimum 2 and maximum 10 connections per process.
+Both clients use `https://hindsight.nahsi.dev`.
 
-On the existing private hostname, `/` routes to the UI; `/v1` and `/ext/hindclaw`
-route to the API. The API exposes `/health/live`, `/health`, and `/metrics`
-internally for probes and monitoring. No separate HindClaw service or PVC exists.
+For oh-my-pi, configure `hindsight.apiUrl`, `hindsight.apiToken`, and
+`hindsight.bankId = oh-my-pi`. Keep `hindsight.scoping = per-project-tagged`
+to organize projects within that one bank. Saving workstation settings requires
+local approval; the Kubernetes deployment does not configure the workstation.
 
-## Accepted upstream behavior
+Hermes proba uses the external Hindsight memory plugin and bank `hermes-proba`.
+Its native `MEMORY.md` and `USER.md` features remain disabled. Other Hermes
+agents do not inherit this plugin configuration.
 
-HindClaw 0.5.0 unconditionally recreates `template_sources` when its database pool
-initializes. Process restarts can therefore erase registered template catalog
-sources. This statement does not delete retained memories or the separate
-`bank_templates` table. Source registrations are treated as disposable here.
+## Image builds
 
-The published installation documentation names `HINDSIGHT_API_TENANT_JWT_SECRET`,
-but 0.5.0 reads `HINDCLAW_JWT_SECRET`. If JWT clients are enabled later, use the
-implementation's setting and keep the signing secret limited to trusted clients.
+```bash
+docker build --platform linux/amd64 \
+  -t docker.io/nahsilabs/hindsight:1.0.0-static-keys containers/hindsight
+docker push docker.io/nahsilabs/hindsight:1.0.0-static-keys
+```
 
-Hindsight 1.0.0 rejects tag-scoped callers on bank-wide operations. Review that
-behavior when defining agent permissions; HindClaw's policy tag enrichment is not
-a substitute for checking the upstream tag-scope contract.
+Pin the published digest in `app/release.yml`. When upgrading Hindsight, update
+the API base image, extension source commit, and control-plane image together.
+The build checks that the server interpreter can import the extension.
+
+## Runtime and routes
+
+The deployment keeps the existing PostgreSQL cluster, S3 storage, remote model
+providers, and private gateway. `/` routes to the UI and `/v1` routes to the API.
+Health and metrics endpoints remain available internally. The tenant extension
+lazily initializes its schema on the first authenticated request.
+
+No Terraform provider, groups, scope policies, bank templates, or identity
+provider are required. The static-key extension does not provide selective
+cross-tenant access or a universal administrator API key.
 
 ## Operator reading
 
-- [Hindsight 1.0.0 release notes](https://github.com/vectorize-io/hindsight/releases/tag/v1.0.0)
-- [HindClaw installation](https://hindclaw.pro/docs/getting-started/installation/)
-- [HindClaw access control](https://hindclaw.pro/docs/guides/access-control/)
-- [HindClaw configuration reference](https://hindclaw.pro/docs/reference/configuration/)
-- [HindClaw Terraform provider guide](https://hindclaw.pro/docs/guides/terraform/)
-
-Banks, policy design, templates, agent onboarding, SSO, and Langfuse integration
-are separate work. This deployment does not configure them.
+- [Static-key tenant extension at v1.0.0](https://github.com/vectorize-io/hindsight/tree/v1.0.0/hindsight-extensions/static-keys-tenant)
+- [Hindsight extension interfaces](https://hindsight.vectorize.io/developer/extensions)
+- [Memory banks](https://hindsight.vectorize.io/developer/api/memory-banks)
+- [Hermes Hindsight plugin](https://hermes-agent.nousresearch.com/docs/plugins/hindsight)
