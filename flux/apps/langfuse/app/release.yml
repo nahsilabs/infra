@@ -33,6 +33,7 @@ spec:
               TELEMETRY_ENABLED: "false"
 
               NEXTAUTH_URL: https://langfuse.nahsi.dev
+              LANGFUSE_MCP_ALLOWED_HOSTS: https://ai.nahsi.dev,http://langfuse.langfuse.svc.cluster.local:3000
               AUTH_AUTHENTIK_ISSUER: https://auth.nahsi.dev/application/o/langfuse/
               AUTH_DISABLE_USERNAME_PASSWORD: "true"
               AUTH_DISABLE_SIGNUP: "false"
