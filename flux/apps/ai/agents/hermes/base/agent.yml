@@ -5,7 +5,7 @@ metadata:
 spec:
   runtimeClassName: kata
   hermes:
-    image: docker.io/nahsilabs/hermes-agent:latest@sha256:5e440ceff2a0bfa81c3d7f57b5a280fdd563d291b04a39adcec19ce035077f3b
+    image: docker.io/nahsilabs/hermes-agent:latest@sha256:8495280692161034225b9c3086e1bba5cfb2511544079d50b68bc76b01087bc6
     workspace:
       files:
         plugin-data/hermes-snapcompact/mode.yaml: |
