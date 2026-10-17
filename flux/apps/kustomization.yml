@@ -7,7 +7,6 @@ resources:
   - browsertrix
   - dawarich
   - deeptutor
-  - evebox
   - grimmory
   - homepage
   - immich
@@ -18,7 +17,6 @@ resources:
   - miniflux
   - myspeed
   - readeck
-  - trek
   - vaultwarden
   - ai
   - downloads
