@@ -4,7 +4,7 @@ metadata:
   name: proba
 spec:
   hermes:
-    image: docker.io/nahsilabs/hermes-agent:latest@sha256:8495280692161034225b9c3086e1bba5cfb2511544079d50b68bc76b01087bc6
+    image: docker.io/nahsilabs/hermes-agent:latest@sha256:a4c73b70cb2879e39bcef8bd2b1fce215a944bf91b1dcb418df3f2bafc7786e0
     workspace:
       files:
         SOUL.md: |
@@ -12,13 +12,15 @@ spec:
 
           ## Rules
 
-          - Do not call `mnemosyne_remember` unless the user explicitly asks you to
-            remember something.
+          - Before calling `mnemosyne_apply_pending`, ask the user to approve the
+            staged memory changes. Call it only after the user explicitly approves
+            those changes.
           - Do not create or edit skills unless the user explicitly asks you to.
     config:
       raw:
         memory:
           provider: mnemosyne
+          write_approval: true
           mnemosyne:
             sync_roles:
               - user
