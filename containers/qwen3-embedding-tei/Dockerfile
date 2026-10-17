@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.27
-ARG PYTHON_IMAGE=python:3.12.11-slim-bookworm@sha256:519591d6871b7bc437060736b9f7456b8731f1499a57e22e6c285135ae657bf7
+ARG PYTHON_IMAGE=python:3.15.0-slim-bookworm@sha256:2a41267d9de9d358f77a1de356e0f16ecba8d39827855be0ce9ef4792edce402
 ARG TEI_IMAGE=ghcr.io/huggingface/text-embeddings-inference:cpu-1.9.3@sha256:ad950d30878eceb72aaf32024d26fa2b1d04a75304fa0b4776b49aa1941fea07
 ARG MODEL_REVISION=97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3
 
