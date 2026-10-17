@@ -16,3 +16,4 @@ spec:
               protocol: TCP
           serverNames:
             - matrix.nahsi.dev
+            - hindsight.nahsi.dev

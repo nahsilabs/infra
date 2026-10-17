@@ -149,6 +149,10 @@ spec:
       webhook:
         enabled: false
     env:
+      - name: HINDSIGHT_RECALL_INDICATOR
+        value: "false"
+      - name: HINDSIGHT_RETAIN_INDICATOR
+        value: "false"
       - name: HERMES_LANGFUSE_BASE_URL
         value: https://langfuse.nahsi.dev
       - name: HERMES_LANGFUSE_CAPTURE
