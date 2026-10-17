@@ -1,0 +1,148 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: langfuse-mcp
+spec:
+  mcp:
+    sessionRouting: Stateless
+    prefixMode: Always
+    targets:
+      - name: hermes
+        static:
+          host: langfuse.langfuse.svc.cluster.local
+          port: 3000
+          path: /api/public/mcp
+          protocol: StreamableHTTP
+          policies:
+            auth:
+              secretRef:
+                name: langfuse-mcp-hermes-auth
+              location:
+                header:
+                  name: Authorization
+      - name: hindsight
+        static:
+          host: langfuse.langfuse.svc.cluster.local
+          port: 3000
+          path: /api/public/mcp
+          protocol: StreamableHTTP
+          policies:
+            auth:
+              secretRef:
+                name: langfuse-mcp-hindsight-auth
+              location:
+                header:
+                  name: Authorization
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: langfuse-mcp-read-only
+spec:
+  targetRefs:
+    - group: agentgateway.dev
+      kind: AgentgatewayBackend
+      name: langfuse-mcp
+  backend:
+    mcp:
+      authorization:
+        action: Allow
+        policy:
+          matchExpressions:
+            - >-
+              mcp.tool.name in [
+                'listObservations',
+                'getObservation',
+                'getObservationFieldSchema',
+                'getObservationFilterSchema',
+                'getObservationFilterValues'
+              ]
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: langfuse-mcp
+spec:
+  parentRefs:
+    - name: agenticgateway-internal
+      namespace: agenticgateway
+      sectionName: https
+  hostnames:
+    - ai.nahsi.dev
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /mcp/langfuse
+        - path:
+            type: PathPrefix
+            value: /.well-known/oauth-protected-resource/mcp/langfuse
+        - path:
+            type: PathPrefix
+            value: /.well-known/oauth-authorization-server/mcp/langfuse
+      backendRefs:
+        - group: agentgateway.dev
+          kind: AgentgatewayBackend
+          name: langfuse-mcp
+---
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: langfuse-mcp
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: langfuse-mcp
+  traffic:
+    jwtAuthentication:
+      mode: Strict
+      providers:
+        - issuer: https://auth.nahsi.dev/application/o/langfuse-mcp/
+          audiences:
+            - https://ai.nahsi.dev/mcp/langfuse
+            - "767214a47a7bba69"
+          jwks:
+            remote:
+              backendRef:
+                kind: Service
+                name: authentik-server
+                namespace: authentik
+                port: 80
+              jwksPath: /application/o/langfuse-mcp/jwks/
+      mcp:
+        provider: Authentik
+        clientId: "767214a47a7bba69"
+        resourceMetadata:
+          resource: https://ai.nahsi.dev/mcp/langfuse
+          scopesSupported:
+            - openid
+            - profile
+            - email
+            - offline_access
+          bearerMethodsSupported:
+            - header
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: langfuse-mcp-oidc-discovery
+spec:
+  parentRefs:
+    - name: private-gateway
+      namespace: envoy-gateway
+      sectionName: https
+  hostnames:
+    - auth.nahsi.dev
+  rules:
+    - matches:
+        - path:
+            type: Exact
+            value: /.well-known/openid-configuration/application/o/langfuse-mcp
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /application/o/langfuse-mcp/.well-known/openid-configuration
+            statusCode: 302

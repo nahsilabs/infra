@@ -33,6 +33,7 @@ spec:
   dependsOn:
     - name: app-langfuse-deps
     - name: infra-gateway-api-crds
+    - name: infra-agenticgateway
   path: ./flux/apps/langfuse/app
   targetNamespace: langfuse
   prune: true
