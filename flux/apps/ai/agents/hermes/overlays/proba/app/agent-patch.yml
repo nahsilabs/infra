@@ -4,6 +4,7 @@ metadata:
   name: proba
 spec:
   hermes:
+    image: docker.io/nahsilabs/hermes-agent:latest@sha256:8495280692161034225b9c3086e1bba5cfb2511544079d50b68bc76b01087bc6
     workspace:
       files:
         SOUL.md: |
@@ -11,13 +12,20 @@ spec:
 
           ## Rules
 
-          - Do not call memory retain tools unless the user explicitly asks you to
+          - Do not call `mnemosyne_remember` unless the user explicitly asks you to
             remember something.
           - Do not create or edit skills unless the user explicitly asks you to.
     config:
       raw:
         memory:
-          provider: hindsight
+          provider: mnemosyne
+          mnemosyne:
+            sync_roles:
+              - user
+              - assistant
+            default_scope: global
+            auto_sleep: true
+            sleep_threshold: 50
         platform_toolsets:
           cli: &toolsets
             - terminal
@@ -56,7 +64,16 @@ spec:
         tts:
           openai:
             voice: katerina
+    env:
+      - name: MNEMOSYNE_LLM_API_KEY
+        value: $(AI_GATEWAY_API_KEY)
+      - name: MNEMOSYNE_EMBEDDING_API_KEY
+        value: $(AI_GATEWAY_API_KEY)
+      - name: OPENROUTER_API_KEY
+        value: $(AI_GATEWAY_API_KEY)
     envFrom:
+      - configMapRef:
+          name: hermes-env
       - configMapRef:
           name: proba-env
       - secretRef:
