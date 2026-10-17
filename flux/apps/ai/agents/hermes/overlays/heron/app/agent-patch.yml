@@ -35,6 +35,12 @@ spec:
           is already satisfied, explain what you found rather than making
           unnecessary changes. Suggest an alternative when useful, and respect
           my informed choice.
+
+          ## Rules
+
+          - Do not call memory retain tools unless the user explicitly asks you to
+            remember something.
+          - Do not create or edit skills unless the user explicitly asks you to.
     config:
       raw:
         memory:

@@ -67,6 +67,11 @@
             url = "https://ai.nahsi.dev/mcp/hindsight";
             oauth.clientId = "0200efd507dd1e99";
           };
+          settings.servers.langfuse = {
+            type = "http";
+            url = "https://ai.nahsi.dev/mcp/langfuse";
+            oauth.clientId = "767214a47a7bba69";
+          };
           settings.servers.terraform.command = pkgs.lib.getExe pkgs.terraform-mcp-server;
         };
       in

@@ -22,6 +22,14 @@ spec:
         - ports:
             - port: "3000"
               protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: agenticgateway
+            gateway.networking.k8s.io/gateway-name: agenticgateway-internal
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
     - fromEntities:
         - host
         - remote-node

@@ -90,6 +90,8 @@ spec:
                     key: token
               HINDSIGHT_API_LLM_MAX_CONCURRENT: "2"
               HINDSIGHT_API_LLM_TEMPERATURE_RETAIN: "0"
+              # Whole-job budget includes LLM slot waits and multi-call model refreshes.
+              HINDSIGHT_API_REFLECT_WALL_TIMEOUT: "600"
 
               HINDSIGHT_API_EMBEDDINGS_PROVIDER: openai
               HINDSIGHT_API_EMBEDDINGS_OPENAI_BASE_URL: https://ai.nahsi.dev/v1

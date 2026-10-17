@@ -3,6 +3,8 @@ kind: Kustomization
 resources:
   - secret.yml
   - s3-secret.yml
+  - mcp-hermes-secret.yml
+  - mcp-hindsight-secret.yml
   - postgres.yml
   - valkey.yml
   - keeper.yml
