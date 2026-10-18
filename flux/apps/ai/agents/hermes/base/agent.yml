@@ -148,29 +148,6 @@ spec:
         enabled: false
       webhook:
         enabled: false
-    env:
-      - name: HINDSIGHT_RECALL_INDICATOR
-        value: "false"
-      - name: HINDSIGHT_RETAIN_INDICATOR
-        value: "false"
-      - name: HERMES_LANGFUSE_BASE_URL
-        value: https://langfuse.nahsi.dev
-      - name: HERMES_LANGFUSE_CAPTURE
-        value: sanitized
-      - name: COMFYUI_URL
-        value: https://comfyui.nahsi.dev
-      - name: HERMES_DASHBOARD
-        value: "1"
-      - name: HERMES_DASHBOARD_HOST
-        value: "0.0.0.0"
-      - name: HERMES_DASHBOARD_PORT
-        value: "9119"
-      - name: HERMES_DASHBOARD_OIDC_SCOPES
-        value: openid profile email offline_access
-      - name: API_SERVER_ENABLED
-        value: "false"
-      - name: WEBHOOK_ENABLED
-        value: "false"
     ports:
       - name: dashboard
         containerPort: 9119

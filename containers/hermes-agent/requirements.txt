@@ -4,3 +4,6 @@ pymorphy3==2.0.6
 dawg2-python==0.9.0
 pymorphy3-dicts-ru==2.4.417150.4580142
 setuptools==83.0.0
+mnemosyne-memory==4.0.0b4
+numpy==2.4.3
+sqlite-vec==0.1.9

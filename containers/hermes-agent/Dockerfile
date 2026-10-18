@@ -2,6 +2,9 @@
 FROM scratch AS hindsight
 ADD https://github.com/vectorize-io/hindsight.git#f843f173bb41f001e322cc83c917371639e47fbf /src/
 
+FROM scratch AS mnemosyne
+ADD https://github.com/mnemosyne-oss/mnemosyne.git#d73848735a2a48471a62d2c8fb96cd7183c97491 /src/
+
 FROM scratch AS langfuse
 ADD https://github.com/NousResearch/hermes-official-plugins.git#c2a95963c442f3f23e4bc6fe0da898e1dd1fb63d /src/
 
@@ -17,6 +20,7 @@ ARG TARGETARCH
 RUN test "$TARGETARCH" = amd64
 
 COPY --from=hindsight /src/hindsight-integrations/hermes/ /opt/hermes/plugins/memory/hindsight/
+COPY --from=mnemosyne /src/integrations/hermes/src/mnemosyne_hermes/ /opt/hermes/plugins/memory/mnemosyne/
 COPY --from=langfuse /src/langfuse/ /opt/hermes/plugins/langfuse/
 COPY --from=snapcompact /src/ /opt/hermes/plugins/context_engine/hermes-snapcompact/
 COPY --from=humanizer /src/skills/humanizer-ru/ /opt/managed-skills/humanizer-ru/
