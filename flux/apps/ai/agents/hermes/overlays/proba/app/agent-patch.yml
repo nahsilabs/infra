@@ -24,7 +24,6 @@ spec:
           mnemosyne:
             sync_roles:
               - user
-              - assistant
             default_scope: global
             auto_sleep: true
             sleep_threshold: 50
