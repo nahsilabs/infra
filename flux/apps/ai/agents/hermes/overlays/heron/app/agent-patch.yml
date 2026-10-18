@@ -72,6 +72,7 @@ spec:
           dm_mention_threads: false
           process_notices: false
         display:
+          busy_input_mode: steer
           platforms:
             matrix:
               show_reasoning: false

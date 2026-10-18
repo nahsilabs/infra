@@ -45,6 +45,20 @@ spec:
             - cronjob
             - tts
           matrix: *toolsets
+          telegram: *toolsets
+        streaming:
+          enabled: true
+          transport: edit
+        platforms:
+          telegram:
+            gateway_restart_notification: false
+            extra:
+              base_url: http://127.0.0.1:8081/bot
+              base_file_url: http://127.0.0.1:8081/file/bot
+              local_mode: true
+              disable_link_previews: true
+        telegram:
+          reactions: false
         matrix:
           allowed_users:
             - "@me:nahsi.dev"
@@ -55,13 +69,23 @@ spec:
           process_notices: false
           gateway_restart_notification: false
         display:
+          busy_input_mode: steer
           platforms:
             matrix:
+              streaming: false
               show_reasoning: false
               tool_progress: "off"
               interim_assistant_messages: false
               long_running_notifications: false
               busy_ack_detail: false
+            telegram:
+              streaming: true
+              show_reasoning: false
+              tool_progress: "off"
+              interim_assistant_messages: false
+              long_running_notifications: false
+              busy_ack_detail: false
+              notifications: important
         tts:
           openai:
             voice: katerina
@@ -72,6 +96,11 @@ spec:
         value: $(AI_GATEWAY_API_KEY)
       - name: OPENROUTER_API_KEY
         value: $(AI_GATEWAY_API_KEY)
+      - name: TELEGRAM_ALLOWED_CHATS
+        valueFrom:
+          secretKeyRef:
+            name: proba-secrets
+            key: TELEGRAM_ALLOWED_USERS
     envFrom:
       - configMapRef:
           name: hermes-env
@@ -82,3 +111,72 @@ spec:
     storage:
       persistence:
         existingClaim: proba-home
+  initContainers:
+    - name: telegram-volume-permissions
+      image: &telegram-image docker.io/aiogram/telegram-bot-api:latest@sha256:62887a6c637185bd63e0b4f7df9798f808661de3c67e9ccd8cb834993114ba65
+      command: ["chown", "10000:10000", "/var/lib/telegram-bot-api"]
+      securityContext:
+        runAsUser: 0
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: ["ALL"]
+          add: ["CHOWN"]
+      volumeMounts:
+        - name: telegram-data
+          mountPath: /var/lib/telegram-bot-api
+  sidecars:
+    - name: telegram-bot-api
+      image: *telegram-image
+      command: ["telegram-bot-api"]
+      args:
+        - --local
+        - --dir=/var/lib/telegram-bot-api
+        - --temp-dir=/var/lib/telegram-bot-api/temp
+        - --http-ip-address=127.0.0.1
+      env:
+        - name: TELEGRAM_API_ID
+          valueFrom:
+            secretKeyRef:
+              name: proba-secrets
+              key: TELEGRAM_API_ID
+        - name: TELEGRAM_API_HASH
+          valueFrom:
+            secretKeyRef:
+              name: proba-secrets
+              key: TELEGRAM_API_HASH
+      securityContext:
+        runAsUser: 10000
+        runAsGroup: 10000
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop: ["ALL"]
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          memory: 512Mi
+      startupProbe:
+        exec: &telegram-health
+          command: ["nc", "-z", "127.0.0.1", "8081"]
+        periodSeconds: 2
+        failureThreshold: 30
+      readinessProbe:
+        exec: *telegram-health
+        periodSeconds: 10
+      livenessProbe:
+        exec: *telegram-health
+        periodSeconds: 30
+      volumeMounts:
+        - name: telegram-data
+          mountPath: /var/lib/telegram-bot-api
+  extraVolumes:
+    - name: telegram-data
+      persistentVolumeClaim:
+        claimName: proba-telegram
+  extraVolumeMounts:
+    - name: telegram-data
+      mountPath: /var/lib/telegram-bot-api
+      readOnly: true
