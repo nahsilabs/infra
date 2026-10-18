@@ -10,6 +10,10 @@ spec:
             io.kubernetes.pod.namespace: envoy-gateway
             app.kubernetes.io/name: envoy
             gateway.envoyproxy.io/owning-gateway-name: private-gateway
+        - matchLabels:
+            io.kubernetes.pod.namespace: envoy-gateway
+            app.kubernetes.io/name: envoy
+            gateway.envoyproxy.io/owning-gateway-name: public-gateway
       toPorts:
         - ports:
             - port: "9119"

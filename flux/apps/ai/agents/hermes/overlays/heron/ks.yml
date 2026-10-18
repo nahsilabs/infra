@@ -11,6 +11,7 @@ spec:
     - name: infra-ceph-csi-rbd
     - name: infra-gateway-api-crds
     - name: infra-gateway-private
+    - name: infra-gateway-public
   interval: 1h
   retryInterval: 2m
   timeout: 10m

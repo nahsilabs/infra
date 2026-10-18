@@ -7,6 +7,9 @@ spec:
     - name: private-gateway
       namespace: envoy-gateway
       sectionName: https
+    - name: public-gateway
+      namespace: envoy-gateway
+      sectionName: https
   hostnames:
     - gabriel.agents.nahsi.dev
   rules:
