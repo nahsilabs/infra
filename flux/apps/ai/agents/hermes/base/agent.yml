@@ -19,6 +19,7 @@ spec:
           key_env: AI_GATEWAY_API_KEY
           context_length: 262144
           streaming: true
+          supports_vision: true
         timezone: Europe/Athens
         agent:
           max_turns: null
