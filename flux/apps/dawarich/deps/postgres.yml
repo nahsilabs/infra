@@ -4,7 +4,7 @@ metadata:
   name: pg-dawarich
 spec:
   instances: 1
-  imageName: ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie@sha256:da0045903af30080c0b5de29dba7aba9320df787ae0793343c07dafcdf5d84ad
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie@sha256:0675340b02be838319b9b6f323c206693e519dcd62ec729d539be9f46bb7a2f9
   primaryUpdateStrategy: unsupervised
   postgresql:
     extensions:
