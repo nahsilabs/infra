@@ -36,14 +36,6 @@ spec:
           do not replace delegating independent investigations.
     config:
       raw:
-        fallback_providers: []
-        delegation:
-          provider: openai-codex
-          model: gpt-6.1-sol
-          reasoning_effort: low
-          fallback_providers: []
-        web:
-          backend: exa
         memory:
           provider: mnemosyne
           mnemosyne:
