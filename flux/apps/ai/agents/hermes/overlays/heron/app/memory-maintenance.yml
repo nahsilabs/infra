@@ -1,0 +1,59 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: heron-memory-maintenance
+spec:
+  schedule: "0 4 * * *"
+  timeZone: Europe/Athens
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 10920
+      template:
+        spec:
+          restartPolicy: Never
+          automountServiceAccountToken: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: maintenance
+              image: docker.io/nahsilabs/hindsight:1.0.0-static-keys@sha256:aeb61cd3ae11a95ba69a5c918d316687e72dbfa1211cf51d20645c8016ad080c
+              command: ["python", "/scripts/memory-maintenance.py"]
+              env:
+                - name: HINDSIGHT_API_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: heron-env
+                      key: HINDSIGHT_API_URL
+                - name: HINDSIGHT_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: heron-secrets
+                      key: HINDSIGHT_API_KEY
+              volumeMounts:
+                - name: script
+                  mountPath: /scripts
+                  readOnly: true
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 32Mi
+                limits:
+                  memory: 128Mi
+          volumes:
+            - name: script
+              configMap:
+                name: heron-memory-maintenance

@@ -8,6 +8,11 @@ resources:
   - networkpolicy.yml
   - pvc.yml
   - route.yml
+  - memory-maintenance.yml
+configMapGenerator:
+  - name: heron-memory-maintenance
+    files:
+      - memory-maintenance.py
 patches:
   - path: agent-patch.yml
     options:
