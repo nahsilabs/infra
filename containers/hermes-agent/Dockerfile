@@ -19,6 +19,10 @@ FROM nousresearch/hermes-agent:v0.22.2@sha256:36099926da316742423544e055d4734777
 ARG TARGETARCH
 RUN test "$TARGETARCH" = amd64
 
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends jq \
+ && rm -rf /var/lib/apt/lists/*
+
 COPY --from=hindsight /src/hindsight-integrations/hermes/ /opt/hermes/plugins/memory/hindsight/
 COPY --from=mnemosyne /src/integrations/hermes/src/mnemosyne_hermes/ /opt/hermes/plugins/memory/mnemosyne/
 COPY --from=langfuse /src/langfuse/ /opt/hermes/plugins/langfuse/

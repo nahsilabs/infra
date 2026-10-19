@@ -4,7 +4,7 @@ metadata:
   name: proba
 spec:
   hermes:
-    image: docker.io/nahsilabs/hermes-agent:latest@sha256:a4c73b70cb2879e39bcef8bd2b1fce215a944bf91b1dcb418df3f2bafc7786e0
+    image: docker.io/nahsilabs/hermes-agent:latest@sha256:2b2a2fe7adf1db859107d4fa09d833ed726851bb1312ab616968dfecb11f8509
     workspace:
       files:
         SOUL.md: |
