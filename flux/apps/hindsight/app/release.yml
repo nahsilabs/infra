@@ -90,6 +90,8 @@ spec:
                     key: token
               HINDSIGHT_API_LLM_MAX_CONCURRENT: "2"
               HINDSIGHT_API_LLM_TEMPERATURE_RETAIN: "0"
+              HINDSIGHT_API_RETAIN_LLM_REASONING_EFFORT: "none"
+              HINDSIGHT_API_CONSOLIDATION_LLM_TIMEOUT: "300"
               # Whole-job budget includes LLM slot waits and multi-call model refreshes.
               HINDSIGHT_API_REFLECT_WALL_TIMEOUT: "600"
 
@@ -239,6 +241,9 @@ spec:
               - path:
                   type: PathPrefix
                   value: /
+            timeouts:
+              request: 360s
+              backendRequest: 360s
             backendRefs:
               - identifier: control-plane
                 port: http
