@@ -17,6 +17,7 @@ resources:
   - miniflux
   - myspeed
   - readeck
+  - rustpbx
   - vaultwarden
   - ai
   - downloads

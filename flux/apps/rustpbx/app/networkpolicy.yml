@@ -1,0 +1,25 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: rustpbx-ingress
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: rustpbx
+      app.kubernetes.io/instance: rustpbx
+  ingress:
+    - fromEntities:
+        - all
+      toPorts:
+        - ports:
+            - port: "5061"
+              protocol: TCP
+            - port: "12000"
+              endPort: 12031
+              protocol: UDP
+    - fromCIDR:
+        - 10.2.0.0/16
+      toPorts:
+        - ports:
+            - port: "8443"
+              protocol: TCP

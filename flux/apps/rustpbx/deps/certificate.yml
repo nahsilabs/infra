@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: rustpbx
+spec:
+  secretName: rustpbx-tls
+  secretTemplate:
+    labels:
+      reconcile.fluxcd.io/watch: Enabled
+  issuerRef:
+    kind: ClusterIssuer
+    name: nahsi.dev
+  dnsNames:
+    - rustpbx.nahsi.dev
