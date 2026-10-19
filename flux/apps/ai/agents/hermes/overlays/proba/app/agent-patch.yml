@@ -38,10 +38,12 @@ spec:
       raw:
         fallback_providers: []
         delegation:
-          # Keep the shared Qwen main model; use Luna for delegated tasks.
           provider: openai-codex
-          model: gpt-6-luna
+          model: gpt-6.1-sol
+          reasoning_effort: low
           fallback_providers: []
+        web:
+          backend: exa
         memory:
           provider: mnemosyne
           mnemosyne:
