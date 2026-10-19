@@ -21,8 +21,6 @@ spec:
           streaming: true
           supports_vision: true
         fallback_providers: []
-        web:
-          backend: exa
         timezone: Europe/Athens
         agent:
           max_turns: null
@@ -65,6 +63,8 @@ spec:
         plugins:
           enabled:
             - langfuse
+          disabled:
+            - web-openai-native
         skills:
           write_approval: true
           external_dirs:
