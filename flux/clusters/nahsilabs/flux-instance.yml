@@ -22,6 +22,6 @@ spec:
   sync:
     kind: GitRepository
     name: "infra"
-    url: "https://github.com/nahsilabs/infra"
+    url: "https://github.com/nahsi/infra"
     ref: "refs/heads/main"
     path: "flux/clusters/nahsilabs"

@@ -49,7 +49,7 @@ ARG VCS_REF=unknown
 
 LABEL org.opencontainers.image.title="RealtimeSTT OpenAI transcription adapter" \
       org.opencontainers.image.description="CPU RealtimeSTT with a narrow OpenAI-compatible transcription adapter" \
-      org.opencontainers.image.source="https://github.com/nahsilabs/infra" \
+      org.opencontainers.image.source="https://github.com/nahsi/infra" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.created="${BUILD_DATE}" \
       org.opencontainers.image.base.name="${PYTHON_IMAGE}" \

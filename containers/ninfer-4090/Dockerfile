@@ -55,7 +55,7 @@ ARG VCS_REF
 
 LABEL org.opencontainers.image.title="NInfer RTX 4090" \
       org.opencontainers.image.description="Pinned NInfer CLI and server built for NVIDIA Ada sm_89" \
-      org.opencontainers.image.source="https://github.com/nahsilabs/infra" \
+      org.opencontainers.image.source="https://github.com/nahsi/infra" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.created="${BUILD_DATE}" \
       org.opencontainers.image.version="${NINFER_REV}" \

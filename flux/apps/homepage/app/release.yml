@@ -32,7 +32,7 @@ spec:
       bookmarks:
         - NahsiLabs:
             - Infra Repo:
-                - href: https://github.com/nahsilabs/infra
+                - href: https://github.com/nahsi/infra
 
       kubernetes:
         mode: cluster

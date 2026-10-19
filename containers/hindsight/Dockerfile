@@ -10,7 +10,7 @@ FROM ghcr.io/vectorize-io/hindsight-api:1.0.0-slim@sha256:1e889b5f44a3546a40765d
 
 LABEL org.opencontainers.image.title="Hindsight with static-keys tenancy" \
       org.opencontainers.image.description="Hindsight API 1.0.0 with upstream static-keys tenant extension" \
-      org.opencontainers.image.source="https://github.com/nahsilabs/infra" \
+      org.opencontainers.image.source="https://github.com/nahsi/infra" \
       org.opencontainers.image.version="1.0.0-static-keys" \
       org.opencontainers.image.base.name="ghcr.io/vectorize-io/hindsight-api:1.0.0-slim@sha256:1e889b5f44a3546a40765d084162cf0807c0b08c97fb29f64d0705597f1ef3b6"
 

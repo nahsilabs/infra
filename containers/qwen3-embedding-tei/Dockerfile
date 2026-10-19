@@ -21,7 +21,7 @@ ARG TEI_IMAGE
 ARG MODEL_REVISION
 
 LABEL org.opencontainers.image.title="Qwen3-Embedding-0.6B TEI CPU" \
-      org.opencontainers.image.source="https://github.com/nahsilabs/infra" \
+      org.opencontainers.image.source="https://github.com/nahsi/infra" \
       org.opencontainers.image.version="1.9.3-${MODEL_REVISION}" \
       org.opencontainers.image.base.name="${TEI_IMAGE}" \
       org.opencontainers.image.licenses="Apache-2.0" \

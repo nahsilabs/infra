@@ -5,7 +5,7 @@ ARG PRISM_VERSION=prism-b10743-adfffbe
 ARG PRISM_SHA256=43b73a24d5cd83c4482750ee52e59afac497c669c008a319e44e43a0033757e2
 
 LABEL org.opencontainers.image.title="PrismML llama.cpp CUDA" \
-      org.opencontainers.image.source="https://github.com/nahsilabs/infra" \
+      org.opencontainers.image.source="https://github.com/nahsi/infra" \
       org.opencontainers.image.version="${PRISM_VERSION}"
 
 RUN apt-get update \
