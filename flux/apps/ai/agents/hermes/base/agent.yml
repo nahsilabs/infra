@@ -20,6 +20,7 @@ spec:
           context_length: 262144
           streaming: true
           supports_vision: true
+        fallback_providers: []
         timezone: Europe/Athens
         agent:
           max_turns: null
@@ -62,6 +63,8 @@ spec:
         plugins:
           enabled:
             - langfuse
+          disabled:
+            - web-openai-native
         skills:
           write_approval: true
           external_dirs:
@@ -109,6 +112,10 @@ spec:
           enabled: false
         delegation:
           max_concurrent_children: 2
+          provider: openai-codex
+          model: gpt-6.1-sol
+          reasoning_effort: low
+          fallback_providers: []
         kanban:
           dispatch_in_gateway: false
           auto_decompose: false

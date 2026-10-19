@@ -41,6 +41,27 @@ spec:
           - Do not call `hindsight_retain` unless the user explicitly asks you to
             remember something.
           - Do not create or edit skills unless the user explicitly asks you to.
+
+          ## Delegation
+
+          For two or more independent investigations, call `delegate_task` with
+          a batch before researching those questions yourself. A comparison that
+          needs separate evidence for each option qualifies.
+
+          Delegate a single context-heavy investigation when only its findings
+          are needed in the main conversation. Handle single lookups and tightly
+          coupled work directly.
+
+          Split by question, evidence source, or subsystem. Give each child a
+          self-contained goal, relevant context, allowed actions, and expected
+          output. Research children are read-only and must return sources,
+          uncertainties, and blockers.
+
+          Delegation transfers ownership: while a child works, do only disjoint
+          work. Verify its findings and write the final synthesis yourself.
+
+          Batch individual tool calls within an investigation. Parallel searches
+          do not replace delegating independent investigations.
     config:
       raw:
         memory:
