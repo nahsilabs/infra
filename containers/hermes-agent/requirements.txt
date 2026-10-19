@@ -5,5 +5,5 @@ dawg2-python==0.9.0
 pymorphy3-dicts-ru==2.4.417150.4580142
 setuptools==83.0.0
 mnemosyne-memory @ https://github.com/mnemosyne-oss/mnemosyne/archive/47b755e2b6cbcb4047370899ab8cdb3e92bb6992.tar.gz
-numpy==2.4.3
+numpy==2.5.4
 sqlite-vec==0.1.9
