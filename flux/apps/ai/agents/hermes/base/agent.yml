@@ -121,6 +121,9 @@ spec:
         auxiliary:
           background_review:
             enabled: false
+          title_generation:
+            extra_body:
+              temperature: 0
         stt:
           enabled: true
           echo_transcripts: false
