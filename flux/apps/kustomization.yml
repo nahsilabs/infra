@@ -29,6 +29,5 @@ resources:
   - authentik
   - ntfy
   - hindsight
-  - open-webui
   - comfyui
   - xberg
