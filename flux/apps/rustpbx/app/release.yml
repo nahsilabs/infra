@@ -1,0 +1,226 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: rustpbx
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: app-template
+      version: 5.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  valuesFrom:
+    - kind: Secret
+      name: rustpbx-tls
+      valuesKey: tls.crt
+      targetPath: global.rustpbx.certificate
+      literal: true
+    - kind: Secret
+      name: pg-rustpbx-app
+      valuesKey: uri
+      targetPath: global.rustpbx.databaseUrl
+      literal: true
+    - kind: Secret
+      name: rustpbx-auth
+      valuesKey: session-secret
+      targetPath: global.rustpbx.sessionSecret
+      literal: true
+    - kind: Secret
+      name: rustpbx-s3-auth
+      valuesKey: access_key
+      targetPath: global.rustpbx.s3AccessKey
+      literal: true
+    - kind: Secret
+      name: rustpbx-s3-auth
+      valuesKey: secret_key
+      targetPath: global.rustpbx.s3SecretKey
+      literal: true
+  values:
+    controllers:
+      main:
+        replicas: 1
+        strategy: Recreate
+        pod:
+          annotations:
+            checksum/credentials: '{{ .Values.global.rustpbx | toJson | sha256sum }}'
+        containers:
+          main:
+            image:
+              repository: ghcr.io/restsend/rustpbx
+              tag: latest@sha256:b50985c83a8a5b103f297c25a8cbe1c4c71e45b363ef011b4488535c567dde5b
+            args:
+              - --conf
+              - /run/rustpbx/config.toml
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 5061
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: {drop: ["ALL"]}
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+
+    defaultPodOptions:
+      terminationGracePeriodSeconds: 330
+      securityContext:
+        seccompProfile: {type: RuntimeDefault}
+
+    service:
+      main:
+        controller: main
+        forceRename: rustpbx
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        labels:
+          cilium-bgp-private: "true"
+        annotations:
+          external-dns.kubernetes.io/hostname: rustpbx.nahsi.dev
+          lbipam.cilium.io/ips: "192.168.78.109"
+        ports:
+          https:
+            primary: true
+            port: 443
+            targetPort: 8443
+            protocol: TCP
+          sip-tls:
+            port: 5061
+            protocol: TCP
+          rtp:
+            protocol: UDP
+            portRange:
+              start: 12000
+              end: 12031
+      public:
+        controller: main
+        forceRename: rustpbx-public
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        labels:
+          cilium-bgp-public: "true"
+        annotations:
+          external-dns.kubernetes.io/hostname: rustpbx.nahsi.dev
+          external-dns.kubernetes.io/ttl: "300"
+          external-dns.kubernetes.io/cloudflare-proxied: "false"
+          lbipam.cilium.io/ips: "37.98.199.181"
+        ports:
+          sip-tls:
+            port: 5061
+            protocol: TCP
+          rtp:
+            protocol: UDP
+            portRange:
+              start: 12000
+              end: 12031
+
+    secrets:
+      config:
+        stringData:
+          config.toml: |
+            http_addr = "0.0.0.0:8080"
+            https_addr = "0.0.0.0:8443"
+            ssl_certificate = "/certs/tls.crt"
+            ssl_private_key = "/certs/tls.key"
+            log_level = "info"
+            database_url = {{ .Values.global.rustpbx.databaseUrl | quote }}
+            external_ip = {{ index .Values.service.public.annotations "lbipam.cilium.io/ips" | quote }}
+            sip_external_ip = {{ index .Values.service.public.annotations "lbipam.cilium.io/ips" | quote }}
+            contact_lan_use_bind = false
+            rtp_start_port = {{ .Values.service.main.ports.rtp.portRange.start }}
+            rtp_end_port = {{ .Values.service.main.ports.rtp.portRange.end }}
+
+            [database_pool]
+            max_connections = 8
+            min_connections = 1
+
+            [console]
+            base_path = "/console"
+            allow_registration = false
+            secure_cookie = true
+            session_secret = {{ .Values.global.rustpbx.sessionSecret | quote }}
+
+            [security.bans]
+            enabled = true
+            max_failures = 5
+            window_secs = 600
+            ban_durations_secs = [3600, 86400, 604800]
+
+            [graceful_shutdown]
+            drain_timeout_secs = 300
+
+            [proxy]
+            addr = "0.0.0.0"
+            modules = ["acl", "auth", "registrar", "call"]
+            tls_port = 5061
+            ssl_certificate = "/certs/tls.crt"
+            ssl_private_key = "/certs/tls.key"
+            realms = ["rustpbx.nahsi.dev"]
+            media_proxy = "all"
+            audio_codecs = ["opus", "pcma", "pcmu"]
+            ensure_user = true
+            dos_enabled = true
+            dos_max_cps_per_ip = 20
+            dos_max_concurrent_per_ip = 50
+            dos_scan_probe_threshold = 10
+            dos_scan_block_duration_secs = 600
+            addons = []
+            generated_db = true
+
+            [[proxy.user_backends]]
+            type = "extension"
+            database_url = {{ .Values.global.rustpbx.databaseUrl | quote }}
+
+            [recording]
+            enabled = true
+            auto_start = true
+            auto_start_at = "answer"
+            type = "s3"
+            path = "/recordings"
+            vendor = "minio"
+            bucket = "rustpbx"
+            region = "us-east-1"
+            endpoint = "https://s3.nahsi.dev:9000"
+            root = "recordings"
+            access_key = {{ .Values.global.rustpbx.s3AccessKey | quote }}
+            secret_key = {{ .Values.global.rustpbx.s3SecretKey | quote }}
+            signaling = false
+
+    persistence:
+      config:
+        type: secret
+        identifier: config
+        globalMounts:
+          - path: /run/rustpbx
+      tls:
+        type: secret
+        name: rustpbx-tls
+        advancedMounts:
+          main:
+            main:
+              - path: /certs
+                readOnly: true
+      recordings:
+        existingClaim: rustpbx-recordings
+        advancedMounts:
+          main:
+            main:
+              - path: /recordings
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

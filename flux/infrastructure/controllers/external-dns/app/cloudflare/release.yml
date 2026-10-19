@@ -22,6 +22,7 @@ spec:
             key: CF_API_TOKEN
     sources:
       - gateway-httproute
+      - service
     policy: sync
     txtOwnerId: nahsilabs
     domainFilters:
@@ -29,6 +30,8 @@ spec:
     provider: cloudflare
     extraArgs:
       - --target-net-filter=37.98.199.176/29
+      - --service-type-filter=LoadBalancer
+      - --label-filter=cilium-bgp-private!=true
     serviceMonitor:
       enabled: true
       additionalLabels:

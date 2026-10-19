@@ -17,6 +17,7 @@ spec:
     sources:
       - gateway-httproute
       - crd
+      - service
     provider:
       name: webhook
       webhook:
