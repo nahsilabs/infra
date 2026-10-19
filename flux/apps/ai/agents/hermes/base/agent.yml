@@ -32,6 +32,11 @@ spec:
             do not update the deployment source.
         terminal:
           backend: local
+          shell_init_files:
+            - ~/.profile
+            - ~/.bash_profile
+            - ~/.bashrc
+            - /opt/hermes/.venv/bin/activate
         browser:
           cloud_provider: local
           headed: false
