@@ -12,18 +12,13 @@ spec:
 
           ## Rules
 
-          - Before calling `mnemosyne_apply_pending`, ask the user to approve the
-            staged memory changes. Call it only after the user explicitly approves
-            those changes.
           - Do not create or edit skills unless the user explicitly asks you to.
     config:
       raw:
         memory:
           provider: mnemosyne
-          write_approval: true
           mnemosyne:
-            sync_roles:
-              - user
+            sync_roles: []
             default_scope: global
             auto_sleep: true
             sleep_threshold: 50
