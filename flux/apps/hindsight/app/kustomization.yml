@@ -1,6 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: hindsight
 resources:
   - release.yml
   - secret.yml
   - agentgateway.yml
+  - memory-maintenance.yml
+configMapGenerator:
+  - name: memory-maintenance
+    files:
+      - memory-maintenance.py
