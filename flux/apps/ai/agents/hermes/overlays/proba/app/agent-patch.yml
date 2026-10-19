@@ -13,8 +13,19 @@ spec:
           ## Rules
 
           - Do not create or edit skills unless the user explicitly asks you to.
+          - When a request has at least two independent research questions, use
+            `delegate_task` for the separate investigations. Give each child a
+            self-contained, read-only goal and require sources. Verify their
+            findings and write the final answer yourself. Handle simple or
+            tightly coupled requests directly.
     config:
       raw:
+        fallback_providers: []
+        delegation:
+          # Keep the shared Qwen main model; use Luna for delegated tasks.
+          provider: openai-codex
+          model: gpt-6-luna
+          fallback_providers: []
         memory:
           provider: mnemosyne
           mnemosyne:
