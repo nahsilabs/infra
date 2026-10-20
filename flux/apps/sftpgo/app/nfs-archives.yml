@@ -1,0 +1,42 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-sftpgo-archives
+  annotations:
+    pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
+spec:
+  capacity:
+    storage: 1Ti
+  accessModes:
+    - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  mountOptions:
+    - nfsvers=4.1
+    - nconnect=8
+    - noatime
+    - ro
+    - hard
+    - timeo=600
+    - retrans=2
+  csi:
+    driver: nfs.csi.k8s.io
+    readOnly: true
+    volumeHandle: nfs.lan#mnt/storage/downloads/bidpoint/archives#sftpgo
+    volumeAttributes:
+      server: nfs.lan
+      share: /mnt/storage/downloads/bidpoint/archives
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sftpgo-archives
+spec:
+  accessModes:
+    - ReadOnlyMany
+  storageClassName: ""
+  volumeName: nfs-sftpgo-archives
+  resources:
+    requests:
+      storage: 1Ti
