@@ -4,4 +4,3 @@ resources:
   - release.yml
   - pvc.yml
   - nfs-archives.yml
-  - httproute.yml

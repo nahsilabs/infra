@@ -99,6 +99,51 @@ spec:
           webdav:
             port: 8081
 
+    route:
+      main:
+        forceRename: sftpgo
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - sftpgo.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: main
+                port: http
+            timeouts:
+              request: 0s
+              backendRequest: 0s
+      webdav:
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+          - name: public-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - sftpgo.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /dav
+            backendRefs:
+              - identifier: main
+                port: webdav
+            timeouts:
+              request: 0s
+              backendRequest: 0s
+
     persistence:
       data:
         existingClaim: sftpgo-data
