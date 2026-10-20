@@ -1,0 +1,18 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: app-sftpgo
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: infra-gateway-api-crds
+  path: ./flux/apps/sftpgo/app
+  targetNamespace: sftpgo
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: infra
+    namespace: flux-system
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m
