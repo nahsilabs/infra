@@ -1,0 +1,43 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: livekit-ingress
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: livekit
+      app.kubernetes.io/instance: livekit
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: private-gateway
+      toPorts:
+        - ports:
+            - port: "7880"
+              protocol: TCP
+    - fromEntities:
+        - cluster
+      toPorts:
+        - ports:
+            - port: "7881"
+              protocol: TCP
+            - port: "7882"
+              protocol: UDP
+    - fromCIDR:
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+      toPorts:
+        - ports:
+            - port: "7881"
+              protocol: TCP
+            - port: "7882"
+              protocol: UDP
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: obs-collect
+      toPorts:
+        - ports:
+            - port: "6789"
+              protocol: TCP
