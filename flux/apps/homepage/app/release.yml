@@ -45,7 +45,7 @@ spec:
         ingress: true
         gateway: true
 
-      settings:
+      settingsString: |
         title: NahsiLabs Dashboard
         favicon: https://kubernetes.io/images/favicon.png
         theme: dark
@@ -59,42 +59,42 @@ spec:
           hideVisitURL: true
 
         layout:
-          - Productivity:
-              tab: Daily Use
-              style: columns
-              columns: 4
-          - Knowledge:
-              tab: Daily Use
-              style: columns
-              columns: 3
-          - Media:
-              tab: Daily Use
-              style: columns
-              columns: 3
-          - Comms:
-              tab: Daily Use
-              style: columns
-              columns: 2
-          - Arr:
-              tab: Data Hoarding
-              style: columns
-              columns: 4
-          - Downloads:
-              tab: Data Hoarding
-              style: columns
-              columns: 3
-          - Platform:
-              tab: Systems
-              style: columns
-              columns: 4
-          - Observability:
-              tab: Systems
-              style: columns
-              columns: 4
-          - Telephony:
-              tab: Systems
-              style: columns
-              columns: 3
+          Productivity:
+            tab: Daily Use
+            style: columns
+            columns: 4
+          Knowledge:
+            tab: Daily Use
+            style: columns
+            columns: 3
+          Media:
+            tab: Daily Use
+            style: columns
+            columns: 3
+          Comms:
+            tab: Daily Use
+            style: columns
+            columns: 2
+          Arr:
+            tab: Data Hoarding
+            style: columns
+            columns: 4
+          Downloads:
+            tab: Data Hoarding
+            style: columns
+            columns: 3
+          Platform:
+            tab: Systems
+            style: columns
+            columns: 4
+          Observability:
+            tab: Systems
+            style: columns
+            columns: 4
+          Telephony:
+            tab: Systems
+            style: columns
+            columns: 3
 
       widgets:
         - search:
