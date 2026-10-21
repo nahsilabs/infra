@@ -171,7 +171,7 @@ spec:
                 description: Rooms, participants and telephony
             - RustPBX:
                 icon: mdi-phone-voip
-                href: https://rustpbx.nahsi.dev/console
+                href: https://rustpbx.nahsi.dev/console/
                 description: PBX administration
             - Grandstream:
                 icon: mdi-phone-classic
