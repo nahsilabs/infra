@@ -167,7 +167,7 @@ spec:
         - Telephony:
             - LiveKit:
                 icon: mdi-video
-                href: https://livekit-console.nahsi.dev
+                href: https://livekit.nahsi.dev
                 description: Rooms, participants and telephony
             - RustPBX:
                 icon: mdi-phone-voip

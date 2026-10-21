@@ -223,22 +223,25 @@ spec:
           - matches:
               - path:
                   type: PathPrefix
-                  value: /
+                  value: /rtc
+              - path:
+                  type: PathPrefix
+                  value: /twirp
+              - path:
+                  type: PathPrefix
+                  value: /whip
+              - path:
+                  type: Exact
+                  value: /agent
+              - path:
+                  type: RegularExpression
+                  value: ^/agents/[^/]+/[^/]+(/.*)?$
             backendRefs:
               - identifier: main
                 port: http
             timeouts:
               request: 0s
               backendRequest: 0s
-      console:
-        forceRename: livekit-console
-        parentRefs:
-          - name: private-gateway
-            namespace: envoy-gateway
-            sectionName: https
-        hostnames:
-          - livekit-console.nahsi.dev
-        rules:
           - matches:
               - path:
                   type: PathPrefix
