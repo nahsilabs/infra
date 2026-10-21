@@ -34,14 +34,26 @@ spec:
       valuesKey: default
       targetPath: global.livekit.redisPassword
       literal: true
+    - kind: Secret
+      name: livekit-console-auth
+      valuesKey: ADMIN_PASSWORD
+      targetPath: global.livekitConsole.adminPassword
+      literal: true
+    - kind: Secret
+      name: livekit-console-auth
+      valuesKey: SESSION_SECRET
+      targetPath: global.livekitConsole.sessionSecret
+      literal: true
   values:
     controllers:
       main:
+        forceRename: livekit
         replicas: 1
         strategy: Recreate
         pod:
           annotations:
             checksum/credentials: '{{ .Values.global.livekit | toJson | sha256sum }}'
+            checksum/config: '{{ .Values.secrets.config.stringData | toJson | sha256sum }}'
         containers:
           main:
             image:
@@ -83,6 +95,76 @@ spec:
                 memory: 256Mi
               limits:
                 memory: 1Gi
+      console:
+        replicas: 1
+        strategy: Recreate
+        pod:
+          annotations:
+            checksum/credentials: '{{ .Values.global | toJson | sha256sum }}'
+        containers:
+          main:
+            image:
+              repository: docker.io/nahsilabs/livekit-console
+              tag: 0.1.0@sha256:7898d26c30f5eb00917713e7b197c1a9a1afb42ff509b381f9209c093987ef2c
+            env:
+              LIVEKIT_URL: http://livekit:7880
+              LIVEKIT_BROWSER_URL: wss://livekit.nahsi.dev
+              LIVEKIT_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: livekit-auth
+                    key: api-key
+              LIVEKIT_API_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: livekit-auth
+                    key: api-secret
+              ADMIN_USER: admin
+              ADMIN_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: livekit-console-auth
+                    key: ADMIN_PASSWORD
+              SESSION_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: livekit-console-auth
+                    key: SESSION_SECRET
+              DB_PATH: /data/console.db
+              HOST: 0.0.0.0
+              PORT: "8080"
+            probes:
+              liveness: &console-probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8080
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+              readiness: *console-probe
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8080
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
 
     defaultPodOptions:
       terminationGracePeriodSeconds: 330
@@ -121,6 +203,12 @@ spec:
           rtc-udp:
             port: 7882
             protocol: UDP
+      console:
+        controller: console
+        forceRename: livekit-console
+        ports:
+          http:
+            port: 8080
 
     route:
       main:
@@ -138,6 +226,25 @@ spec:
                   value: /
             backendRefs:
               - identifier: main
+                port: http
+            timeouts:
+              request: 0s
+              backendRequest: 0s
+      console:
+        forceRename: livekit-console
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - livekit-console.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: console
                 port: http
             timeouts:
               request: 0s
@@ -161,6 +268,10 @@ spec:
               password: {{ .Values.global.livekit.redisPassword | quote }}
             keys:
               {{ .Values.global.livekit.apiKey | quote }}: {{ .Values.global.livekit.apiSecret | quote }}
+            webhook:
+              api_key: {{ .Values.global.livekit.apiKey | quote }}
+              urls:
+                - http://livekit-console:8080/webhook
             turn:
               enabled: false
             prometheus:
@@ -173,9 +284,17 @@ spec:
       config:
         type: secret
         identifier: config
-        globalMounts:
-          - path: /run/livekit
-            readOnly: true
+        advancedMounts:
+          main:
+            main:
+              - path: /run/livekit
+                readOnly: true
+      console-data:
+        existingClaim: livekit-console
+        advancedMounts:
+          console:
+            main:
+              - path: /data
       tmp:
         type: emptyDir
         globalMounts:

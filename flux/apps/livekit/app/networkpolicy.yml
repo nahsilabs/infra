@@ -7,6 +7,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: livekit
       app.kubernetes.io/instance: livekit
+      app.kubernetes.io/controller: main
   ingress:
     - fromEndpoints:
         - matchLabels:
@@ -40,4 +41,24 @@ spec:
       toPorts:
         - ports:
             - port: "6789"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: livekit-console-ingress
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: livekit
+      app.kubernetes.io/instance: livekit
+      app.kubernetes.io/controller: console
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: envoy-gateway
+            gateway.envoyproxy.io/owning-gateway-name: private-gateway
+      toPorts:
+        - ports:
+            - port: "8080"
               protocol: TCP
