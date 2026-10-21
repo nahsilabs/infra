@@ -89,8 +89,10 @@ spec:
                     name: hindsight-inference-auth
                     key: token
               HINDSIGHT_API_LLM_MAX_CONCURRENT: "2"
-              HINDSIGHT_API_LLM_TEMPERATURE_RETAIN: "0"
+              HINDSIGHT_API_LLM_TEMPERATURE_RETAIN: "0.7"
               HINDSIGHT_API_RETAIN_LLM_REASONING_EFFORT: "none"
+              HINDSIGHT_API_RETAIN_LLM_EXTRA_BODY: >-
+                {"top_p":0.8,"top_k":20,"min_p":0.0,"presence_penalty":0.0,"repetition_penalty":1.0}
               HINDSIGHT_API_REFLECT_LLM_TIMEOUT: "90"
               HINDSIGHT_API_REFLECT_LLM_MAX_RETRIES: "1"
               HINDSIGHT_API_CONSOLIDATION_LLM_TIMEOUT: "300"
