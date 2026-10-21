@@ -12,6 +12,12 @@ spec:
         kind: HelmRepository
         name: jameswynn
         namespace: flux-system
+  valuesFrom:
+    - kind: Secret
+      name: homepage-telephony
+      valuesKey: grandstream-url
+      targetPath: config.services[3].Telephony[2].Grandstream.href
+      literal: true
   values:
     image:
       repository: ghcr.io/gethomepage/homepage
@@ -85,6 +91,10 @@ spec:
               tab: Systems
               style: columns
               columns: 4
+          - Telephony:
+              tab: Systems
+              style: columns
+              columns: 3
 
       widgets:
         - search:
@@ -153,3 +163,16 @@ spec:
                 icon: home-assistant
                 href: https://ha.nahsi.dev
                 ping: https://ha.nahsi.dev
+
+        - Telephony:
+            - LiveKit:
+                icon: mdi-video
+                href: https://livekit-console.nahsi.dev
+                description: Rooms, participants and telephony
+            - RustPBX:
+                icon: mdi-phone-voip
+                href: https://rustpbx.nahsi.dev/console
+                description: PBX administration
+            - Grandstream:
+                icon: mdi-phone-classic
+                description: HT801 V2 adapter administration
