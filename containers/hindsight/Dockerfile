@@ -6,7 +6,7 @@ FROM scratch AS extension-source
 # Upstream v1.0.0, pinned to its immutable release commit.
 ADD https://github.com/vectorize-io/hindsight.git#39c65ffe2f140d0c84cee58566cad8900c5b9908 /src/
 
-FROM ghcr.io/vectorize-io/hindsight-api:1.0.0-slim@sha256:1e889b5f44a3546a40765d084162cf0807c0b08c97fb29f64d0705597f1ef3b6
+FROM ghcr.io/vectorize-io/hindsight-api:1.1.0-slim@sha256:b97af4787f35f0f897cc85299e1c800e265ff98e1d70c900c58a7f9903cb5b7d
 
 LABEL org.opencontainers.image.title="Hindsight with static-keys tenancy" \
       org.opencontainers.image.description="Hindsight API 1.0.0 with upstream static-keys tenant extension" \
