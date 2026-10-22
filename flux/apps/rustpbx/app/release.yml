@@ -169,6 +169,7 @@ spec:
             tls_port = 5061
             ssl_certificate = "/certs/tls.crt"
             ssl_private_key = "/certs/tls.key"
+            tls_ca_certificates = "/etc/ssl/certs/ca-certificates.crt"
             realms = ["rustpbx.nahsi.dev"]
             media_proxy = "all"
             audio_codecs = ["opus", "pcma", "pcmu"]
