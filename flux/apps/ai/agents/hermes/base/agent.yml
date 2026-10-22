@@ -128,9 +128,24 @@ spec:
         auxiliary:
           background_review:
             enabled: false
-          title_generation:
+          approval:
+            provider: custom
+            model: Qwen/Qwen3.8-Flash-Next
+            base_url: https://ai.nahsi.dev/v1
+            api_key: ${AI_GATEWAY_API_KEY}
+            reasoning_effort: none
             extra_body:
               temperature: 0
+              prompt_cache_policy: no_store
+          title_generation:
+            provider: custom
+            model: Qwen/Qwen3.8-Flash-Next
+            base_url: https://ai.nahsi.dev/v1
+            api_key: ${AI_GATEWAY_API_KEY}
+            reasoning_effort: none
+            extra_body:
+              temperature: 0
+              prompt_cache_policy: no_store
         stt:
           enabled: true
           echo_transcripts: false
