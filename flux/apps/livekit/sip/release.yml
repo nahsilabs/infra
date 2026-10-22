@@ -1,0 +1,168 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: livekit-sip
+spec:
+  interval: 1h
+  timeout: 10m
+  chart:
+    spec:
+      chart: app-template
+      version: 5.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  valuesFrom:
+    - kind: Secret
+      name: livekit-auth
+      valuesKey: api-key
+      targetPath: global.livekit.apiKey
+      literal: true
+    - kind: Secret
+      name: livekit-auth
+      valuesKey: api-secret
+      targetPath: global.livekit.apiSecret
+      literal: true
+    - kind: Secret
+      name: livekit-valkey-auth
+      valuesKey: default
+      targetPath: global.livekit.redisPassword
+      literal: true
+    - kind: Secret
+      name: livekit-sip-tls
+      valuesKey: tls.crt
+      targetPath: global.livekitSip.certificate
+      literal: true
+  values:
+    global:
+      livekitSip:
+        address: 192.168.78.111
+    controllers:
+      main:
+        replicas: 1
+        strategy: Recreate
+        pod:
+          annotations:
+            checksum/credentials: '{{ .Values.global | toJson | sha256sum }}'
+            checksum/config: '{{ .Values.secrets.config.stringData | toJson | sha256sum }}'
+        containers:
+          main:
+            image:
+              repository: docker.io/livekit/sip
+              tag: v1.20.0@sha256:e675638b7678eadb19d48c7a8865149d1b7c23a95b2e3c6fae173684d70c62fc
+            command: ["livekit-sip"]
+            args: ["--config=/run/livekit-sip/config.yaml"]
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: 8081
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: 8081
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
+            resources:
+              requests:
+                cpu: 500m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+    defaultPodOptions:
+      terminationGracePeriodSeconds: 330
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10000
+        runAsGroup: 10000
+        fsGroup: 10000
+        seccompProfile:
+          type: RuntimeDefault
+    service:
+      main:
+        controller: main
+        forceRename: livekit-sip
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        allocateLoadBalancerNodePorts: false
+        labels:
+          cilium-bgp-private: "true"
+        annotations:
+          external-dns.kubernetes.io/hostname: livekit-sip.nahsi.dev
+          lbipam.cilium.io/ips: '{{ .Values.global.livekitSip.address }}'
+        ports:
+          sip-tls:
+            port: 5061
+            protocol: TCP
+          rtp:
+            protocol: UDP
+            portRange:
+              start: 13000
+              end: 13063
+      metrics:
+        controller: main
+        forceRename: livekit-sip-metrics
+        ports:
+          metrics:
+            port: 6789
+    secrets:
+      config:
+        stringData:
+          config.yaml: |
+            api_key: {{ .Values.global.livekit.apiKey | quote }}
+            api_secret: {{ .Values.global.livekit.apiSecret | quote }}
+            ws_url: ws://livekit:7880
+            redis:
+              address: livekit-valkey:6379
+              username: default
+              password: {{ .Values.global.livekit.redisPassword | quote }}
+            use_external_ip: false
+            nat_1_to_1_ip: {{ .Values.global.livekitSip.address | quote }}
+            sip_hostname: livekit-sip.nahsi.dev
+            tls:
+              port: 5061
+              min_version: tls1.2
+              certs:
+                - cert_file: /certs/tls.crt
+                  key_file: /certs/tls.key
+            rtp_port: 13000-13063
+            health_port: 8081
+            prometheus_port: 6789
+            logging:
+              json: true
+              level: info
+    persistence:
+      config:
+        type: secret
+        identifier: config
+        globalMounts:
+          - path: /run/livekit-sip
+            readOnly: true
+      tls:
+        type: secret
+        name: livekit-sip-tls
+        globalMounts:
+          - path: /certs
+            readOnly: true
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

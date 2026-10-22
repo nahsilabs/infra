@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: livekit-sip
+spec:
+  secretName: livekit-sip-tls
+  secretTemplate:
+    labels:
+      reconcile.fluxcd.io/watch: Enabled
+  issuerRef:
+    kind: ClusterIssuer
+    name: nahsi.dev
+  dnsNames:
+    - livekit-sip.nahsi.dev

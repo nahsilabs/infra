@@ -1,0 +1,15 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: livekit-sip
+  labels:
+    obs.nahsilabs/metrics: "true"
+spec:
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: livekit-sip
+      app.kubernetes.io/service: livekit-sip-metrics
+  endpoints:
+    - port: metrics
+      path: /metrics
