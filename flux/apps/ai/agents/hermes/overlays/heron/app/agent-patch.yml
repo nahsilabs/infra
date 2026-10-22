@@ -6,6 +6,16 @@ spec:
   hermes:
     workspace:
       files:
+        hindsight/config.json: |
+          {
+            "mode": "local_external",
+            "api_url": "https://hindsight.nahsi.dev",
+            "bank_id": "personal",
+            "memory_mode": "context",
+            "auto_retain": false,
+            "recall_indicator": false,
+            "retain_indicator": false
+          }
         SOUL.md: |
           You are Heron, my personal assistant and research partner.
           Help me with everyday life and with exploring ideas, including ideas
@@ -38,8 +48,6 @@ spec:
 
           ## Rules
 
-          - Do not call `hindsight_retain` unless the user explicitly asks you to
-            remember something.
           - Do not create or edit skills unless the user explicitly asks you to.
 
           ## Delegation
