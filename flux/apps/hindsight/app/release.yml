@@ -30,6 +30,9 @@ spec:
               HINDSIGHT_API_PORT: "8888"
               HINDSIGHT_API_WORKER_ID: hindsight-api
               HINDSIGHT_API_WORKER_MAX_SLOTS: "4"
+              HINDSIGHT_API_WORKER_CONSOLIDATION_RESERVED_SLOTS: "1"
+              HINDSIGHT_API_WORKER_RETAIN_RESERVED_SLOTS: "1"
+              HINDSIGHT_API_WORKER_REFRESH_MENTAL_MODEL_RESERVED_SLOTS: "1"
               HINDSIGHT_API_MCP_ENABLED: "true"
               HINDSIGHT_API_MCP_ENABLED_TOOLS: >-
                 list_banks,create_bank,get_bank,get_bank_stats,update_bank,delete_bank,clear_memories,
@@ -88,23 +91,39 @@ spec:
                   secretKeyRef:
                     name: hindsight-inference-auth
                     key: token
-              HINDSIGHT_API_LLM_MAX_CONCURRENT: "2"
+              HINDSIGHT_API_LLM_MAX_CONCURRENT: "3"
               HINDSIGHT_API_LLM_TEMPERATURE: "none"
               HINDSIGHT_API_LLM_EXTRA_BODY: '{"presence_penalty":0}'
               HINDSIGHT_API_LLM_STRICT_SCHEMA_RETAIN: "true"
               HINDSIGHT_API_LLM_STRICT_SCHEMA_CONSOLIDATION: "true"
               HINDSIGHT_API_RETAIN_LLM_REASONING_EFFORT: "none"
+              HINDSIGHT_API_RETAIN_LLM_MAX_CONCURRENT: "1"
               HINDSIGHT_API_RETAIN_LLM_MAX_RETRIES: "2"
               HINDSIGHT_API_REFLECT_LLM_REASONING_EFFORT: "medium"
+              HINDSIGHT_API_REFLECT_LLM_MAX_CONCURRENT: "1"
               HINDSIGHT_API_REFLECT_LLM_TIMEOUT: "90"
               HINDSIGHT_API_REFLECT_LLM_MAX_RETRIES: "1"
               HINDSIGHT_API_CONSOLIDATION_LLM_REASONING_EFFORT: "low"
+              HINDSIGHT_API_CONSOLIDATION_LLM_MAX_CONCURRENT: "1"
               HINDSIGHT_API_CONSOLIDATION_LLM_MAX_RETRIES: "2"
               HINDSIGHT_API_CONSOLIDATION_LLM_TIMEOUT: "300"
               HINDSIGHT_API_MENTAL_MODEL_REFRESH_LLM_REASONING_EFFORT: "none"
+              HINDSIGHT_API_MENTAL_MODEL_REFRESH_LLM_MAX_CONCURRENT: "2"
               HINDSIGHT_API_MENTAL_MODEL_REFRESH_LLM_TIMEOUT: "300"
               # Whole-job budget includes LLM slot waits and multi-call model refreshes.
-              HINDSIGHT_API_REFLECT_WALL_TIMEOUT: "600"
+              HINDSIGHT_API_REFLECT_WALL_TIMEOUT: "1200"
+
+              HINDSIGHT_API_DECISION_MODEL_PROVIDER: typesafe
+              HINDSIGHT_API_DECISION_MODEL_BASE_URL: https://openrouter.ai/api
+              HINDSIGHT_API_DECISION_MODEL_MODEL: typesafe/jev-1.14
+              HINDSIGHT_API_DECISION_MODEL_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hindsight-auth
+                    key: openrouter-key
+              HINDSIGHT_API_RECALL_DECISION_MODEL_PROVIDER: none
+              HINDSIGHT_API_REFLECT_USE_DECISION_MODEL: "false"
+              HINDSIGHT_API_MENTAL_MODEL_DELTA_USE_DECISION_MODEL: "true"
 
               HINDSIGHT_API_EMBEDDINGS_PROVIDER: openai
               HINDSIGHT_API_EMBEDDINGS_OPENAI_BASE_URL: https://ai.nahsi.dev/v1
