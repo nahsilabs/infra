@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.27
+# syntax=docker/dockerfile:1.28
 FROM scratch AS hindsight
 ADD https://github.com/vectorize-io/hindsight.git#f843f173bb41f001e322cc83c917371639e47fbf /src/
 
