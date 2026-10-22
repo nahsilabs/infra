@@ -2,9 +2,8 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: memory-maintenance
-  namespace: hindsight
 spec:
-  schedule: "0 2 * * 1,3,4,6"
+  schedule: "0 2 * * 1-6"
   timeZone: Europe/Athens
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 3600
@@ -13,7 +12,6 @@ spec:
   jobTemplate:
     spec:
       backoffLimit: 0
-      activeDeadlineSeconds: 18000
       template:
         spec:
           restartPolicy: Never
@@ -26,7 +24,7 @@ spec:
               type: RuntimeDefault
           containers:
             - name: maintenance
-              image: docker.io/nahsilabs/hindsight:1.0.0-static-keys@sha256:aeb61cd3ae11a95ba69a5c918d316687e72dbfa1211cf51d20645c8016ad080c
+              image: ghcr.io/vectorize-io/hindsight-api:1.1.0-slim@sha256:b97af4787f35f0f897cc85299e1c800e265ff98e1d70c900c58a7f9903cb5b7d
               command: ["python", "/scripts/memory-maintenance.py"]
               env:
                 - name: HINDSIGHT_API_URL
