@@ -40,7 +40,7 @@ spec:
           main:
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag: "v3.2.4@sha256:d317916b28090c33eb36b308464ea391f8b7df1d850fcfea227a39ec879718c2"
+              tag: "v3.3.5@sha256:485d546a2e31d6a8b4db8423fcba5c109de8c218d93410af115fd1ccfc4352a6"
             env:
               TZ: Europe/Athens
               REDIS_HOSTNAME: "immich-valkey"
@@ -148,7 +148,7 @@ spec:
             main:
               image:
                 repository: ghcr.io/immich-app/immich-machine-learning
-                tag: "v3.2.4-openvino@sha256:ee28c9419670b7f4c17765fb089527eff977deb8e8fb83e714aa1fa57aa89736"
+                tag: "v3.3.5-openvino@sha256:1dbac7f811b51b80c55ee0cf678e0089d3532c798f14a65747d5d7b473a4f9d6"
               env:
                 MACHINE_LEARNING_PRELOAD__CLIP__VISUAL: ViT-L-16-SigLIP2-512__webli
                 MACHINE_LEARNING_PRELOAD__CLIP__TEXTUAL: ViT-L-16-SigLIP2-512__webli
