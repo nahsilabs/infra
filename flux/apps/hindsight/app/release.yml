@@ -89,12 +89,13 @@ spec:
                     name: hindsight-inference-auth
                     key: token
               HINDSIGHT_API_LLM_MAX_CONCURRENT: "2"
-              HINDSIGHT_API_LLM_TEMPERATURE_RETAIN: "0.7"
+              HINDSIGHT_API_LLM_TEMPERATURE_RETAIN: "0"
               HINDSIGHT_API_RETAIN_LLM_REASONING_EFFORT: "none"
-              HINDSIGHT_API_RETAIN_LLM_EXTRA_BODY: >-
-                {"top_p":0.8,"top_k":20,"min_p":0.0,"presence_penalty":0.0,"repetition_penalty":1.0}
+              HINDSIGHT_API_RETAIN_LLM_MAX_RETRIES: "2"
               HINDSIGHT_API_REFLECT_LLM_TIMEOUT: "90"
               HINDSIGHT_API_REFLECT_LLM_MAX_RETRIES: "1"
+              HINDSIGHT_API_CONSOLIDATION_LLM_REASONING_EFFORT: "low"
+              HINDSIGHT_API_CONSOLIDATION_LLM_MAX_RETRIES: "2"
               HINDSIGHT_API_CONSOLIDATION_LLM_TIMEOUT: "300"
               # Whole-job budget includes LLM slot waits and multi-call model refreshes.
               HINDSIGHT_API_REFLECT_WALL_TIMEOUT: "600"
@@ -106,7 +107,6 @@ spec:
               HINDSIGHT_API_EMBEDDINGS_OPENAI_BATCH_SIZE: "1"
               HINDSIGHT_API_EMBEDDINGS_MAX_INPUT_TOKENS: "4096"
               HINDSIGHT_API_EMBEDDINGS_QUERY_PREFIX: "Instruct: Given a query, retrieve relevant passages that answer the query.\nQuery: "
-              HINDSIGHT_API_EMBEDDINGS_PASSAGE_PREFIX: ""
               HINDSIGHT_API_EMBEDDINGS_MAX_CONCURRENT_REQUESTS: "2"
 
               HINDSIGHT_API_RERANKER_PROVIDER: cohere
