@@ -39,7 +39,7 @@ spec:
         ingress: true
         gateway: true
 
-      settings:
+      settingsString: |
         title: NahsiLabs Dashboard
         favicon: https://kubernetes.io/images/favicon.png
         theme: dark
@@ -53,38 +53,42 @@ spec:
           hideVisitURL: true
 
         layout:
-          - Productivity:
-              tab: Daily Use
-              style: columns
-              columns: 4
-          - Knowledge:
-              tab: Daily Use
-              style: columns
-              columns: 3
-          - Media:
-              tab: Daily Use
-              style: columns
-              columns: 3
-          - Comms:
-              tab: Daily Use
-              style: columns
-              columns: 2
-          - Arr:
-              tab: Data Hoarding
-              style: columns
-              columns: 4
-          - Downloads:
-              tab: Data Hoarding
-              style: columns
-              columns: 3
-          - Platform:
-              tab: Systems
-              style: columns
-              columns: 4
-          - Observability:
-              tab: Systems
-              style: columns
-              columns: 4
+          Productivity:
+            tab: Daily Use
+            style: columns
+            columns: 4
+          Knowledge:
+            tab: Daily Use
+            style: columns
+            columns: 3
+          Media:
+            tab: Daily Use
+            style: columns
+            columns: 3
+          Comms:
+            tab: Daily Use
+            style: columns
+            columns: 2
+          Arr:
+            tab: Data Hoarding
+            style: columns
+            columns: 4
+          Downloads:
+            tab: Data Hoarding
+            style: columns
+            columns: 3
+          Platform:
+            tab: Systems
+            style: columns
+            columns: 4
+          Observability:
+            tab: Systems
+            style: columns
+            columns: 4
+          Telephony:
+            tab: Systems
+            style: columns
+            columns: 3
 
       widgets:
         - search:
@@ -153,3 +157,17 @@ spec:
                 icon: home-assistant
                 href: https://ha.nahsi.dev
                 ping: https://ha.nahsi.dev
+
+        - Telephony:
+            - LiveKit:
+                icon: mdi-video
+                href: https://livekit.nahsi.dev
+                description: Rooms, participants and telephony
+            - RustPBX:
+                icon: mdi-phone-voip
+                href: https://rustpbx.nahsi.dev/console/
+                description: PBX administration
+            - Grandstream:
+                icon: mdi-phone-classic
+                href: http://10.2.10.9/
+                description: HT801 V2 adapter administration
