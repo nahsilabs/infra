@@ -7,3 +7,4 @@ resources:
   - model.yml
   - epp.yml
   - pool.yml
+  - policy.yml

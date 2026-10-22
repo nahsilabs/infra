@@ -1,0 +1,37 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayPolicy
+metadata:
+  name: ai-halogen-defaults
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: ai-llm
+  traffic:
+    transformation:
+      conditional:
+      - condition: |-
+          request.method == "POST" && request.path in ["/v1/chat/completions", "/v1/responses"] && json(request.body).with(r,
+            r.model == "Qwen/Qwen3.8-Flash-Next" &&
+            (
+              default(r.reasoning_effort, "") == "none" ||
+              default(r.reasoning.effort, "") == "none" ||
+              default(r.reasoning.enabled, true) == false ||
+              default(r.enable_thinking, true) == false ||
+              default(r.chat_template_kwargs.enable_thinking, true) == false ||
+              default(r.chat_template_kwargs.reasoning_effort, "") == "none" ||
+              default(r.thinking.type, "") == "disabled"
+            )
+          )
+        policy:
+          request:
+            body: |-
+              json(request.body).with(r,
+                toJson({
+                  "temperature": 0.7,
+                  "top_p": 0.8,
+                  "top_k": 20,
+                  "presence_penalty":
+                    default(r.temperature, 0.7) == 0 ? 0.0 : 1.5
+                }.merge(r))
+              )
