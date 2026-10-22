@@ -1,0 +1,35 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: livekit-sip-ingress
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: livekit-sip
+      app.kubernetes.io/instance: livekit-sip
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: rustpbx
+            app.kubernetes.io/name: rustpbx
+      toPorts:
+        - ports:
+            - port: "5061"
+              protocol: TCP
+            - port: "13000"
+              endPort: 13063
+              protocol: UDP
+    - fromEndpoints:
+        - matchLabels:
+            io.kubernetes.pod.namespace: obs-collect
+      toPorts:
+        - ports:
+            - port: "6789"
+              protocol: TCP
+    - fromEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "8081"
+              protocol: TCP

@@ -1,0 +1,304 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: livekit
+spec:
+  interval: 1h
+  timeout: 10m
+  chart:
+    spec:
+      chart: app-template
+      version: 5.2.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  valuesFrom:
+    - kind: Secret
+      name: livekit-auth
+      valuesKey: api-key
+      targetPath: global.livekit.apiKey
+      literal: true
+    - kind: Secret
+      name: livekit-auth
+      valuesKey: api-secret
+      targetPath: global.livekit.apiSecret
+      literal: true
+    - kind: Secret
+      name: livekit-auth
+      valuesKey: media-address
+      targetPath: global.livekit.mediaAddress
+      literal: true
+    - kind: Secret
+      name: livekit-valkey-auth
+      valuesKey: default
+      targetPath: global.livekit.redisPassword
+      literal: true
+    - kind: Secret
+      name: livekit-console-auth
+      valuesKey: ADMIN_PASSWORD
+      targetPath: global.livekitConsole.adminPassword
+      literal: true
+    - kind: Secret
+      name: livekit-console-auth
+      valuesKey: SESSION_SECRET
+      targetPath: global.livekitConsole.sessionSecret
+      literal: true
+  values:
+    controllers:
+      main:
+        forceRename: livekit
+        replicas: 1
+        strategy: Recreate
+        pod:
+          annotations:
+            checksum/credentials: '{{ .Values.global.livekit | toJson | sha256sum }}'
+            checksum/config: '{{ .Values.secrets.config.stringData | toJson | sha256sum }}'
+        containers:
+          main:
+            image:
+              repository: docker.io/livekit/livekit-server
+              tag: v1.13.10@sha256:89ca9ce0791e18d6e03bf6e2c49ceb27e1c754eae8bd50c989386c1a5963791a
+            args:
+              - --config
+              - /run/livekit/config.yaml
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: 7880
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: 7880
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
+            resources:
+              requests:
+                cpu: 500m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+      console:
+        replicas: 1
+        strategy: Recreate
+        pod:
+          annotations:
+            checksum/credentials: '{{ .Values.global | toJson | sha256sum }}'
+        containers:
+          main:
+            image:
+              repository: docker.io/nahsilabs/livekit-console
+              tag: 0.1.0@sha256:7898d26c30f5eb00917713e7b197c1a9a1afb42ff509b381f9209c093987ef2c
+            env:
+              LIVEKIT_URL: http://livekit:7880
+              LIVEKIT_BROWSER_URL: wss://livekit.nahsi.dev
+              LIVEKIT_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: livekit-auth
+                    key: api-key
+              LIVEKIT_API_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: livekit-auth
+                    key: api-secret
+              ADMIN_USER: admin
+              ADMIN_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: livekit-console-auth
+                    key: ADMIN_PASSWORD
+              SESSION_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: livekit-console-auth
+                    key: SESSION_SECRET
+              DB_PATH: /data/console.db
+              HOST: 0.0.0.0
+              PORT: "8080"
+            probes:
+              liveness: &console-probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8080
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+              readiness: *console-probe
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8080
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+
+    defaultPodOptions:
+      terminationGracePeriodSeconds: 330
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10000
+        runAsGroup: 10000
+        fsGroup: 10000
+        seccompProfile:
+          type: RuntimeDefault
+
+    service:
+      main:
+        controller: main
+        forceRename: livekit
+        ports:
+          http:
+            port: 7880
+          metrics:
+            port: 6789
+      media:
+        controller: main
+        forceRename: livekit-media
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        allocateLoadBalancerNodePorts: false
+        labels:
+          cilium-bgp-private: "true"
+        annotations:
+          lbipam.cilium.io/ips: '{{ .Values.global.livekit.mediaAddress }}'
+        ports:
+          rtc-tcp:
+            port: 7881
+            protocol: TCP
+          rtc-udp:
+            port: 7882
+            protocol: UDP
+      console:
+        controller: console
+        forceRename: livekit-console
+        ports:
+          http:
+            port: 8080
+
+    route:
+      main:
+        forceRename: livekit
+        parentRefs:
+          - name: private-gateway
+            namespace: envoy-gateway
+            sectionName: https
+        hostnames:
+          - livekit.nahsi.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /rtc
+              - path:
+                  type: PathPrefix
+                  value: /twirp
+              - path:
+                  type: PathPrefix
+                  value: /whip
+              - path:
+                  type: Exact
+                  value: /agent
+              - path:
+                  type: RegularExpression
+                  value: ^/agents/[^/]+/[^/]+(/.*)?$
+            backendRefs:
+              - identifier: main
+                port: http
+            timeouts:
+              request: 0s
+              backendRequest: 0s
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: console
+                port: http
+            timeouts:
+              request: 0s
+              backendRequest: 0s
+
+    secrets:
+      config:
+        stringData:
+          config.yaml: |
+            port: 7880
+            bind_addresses:
+              - "0.0.0.0"
+            rtc:
+              tcp_port: 7881
+              udp_port: 7882
+              use_external_ip: false
+              node_ip: {{ .Values.global.livekit.mediaAddress | quote }}
+            redis:
+              address: livekit-valkey:6379
+              username: default
+              password: {{ .Values.global.livekit.redisPassword | quote }}
+            keys:
+              {{ .Values.global.livekit.apiKey | quote }}: {{ .Values.global.livekit.apiSecret | quote }}
+            webhook:
+              api_key: {{ .Values.global.livekit.apiKey | quote }}
+              urls:
+                - http://livekit-console:8080/webhook
+            turn:
+              enabled: false
+            prometheus:
+              port: 6789
+            logging:
+              json: true
+              level: info
+
+    persistence:
+      config:
+        type: secret
+        identifier: config
+        advancedMounts:
+          main:
+            main:
+              - path: /run/livekit
+                readOnly: true
+      console-data:
+        existingClaim: livekit-console
+        advancedMounts:
+          console:
+            main:
+              - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
