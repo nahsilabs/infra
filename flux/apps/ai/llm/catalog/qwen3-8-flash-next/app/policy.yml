@@ -29,9 +29,12 @@ spec:
                   }] + r.messages
                 }))
               )
+      # Re-serializing the body shuffles JSON key order, which breaks Halogen's prompt
+      # cache; requests that already set every default pass through unchanged.
       - condition: |-
           request.method == "POST" && request.path in ["/v1/chat/completions", "/v1/responses"] && json(request.body).with(r,
             r.model == "Qwen/Qwen3.8-Flash-Next" &&
+            !(has(r.temperature) && has(r.top_p) && has(r.top_k) && has(r.presence_penalty)) &&
             (
               default(r.reasoning_effort, "") == "none" ||
               default(r.reasoning.effort, "") == "none" ||
