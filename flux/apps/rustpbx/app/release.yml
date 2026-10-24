@@ -50,7 +50,7 @@ spec:
           main:
             image:
               repository: ghcr.io/restsend/rustpbx
-              tag: latest@sha256:b50985c83a8a5b103f297c25a8cbe1c4c71e45b363ef011b4488535c567dde5b
+              tag: latest@sha256:c8c9258d27ed11d368fd94e3e9d47b5e0f03973b57106a00ece9fbbd4b5ea8b4
             args:
               - --conf
               - /run/rustpbx/config.toml
