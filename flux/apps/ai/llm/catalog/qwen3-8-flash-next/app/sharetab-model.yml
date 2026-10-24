@@ -1,0 +1,24 @@
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayModel
+metadata:
+  name: sharetab-receipt
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: ai-llm
+  match:
+    model: sharetab-receipt
+  provider: Custom
+  custom:
+    backendRef:
+      kind: Service
+      name: qwen3-8-flash-next
+      port: 8080
+    formats:
+      - type: Completions
+        path: /v1/chat/completions
+  policies:
+    transformations:
+      - field: model
+        expression: '"Qwen/Qwen3.8-Flash-Next"'

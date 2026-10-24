@@ -10,6 +10,25 @@ spec:
   traffic:
     transformation:
       conditional:
+      # Halogen rejects JSON mode with images; ShareTab relies on the prompt instead.
+      - condition: |-
+          request.method == "POST" && request.path == "/v1/chat/completions" &&
+          json(request.body).model == "sharetab-receipt"
+        policy:
+          request:
+            body: |-
+              json(request.body).with(r,
+                toJson(r.filterKeys(k, k != "response_format").merge({
+                  "model": "Qwen/Qwen3.8-Flash-Next",
+                  "reasoning_effort": "none",
+                  "temperature": 0,
+                  "presence_penalty": 0,
+                  "messages": [{
+                    "role": "system",
+                    "content": "Return only valid JSON matching the requested receipt structure, without markdown. All monetary values must be non-negative integers in cents."
+                  }] + r.messages
+                }))
+              )
       - condition: |-
           request.method == "POST" && request.path in ["/v1/chat/completions", "/v1/responses"] && json(request.body).with(r,
             r.model == "Qwen/Qwen3.8-Flash-Next" &&
