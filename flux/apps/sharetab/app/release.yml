@@ -22,9 +22,7 @@ spec:
               repository: ghcr.io/sw-carlos-cristobal/sharetab
               tag: stable@sha256:1cf3a50641b56ae3a6e43cc9da77984f06b0b15c8063550c8430a5d8bade9f41
             envFrom:
-              # sharetab-app (deps/secret-app.yml, SOPS-encrypted): AUTH_SECRET,
-              # NEXTAUTH_SECRET, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET,
-              # OPENAI_API_KEY, ADMIN_EMAIL.
+              # SOPS: AUTH_SECRET, NEXTAUTH_SECRET, OIDC_CLIENT_ID/SECRET, OPENAI_API_KEY, ADMIN_EMAIL
               - secretRef:
                   name: sharetab-app
             env:
@@ -45,10 +43,6 @@ spec:
               OPENAI_BASE_URL: https://ai.nahsi.dev/v1
               # Gateway alias for Flash, see qwen3-8-flash-next/app/policy.yml
               OPENAI_MODEL: sharetab-receipt
-              # Anonymous (no-account) receipt uploads and AI scans are
-              # currently allowed. To lock off guest receipt uploads and
-              # scans while signed-in users keep working, uncomment:
-              # DISABLE_GUEST_UPLOADS: "true"
             probes:
               startup:
                 enabled: true
@@ -83,9 +77,7 @@ spec:
                 memory: 256Mi
               limits:
                 memory: 512Mi
-        # The image entrypoint needs root (initdb, chown, signal handling) and
-        # drops the Next.js process to the nextjs user itself; it cannot run
-        # as non-root, so no runAsNonRoot is set.
+        # Entrypoint needs root (initdb, chown) and drops to nextjs itself.
         strategy: Recreate
     service:
       main:
@@ -98,9 +90,7 @@ spec:
         existingClaim: sharetab-uploads
         globalMounts:
           - path: /app/uploads
-      # The image always starts its bundled PostgreSQL, even when DATABASE_URL
-      # points at the external CNPG cluster; the bundled instance is unused
-      # and stays on a writable ephemeral volume rather than a redundant PVC.
+      # Bundled PostgreSQL always starts but is unused (CNPG); keep it ephemeral.
       pgdata:
         type: emptyDir
         globalMounts:
