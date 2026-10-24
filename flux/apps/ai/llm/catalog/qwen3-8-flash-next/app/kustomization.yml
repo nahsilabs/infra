@@ -6,3 +6,4 @@ resources:
   - model.yml
   - networkpolicy.yml
   - policy.yml
+  - sharetab-model.yml
