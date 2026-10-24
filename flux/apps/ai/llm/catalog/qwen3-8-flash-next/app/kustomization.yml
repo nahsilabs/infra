@@ -5,5 +5,4 @@ resources:
   - volumes.yml
   - model.yml
   - networkpolicy.yml
-  - policy.yml
   - sharetab-model.yml

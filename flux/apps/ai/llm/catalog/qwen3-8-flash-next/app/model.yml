@@ -20,3 +20,44 @@ spec:
         path: /v1/chat/completions
       - type: Responses
         path: /v1/responses
+  # Per-field so the rest of the body keeps its key order (Halogen's prompt cache needs it).
+  # Thinking-off requests get Qwen's non-thinking sampling for fields they leave unset;
+  # null leaves the field unset, so Halogen applies its own (thinking) defaults.
+  policies:
+    transformations:
+      - field: temperature
+        expression: |-
+          llmRequest.with(r, has(r.temperature) ? r.temperature : (
+            default(r.reasoning_effort, "") == "none" || default(r.reasoning.effort, "") == "none" ||
+            default(r.reasoning.enabled, true) == false || default(r.enable_thinking, true) == false ||
+            default(r.chat_template_kwargs.enable_thinking, true) == false ||
+            default(r.chat_template_kwargs.reasoning_effort, "") == "none" ||
+            default(r.thinking.type, "") == "disabled"
+          ) ? 0.7 : null)
+      - field: top_p
+        expression: |-
+          llmRequest.with(r, has(r.top_p) ? r.top_p : (
+            default(r.reasoning_effort, "") == "none" || default(r.reasoning.effort, "") == "none" ||
+            default(r.reasoning.enabled, true) == false || default(r.enable_thinking, true) == false ||
+            default(r.chat_template_kwargs.enable_thinking, true) == false ||
+            default(r.chat_template_kwargs.reasoning_effort, "") == "none" ||
+            default(r.thinking.type, "") == "disabled"
+          ) ? 0.8 : null)
+      - field: top_k
+        expression: |-
+          llmRequest.with(r, has(r.top_k) ? r.top_k : (
+            default(r.reasoning_effort, "") == "none" || default(r.reasoning.effort, "") == "none" ||
+            default(r.reasoning.enabled, true) == false || default(r.enable_thinking, true) == false ||
+            default(r.chat_template_kwargs.enable_thinking, true) == false ||
+            default(r.chat_template_kwargs.reasoning_effort, "") == "none" ||
+            default(r.thinking.type, "") == "disabled"
+          ) ? 20 : null)
+      - field: presence_penalty
+        expression: |-
+          llmRequest.with(r, has(r.presence_penalty) ? r.presence_penalty : (
+            default(r.reasoning_effort, "") == "none" || default(r.reasoning.effort, "") == "none" ||
+            default(r.reasoning.enabled, true) == false || default(r.enable_thinking, true) == false ||
+            default(r.chat_template_kwargs.enable_thinking, true) == false ||
+            default(r.chat_template_kwargs.reasoning_effort, "") == "none" ||
+            default(r.thinking.type, "") == "disabled"
+          ) ? (default(r.temperature, 0.7) == 0 ? 0.0 : 1.5) : null)

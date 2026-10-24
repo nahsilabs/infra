@@ -18,7 +18,22 @@ spec:
     formats:
       - type: Completions
         path: /v1/chat/completions
+  # Halogen rejects JSON mode with images; ShareTab relies on the prompt instead.
   policies:
     transformations:
       - field: model
         expression: '"Qwen/Qwen3.8-Flash-Next"'
+      - field: response_format
+        expression: "null"
+      - field: reasoning_effort
+        expression: '"none"'
+      - field: temperature
+        expression: "0"
+      - field: presence_penalty
+        expression: "0"
+      - field: messages
+        expression: |-
+          [{
+            "role": "system",
+            "content": "Return only valid JSON matching the requested receipt structure, without markdown. All monetary values must be non-negative integers in cents."
+          }] + llmRequest.messages
